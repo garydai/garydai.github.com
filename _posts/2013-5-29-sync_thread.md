@@ -1,7 +1,7 @@
 ---
 layout: default
 
-title: windows线程同步
+title: 线程同步
 
 ---
 ## windows线程同步  
@@ -242,6 +242,8 @@ https://www.cnblogs.com/liyuan989/p/4240271.html
 ###java 线程
 ![](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/thread.png)
 ![](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/thread2.png)
+
+![image-20191031152908741](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191031152908741.png)
 
 线程的5个状态 
 
