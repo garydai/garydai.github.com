@@ -70,6 +70,74 @@ invokeinterface 所使用的接口方法表（interface method table，itable）
 
 
 
+```java
+
+abstract class Passenger {
+  abstract void passThroughImmigration();
+  @Override
+  public String toString() { ... }
+}
+class ForeignerPassenger extends Passenger {
+   @Override
+   void passThroughImmigration() { /* 进外国人通道 */ }
+}
+class ChinesePassenger extends Passenger {
+  @Override
+  void passThroughImmigration() { /* 进中国人通道 */ }
+  void visitDutyFreeShops() { /* 逛免税店 */ }
+}
+
+Passenger passenger = ...
+passenger.passThroughImmigration();
+
+```
+
+![image-20191101153748947](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191101153748947.png)
+
+使用了方法表的动态绑定与静态绑定相比，仅仅多出几个内存解引用操作：访问栈上的调用者，读取调用者的动态类型，读取该类型的方法表，读取方法表中某个索引值所对应的目标方法
+
+即时编译还拥有另外两种性能更好的优化手段：内联缓存（inlining cache）和方法内联（method inlining）
+
+内联缓存是一种加快动态绑定的优化技术。它能够缓存虚方法调用中调用者的动态类型，以及该类型所对应的目标方法。在之后的执行过程中，如果碰到已缓存的类型，内联缓存便会直接调用该类型所对应的目标方法。如果没有碰到已缓存的类型，内联缓存则会退化至使用基于方法表的动态绑定
+
+### method invoke
+
+方法反射Method.invoke源码
+
+```java
+
+public final class Method extends Executable {
+  ...
+  public Object invoke(Object obj, Object... args) throws ... {
+    ... // 权限检查
+    MethodAccessor ma = methodAccessor;
+    if (ma == null) {
+      ma = acquireMethodAccessor();
+    }
+    return ma.invoke(obj, args);
+  }
+}
+
+```
+
+委派给 MethodAccessor 来处理。MethodAccessor 是一个接口，它有两个已有的具体实现：一个通过本地方法来实现反射调用，另一个则使用了委派模式（生成动态代理类来执行方法）
+
+```java
+
+// 动态实现的伪代码，这里只列举了关键的调用逻辑，其实它还包括调用者检测、参数检测的字节码。
+package jdk.internal.reflect;
+
+public class GeneratedMethodAccessor1 extends ... {
+  @Overrides    
+  public Object invoke(Object obj, Object[] args) throws ... {
+    Test.target((int) args[0]);
+    return null;
+  }
+}
+```
+
+Java 虚拟机设置了一个阈值 15（可以通过 -Dsun.reflect.inflationThreshold= 来调整），当某个反射调用的调用次数在 15 之下时，采用本地实现；当达到 15 时，便开始动态生成字节码，并将委派实现的委派对象切换至动态实现，这个过程我们称之为 Inflation
+
 #### reference
 
 https://time.geekbang.org/column/article/12098
