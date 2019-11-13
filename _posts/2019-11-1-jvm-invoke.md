@@ -3,7 +3,6 @@ layout: default
 
 title: jvm-invoke
 
-
 ---
 
 ## java函数调用
@@ -137,6 +136,66 @@ public class GeneratedMethodAccessor1 extends ... {
 ```
 
 Java 虚拟机设置了一个阈值 15（可以通过 -Dsun.reflect.inflationThreshold= 来调整），当某个反射调用的调用次数在 15 之下时，采用本地实现；当达到 15 时，便开始动态生成字节码，并将委派实现的委派对象切换至动态实现，这个过程我们称之为 Inflation
+
+### invokedynamic
+
+Java 7 引入了一条新的指令 invokedynamic。该指令的调用机制抽象出调用点这一个概念，并允许应用程序将调用点链接至任意符合条件的方法上，在第一次执行 invokedynamic 指令时，Java 虚拟机将执行它所对应的启动方法，生成并且绑定一个调用点。之后如果再次执行该指令，Java 虚拟机则直接调用已经绑定了的调用点所链接的方法。
+
+它将调用点（CallSite）抽象成一个 Java 类，并且将原本由 Java 虚拟机控制的方法调用以及方法链接暴露给了应用程序。在运行过程中，每一条 invokedynamic 指令将捆绑一个调用点，并且会调用该调用点所链接的方法句柄
+
+##### 方法句柄
+
+方法句柄是一个强类型的、能够被直接执行的引用。它仅关心所指向方法的参数类型以及返回类型，而不关心方法所在的类以及方法名。方法句柄的权限检查发生在创建过程中，相较于反射调用节省了调用时反复权限检查的开销。
+
+##### 获取方法句柄两种方式
+
+```
+
+class Foo {
+  private static void bar(Object o) {
+    ..
+  }
+  public static Lookup lookup() {
+    return MethodHandles.lookup();
+  }
+}
+
+// 获取方法句柄的不同方式
+MethodHandles.Lookup l = Foo.lookup(); // 具备Foo类的访问权限
+Method m = Foo.class.getDeclaredMethod("bar", Object.class);
+MethodHandle mh0 = l.unreflect(m);
+
+MethodType t = MethodType.methodType(void.class, Object.class);
+MethodHandle mh1 = l.findStatic(Foo.class, "bar", t);
+```
+
+在 Java 8 中，Lambda 表达式也是借助 invokedynamic 来实现的
+
+```
+
+int x = ..
+IntStream.of(1, 2, 3).map(i -> i * 2).map(i -> i * x);
+
+
+
+  // i -> i * 2
+  private static int lambda$0(int);
+    Code:
+       0: iload_0
+       1: iconst_2
+       2: imul
+       3: ireturn
+
+  // i -> i * x
+  private static int lambda$1(int, int);
+    Code:
+       0: iload_1
+       1: iload_0
+       2: imul
+       3: ireturn
+```
+
+该 invokedynamic 指令对应的启动方法将通过 ASM 生成一个适配器类。
 
 #### reference
 

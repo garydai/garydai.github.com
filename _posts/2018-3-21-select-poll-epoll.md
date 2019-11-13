@@ -122,7 +122,9 @@ title: select / poll / epoll
 	    }
 	}
 
+https://www.cnblogs.com/wish123/p/11393383.html
 
 ### fd
 
 一个进程默认可以创建1024个文件，socket也属于一个文件，fd指的是fds[1024]的索引，数组的值表示文件地址
+
