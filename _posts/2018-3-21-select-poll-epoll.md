@@ -43,6 +43,8 @@ title: select / poll / epoll
 	        // output event on sock2
 	}
 
+在每次调用 select() 函数之前，系统需要把一个 fd 从用户态拷贝到内核态，这样就给系统带来了一定的性能开销。再有单个进程监视的 fd 数量默认是 1024，我们可以通过修改宏定义甚至重新编译内核的方式打破这一限制。但由于 fd_set 是基于数组实现的，在新增和删除 fd 时，数量过大会导致效率降低
+
 ### poll
 
 	// The structure for two events
@@ -74,6 +76,10 @@ title: select / poll / epoll
 	        pfd[1].revents = 0;
 	        // output event on sock2
 	}
+
+poll() 的机制与 select() 类似，二者在本质上差别不大。poll() 管理多个描述符也是通过轮询，根据描述符的状态进行处理，但 poll() 没有最大文件描述符数量的限制
+
+
 
 ### epoll
 
@@ -121,6 +127,10 @@ title: select / poll / epoll
 	         }
 	    }
 	}
+
+epoll 事先通过 epoll_ctl() 来注册一个文件描述符，将文件描述符存放到内核的一个事件表中，这个事件表是基于红黑树实现的，所以在大量 I/O 请求的场景下，插入和删除的性能比 select/poll 的数组 fd_set 要好，因此 epoll 的性能更胜一筹，而且不会受到 fd 数量的限制。
+
+
 
 https://www.cnblogs.com/wish123/p/11393383.html
 
