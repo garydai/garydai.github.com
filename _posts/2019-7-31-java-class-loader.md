@@ -97,7 +97,28 @@ public Launcher() {
 
 Thread.currentThread().setContextClassLoader(diskLoader)设置线程的classLoader
 
+#### Class.forName和ClassLoader.loadClass
+
+###### Java类加载到JVM中经过的三个步骤
+
+**装载：** 查找和导入类或接口的二进制数据
+
+**链接：** 分别执行 **校验，准备，和解析**
+
+​	**校验：** 检查导入类或接口的二进制数据的正确性；
+
+​	**准备：** **给类的静态变量分配并初始化存储空间； **
+
+​	**解析：** 将符号引用转成直接引用；
+
+**初始化：** 激活类的静态变量的初始化Java代码和静态Java代码块。
+
+Class.forName经历所有步骤
+
+ClassLoader.loadClass只做了装载这一步
+
 ### reference
+
 https://juejin.im/post/5c04892351882516e70dcc9b
 
 https://blog.csdn.net/briblue/article/details/54973413
