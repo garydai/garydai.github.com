@@ -406,13 +406,38 @@ protected void initStrategies(ApplicationContext context) {
   	// 初始化不同的handlermapping
 		initHandlerMappings(context);
     // 初始化不同的handlerAdpters，逻辑同上，如果没有adapter注入，使用DispatcherServlet.properties文件里是（org.springframework.web.servlet.HandlerAdapter=org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter,\org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter,\org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter）
-
 		initHandlerAdapters(context);
 		initHandlerExceptionResolvers(context);
 		initRequestToViewNameTranslator(context);
+  	// 初始化视图解析器
 		initViewResolvers(context);
 		initFlashMapManager(context);
 	}
+```
+
+
+
+```java
+org.springframework.web.servlet.LocaleResolver=org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver
+
+org.springframework.web.servlet.ThemeResolver=org.springframework.web.servlet.theme.FixedThemeResolver
+
+org.springframework.web.servlet.HandlerMapping=org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping,\
+	org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
+
+org.springframework.web.servlet.HandlerAdapter=org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter,\
+	org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter,\
+	org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter
+
+org.springframework.web.servlet.HandlerExceptionResolver=org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver,\
+	org.springframework.web.servlet.mvc.annotation.ResponseStatusExceptionResolver,\
+	org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver
+
+org.springframework.web.servlet.RequestToViewNameTranslator=org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator
+
+org.springframework.web.servlet.ViewResolver=org.springframework.web.servlet.view.InternalResourceViewResolver
+
+org.springframework.web.servlet.FlashMapManager=org.springframework.web.servlet.support.SessionFlashMapManager
 ```
 
 加了<mvc:annotation-driven />注解会加载如下bean
@@ -1050,6 +1075,7 @@ org.springframework.web.servlet.DispatcherServlet#doDispatch
 				}
 
 				// Actually invoke the handler.
+        // 返回ModelAndView
 				mv = ha.handle(processedRequest, response, mappedHandler.getHandler());
 
 				if (asyncManager.isConcurrentHandlingStarted()) {
@@ -1067,6 +1093,7 @@ org.springframework.web.servlet.DispatcherServlet#doDispatch
 				// making them available for @ExceptionHandler methods and other scenarios.
 				dispatchException = new NestedServletException("Handler dispatch failed", err);
 			}
+      // 处理ModelAndView
 			processDispatchResult(processedRequest, response, mappedHandler, mv, dispatchException);
 		}
 		catch (Exception ex) {
@@ -1093,15 +1120,742 @@ org.springframework.web.servlet.DispatcherServlet#doDispatch
 	}
 ```
 
+#### 生成ModelAndView
 
+org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter#handleInternal
+
+```java
+protected ModelAndView handleInternal(HttpServletRequest request,
+      HttpServletResponse response, HandlerMethod handlerMethod) throws Exception {
+
+   ModelAndView mav;
+   checkRequest(request);
+
+   // Execute invokeHandlerMethod in synchronized block if required.
+   if (this.synchronizeOnSession) {
+      HttpSession session = request.getSession(false);
+      if (session != null) {
+         Object mutex = WebUtils.getSessionMutex(session);
+         synchronized (mutex) {
+            mav = invokeHandlerMethod(request, response, handlerMethod);
+         }
+      }
+      else {
+         // No HttpSession available -> no mutex necessary
+         mav = invokeHandlerMethod(request, response, handlerMethod);
+      }
+   }
+   else {
+      // No synchronization on session demanded at all...
+      mav = invokeHandlerMethod(request, response, handlerMethod);
+   }
+
+   if (!response.containsHeader(HEADER_CACHE_CONTROL)) {
+      if (getSessionAttributesHandler(handlerMethod).hasSessionAttributes()) {
+         applyCacheSeconds(response, this.cacheSecondsForSessionAttributeHandlers);
+      }
+      else {
+         prepareResponse(response);
+      }
+   }
+
+   return mav;
+}
+```
+
+已RequestMappingHandlerAdapter为例
+
+org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter#invokeHandlerMethod
+
+```java
+protected ModelAndView invokeHandlerMethod(HttpServletRequest request,
+      HttpServletResponse response, HandlerMethod handlerMethod) throws Exception {
+
+   ServletWebRequest webRequest = new ServletWebRequest(request, response);
+   try {
+      WebDataBinderFactory binderFactory = getDataBinderFactory(handlerMethod);
+      ModelFactory modelFactory = getModelFactory(handlerMethod, binderFactory);
+
+      ServletInvocableHandlerMethod invocableMethod = createInvocableHandlerMethod(handlerMethod);
+      if (this.argumentResolvers != null) {
+         invocableMethod.setHandlerMethodArgumentResolvers(this.argumentResolvers);
+      }
+      if (this.returnValueHandlers != null) {
+         invocableMethod.setHandlerMethodReturnValueHandlers(this.returnValueHandlers);
+      }
+      invocableMethod.setDataBinderFactory(binderFactory);
+      invocableMethod.setParameterNameDiscoverer(this.parameterNameDiscoverer);
+
+      ModelAndViewContainer mavContainer = new ModelAndViewContainer();
+      mavContainer.addAllAttributes(RequestContextUtils.getInputFlashMap(request));
+      modelFactory.initModel(webRequest, mavContainer, invocableMethod);
+      mavContainer.setIgnoreDefaultModelOnRedirect(this.ignoreDefaultModelOnRedirect);
+
+      AsyncWebRequest asyncWebRequest = WebAsyncUtils.createAsyncWebRequest(request, response);
+      asyncWebRequest.setTimeout(this.asyncRequestTimeout);
+
+      WebAsyncManager asyncManager = WebAsyncUtils.getAsyncManager(request);
+      asyncManager.setTaskExecutor(this.taskExecutor);
+      asyncManager.setAsyncWebRequest(asyncWebRequest);
+      asyncManager.registerCallableInterceptors(this.callableInterceptors);
+      asyncManager.registerDeferredResultInterceptors(this.deferredResultInterceptors);
+
+      if (asyncManager.hasConcurrentResult()) {
+         Object result = asyncManager.getConcurrentResult();
+         mavContainer = (ModelAndViewContainer) asyncManager.getConcurrentResultContext()[0];
+         asyncManager.clearConcurrentResult();
+         if (logger.isDebugEnabled()) {
+            logger.debug("Found concurrent result value [" + result + "]");
+         }
+         invocableMethod = invocableMethod.wrapConcurrentResult(result);
+      }
+
+      invocableMethod.invokeAndHandle(webRequest, mavContainer);
+      if (asyncManager.isConcurrentHandlingStarted()) {
+         return null;
+      }
+
+      return getModelAndView(mavContainer, modelFactory, webRequest);
+   }
+   finally {
+      webRequest.requestCompleted();
+   }
+}
+```
+
+org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod#invokeAndHandle
+
+```java
+public void invokeAndHandle(ServletWebRequest webRequest, ModelAndViewContainer mavContainer,
+			Object... providedArgs) throws Exception {
+
+		Object returnValue = invokeForRequest(webRequest, mavContainer, providedArgs);
+		setResponseStatus(webRequest);
+
+		if (returnValue == null) {
+			if (isRequestNotModified(webRequest) || getResponseStatus() != null || mavContainer.isRequestHandled()) {
+				mavContainer.setRequestHandled(true);
+				return;
+			}
+		}
+		else if (StringUtils.hasText(getResponseStatusReason())) {
+			mavContainer.setRequestHandled(true);
+			return;
+		}
+
+		mavContainer.setRequestHandled(false);
+		Assert.state(this.returnValueHandlers != null, "No return value handlers");
+		try {
+      // 选择结果处理器，处理结果
+			this.returnValueHandlers.handleReturnValue(
+					returnValue, getReturnValueType(returnValue), mavContainer, webRequest);
+		}
+		catch (Exception ex) {
+			if (logger.isTraceEnabled()) {
+				logger.trace(getReturnValueHandlingErrorMessage("Error handling return value", returnValue), ex);
+			}
+			throw ex;
+		}
+	}
+```
+
+
+
+org.springframework.web.method.support.InvocableHandlerMethod#invokeForRequest
+
+```java
+public Object invokeForRequest(NativeWebRequest request, @Nullable ModelAndViewContainer mavContainer,
+      Object... providedArgs) throws Exception {
+
+   Object[] args = getMethodArgumentValues(request, mavContainer, providedArgs);
+   if (logger.isTraceEnabled()) {
+      logger.trace("Invoking '" + ClassUtils.getQualifiedMethodName(getMethod(), getBeanType()) +
+            "' with arguments " + Arrays.toString(args));
+   }
+   Object returnValue = doInvoke(args);
+   if (logger.isTraceEnabled()) {
+      logger.trace("Method [" + ClassUtils.getQualifiedMethodName(getMethod(), getBeanType()) +
+            "] returned [" + returnValue + "]");
+   }
+   return returnValue;
+}
+```
+
+org.springframework.web.method.support.InvocableHandlerMethod#doInvoke
+
+```java
+/**
+ * Invoke the handler method with the given argument values.
+ */
+protected Object doInvoke(Object... args) throws Exception {
+   ReflectionUtils.makeAccessible(getBridgedMethod());
+   try {
+      return getBridgedMethod().invoke(getBean(), args);
+   }
+   catch (IllegalArgumentException ex) {
+      assertTargetBean(getBridgedMethod(), getBean(), args);
+      String text = (ex.getMessage() != null ? ex.getMessage() : "Illegal argument");
+      throw new IllegalStateException(getInvocationErrorMessage(text, args), ex);
+   }
+   catch (InvocationTargetException ex) {
+      // Unwrap for HandlerExceptionResolvers ...
+      Throwable targetException = ex.getTargetException();
+      if (targetException instanceof RuntimeException) {
+         throw (RuntimeException) targetException;
+      }
+      else if (targetException instanceof Error) {
+         throw (Error) targetException;
+      }
+      else if (targetException instanceof Exception) {
+         throw (Exception) targetException;
+      }
+      else {
+         String text = getInvocationErrorMessage("Failed to invoke handler method", args);
+         throw new IllegalStateException(text, targetException);
+      }
+   }
+```
+
+#### 处理返回对象
+
+org.springframework.web.method.support.HandlerMethodReturnValueHandlerComposite#handleReturnValue
+
+```java
+public void handleReturnValue(@Nullable Object returnValue, MethodParameter returnType,
+      ModelAndViewContainer mavContainer, NativeWebRequest webRequest) throws Exception {
+
+   HandlerMethodReturnValueHandler handler = selectHandler(returnValue, returnType);
+   if (handler == null) {
+      throw new IllegalArgumentException("Unknown return value type: " + returnType.getParameterType().getName());
+   }
+   handler.handleReturnValue(returnValue, returnType, mavContainer, webRequest);
+}
+```
+
+
+
+```java
+private HandlerMethodReturnValueHandler selectHandler(@Nullable Object value, MethodParameter returnType) {
+   boolean isAsyncValue = isAsyncReturnValue(value, returnType);
+   for (HandlerMethodReturnValueHandler handler : this.returnValueHandlers) {
+      if (isAsyncValue && !(handler instanceof AsyncHandlerMethodReturnValueHandler)) {
+         continue;
+      }
+      if (handler.supportsReturnType(returnType)) {
+         return handler;
+      }
+   }
+   return null;
+}
+```
+
+已org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor为例，处理有@ResponseBody注解的返回结果
+
+```java
+public boolean supportsReturnType(MethodParameter returnType) {
+   return (AnnotatedElementUtils.hasAnnotation(returnType.getContainingClass(), ResponseBody.class) ||
+         returnType.hasMethodAnnotation(ResponseBody.class));
+}
+
+public void handleReturnValue(@Nullable Object returnValue, MethodParameter returnType,
+			ModelAndViewContainer mavContainer, NativeWebRequest webRequest)
+			throws IOException, HttpMediaTypeNotAcceptableException, HttpMessageNotWritableException {
+
+  	// RequestHandled设置true，则直接返回response，否则返回view，需要视图解析，
+		mavContainer.setRequestHandled(true);
+		ServletServerHttpRequest inputMessage = createInputMessage(webRequest);
+		ServletServerHttpResponse outputMessage = createOutputMessage(webRequest);
+
+		// Try even with null return value. ResponseBodyAdvice could get involved.
+		writeWithMessageConverters(returnValue, returnType, inputMessage, outputMessage);
+	}
+
+	protected <T> void writeWithMessageConverters(@Nullable T value, MethodParameter returnType,
+			ServletServerHttpRequest inputMessage, ServletServerHttpResponse outputMessage)
+			throws IOException, HttpMediaTypeNotAcceptableException, HttpMessageNotWritableException {
+
+		Object outputValue;
+		Class<?> valueType;
+		Type declaredType;
+
+		if (value instanceof CharSequence) {
+			outputValue = value.toString();
+			valueType = String.class;
+			declaredType = String.class;
+		}
+		else {
+      // 返回值非字符串
+			outputValue = value;
+			valueType = getReturnValueType(outputValue, returnType);
+			declaredType = getGenericType(returnType);
+		}
+
+		if (isResourceType(value, returnType)) {
+			outputMessage.getHeaders().set(HttpHeaders.ACCEPT_RANGES, "bytes");
+			if (value != null && inputMessage.getHeaders().getFirst(HttpHeaders.RANGE) != null) {
+				Resource resource = (Resource) value;
+				try {
+					List<HttpRange> httpRanges = inputMessage.getHeaders().getRange();
+					outputMessage.getServletResponse().setStatus(HttpStatus.PARTIAL_CONTENT.value());
+					outputValue = HttpRange.toResourceRegions(httpRanges, resource);
+					valueType = outputValue.getClass();
+					declaredType = RESOURCE_REGION_LIST_TYPE;
+				}
+				catch (IllegalArgumentException ex) {
+					outputMessage.getHeaders().set(HttpHeaders.CONTENT_RANGE, "bytes */" + resource.contentLength());
+					outputMessage.getServletResponse().setStatus(HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE.value());
+				}
+			}
+		}
+
+
+		List<MediaType> mediaTypesToUse;
+
+		MediaType contentType = outputMessage.getHeaders().getContentType();
+		if (contentType != null && contentType.isConcrete()) {
+			mediaTypesToUse = Collections.singletonList(contentType);
+		}
+		else {
+			HttpServletRequest request = inputMessage.getServletRequest();
+			List<MediaType> requestedMediaTypes = getAcceptableMediaTypes(request);
+			List<MediaType> producibleMediaTypes = getProducibleMediaTypes(request, valueType, declaredType);
+
+			if (outputValue != null && producibleMediaTypes.isEmpty()) {
+				throw new HttpMessageNotWritableException(
+						"No converter found for return value of type: " + valueType);
+			}
+			mediaTypesToUse = new ArrayList<>();
+			for (MediaType requestedType : requestedMediaTypes) {
+				for (MediaType producibleType : producibleMediaTypes) {
+					if (requestedType.isCompatibleWith(producibleType)) {
+						mediaTypesToUse.add(getMostSpecificMediaType(requestedType, producibleType));
+					}
+				}
+			}
+			if (mediaTypesToUse.isEmpty()) {
+				if (outputValue != null) {
+					throw new HttpMediaTypeNotAcceptableException(producibleMediaTypes);
+				}
+				return;
+			}
+			MediaType.sortBySpecificityAndQuality(mediaTypesToUse);
+		}
+
+		MediaType selectedMediaType = null;
+		for (MediaType mediaType : mediaTypesToUse) {
+			if (mediaType.isConcrete()) {
+				selectedMediaType = mediaType;
+				break;
+			}
+			else if (mediaType.equals(MediaType.ALL) || mediaType.equals(MEDIA_TYPE_APPLICATION)) {
+				selectedMediaType = MediaType.APPLICATION_OCTET_STREAM;
+				break;
+			}
+		}
+
+		if (selectedMediaType != null) {
+			selectedMediaType = selectedMediaType.removeQualityValue();
+			for (HttpMessageConverter<?> converter : this.messageConverters) {
+				GenericHttpMessageConverter genericConverter = (converter instanceof GenericHttpMessageConverter ?
+						(GenericHttpMessageConverter<?>) converter : null);
+				if (genericConverter != null ?
+						((GenericHttpMessageConverter) converter).canWrite(declaredType, valueType, selectedMediaType) :
+						converter.canWrite(valueType, selectedMediaType)) {
+          // 拦截返回结果
+					outputValue = getAdvice().beforeBodyWrite(outputValue, returnType, selectedMediaType,
+							(Class<? extends HttpMessageConverter<?>>) converter.getClass(),
+							inputMessage, outputMessage);
+					if (outputValue != null) {
+						addContentDispositionHeader(inputMessage, outputMessage);
+						if (genericConverter != null) {
+              // 根据选择的messageConverter
+							genericConverter.write(outputValue, declaredType, selectedMediaType, outputMessage);
+						}
+						else {
+							((HttpMessageConverter) converter).write(outputValue, selectedMediaType, outputMessage);
+						}
+						if (logger.isDebugEnabled()) {
+							logger.debug("Written [" + outputValue + "] as \"" + selectedMediaType +
+									"\" using [" + converter + "]");
+						}
+					}
+					return;
+				}
+			}
+		}
+
+		if (outputValue != null) {
+			throw new HttpMediaTypeNotAcceptableException(this.allSupportedMediaTypes);
+		}
+	}
+```
+
+已Jackson2HttpMessageConverter为例
+
+org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter#writeInternal
+
+#### 返回mav
+
+org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter#getModelAndView
+
+**将返回结果和viewName放入ModelAndViewContainer**
+
+```java
+private ModelAndView getModelAndView(ModelAndViewContainer mavContainer,
+      ModelFactory modelFactory, NativeWebRequest webRequest) throws Exception {
+
+   modelFactory.updateModel(webRequest, mavContainer);
+   if (mavContainer.isRequestHandled()) {
+      return null;
+   }
+   ModelMap model = mavContainer.getModel();
+   ModelAndView mav = new ModelAndView(mavContainer.getViewName(), model, mavContainer.getStatus());
+   if (!mavContainer.isViewReference()) {
+      mav.setView((View) mavContainer.getView());
+   }
+   if (model instanceof RedirectAttributes) {
+      Map<String, ?> flashAttributes = ((RedirectAttributes) model).getFlashAttributes();
+      HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
+      if (request != null) {
+         RequestContextUtils.getOutputFlashMap(request).putAll(flashAttributes);
+      }
+   }
+   return mav;
+}
+```
+
+#### 视图渲染
+
+org.springframework.web.servlet.DispatcherServlet#processDispatchResult
+
+```java
+private void processDispatchResult(HttpServletRequest request, HttpServletResponse response,
+      @Nullable HandlerExecutionChain mappedHandler, @Nullable ModelAndView mv,
+      @Nullable Exception exception) throws Exception {
+
+   boolean errorView = false;
+
+   if (exception != null) {
+      if (exception instanceof ModelAndViewDefiningException) {
+         logger.debug("ModelAndViewDefiningException encountered", exception);
+         mv = ((ModelAndViewDefiningException) exception).getModelAndView();
+      }
+      else {
+         Object handler = (mappedHandler != null ? mappedHandler.getHandler() : null);
+         mv = processHandlerException(request, response, handler, exception);
+         errorView = (mv != null);
+      }
+   }
+
+   // Did the handler return a view to render?
+   if (mv != null && !mv.wasCleared()) {
+      // 渲染视图
+      render(mv, request, response);
+      if (errorView) {
+         WebUtils.clearErrorRequestAttributes(request);
+      }
+   }
+   else {
+      if (logger.isDebugEnabled()) {
+         logger.debug("Null ModelAndView returned to DispatcherServlet with name '" + getServletName() +
+               "': assuming HandlerAdapter completed request handling");
+      }
+   }
+
+   if (WebAsyncUtils.getAsyncManager(request).isConcurrentHandlingStarted()) {
+      // Concurrent handling started during a forward
+      return;
+   }
+
+   if (mappedHandler != null) {
+      mappedHandler.triggerAfterCompletion(request, response, null);
+   }
+}
+```
+
+```java
+protected void render(ModelAndView mv, HttpServletRequest request, HttpServletResponse response) throws Exception {
+   // Determine locale for request and apply it to the response.
+   Locale locale =
+         (this.localeResolver != null ? this.localeResolver.resolveLocale(request) : request.getLocale());
+   response.setLocale(locale);
+
+   View view;
+   String viewName = mv.getViewName();
+   if (viewName != null) {
+      // 视图名
+      // We need to resolve the view name.
+      view = resolveViewName(viewName, mv.getModelInternal(), locale, request);
+      if (view == null) {
+         throw new ServletException("Could not resolve view with name '" + mv.getViewName() +
+               "' in servlet with name '" + getServletName() + "'");
+      }
+   }
+   else {
+     	// 数据实体
+      // No need to lookup: the ModelAndView object contains the actual View object.
+      view = mv.getView();
+      if (view == null) {
+         throw new ServletException("ModelAndView [" + mv + "] neither contains a view name nor a " +
+               "View object in servlet with name '" + getServletName() + "'");
+      }
+   }
+
+   // Delegate to the View object for rendering.
+   if (logger.isDebugEnabled()) {
+      logger.debug("Rendering view [" + view + "] in DispatcherServlet with name '" + getServletName() + "'");
+   }
+   try {
+      if (mv.getStatus() != null) {
+         response.setStatus(mv.getStatus().value());
+      }
+     	// 渲染视图
+      view.render(mv.getModelInternal(), request, response);
+   }
+   catch (Exception ex) {
+      if (logger.isDebugEnabled()) {
+         logger.debug("Error rendering view [" + view + "] in DispatcherServlet with name '" +
+               getServletName() + "'", ex);
+      }
+      throw ex;
+   }
+}
+```
+
+```java
+protected View resolveViewName(String viewName, @Nullable Map<String, Object> model,
+      Locale locale, HttpServletRequest request) throws Exception {
+
+   if (this.viewResolvers != null) {
+      for (ViewResolver viewResolver : this.viewResolvers) {
+        // 遍历注册的viewResolvers
+         View view = viewResolver.resolveViewName(viewName, locale);
+         if (view != null) {
+            return view;
+         }
+      }
+   }
+   return null;
+}
+```
+
+```java
+public View resolveViewName(String viewName, Locale locale) throws Exception {
+   if (!isCache()) {
+     // 如果子类重写，则调用子类createView
+      return createView(viewName, locale);
+   }
+   else {
+      Object cacheKey = getCacheKey(viewName, locale);
+      View view = this.viewAccessCache.get(cacheKey);
+      if (view == null) {
+         synchronized (this.viewCreationCache) {
+            view = this.viewCreationCache.get(cacheKey);
+            if (view == null) {
+               // Ask the subclass to create the View object.
+               view = createView(viewName, locale);
+               if (view == null && this.cacheUnresolved) {
+                  view = UNRESOLVED_VIEW;
+               }
+               if (view != null) {
+                  this.viewAccessCache.put(cacheKey, view);
+                  this.viewCreationCache.put(cacheKey, view);
+                  if (logger.isTraceEnabled()) {
+                     logger.trace("Cached view [" + cacheKey + "]");
+                  }
+               }
+            }
+         }
+      }
+      return (view != UNRESOLVED_VIEW ? view : null);
+   }
+}
+
+```
+
+
+
+已InternalResourceViewResolver为例子，
+
+```
+* &lt;bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"&gt;
+*   &lt;property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/&gt;
+*   &lt;property name="prefix" value="/WEB-INF/jsp/"/&gt;
+*   &lt;property name="suffix" value=".jsp"/&gt;
+* &lt;/bean&gt;
+```
+
+```java
+protected View createView(String viewName, Locale locale) throws Exception {
+   // If this resolver is not supposed to handle the given view,
+   // return null to pass on to the next resolver in the chain.
+   if (!canHandle(viewName, locale)) {
+      return null;
+   }
+
+   // Check for special "redirect:" prefix.
+   if (viewName.startsWith(REDIRECT_URL_PREFIX)) {
+      String redirectUrl = viewName.substring(REDIRECT_URL_PREFIX.length());
+      RedirectView view = new RedirectView(redirectUrl,
+            isRedirectContextRelative(), isRedirectHttp10Compatible());
+      String[] hosts = getRedirectHosts();
+      if (hosts != null) {
+         view.setHosts(hosts);
+      }
+      return applyLifecycleMethods(REDIRECT_URL_PREFIX, view);
+   }
+
+   // Check for special "forward:" prefix.
+   if (viewName.startsWith(FORWARD_URL_PREFIX)) {
+      String forwardUrl = viewName.substring(FORWARD_URL_PREFIX.length());
+      return new InternalResourceView(forwardUrl);
+   }
+
+   // Else fall back to superclass implementation: calling loadView.
+   return super.createView(viewName, locale);
+}
+```
+
+
+
+org.springframework.web.servlet.view.UrlBasedViewResolver#buildView
+
+```java
+protected AbstractUrlBasedView buildView(String viewName) throws Exception {
+   // JstlView
+   Class<?> viewClass = getViewClass();
+   Assert.state(viewClass != null, "No view class");
+
+   AbstractUrlBasedView view = (AbstractUrlBasedView) BeanUtils.instantiateClass(viewClass);
+   // 视图文件名getPrefix() + viewName + getSuffix()
+   view.setUrl(getPrefix() + viewName + getSuffix());
+
+   String contentType = getContentType();
+   if (contentType != null) {
+      view.setContentType(contentType);
+   }
+
+   view.setRequestContextAttribute(getRequestContextAttribute());
+   view.setAttributesMap(getAttributesMap());
+
+   Boolean exposePathVariables = getExposePathVariables();
+   if (exposePathVariables != null) {
+      view.setExposePathVariables(exposePathVariables);
+   }
+   Boolean exposeContextBeansAsAttributes = getExposeContextBeansAsAttributes();
+   if (exposeContextBeansAsAttributes != null) {
+      view.setExposeContextBeansAsAttributes(exposeContextBeansAsAttributes);
+   }
+   String[] exposedContextBeanNames = getExposedContextBeanNames();
+   if (exposedContextBeanNames != null) {
+      view.setExposedContextBeanNames(exposedContextBeanNames);
+   }
+
+   return view;
+}
+```
+
+
+
+view.render
+
+org.springframework.web.servlet.view.AbstractView#render
+
+```java
+public void render(@Nullable Map<String, ?> model, HttpServletRequest request,
+      HttpServletResponse response) throws Exception {
+
+   if (logger.isTraceEnabled()) {
+      logger.trace("Rendering view with name '" + this.beanName + "' with model " + model +
+         " and static attributes " + this.staticAttributes);
+   }
+
+   Map<String, Object> mergedModel = createMergedOutputModel(model, request, response);
+   prepareResponse(request, response);
+   // 这里进行真正渲染
+   renderMergedOutputModel(mergedModel, getRequestToExpose(request), response);
+}
+```
+
+org.springframework.web.servlet.view.InternalResourceView#renderMergedOutputModel
+
+```java
+protected void renderMergedOutputModel(
+      Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+   // Expose the model object as request attributes.
+   // 将request属性都放入model
+   exposeModelAsRequestAttributes(model, request);
+
+   // Expose helpers as request attributes, if any.
+   exposeHelpers(request);
+
+   // Determine the path for the request dispatcher.
+   // 要转发的资源地址（xxx.jsp）
+   String dispatcherPath = prepareForRendering(request, response);
+
+   // Obtain a RequestDispatcher for the target resource (typically a JSP).
+   // 得到web容器（例如tomcat）的request信息
+   RequestDispatcher rd = getRequestDispatcher(request, dispatcherPath);
+   if (rd == null) {
+      throw new ServletException("Could not get RequestDispatcher for [" + getUrl() +
+            "]: Check that the corresponding file exists within your web application archive!");
+   }
+
+   // If already included or response already committed, perform include, else forward.
+   if (useInclude(request, response)) {
+      response.setContentType(getContentType());
+      if (logger.isDebugEnabled()) {
+         logger.debug("Including resource [" + getUrl() + "] in InternalResourceView '" + getBeanName() + "'");
+      }
+      rd.include(request, response);
+   }
+
+   else {
+      // Note: The forwarded resource is supposed to determine the content type itself.
+      if (logger.isDebugEnabled()) {
+         logger.debug("Forwarding to resource [" + getUrl() + "] in InternalResourceView '" + getBeanName() + "'");
+      }
+      // 将请求转发到目标地址，之后的事情，JSP解析等等，就是服务器的事情了
+      rd.forward(request, response);
+   }
+}
+```
+
+
+
+### 主要流程
+
+1. 首先方法进入，doDispatch
+2. checkMultipart，判断当前请求是否有文件
+3. getHandler，通过HandleMapping去找一个Controller对象 
+   1. **扩展点1**：HandleMapping
+   2.  Spring boot 扩展Spring mvc，其中就扩展了 HandleMapping 去解析静态资源
+4. getHandlerAdapter， 根据你controller的类型去找一个适配器
+   1. 因为Controller有很多种不同的注册方式，所以需要不同的适配器
+   2. **扩展点2**：HandlerAdapter
+5. handle : 执行Controller逻辑并且进行视图裁决（判断是要重定向还是转发还是响应页面）
+   1. invokeForRequest() 执行方法的全部逻辑
+   2. 首先给参数赋值  
+      1. 参数赋值的**扩展点3**：HandlerMethodArgumentResolver 
+   3. 调用invoke指定方法
+6. setResponseStatus设置ResponseStatus响应状态码 对标：@ResponseStatus注解
+7. handleReturnValue 进行视图裁决
+   1. **扩展点4**：returnValueHandlers 通过这个对象来进行判断接下来视图怎么做
+8. handler.handleReturnValue 对重定向返回值处理（判断是否需要响应还是需要重定向）
+   1. 如果是@ResponseBody 注解又有一个扩展点:HttpMessageConverter
+9. getModelAndView() 重新封装一个ModelAndView对象 
+   1. 如果不需要渲染视图（如果是重定向 || 响应视图的话） 就会返回null
+   2. mavContainer.isRequestHandled() 判断是否需要重定向或响应
+   3. 同时会把model里面的参数放到request.setAttribute（说明model的作用域是request作用域）
+10. processDispatchResult 开始做视图渲染
+    1. 判断是否需要响应异常视图
+    2. **扩展点5**：ViewResolver
+    3. 拿到视图名称 封装一个视图对象 进行forward
 
 
 
 ![image-20191217141620825](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191217141620825.png)
-
-tomcat启动，如果设置loadOnStartUp为1，则开始初始化servlet，否则要等到第一次请求才初始化servlet，org.apache.catalina.core.StandardWrapper#initServlet
-
-调用dispatcherServlet（org.springframework.web.servlet.HttpServletBean#init->org.springframework.web.servlet.FrameworkServlet#initServletBean）方法，初始化handler和映射
 
 使用spring实现mvc设计模式
 
@@ -1121,34 +1875,17 @@ url进入HandlerMapping，找到具体的controller实现类
 
 
 
-1:首先方法进入：doDispatch
-2:checkMultipart() 判断当前请求是否有文件
-3:getHandler（） ：通过HandleMapping去找一个Controller对象 
-	3.1:扩展点1：HandleMapping
-	3.2: Spring boot 扩展Spring mvc 其中就扩展了 HandleMapping 去解析静态资源
-4: getHandlerAdapter（）: 根据你controller的类型去找一个适配器
-	4.1:  因为Controller有很多种不同的注册方式 所以需要不同的适配器
-	4.2:扩展点2：HandlerAdapter
-5:handle() : 执行Controller逻辑并且进行视图裁决（判断是要重定向还是转发还是响应页面）
-	5.1invokeForRequest()：执行方法的全部逻辑
-	5.2：首先给参数赋值  
-		5.2.1:参数赋值的扩展点：HandlerMethodArgumentResolver 
-	5.3：调用invoke（）指定方法
-6:setResponseStatus（）设置ResponseStatus响应状态码 对标：@ResponseStatus注解
-7：handleReturnValue（） 进行视图裁决
-	7.1:扩展点:returnValueHandlers 通过这个对象来进行判断接下来视图怎么做、
-8：handler.handleReturnValue（） 对冲顶于返回值处理（判断是否需要响应还是需要重定向）
-	8.1： 如果是@ResponseBody 注解又有一个扩展点:HttpMessageConverter
-9:getModelAndView() 重新封装一个ModelAndView对象 
-	9.1：如果不需要渲染视图（如果是重定向 || 响应视图的话） 就会返回null
-	9.2: mavContainer.isRequestHandled() 判断是否需要重定向或响应
-	9.3: 同时会把model里面的参数放到request.setAttribute（说明model的作用域是request作用域）
-10：processDispatchResult（）：开始做视图渲染
-	10.1:判断是否需要响应异常视图
-	10.2:扩展点：ViewResolver
-	10.2：拿到视图名称 封装一个视图对象 进行forward
 
 
+理论上我们可以有任意多个容器（只是我们一般其它的都只放进主容器统一管理上，但Spring是提供了这样的功能的），比如
+
+- 主容器：applicationContext.xml(主文件，包括JDBC配置，hibernate.cfg.xml，与所有的Service与DAO基类)
+- web子容器：application-servlet.xml（管理Spring MVC9打组件以及相关的Bean）
+- cache子容器：applicationContext-cache.xml(cache策略配置，管理和缓存相关的Bean)
+- JMX子容器：applicationContext-jmx.xml(JMX相关的Bean)
+- …
+
+**与springmvc不同Spring Boot只有一个上下文**
 
 
 
@@ -1157,3 +1894,5 @@ url进入HandlerMapping，找到具体的controller实现类
 http://www.it165.net/pro/html/201502/33644.html
 
 https://blog.csdn.net/and1kaney/article/details/51214193
+
+https://cloud.tencent.com/developer/article/1497830
