@@ -76,16 +76,53 @@ public SpringApplication(ResourceLoader resourceLoader, Class<?>... primarySourc
 		Assert.notNull(primarySources, "PrimarySources must not be null");
 		this.primarySources = new LinkedHashSet<>(Arrays.asList(primarySources));
 		this.webApplicationType = deduceWebApplicationType();
-    // 从spring.factories找到org.springframework.context.ApplicationContextInitializer实现类
+    // 从spring.factories找到org.springframework.context.ApplicationContextInitializer实现类并实例化
 		setInitializers((Collection) getSpringFactoriesInstances(
 				ApplicationContextInitializer.class));
-    // 从spring.factories找到org.springframework.context.ApplicationListener实现类
+    // 从spring.factories找到org.springframework.context.ApplicationListener实现类并实例化
 		setListeners((Collection) getSpringFactoriesInstances(ApplicationListener.class));
 		this.mainApplicationClass = deduceMainApplicationClass();
 	}
 ```
 
+```java
+private <T> Collection<T> getSpringFactoriesInstances(Class<T> type,
+      Class<?>[] parameterTypes, Object... args) {
+   ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+   // Use names and ensure unique to protect against duplicates
+   // 从spring.factories找到type实现类全限定名
+   Set<String> names = new LinkedHashSet<>(
+         SpringFactoriesLoader.loadFactoryNames(type, classLoader));
+   // 实例化
+   List<T> instances = createSpringFactoriesInstances(type, parameterTypes,
+         classLoader, args, names);
+   AnnotationAwareOrderComparator.sort(instances);
+   return instances;
+```
 
+```java
+private <T> List<T> createSpringFactoriesInstances(Class<T> type,
+      Class<?>[] parameterTypes, ClassLoader classLoader, Object[] args,
+      Set<String> names) {
+   List<T> instances = new ArrayList<>(names.size());
+   for (String name : names) {
+      try {
+         Class<?> instanceClass = ClassUtils.forName(name, classLoader);
+         Assert.isAssignable(type, instanceClass);
+         Constructor<?> constructor = instanceClass
+               .getDeclaredConstructor(parameterTypes);
+         // 实例化
+         T instance = (T) BeanUtils.instantiateClass(constructor, args);
+         instances.add(instance);
+      }
+      catch (Throwable ex) {
+         throw new IllegalArgumentException(
+               "Cannot instantiate " + type + " : " + name, ex);
+      }
+   }
+   return instances;
+}
+```
 
 ```java
 springboot autoconfiguration的meta-inf的spring.factories文件
@@ -159,11 +196,70 @@ public ConfigurableApplicationContext run(String... args) {
 }
 ```
 
-##### 创建spring容器
+创建spring容器，默认org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext
 
-根据import注解，解析META-INF/spring.factories文件，导入第三方组件的启动类（org.springframework.boot.autoconfigure.EnableAutoConfiguration）
+```java
+protected ConfigurableApplicationContext createApplicationContext() {
+   Class<?> contextClass = this.applicationContextClass;
+   if (contextClass == null) {
+      try {
+         switch (this.webApplicationType) {
+         case SERVLET:
+            contextClass = Class.forName(DEFAULT_WEB_CONTEXT_CLASS);
+            break;
+         case REACTIVE:
+            contextClass = Class.forName(DEFAULT_REACTIVE_WEB_CONTEXT_CLASS);
+            break;
+         default:
+            contextClass = Class.forName(DEFAULT_CONTEXT_CLASS);
+         }
+      }
+      catch (ClassNotFoundException ex) {
+         throw new IllegalStateException(
+               "Unable create a default ApplicationContext, "
+                     + "please specify an ApplicationContextClass",
+               ex);
+      }
+   }
+   return (ConfigurableApplicationContext) BeanUtils.instantiateClass(contextClass);
+}
+```
 
-@SpringBootApplication->@EnableAutoConfiguration->@Import(AutoConfigurationImportSelector.class)
+```java
+private void prepareContext(ConfigurableApplicationContext context,
+      ConfigurableEnvironment environment, SpringApplicationRunListeners listeners,
+      ApplicationArguments applicationArguments, Banner printedBanner) {
+   context.setEnvironment(environment);
+   postProcessApplicationContext(context);
+   // 执行Initializers
+   applyInitializers(context);
+   // 执行listeners
+   listeners.contextPrepared(context);
+   if (this.logStartupInfo) {
+      logStartupInfo(context.getParent() == null);
+      logStartupProfileInfo(context);
+   }
+
+   // Add boot specific singleton beans
+   context.getBeanFactory().registerSingleton("springApplicationArguments",
+         applicationArguments);
+   if (printedBanner != null) {
+      context.getBeanFactory().registerSingleton("springBootBanner", printedBanner);
+   }
+
+   // Load the sources
+   Set<Object> sources = getAllSources();
+   Assert.notEmpty(sources, "Sources must not be empty");
+   load(context, sources.toArray(new Object[0]));
+   listeners.contextLoaded(context);
+}
+```
+
+##### @SpringBoosApplication注解
+
+根据import注解，解析META-INF/spring.factories文件，导入第三方组件的启动类xxxx（**org.springframework.boot.autoconfigure.EnableAutoConfiguration**=xxxx）
+
+@SpringBootApplication->@EnableAutoConfiguration->**@Import(AutoConfigurationImportSelector.class**)
 
 ```java
 // 返回包里所有的org.springframework.boot.autoconfigure.EnableAutoConfiguration实现类的类名，由spring生成bd和bean	
