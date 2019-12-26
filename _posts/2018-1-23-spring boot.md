@@ -169,7 +169,7 @@ public ConfigurableApplicationContext run(String... args) {
             new Class[] { ConfigurableApplicationContext.class }, context);
       prepareContext(context, environment, listeners, applicationArguments,
             printedBanner);
-      // 创建spring容器
+      // 创建spring容器，和web服务器
       refreshContext(context);
       afterRefresh(context, applicationArguments);
       stopWatch.stop();
@@ -197,6 +197,8 @@ public ConfigurableApplicationContext run(String... args) {
 ```
 
 创建spring容器，默认org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext
+
+![image-20191225093322418](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191225093322418.png)
 
 ```java
 protected ConfigurableApplicationContext createApplicationContext() {
@@ -255,7 +257,220 @@ private void prepareContext(ConfigurableApplicationContext context,
 }
 ```
 
-##### @SpringBoosApplication注解
+org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext#onRefresh
+
+```java
+protected void onRefresh() {
+   super.onRefresh();
+   try {
+      // 实例化并启动tomcat服务器
+      createWebServer();
+   }
+   catch (Throwable ex) {
+      throw new ApplicationContextException("Unable to start web server", ex);
+   }
+}
+```
+
+```java
+private void createWebServer() {
+   WebServer webServer = this.webServer;
+   ServletContext servletContext = getServletContext();
+   if (webServer == null && servletContext == null) {
+      // 创建webServer工厂tomcatServletWebServerFactory
+      ServletWebServerFactory factory = getWebServerFactory();
+     	// 创建webServer
+      this.webServer = factory.getWebServer(getSelfInitializer());
+   }
+   else if (servletContext != null) {
+      try {
+         getSelfInitializer().onStartup(servletContext);
+      }
+      catch (ServletException ex) {
+         throw new ApplicationContextException("Cannot initialize servlet context",
+               ex);
+      }
+   }
+   initPropertySources();
+}
+```
+
+
+
+```java
+protected ServletWebServerFactory getWebServerFactory() {
+   // Use bean names so that we don't consider the hierarchy
+   // 查找tomcatServletWebServerFactory的bean
+   String[] beanNames = getBeanFactory()
+         .getBeanNamesForType(ServletWebServerFactory.class);
+   if (beanNames.length == 0) {
+      throw new ApplicationContextException(
+            "Unable to start ServletWebServerApplicationContext due to missing "
+                  + "ServletWebServerFactory bean.");
+   }
+   if (beanNames.length > 1) {
+      throw new ApplicationContextException(
+            "Unable to start ServletWebServerApplicationContext due to multiple "
+                  + "ServletWebServerFactory beans : "
+                  + StringUtils.arrayToCommaDelimitedString(beanNames));
+   }
+   return getBeanFactory().getBean(beanNames[0], ServletWebServerFactory.class);
+}
+```
+
+```java
+@FunctionalInterface
+public interface ServletContextInitializer {
+
+	/**
+	 * Configure the given {@link ServletContext} with any servlets, filters, listeners
+	 * context-params and attributes necessary for initialization.
+	 * @param servletContext the {@code ServletContext} to initialize
+	 * @throws ServletException if any call against the given {@code ServletContext}
+	 * throws a {@code ServletException}
+	 */
+	void onStartup(ServletContext servletContext) throws ServletException;
+
+}
+
+private org.springframework.boot.web.servlet.ServletContextInitializer getSelfInitializer() {
+   // 函数接口，调用onStarup的时候调用的是selfInitialize
+   return this::selfInitialize;
+}
+
+private void selfInitialize(ServletContext servletContext) throws ServletException {
+   prepareWebApplicationContext(servletContext);
+   ConfigurableListableBeanFactory beanFactory = getBeanFactory();
+   ExistingWebApplicationScopes existingScopes = new ExistingWebApplicationScopes(
+         beanFactory);
+   WebApplicationContextUtils.registerWebApplicationScopes(beanFactory,
+         getServletContext());
+   existingScopes.restore();
+   WebApplicationContextUtils.registerEnvironmentBeans(beanFactory,
+         getServletContext());
+   // 从spring容器里获取ServletContextInitializer bean
+   for (ServletContextInitializer beans : getServletContextInitializerBeans()) {
+      // 将tomcat和spring容器关联
+      beans.onStartup(servletContext);
+   }
+}
+```
+
+
+
+```java
+protected Collection<ServletContextInitializer> getServletContextInitializerBeans() {
+   return new ServletContextInitializerBeans(getBeanFactory());
+}
+
+	public ServletContextInitializerBeans(ListableBeanFactory beanFactory) {
+		this.initializers = new LinkedMultiValueMap<>();
+    // 将ServletContextInitializerBean放入initializers
+		addServletContextInitializerBeans(beanFactory);
+		addAdaptableBeans(beanFactory);
+		List<ServletContextInitializer> sortedInitializers = this.initializers.values()
+				.stream()
+				.flatMap((value) -> value.stream()
+						.sorted(AnnotationAwareOrderComparator.INSTANCE))
+				.collect(Collectors.toList());
+		this.sortedList = Collections.unmodifiableList(sortedInitializers);
+	}
+```
+
+
+
+**实例化并启动tomcat服务器**
+
+org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory#getWebServer
+
+```java
+public WebServer getWebServer(ServletContextInitializer... initializers) {
+   Tomcat tomcat = new Tomcat();
+   File baseDir = (this.baseDirectory != null) ? this.baseDirectory
+         : createTempDir("tomcat");
+   tomcat.setBaseDir(baseDir.getAbsolutePath());
+   Connector connector = new Connector(this.protocol);
+   tomcat.getService().addConnector(connector);
+   customizeConnector(connector);
+   tomcat.setConnector(connector);
+   tomcat.getHost().setAutoDeploy(false);
+   configureEngine(tomcat.getEngine());
+   for (Connector additionalConnector : this.additionalTomcatConnectors) {
+      tomcat.getService().addConnector(additionalConnector);
+   }
+   prepareContext(tomcat.getHost(), initializers);
+   return getTomcatWebServer(tomcat);
+}
+```
+
+
+
+```java
+protected void prepareContext(Host host, ServletContextInitializer[] initializers) {
+   File documentRoot = getValidDocumentRoot();
+   TomcatEmbeddedContext context = new TomcatEmbeddedContext();
+   if (documentRoot != null) {
+      context.setResources(new LoaderHidingResourceRoot(context));
+   }
+   context.setName(getContextPath());
+   context.setDisplayName(getDisplayName());
+   context.setPath(getContextPath());
+   File docBase = (documentRoot != null) ? documentRoot
+         : createTempDir("tomcat-docbase");
+   context.setDocBase(docBase.getAbsolutePath());
+   context.addLifecycleListener(new FixContextListener());
+   context.setParentClassLoader(
+         (this.resourceLoader != null) ? this.resourceLoader.getClassLoader()
+               : ClassUtils.getDefaultClassLoader());
+   resetDefaultLocaleMapping(context);
+   addLocaleMappings(context);
+   context.setUseRelativeRedirects(false);
+   configureTldSkipPatterns(context);
+   WebappLoader loader = new WebappLoader(context.getParentClassLoader());
+   loader.setLoaderClass(TomcatEmbeddedWebappClassLoader.class.getName());
+   loader.setDelegate(true);
+   context.setLoader(loader);
+   if (isRegisterDefaultServlet()) {
+      addDefaultServlet(context);
+   }
+   if (shouldRegisterJspServlet()) {
+      addJspServlet(context);
+      addJasperInitializer(context);
+   }
+   context.addLifecycleListener(new StaticResourceConfigurer(context));
+   ServletContextInitializer[] initializersToUse = mergeInitializers(initializers);
+   host.addChild(context);
+   // 实例化TomcatStarter，org.springframework.boot.web.embedded.tomcat.TomcatStarter#TomcatStarter，并发initilizer放到tomcatStarter
+   configureContext(context, initializersToUse);
+   postProcessContext(context);
+}
+```
+
+tomcat启动的时候，org.apache.catalina.core.StandardContext#startInternal->org.springframework.boot.web.embedded.tomcat.TomcatStarter#onStartup，servlet初始化
+
+```java
+public void onStartup(Set<Class<?>> classes, ServletContext servletContext)
+      throws ServletException {
+   try {
+      for (ServletContextInitializer initializer : this.initializers) {
+         initializer.onStartup(servletContext);
+      }
+   }
+   catch (Exception ex) {
+      this.startUpException = ex;
+      // Prevent Tomcat from logging and re-throwing when we know we can
+      // deal with it in the main thread, but log for information here.
+      if (logger.isErrorEnabled()) {
+         logger.error("Error starting Tomcat context. Exception: "
+               + ex.getClass().getName() + ". Message: " + ex.getMessage());
+      }
+   }
+}
+```
+
+
+
+### @SpringBoosApplication注解
 
 根据import注解，解析META-INF/spring.factories文件，导入第三方组件的启动类xxxx（**org.springframework.boot.autoconfigure.EnableAutoConfiguration**=xxxx）
 
@@ -354,8 +569,205 @@ private void fireAutoConfigurationImportEvents(List<String> configurations,
    }
 ```
 
+## 自动配置注入dispatcherServlet
 
+**springboot是先把dispatcherServlet bean注入到spring容器，而springmvc不需要**
 
+注入的DispatcherServletRegistrationBean，继承了ServletContextInitializer，能被启动服务器流程调用
 
+spring.factories
 
+```java
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=org.springframework.boot.autoconfigure.web.servlet.DispatcherServletAutoConfiguration
+```
 
+```java
+@AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
+@Configuration
+@ConditionalOnWebApplication(type = Type.SERVLET)
+@ConditionalOnClass(DispatcherServlet.class)
+@AutoConfigureAfter(ServletWebServerFactoryAutoConfiguration.class)
+@EnableConfigurationProperties(ServerProperties.class)
+public class DispatcherServletAutoConfiguration {
+  
+  
+  @Configuration
+	@Conditional(DispatcherServletRegistrationCondition.class)
+	@ConditionalOnClass(ServletRegistration.class)
+	@EnableConfigurationProperties(WebMvcProperties.class)
+	@Import(DispatcherServletConfiguration.class)
+	protected static class DispatcherServletRegistrationConfiguration {
+    
+      // 注入DispatcherServletRegistrationBean，这个bean继承了
+      @Bean(name = DEFAULT_DISPATCHER_SERVLET_REGISTRATION_BEAN_NAME)
+      @ConditionalOnBean(value = DispatcherServlet.class, name = DEFAULT_DISPATCHER_SERVLET_BEAN_NAME)
+      public DispatcherServletRegistrationBean dispatcherServletRegistration(
+          DispatcherServlet dispatcherServlet) {
+        DispatcherServletRegistrationBean registration = new DispatcherServletRegistrationBean(
+            dispatcherServlet, this.serverProperties.getServlet().getPath());
+        registration.setName(DEFAULT_DISPATCHER_SERVLET_BEAN_NAME);
+        registration.setLoadOnStartup(
+            this.webMvcProperties.getServlet().getLoadOnStartup());
+        if (this.multipartConfig != null) {
+          registration.setMultipartConfig(this.multipartConfig);
+        }
+        return registration;
+      }
+  }
+  
+  
+  @Configuration
+	@Conditional(DefaultDispatcherServletCondition.class)
+	@ConditionalOnClass(ServletRegistration.class)
+	@EnableConfigurationProperties(WebMvcProperties.class)
+	protected static class DispatcherServletConfiguration {
+
+		private final WebMvcProperties webMvcProperties;
+
+		public DispatcherServletConfiguration(WebMvcProperties webMvcProperties) {
+			this.webMvcProperties = webMvcProperties;
+		}
+
+    // 注入dispatcherServlet bean
+		@Bean(name = DEFAULT_DISPATCHER_SERVLET_BEAN_NAME)
+		public DispatcherServlet dispatcherServlet() {
+			DispatcherServlet dispatcherServlet = new DispatcherServlet();
+			dispatcherServlet.setDispatchOptionsRequest(
+					this.webMvcProperties.isDispatchOptionsRequest());
+			dispatcherServlet.setDispatchTraceRequest(
+					this.webMvcProperties.isDispatchTraceRequest());
+			dispatcherServlet.setThrowExceptionIfNoHandlerFound(
+					this.webMvcProperties.isThrowExceptionIfNoHandlerFound());
+			return dispatcherServlet;
+		}
+  }
+  
+  
+}
+```
+
+![image-20191225162114063](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191225162114063.png)
+
+```java
+public final void onStartup(ServletContext servletContext) throws ServletException {
+   String description = getDescription();
+   if (!isEnabled()) {
+      logger.info(StringUtils.capitalize(description)
+            + " was not registered (disabled)");
+      return;
+   }
+   register(description, servletContext);
+}
+
+protected final void register(String description, ServletContext servletContext) {
+   D registration = addRegistration(description, servletContext);
+   if (registration == null) {
+      logger.info(StringUtils.capitalize(description) + " was not registered "
+            + "(possibly already registered?)");
+      return;
+   }
+   configure(registration);
+}
+
+// 将dispatcherServlet设置到tomcat的context里，作为一个分发请求的servlet
+protected ServletRegistration.Dynamic addRegistration(String description,
+                                                      ServletContext servletContext) {
+  String name = getServletName();
+  logger.info("Servlet " + name + " mapped to " + this.urlMappings);
+  return servletContext.addServlet(name, this.servlet);
+}
+
+protected void configure(ServletRegistration.Dynamic registration) {
+		super.configure(registration);
+		String[] urlMapping = StringUtils.toStringArray(this.urlMappings);
+		if (urlMapping.length == 0 && this.alwaysMapUrl) {
+			urlMapping = DEFAULT_MAPPINGS;
+		}
+		if (!ObjectUtils.isEmpty(urlMapping)) {
+			registration.addMapping(urlMapping);
+		}
+		registration.setLoadOnStartup(this.loadOnStartup);
+		if (this.multipartConfig != null) {
+			registration.setMultipartConfig(this.multipartConfig);
+		}
+	}
+```
+
+dispatcherServlet 实现了ApplicationContextAware接口，在org.springframework.web.servlet.FrameworkServlet#setApplicationContext中设置了spring上下文
+
+```java
+public void setApplicationContext(ApplicationContext applicationContext) {
+   if (this.webApplicationContext == null && applicationContext instanceof WebApplicationContext) {
+      this.webApplicationContext = (WebApplicationContext) applicationContext;
+      this.webApplicationContextInjected = true;
+   }
+}
+```
+
+所以说dispatcherServlet bean要先在spring容器里面，再利用后置处理器设置上下文，而springmvc的dispatcherServlet则不需要再spring容器
+
+## 自动配置WebMvcAutoConfiguration
+
+```java
+// 搜集messageConvertersProvider消息转换器等bean
+public WebMvcAutoConfigurationAdapter(ResourceProperties resourceProperties,
+      WebMvcProperties mvcProperties, ListableBeanFactory beanFactory,
+      ObjectProvider<HttpMessageConverters> messageConvertersProvider,
+      ObjectProvider<ResourceHandlerRegistrationCustomizer> resourceHandlerRegistrationCustomizerProvider) {
+   this.resourceProperties = resourceProperties;
+   this.mvcProperties = mvcProperties;
+   this.beanFactory = beanFactory;
+   this.messageConvertersProvider = messageConvertersProvider;
+   this.resourceHandlerRegistrationCustomizer = resourceHandlerRegistrationCustomizerProvider
+         .getIfAvailable();
+}
+```
+
+视图解析器
+
+```java
+@Bean
+@ConditionalOnBean(ViewResolver.class)
+@ConditionalOnMissingBean(name = "viewResolver", value = ContentNegotiatingViewResolver.class)
+public ContentNegotiatingViewResolver viewResolver(BeanFactory beanFactory) {
+   ContentNegotiatingViewResolver resolver = new ContentNegotiatingViewResolver();
+   resolver.setContentNegotiationManager(
+         beanFactory.getBean(ContentNegotiationManager.class));
+   // ContentNegotiatingViewResolver uses all the other view resolvers to locate
+   // a view so it should have a high precedence
+   resolver.setOrder(Ordered.HIGHEST_PRECEDENCE);
+   return resolver;
+}
+```
+
+```java
+protected void initServletContext(ServletContext servletContext) {
+   Collection<ViewResolver> matchingBeans =
+         BeanFactoryUtils.beansOfTypeIncludingAncestors(obtainApplicationContext(), ViewResolver.class).values();
+   if (this.viewResolvers == null) {
+      this.viewResolvers = new ArrayList<>(matchingBeans.size());
+      for (ViewResolver viewResolver : matchingBeans) {
+         if (this != viewResolver) {
+            this.viewResolvers.add(viewResolver);
+         }
+      }
+   }
+   else {
+      for (int i = 0; i < this.viewResolvers.size(); i++) {
+         ViewResolver vr = this.viewResolvers.get(i);
+         if (matchingBeans.contains(vr)) {
+            continue;
+         }
+         String name = vr.getClass().getName() + i;
+         obtainApplicationContext().getAutowireCapableBeanFactory().initializeBean(vr, name);
+      }
+
+   }
+   if (this.viewResolvers.isEmpty()) {
+      logger.warn("Did not find any ViewResolvers to delegate to; please configure them using the " +
+            "'viewResolvers' property on the ContentNegotiatingViewResolver");
+   }
+   AnnotationAwareOrderComparator.sort(this.viewResolvers);
+   this.cnmFactoryBean.setServletContext(servletContext);
+}
+```
