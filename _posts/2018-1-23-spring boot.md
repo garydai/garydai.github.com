@@ -30,43 +30,11 @@ src\main\resources
 
 src\main\resources\config
 
-## 自动配置
-
-根据import注解，导入第三方组件到spring容器，第三方组件要有自动配置类
-
-例如mybatis
-
-```java
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration
-```
-
-```java
-@Configuration
-@ConditionalOnClass({ SqlSessionFactory.class, SqlSessionFactoryBean.class })
-@ConditionalOnBean(DataSource.class)
-@EnableConfigurationProperties(MybatisProperties.class)
-@AutoConfigureAfter(DataSourceAutoConfiguration.class)
-public class MybatisAutoConfiguration {
-
-  private static final Logger logger = LoggerFactory.getLogger(MybatisAutoConfiguration.class);
-
-  private final MybatisProperties properties;
-
-  private final Interceptor[] interceptors;
-
-  private final ResourceLoader resourceLoader;
-
-  private final DatabaseIdProvider databaseIdProvider;
-  ...
-}
-```
-
-### 程序开始
+## 程序开始
 
 SpringApplication.run（），进行自动配置
 
-#### SpringApplication构造函数
+### SpringApplication构造函数
 
 org.springframework.boot.SpringApplication#SpringApplication(org.springframework.core.io.ResourceLoader, java.lang.Class<?>...)
 
@@ -81,6 +49,7 @@ public SpringApplication(ResourceLoader resourceLoader, Class<?>... primarySourc
 				ApplicationContextInitializer.class));
     // 从spring.factories找到org.springframework.context.ApplicationListener实现类并实例化
 		setListeners((Collection) getSpringFactoriesInstances(ApplicationListener.class));
+    // 根据调用栈，拿到main启动类 new RuntimeException().getStackTrace() 
 		this.mainApplicationClass = deduceMainApplicationClass();
 	}
 ```
@@ -295,6 +264,41 @@ private void createWebServer() {
 }
 ```
 
+ServletWebServerFactoryAutoConfiguration
+
+```java
+@Configuration
+@AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
+@ConditionalOnClass(ServletRequest.class)
+@ConditionalOnWebApplication(type = Type.SERVLET)
+@EnableConfigurationProperties(ServerProperties.class)
+// 按顺序加载，所以tomcat优先级最高
+@Import({ ServletWebServerFactoryAutoConfiguration.BeanPostProcessorsRegistrar.class,
+      ServletWebServerFactoryConfiguration.EmbeddedTomcat.class,
+      ServletWebServerFactoryConfiguration.EmbeddedJetty.class,
+      ServletWebServerFactoryConfiguration.EmbeddedUndertow.class })
+public class ServletWebServerFactoryAutoConfiguration {
+}
+
+
+
+class ServletWebServerFactoryConfiguration {
+
+	@Configuration
+	@ConditionalOnClass({ Servlet.class, Tomcat.class, UpgradeProtocol.class })
+	@ConditionalOnMissingBean(value = ServletWebServerFactory.class, search = SearchStrategy.CURRENT)
+	public static class EmbeddedTomcat {
+
+		@Bean
+		public TomcatServletWebServerFactory tomcatServletWebServerFactory() {
+      // tomcat工厂类
+			return new TomcatServletWebServerFactory();
+		}
+
+	}
+}
+```
+
 
 
 ```java
@@ -356,8 +360,6 @@ private void selfInitialize(ServletContext servletContext) throws ServletExcepti
 }
 ```
 
-
-
 ```java
 protected Collection<ServletContextInitializer> getServletContextInitializerBeans() {
    return new ServletContextInitializerBeans(getBeanFactory());
@@ -399,11 +401,56 @@ public WebServer getWebServer(ServletContextInitializer... initializers) {
       tomcat.getService().addConnector(additionalConnector);
    }
    prepareContext(tomcat.getHost(), initializers);
+   // TomcatWebServer包装原生tomcat
    return getTomcatWebServer(tomcat);
 }
 ```
 
+org.springframework.boot.web.embedded.tomcat.TomcatWebServer#initialize
 
+```java
+private void initialize() throws WebServerException {
+   TomcatWebServer.logger
+         .info("Tomcat initialized with port(s): " + getPortsDescription(false));
+   synchronized (this.monitor) {
+      try {
+         addInstanceIdToEngineName();
+
+         Context context = findContext();
+         context.addLifecycleListener((event) -> {
+            if (context.equals(event.getSource())
+                  && Lifecycle.START_EVENT.equals(event.getType())) {
+               // Remove service connectors so that protocol binding doesn't
+               // happen when the service is started.
+               removeServiceConnectors();
+            }
+         });
+
+         // Start the server to trigger initialization listeners
+         this.tomcat.start();
+
+         // We can re-throw failure exception directly in the main thread
+         rethrowDeferredStartupExceptions();
+
+         try {
+            ContextBindings.bindClassLoader(context, context.getNamingToken(),
+                  getClass().getClassLoader());
+         }
+         catch (NamingException ex) {
+            // Naming is not enabled. Continue
+         }
+
+         // Unlike Jetty, all Tomcat threads are daemon threads. We create a
+         // blocking non-daemon to stop immediate shutdown
+         startDaemonAwaitThread();
+      }
+      catch (Exception ex) {
+         stopSilently();
+         throw new WebServerException("Unable to start embedded Tomcat", ex);
+      }
+   }
+}
+```
 
 ```java
 protected void prepareContext(Host host, ServletContextInitializer[] initializers) {
@@ -470,11 +517,47 @@ public void onStartup(Set<Class<?>> classes, ServletContext servletContext)
 
 
 
+## 自动配置
+
+根据import注解，导入第三方组件到spring容器，第三方组件要有自动配置类
+
+例如mybatis
+
+```java
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration
+```
+
+```java
+@Configuration
+@ConditionalOnClass({ SqlSessionFactory.class, SqlSessionFactoryBean.class })
+@ConditionalOnBean(DataSource.class)
+@EnableConfigurationProperties(MybatisProperties.class)
+@AutoConfigureAfter(DataSourceAutoConfiguration.class)
+public class MybatisAutoConfiguration {
+
+  private static final Logger logger = LoggerFactory.getLogger(MybatisAutoConfiguration.class);
+
+  private final MybatisProperties properties;
+
+  private final Interceptor[] interceptors;
+
+  private final ResourceLoader resourceLoader;
+
+  private final DatabaseIdProvider databaseIdProvider;
+  ...
+}
+```
+
 ### @SpringBoosApplication注解
 
 根据import注解，解析META-INF/spring.factories文件，导入第三方组件的启动类xxxx（**org.springframework.boot.autoconfigure.EnableAutoConfiguration**=xxxx）
 
 @SpringBootApplication->@EnableAutoConfiguration->**@Import(AutoConfigurationImportSelector.class**)
+
+
+
+org.springframework.boot.autoconfigure.AutoConfigurationImportSelector#selectImports
 
 ```java
 // 返回包里所有的org.springframework.boot.autoconfigure.EnableAutoConfiguration实现类的类名，由spring生成bd和bean	
@@ -552,8 +635,6 @@ private static Map<String, List<String>> loadSpringFactories(@Nullable ClassLoad
    }
 }
 ```
-
-### 
 
 ```java
 private void fireAutoConfigurationImportEvents(List<String> configurations,
