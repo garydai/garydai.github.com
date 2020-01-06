@@ -1,85 +1,13 @@
 <!DOCTYPE html>
-
-
-
-  
-
-
-<html class="theme-next muse use-motion" lang="en">
+<html>
 <head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-<meta name="theme-color" content="#222">
-
-
-
-
-
-
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  <meta charset="utf-8">
+  
 
   
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
-
-
-
-
-
-
-
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
-
-
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
-
-
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
-
-
-  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
-
-
-
-
-
-  <meta name="keywords" content="Hexo, NexT" />
-
-
-
-
-
-
-
-
-
-
-<meta name="description" content="jvm  内存模型  加载步骤加载、链接（验证、准备、解析）、初始化（静态字段） 何时初始化：  当虚拟机启动时，初始化用户指定的主类；2. 当遇到用以新建目标类实例的 new 指令时，初始化 new 指令的目标类；3. 当遇到调用静态方法的指令时，初始化该静态方法所在的类； 当遇到访问静态字段的指令时，初始化该静态字段所在的类；5. 子类的初始化会触发父类的初始化； 如果一个接口定义了 defa">
+  <title>jvm | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="jvm  内存模型  加载步骤加载、链接（验证、准备、解析）、初始化（静态字段） 何时初始化：  当虚拟机启动时，初始化用户指定的主类；2. 当遇到用以新建目标类实例的 new 指令时，初始化 new 指令的目标类；3. 当遇到调用静态方法的指令时，初始化该静态方法所在的类； 当遇到访问静态字段的指令时，初始化该静态字段所在的类；5. 子类的初始化会触发父类的初始化； 如果一个接口定义了 defa">
 <meta property="og:type" content="article">
 <meta property="og:title" content="jvm">
 <meta property="og:url" content="http://yoursite.com/2019/03/19/2019-3-19-jvm/index.html">
@@ -95,214 +23,75 @@
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/jvm.jpg">
-
-
-
-<script type="text/javascript" id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Muse',
-    version: '5.1.4',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
-    fancybox: true,
-    tabs: true,
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    duoshuo: {
-      userId: '0',
-      author: 'Author'
-    },
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
-  };
-</script>
-
-
-
-  <link rel="canonical" href="http://yoursite.com/2019/03/19/2019-3-19-jvm/"/>
-
-
-
-
-
-  <title>jvm | Hexo</title>
   
-
-
-
-
-
-
-
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
 
 <meta name="generator" content="Hexo 4.2.0"></head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="en">
-
-  
-  
-    
-  
-
-  <div class="container sidebar-position-left page-post-detail">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta ">
-    
-
-    <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Hexo</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
     </div>
-      
-        <p class="site-subtitle"></p>
-      
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
   </div>
-
-  <div class="site-nav-toggle">
-    <button>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
+</header>
+      <div class="outer">
+        <section id="main"><article id="default-2019-3-19-jvm" class="article article-type-default" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/03/19/2019-3-19-jvm/" class="article-date">
+  <time datetime="2019-03-18T16:00:00.000Z" itemprop="datePublished">2019-03-19</time>
+</a>
+    
   </div>
-</div>
-
-<nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu">
-      
-        
-        <li class="menu-item menu-item-home">
-          <a href="/%20" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
-            
-            Home
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives/%20" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            Archives
-          </a>
-        </li>
-      
-
-      
-    </ul>
-  
-
-  
-</nav>
-
-
-
- </div>
-    </header>
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          <div id="content" class="content">
-            
-
-  <div id="posts" class="posts-expand">
+  <div class="article-inner">
     
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/19/2019-3-19-jvm/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
     
-      <header class="post-header">
-
+      <header class="article-header">
         
-        
-          <h1 class="post-title" itemprop="name headline">jvm</h1>
-        
+  
+    <h1 class="article-title" itemprop="name">
+      jvm
+    </h1>
+  
 
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-19T00:00:00+08:00">
-                2019-03-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
       </header>
     
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
+    <div class="article-entry" itemprop="articleBody">
       
         <h2 id="jvm"><a href="#jvm" class="headerlink" title="jvm"></a>jvm</h2><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/jvm.jpg" alt=""></p>
 <p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/jvm2.jpg" alt=""></p>
@@ -388,357 +177,128 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line"> CallStub是一个函数指针。</span><br><span class="line"></span><br><span class="line"> &#x2F;&#x2F; Calls to Java</span><br><span class="line">  typedef void (*CallStub)(</span><br><span class="line">    address   link,</span><br><span class="line">    intptr_t* result,</span><br><span class="line">    BasicType result_type,</span><br><span class="line">    Method* method,</span><br><span class="line">    address   entry_point,</span><br><span class="line">    intptr_t* parameters,</span><br><span class="line">    int       size_of_parameters,</span><br><span class="line">    TRAPS</span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  static CallStub call_stub()    &#123; return CAST_TO_FN_PTR(CallStub, _call_stub_entry); &#125;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line">  _call_stub_entry在之前已经初始化过</span><br><span class="line"></span><br><span class="line">	StubRoutines::_call_stub_entry &#x3D; generate_call_stub(StubRoutines::_call_stub_return_address);</span><br><span class="line"></span><br><span class="line">  jvm启动过程</span><br><span class="line">  java.c: main()</span><br><span class="line">	java_md.c: LoadJavaVM()</span><br><span class="line">		jni.c: JNI_CreateJavaVM()</span><br><span class="line">			Threads.c: create_vm()</span><br><span class="line">				init.c: init_globals()</span><br><span class="line">					StubRoutines.cpp: stubRoutines_init1()</span><br><span class="line">						StubRoutines.cpp: initialize1()</span><br><span class="line">							StubGenerator_x86_x32.cpp: StubGenerator_generate()</span><br><span class="line">								StubGenerator_x86_x32.cpp: StubCodeGenerator()</span><br><span class="line">									StubGenerator_x86_x32.cpp: generate_initial()</span><br><span class="line">										StubGenerator_x86_x32.cpp: generate_call_stub()</span><br><span class="line"></span><br><span class="line">_call_stub_entry例程</span><br><span class="line"></span><br><span class="line">address generate_call_stub(address&amp; return_address) &#123;</span><br><span class="line">    StubCodeMark mark(this, &quot;StubRoutines&quot;, &quot;call_stub&quot;);</span><br><span class="line">    address start &#x3D; __ pc();</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; stub code parameters &#x2F; addresses</span><br><span class="line">    assert(frame::entry_frame_call_wrapper_offset &#x3D;&#x3D; 2, &quot;adjust this code&quot;);</span><br><span class="line">    bool  sse_save &#x3D; false;</span><br><span class="line">    const Address rsp_after_call(rbp, -4 * wordSize); &#x2F;&#x2F; same as in generate_catch_exception()!</span><br><span class="line">    const int     locals_count_in_bytes  (4*wordSize);</span><br><span class="line">    const Address mxcsr_save    (rbp, -4 * wordSize);</span><br><span class="line">    const Address saved_rbx     (rbp, -3 * wordSize);</span><br><span class="line">    const Address saved_rsi     (rbp, -2 * wordSize);</span><br><span class="line">    const Address saved_rdi     (rbp, -1 * wordSize);</span><br><span class="line">    const Address result        (rbp,  3 * wordSize);</span><br><span class="line">    const Address result_type   (rbp,  4 * wordSize);</span><br><span class="line">    const Address method        (rbp,  5 * wordSize);</span><br><span class="line">    const Address entry_point   (rbp,  6 * wordSize);</span><br><span class="line">    const Address parameters    (rbp,  7 * wordSize);</span><br><span class="line">    const Address parameter_size(rbp,  8 * wordSize);</span><br><span class="line">    const Address thread        (rbp,  9 * wordSize); &#x2F;&#x2F; same as in generate_catch_exception()!</span><br><span class="line">    sse_save &#x3D;  UseSSE &gt; 0;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; stub code</span><br><span class="line">    __ enter();</span><br><span class="line">    __ movptr(rcx, parameter_size);              &#x2F;&#x2F; parameter counter</span><br><span class="line">    __ shlptr(rcx, Interpreter::logStackElementSize); &#x2F;&#x2F; convert parameter count to bytes</span><br><span class="line">    __ addptr(rcx, locals_count_in_bytes);       &#x2F;&#x2F; reserve space for register saves</span><br><span class="line">    __ subptr(rsp, rcx);</span><br><span class="line">    __ andptr(rsp, -(StackAlignmentInBytes));    &#x2F;&#x2F; Align stack</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; save rdi, rsi, &amp; rbx, according to C calling conventions</span><br><span class="line">    __ movptr(saved_rdi, rdi);</span><br><span class="line">    __ movptr(saved_rsi, rsi);</span><br><span class="line">    __ movptr(saved_rbx, rbx);</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; save and initialize %mxcsr</span><br><span class="line">    if (sse_save) &#123;</span><br><span class="line">      Label skip_ldmx;</span><br><span class="line">      __ stmxcsr(mxcsr_save);</span><br><span class="line">      __ movl(rax, mxcsr_save);</span><br><span class="line">      __ andl(rax, MXCSR_MASK);    &#x2F;&#x2F; Only check control and mask bits</span><br><span class="line">      ExternalAddress mxcsr_std(StubRoutines::addr_mxcsr_std());</span><br><span class="line">      __ cmp32(rax, mxcsr_std);</span><br><span class="line">      __ jcc(Assembler::equal, skip_ldmx);</span><br><span class="line">      __ ldmxcsr(mxcsr_std);</span><br><span class="line">      __ bind(skip_ldmx);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; make sure the control word is correct.</span><br><span class="line">    __ fldcw(ExternalAddress(StubRoutines::addr_fpu_cntrl_wrd_std()));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">_call_stub_entry例程的作用就是一段机器代码，做的事情是进入java主函数机器代码之前，把栈环境配置好，因为是两段独立环境的代码，jvm和java，调用函数前会有很多栈的操作（函数入参压栈，调用前的环境压栈），需要要手动配置栈。而同一个环境例如java函数之间的调用，编译器会帮我们配置栈环境。</span><br><span class="line"></span><br><span class="line">所以通过jvm事先写好的例程，使得程序调用可以在jvm和java之间穿梭，jvm可以调用java，java可以调用jvm。</span><br></pre></td></tr></table></figure>
       
     </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2019/03/15/2019-3-15-%E7%9C%8B%E6%9D%BF/" rel="next" title="看板">
-                <i class="fa fa-chevron-left"></i> 看板
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/03/19/2019-3-19-concurrent/" rel="prev" title="concurrent">
-                concurrent <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/03/19/2019-3-19-jvm/" data-id="ck521h17s0071lc7k1o1035zh" class="article-share-link">Share</a>
       
       
     </footer>
   </div>
   
-  
-  
-  </article>
-
-
-
-    <div class="post-spread">
-      
-    </div>
-  </div>
-
-
-          </div>
-          
-
-
-          
-
-  
-
-
-
-        </div>
-        
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
-
-  <aside id="sidebar" class="sidebar">
     
-    <div class="sidebar-inner">
+<nav id="article-nav">
+  
+    <a href="/2019/03/19/2019-3-19-concurrent/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          concurrent
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/03/15/2019-3-15-%E7%9C%8B%E6%9D%BF/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">看板</div>
+    </a>
+  
+</nav>
 
-      
+  
+</article>
 
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">October 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">August 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">June 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">May 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">April 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">March 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">February 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">December 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">October 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">September 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">August 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">July 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">June 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">May 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/04/">April 2013</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/01/06/2018-6-3-%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/">2018-6-3-代码规范</a>
           </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
+        
+          <li>
+            <a href="/2020/01/05/2020-1-5-datax/">离线同步工具DataX</a>
           </li>
-        </ul>
-      
-
-      <section class="site-overview-wrap sidebar-panel">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-            
-              <p class="site-author-name" itemprop="name">John Doe</p>
-              <p class="site-description motion-element" itemprop="description"></p>
-          </div>
-
-          <nav class="site-state motion-element">
-
-            
-              <div class="site-state-item site-state-posts">
-              
-                <a href="/archives/%20%7C%7C%20archive">
-              
-                  <span class="site-state-item-count">271</span>
-                  <span class="site-state-item-name">posts</span>
-                </a>
-              </div>
-            
-
-            
-
-            
-
-          </nav>
-
-          
-
-          
-
-          
-          
-
-          
-          
-
-          
-
-        </div>
-      </section>
-
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#jvm"><span class="nav-number">1.</span> <span class="nav-text">jvm</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#内存模型"><span class="nav-number">1.1.</span> <span class="nav-text">内存模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#加载步骤"><span class="nav-number">1.1.1.</span> <span class="nav-text">加载步骤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#程序计数器（线程私有）"><span class="nav-number">1.1.2.</span> <span class="nav-text">程序计数器（线程私有）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#虚拟机栈（线程私有）"><span class="nav-number">1.1.3.</span> <span class="nav-text">虚拟机栈（线程私有）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#本地方法栈"><span class="nav-number">1.1.4.</span> <span class="nav-text">本地方法栈</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java堆（线程共有）"><span class="nav-number">1.1.5.</span> <span class="nav-text">java堆（线程共有）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方法区（线程共有）"><span class="nav-number">1.1.6.</span> <span class="nav-text">方法区（线程共有）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运行时常量池（方法区一部分）"><span class="nav-number">1.1.7.</span> <span class="nav-text">运行时常量池（方法区一部分）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#直接内存"><span class="nav-number">1.1.8.</span> <span class="nav-text">直接内存</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对象的内存布局"><span class="nav-number">1.2.</span> <span class="nav-text">对象的内存布局</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#垃圾回收"><span class="nav-number">1.3.</span> <span class="nav-text">垃圾回收</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#垃圾回收算法"><span class="nav-number">1.3.1.</span> <span class="nav-text">垃圾回收算法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#虚拟机性能监控"><span class="nav-number">1.4.</span> <span class="nav-text">虚拟机性能监控</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Class"><span class="nav-number">1.5.</span> <span class="nav-text">Class</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java执行引擎工作原理：方法调用"><span class="nav-number">1.6.</span> <span class="nav-text">java执行引擎工作原理：方法调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字节码"><span class="nav-number">1.7.</span> <span class="nav-text">字节码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#oop-klass"><span class="nav-number">1.8.</span> <span class="nav-text">oop-klass</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类加载"><span class="nav-number">1.9.</span> <span class="nav-text">类加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jni"><span class="nav-number">1.10.</span> <span class="nav-text">jni</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#执行引擎"><span class="nav-number">1.11.</span> <span class="nav-text">执行引擎</span></a></li></ol></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
-      
-
-      
-
+        
+          <li>
+            <a href="/2019/12/31/2019-12-31-replicate/">分布式系统数据同步</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/28/2019-12-28-LCH/">LCH</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/26/2019-12-26-lambda/">lambda</a>
+          </li>
+        
+      </ul>
     </div>
-  </aside>
-
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
-  <span class="with-love">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">John Doe</span>
-
-  
-</div>
-
-
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
-
-
-
-  <span class="post-meta-divider">|</span>
-
-
-
-  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
-
-
-
-
-        
-
-
-
-
-
-
-
-        
-      </div>
-    </footer>
-
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
-    
-
-    
-
   </div>
 
   
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
 
-<script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-
-
-
-
-
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 
   
-
-
-
-
-
-
-
-
-
-
-
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
 
   
-  
-    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-  
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
-
-
-
-  
-  
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
-
-
-
-  
-
-
-  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
 
 
 
 
-	
+<script src="/js/script.js"></script>
 
 
 
 
-
-  
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-  
-
-  
-
-  
-  
-
-  
-
-  
-
-  
-
+  </div>
 </body>
 </html>
