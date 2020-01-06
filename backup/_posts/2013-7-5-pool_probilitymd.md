@@ -1,4 +1,5 @@
 ---
+date: 2013-7-5
 layout: default
 title: 随机抽样与洗牌算法
 

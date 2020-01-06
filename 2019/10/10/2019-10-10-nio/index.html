@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="java niobytebuffersocket channelselector123456789101112131415161718192021222324252627282930313233343536&#x2F;&#x2F; 1. 获取数据源 和 目标传输地的输入输出流（此处以数据源 &#x3D; 文件为例）    FileInputStream fin &#x3D; new FileInputStream(infile);">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nio">
+<meta property="og:url" content="http://yoursite.com/2019/10/10/2019-10-10-nio/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="java niobytebuffersocket channelselector123456789101112131415161718192021222324252627282930313233343536&#x2F;&#x2F; 1. 获取数据源 和 目标传输地的输入输出流（此处以数据源 &#x3D; 文件为例）    FileInputStream fin &#x3D; new FileInputStream(infile);">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-10-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-01-06T07:17:32.655Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/10/10/2019-10-10-nio/"/>
+
+
+
+
+
+  <title>nio | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/10/2019-10-10-nio/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">nio</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-10T00:00:00+08:00">
+                2019-10-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="java-nio"><a href="#java-nio" class="headerlink" title="java nio"></a>java nio</h2><h3 id="bytebuffer"><a href="#bytebuffer" class="headerlink" title="bytebuffer"></a>bytebuffer</h3><h3 id="socket-channel"><a href="#socket-channel" class="headerlink" title="socket channel"></a>socket channel</h3><h3 id="selector"><a href="#selector" class="headerlink" title="selector"></a>selector</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 获取数据源 和 目标传输地的输入输出流（此处以数据源 = 文件为例）</span></span><br><span class="line">    FileInputStream fin = <span class="keyword">new</span> FileInputStream(infile);</span><br><span class="line">    FileOutputStream fout = <span class="keyword">new</span> FileOutputStream(outfile);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 获取数据源的输入输出通道</span></span><br><span class="line">    FileChannel fcin = fin.getChannel();</span><br><span class="line">    FileChannel fcout = fout.getChannel();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3. 创建 缓冲区 对象：Buffer（共有2种方法）</span></span><br><span class="line">     <span class="comment">// 方法1：使用allocate()静态方法</span></span><br><span class="line">     ByteBuffer buff = ByteBuffer.allocate(<span class="number">256</span>);</span><br><span class="line">     <span class="comment">// 上述方法创建1个容量为256字节的ByteBuffer</span></span><br><span class="line">     <span class="comment">// 注：若发现创建的缓冲区容量太小，则重新创建一个大小合适的缓冲区</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 方法2：通过包装一个已有的数组来创建</span></span><br><span class="line">     <span class="comment">// 注：通过包装的方法创建的缓冲区保留了被包装数组内保存的数据</span></span><br><span class="line">     ByteBuffer buff = ByteBuffer.wrap(byteArray);</span><br><span class="line"></span><br><span class="line">     <span class="comment">// 额外：若需将1个字符串存入ByteBuffer，则如下</span></span><br><span class="line">     String sendString=<span class="string">"你好,服务器. "</span>;</span><br><span class="line">     ByteBuffer sendBuff = ByteBuffer.wrap(sendString.getBytes(<span class="string">"UTF-16"</span>));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 4. 从通道读取数据 &amp; 写入到缓冲区</span></span><br><span class="line">    <span class="comment">// 注：若 以读取到该通道数据的末尾，则返回-1</span></span><br><span class="line">    fcin.read(buff);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 5. 传出数据准备：将缓存区的写模式 转换-&gt;&gt; 读模式</span></span><br><span class="line">    buff.flip();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 6. 从 Buffer 中读取数据 &amp; 传出数据到通道</span></span><br><span class="line">    fcout.write(buff);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 7. 重置缓冲区</span></span><br><span class="line">    <span class="comment">// 目的：重用现在的缓冲区,即 不必为了每次读写都创建新的缓冲区，在再次读取之前要重置缓冲区</span></span><br><span class="line">    <span class="comment">// 注：不会改变缓冲区的数据，只是重置缓冲区的主要索引值</span></span><br><span class="line">    buff.clear();</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ServerSocketChannelTest</span> </span>&#123;</span><br><span class="line"> <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] data = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">255</span>];</span><br><span class="line"> </span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; data.length; i++) &#123;</span><br><span class="line">   data[i] = (<span class="keyword">byte</span>) i;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//新建NIO通道</span></span><br><span class="line">  ServerSocketChannel server = ServerSocketChannel.open();</span><br><span class="line">  <span class="comment">//使通道为非阻塞</span></span><br><span class="line">  server.configureBlocking(<span class="keyword">false</span>);</span><br><span class="line">  <span class="comment">//创建基于NIO通道的socket连接</span></span><br><span class="line">  ServerSocket ss = server.socket();</span><br><span class="line">  <span class="comment">//新建socket通道的端口</span></span><br><span class="line">  ss.bind(<span class="keyword">new</span> InetSocketAddress(<span class="number">9000</span>));</span><br><span class="line">  <span class="comment">//将NIO通道绑定到选择器</span></span><br><span class="line">  Selector selector = Selector.open();</span><br><span class="line">  server.register(selector, SelectionKey.OP_ACCEPT);</span><br><span class="line"> </span><br><span class="line">  <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">   <span class="comment">//获取通道内是否有选择器的关心事件</span></span><br><span class="line">   <span class="keyword">int</span> num = selector.select();</span><br><span class="line">   <span class="comment">//如果小于1,停止此次循环,进行下一个循环</span></span><br><span class="line">   <span class="keyword">if</span> (num &lt; <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="keyword">continue</span>;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">//获取通道内关心事件的集合</span></span><br><span class="line">   Set selectedKeys = selector.selectedKeys();</span><br><span class="line">   Iterator iterator = selectedKeys.iterator();</span><br><span class="line">   <span class="keyword">while</span> (iterator.hasNext()) &#123;</span><br><span class="line">    SelectionKey key = (SelectionKey) iterator.next();</span><br><span class="line">    <span class="comment">//移走此次事件</span></span><br><span class="line">    iterator.remove();</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (key.isAcceptable()) &#123;</span><br><span class="line">     <span class="comment">//获取对应的SocketChannel</span></span><br><span class="line">     SocketChannel client = server.accept();</span><br><span class="line">     System.out.println(<span class="string">"Accepted connection from "</span> + client);</span><br><span class="line">     <span class="comment">//使此通道为非阻塞</span></span><br><span class="line">     client.configureBlocking(<span class="keyword">false</span>);</span><br><span class="line">     <span class="comment">//将数组data的大小定义为ByteBuffer缓冲区的大小</span></span><br><span class="line">     ByteBuffer source = ByteBuffer.wrap(data);</span><br><span class="line">     </span><br><span class="line">     <span class="comment">//在此通道上注册事件</span></span><br><span class="line">     SelectionKey key2 = client.register(selector,</span><br><span class="line">       SelectionKey.OP_WRITE);</span><br><span class="line">     <span class="comment">//通道执行事件</span></span><br><span class="line">     key2.attach(source);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (key.isWritable()) &#123;</span><br><span class="line">     <span class="comment">//获取此通道的SocketChannel</span></span><br><span class="line">     SocketChannel client = (SocketChannel) key.channel();</span><br><span class="line">     ByteBuffer output = (ByteBuffer) key.attachment();</span><br><span class="line">     <span class="comment">//如果缓存区没了,重置一下</span></span><br><span class="line">     <span class="keyword">if</span> (!output.hasRemaining()) &#123;</span><br><span class="line">      output.rewind();</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="comment">//在此通道内写东西</span></span><br><span class="line">     client.write(output);</span><br><span class="line">    &#125;</span><br><span class="line">    key.channel().close();</span><br><span class="line">   &#125;</span><br><span class="line"> </span><br><span class="line">  &#125;</span><br><span class="line"> </span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SocketChannelTest</span> </span>&#123;</span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">  <span class="comment">//建立到服务端的链接</span></span><br><span class="line">  SocketAddress address = <span class="keyword">new</span> InetSocketAddress(<span class="string">"127.0.0.1"</span>, <span class="number">9000</span>);</span><br><span class="line">  SocketChannel client = SocketChannel.open(address);</span><br><span class="line">  <span class="comment">//创建静态的缓冲区</span></span><br><span class="line">  ByteBuffer buffer = ByteBuffer.allocate(<span class="number">255</span>);</span><br><span class="line"> </span><br><span class="line">  <span class="comment">//读取数据,到buffer中</span></span><br><span class="line">  client.read(buffer);</span><br><span class="line">  <span class="comment">//将position重新置为0</span></span><br><span class="line">  buffer.clear();</span><br><span class="line">  <span class="comment">//输出缓冲区的数据</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; buffer.array().length; i++) &#123;</span><br><span class="line">   System.out.println(buffer.array()[i]);</span><br><span class="line">  &#125;</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="nio-byteBuffer"><a href="#nio-byteBuffer" class="headerlink" title="nio byteBuffer"></a>nio byteBuffer</h4><p>容量（Capacity）：缓冲区能够容纳的数据元素的最大数量。初始设定后不能更改。<br>上界（Limit）：缓冲区中第一个不能被读或者写的元素位置。或者说，缓冲区内现存元素的上界。<br>位置（Position）：缓冲区内下一个将要被读或写的元素位置。在进行读写缓冲区时，位置会自动更新。<br>标记（Mark）：一个备忘位置。初始时为“未定义”，调用mark时mark=positon，调用reset时position=mark。<br>这四个属性总是满足如下关系：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mark&lt;&#x3D;position&lt;&#x3D;limit&lt;&#x3D;capacity</span><br></pre></td></tr></table></figure>
+
+<h3 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h3><p><a href="https://www.jianshu.com/p/d30893c4d6bb" target="_blank" rel="noopener">https://www.jianshu.com/p/d30893c4d6bb</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/10/2019-10-10-jmm/" rel="next" title="jmm">
+                <i class="fa fa-chevron-left"></i> jmm
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/10/16/2019-10-16-count/" rel="prev" title="mysql count()">
+                mysql count() <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">271</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#java-nio"><span class="nav-number">1.</span> <span class="nav-text">java nio</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#bytebuffer"><span class="nav-number">1.1.</span> <span class="nav-text">bytebuffer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#socket-channel"><span class="nav-number">1.2.</span> <span class="nav-text">socket channel</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#selector"><span class="nav-number">1.3.</span> <span class="nav-text">selector</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#nio-byteBuffer"><span class="nav-number">1.3.1.</span> <span class="nav-text">nio byteBuffer</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#reference"><span class="nav-number">1.4.</span> <span class="nav-text">reference</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

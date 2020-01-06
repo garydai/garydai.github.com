@@ -229,7 +229,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2016-11-9-css/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/20/2016-10-20-nginx_cache/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -248,7 +248,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2016-11-9-css/" itemprop="url">css备忘</a></h1>
+                <a class="post-title-link" href="/2016/10/20/2016-10-20-nginx_cache/" itemprop="url">nginx cache</a></h1>
         
 
         <div class="post-meta">
@@ -260,8 +260,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-20T00:00:00+08:00">
+                2016-10-20
               </time>
             
 
@@ -300,53 +300,133 @@
       
         
           
-            <h2 id="css"><a href="#css" class="headerlink" title="css"></a>css</h2><p>###基本元素</p>
-<p>Block-level element: 指能够独立存在, 一般的块级元素之间以换行(如一个段落结束后另起一行)分隔. 常用的块级元素包括: p, h1~h6, div, ul等;</p>
-<p>Inline element: 指依附其他块级元素存在, 紧接于被联元素之间显示, 而不换行. 常用的内联元素包括: img, span, li, br等;</p>
-<p>Top-level element: 包括html, body, frameset, 表现如Block-level element, 属于高级块级元素.</p>
-<h3 id="布局"><a href="#布局" class="headerlink" title="布局"></a>布局</h3><h4 id="display属性"><a href="#display属性" class="headerlink" title="display属性"></a>display属性</h4><h4 id="block"><a href="#block" class="headerlink" title="block"></a>block</h4><p>div 是一个标准的块级元素。一个块级元素会新开始一行并且尽可能撑满容器。其他常用的块级元素包括 p 、 form 和HTML5中的新元素： header 、 footer 、 section 等等。</p>
-<h4 id="inline"><a href="#inline" class="headerlink" title="inline"></a>inline</h4><p>span 是一个标准的行内元素。一个行内元素可以在段落中 <span> 像这样 </span> 包裹一些文字而不会打乱段落的布局。 a 元素是最常用的行内元素，它可以被用作链接。</p>
-<h4 id="none"><a href="#none" class="headerlink" title="none"></a>none</h4><p>另一个常用的display值是 none 。一些特殊元素的默认 display 值是它，例如 script 。 display:none 通常被 JavaScript 用来在不删除元素的情况下隐藏或显示元素。</p>
-<p>它和 visibility 属性不一样。把 display 设置成 none 元素不会占据它本来应该显示的空间，但是设置成 visibility: hidden; 还会占据空间。</p>
-<p>其他 display 值</p>
-<p>还有很多的更有意思的 display 值，例如 list-item 和 table 。这里有一份详细的列表。之后我们会讨论到 inline-block 和 flex </p>
-<pre><code>width: 600px;
- margin: 0 auto;
- 600px宽度居中</code></pre><p>ref:<a href="http://zh.learnlayout.com/display.html" target="_blank" rel="noopener">http://zh.learnlayout.com/display.html</a></p>
-<h4 id="inline-block"><a href="#inline-block" class="headerlink" title="inline-block"></a>inline-block</h4><p>结合inline和block的特性</p>
-<h4 id="Flex布局"><a href="#Flex布局" class="headerlink" title="Flex布局"></a>Flex布局</h4><pre><code>.box{
-  display: -webkit-flex; /* Safari */
-  display: flex;
-}</code></pre><p>采用Flex布局的元素，称为Flex容器（flex container），简称”容器”。它的所有子元素自动成为容器成员，称为Flex项目（flex item），简称”项目”。</p>
-<pre><code>6个属性
-flex-direction
-flex-wrap
-flex-flow
-justify-content
-align-items
-align-content</code></pre><h3 id="position"><a href="#position" class="headerlink" title="position"></a>position</h3><p>css绝对定位、相对定位和文档流</p>
-<p>默认是什么定位</p>
-<p>position:relative;原位置上偏移，不脱离文档流</p>
-<p>position:absolute是脱离文档流的,相对于他的第一个有position的祖先</p>
-<p>padding</p>
-<p>margin</p>
-<h3 id="jquery获取元素位置"><a href="#jquery获取元素位置" class="headerlink" title="jquery获取元素位置"></a>jquery获取元素位置</h3><pre><code>offset():
+            <p>##nginx 缓存</p>
+<pre><code>这里 Cache 有两种情况说明，一种是浏览器访问Nginx，浏览器会Cache；一种是Nginx 访问后端，Nginx 自己Cache </code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
 
-获取匹配元素在当前视口的相对偏移。
+    
 
-position():
+    
 
-获取匹配元素相对父元素的偏移。</code></pre><p><a href="http://www.cnblogs.com/tim-li/archive/2012/07/09/2582618.html" target="_blank" rel="noopener">http://www.cnblogs.com/tim-li/archive/2012/07/09/2582618.html</a></p>
-<h3 id="隐藏"><a href="#隐藏" class="headerlink" title="隐藏"></a>隐藏</h3><p>visibility:hidden 占有空间<br>display:none不占有空间</p>
-<h3 id="image按比例缩小"><a href="#image按比例缩小" class="headerlink" title="image按比例缩小"></a>image按比例缩小</h3><h3 id="padding、margin属性的区别"><a href="#padding、margin属性的区别" class="headerlink" title="padding、margin属性的区别"></a>padding、margin属性的区别</h3><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/cssmargin3d.jpg" alt=""> </p>
-<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/cssmargin.jpg" alt="">  </p>
-<p>当你想让两个元素的content在垂直方向(vertically)分隔时, 既可以选择padding-top/bottom, 也可以选择margin-top/bottom, 再此Jorux建议你尽量使用padding-top/bottom来达到你的目的, 这是因为css中存在Collapsing margins(折叠的margins)的现象</p>
-<p>为什么会折叠: 造成以上现象的原因是, 我们在css中并没有声明id为ID1的元素div的height(高), 因此它的高便被设为auto(自动)了. 一旦其值被设为auto, 那么浏览器就会认为它的高为子元素ID2的border-top到border-bottom之间的距离, 即Fig. 4中bc的长度, 所以子元素ID2的margin-top/bottom(30px)就伸出到了父元素ID1之外, 出现了Fig. 4中ab与cd之间的空白区域. 因此父元素ID1的margin-top/bottom因子元素的”红杏出墙”而被折叠消失了.</p>
-<p>如何解决折叠问题: 可能大家最初想到的办法就是根据折叠发生的原因—auto, 来解决问题. 但是, 在实际操作中, 某些元素如div, h1, p等, 我们是不可能预先知道它的高是多少的, 因此在css文件中是不能常规通过声明元素的高来解决折叠问题.</p>
-<p>我们需要在css文件中加入如下代码:</p>
-<p>padding-top:1px;<br>padding-bottom:1px;</p>
-<p><a href="http://leepiao.blog.163.com/blog/static/485031302010427113653/" target="_blank" rel="noopener">http://leepiao.blog.163.com/blog/static/485031302010427113653/</a></p>
-<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><h4 id="inherit"><a href="#inherit" class="headerlink" title="inherit"></a>inherit</h4><p>继承父标签样式</p>
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/20/2016-10-20-nodejs/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/10/20/2016-10-20-nodejs/" itemprop="url">node.js</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-20T00:00:00+08:00">
+                2016-10-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="node-js"><a href="#node-js" class="headerlink" title="node.js"></a>node.js</h2><p>NodeJS是一个JS脚本解析器</p>
+<p>###模块<br>require导入模块 </p>
+<pre><code>wget 
+./configure --prefix=/home/admin/</code></pre><p>package.json</p>
+<p>指定入口模块</p>
+<p>###NPM</p>
+<p>NPM是随同NodeJS一起安装的包管理工具</p>
 
           
         
@@ -395,7 +475,7 @@ position():
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2016-11-7-yii2login/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/20/2016-10-20-nginxbug/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -414,7 +494,7 @@ position():
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2016-11-7-yii2login/" itemprop="url">yii2登录</a></h1>
+                <a class="post-title-link" href="/2016/10/20/2016-10-20-nginxbug/" itemprop="url">关于@font-face的跨域请求问题</a></h1>
         
 
         <div class="post-meta">
@@ -426,8 +506,8 @@ position():
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-20T00:00:00+08:00">
+                2016-10-20
               </time>
             
 
@@ -466,117 +546,136 @@ position():
       
         
           
-            <p>##yii2架构分析</p>
-<p>yii\base... 如何定位文件</p>
-<pre><code>(new yii\web\Application($config))-&gt;run();
+            <p>##关于@font-face的跨域请求问题</p>
+<pre><code>修改nginx conf
+
+if ($filename ~ ^.?.(eot)|(ttf)|(woff)$){
+add_header Access-Control-Allow-Origin *;
+}     </code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
 
 
-public function run()
-{
-    try {
+    
+      
 
-        $this-&gt;state = self::STATE_BEFORE_REQUEST;
-        $this-&gt;trigger(self::EVENT_BEFORE_REQUEST);
+  
 
-        $this-&gt;state = self::STATE_HANDLING_REQUEST;
-        $response = $this-&gt;handleRequest($this-&gt;getRequest());
+  
+  
+  
 
-        $this-&gt;state = self::STATE_AFTER_REQUEST;
-        $this-&gt;trigger(self::EVENT_AFTER_REQUEST);
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/19/2016-10-19-mysql-mast/">
 
-        $this-&gt;state = self::STATE_SENDING_RESPONSE;
-        $response-&gt;send();
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
 
-        $this-&gt;state = self::STATE_END;
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
 
-        return $response-&gt;exitStatus;
+    
+      <header class="post-header">
 
-    } catch (ExitException $e) {
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/10/19/2016-10-19-mysql-mast/" itemprop="url">mysql主从分离</a></h1>
+        
 
-        $this-&gt;end($e-&gt;statusCode, isset($response) ? $response : null);
-        return $e-&gt;statusCode;
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-19T00:00:00+08:00">
+                2016-10-19
+              </time>
+            
 
-    }
-}
+            
 
+            
+          </span>
 
- public function handleRequest($request)
-{
-    if (empty($this-&gt;catchAll)) {
-        try {
-            list ($route, $params) = $request-&gt;resolve();
-        } catch (UrlNormalizerRedirectException $e) {
-            $url = $e-&gt;url;
-            if (is_array($url)) {
-                if (isset($url[0])) {
-                    // ensure the route is absolute
-                    $url[0] = &apos;/&apos; . ltrim($url[0], &apos;/&apos;);
-                }
-                $url += $request-&gt;getQueryParams();
-            }
-            return $this-&gt;getResponse()-&gt;redirect(Url::to($url, $e-&gt;scheme), $e-&gt;statusCode);
-        }
-    } else {
-        $route = $this-&gt;catchAll[0];
-        $params = $this-&gt;catchAll;
-        unset($params[0]);
-    }
-    try {
-        Yii::trace(&quot;Route requested: &apos;$route&apos;&quot;, __METHOD__);
-        $this-&gt;requestedRoute = $route;
-        $result = $this-&gt;runAction($route, $params);
-        if ($result instanceof Response) {
-            return $result;
-        } else {
-            $response = $this-&gt;getResponse();
-            if ($result !== null) {
-                $response-&gt;data = $result;
-            }
+          
 
-            return $response;
-        }
-    } catch (InvalidRouteException $e) {
-        throw new NotFoundHttpException(Yii::t(&apos;yii&apos;, &apos;Page not found.&apos;), $e-&gt;getCode(), $e);
-    }
-}
+          
+            
+          
 
+          
+          
 
+          
 
-public function runAction($route, $params = [])
-{
-    $parts = $this-&gt;createController($route);
-    if (is_array($parts)) {
-        /* @var $controller Controller */
-        list($controller, $actionID) = $parts;
-        $oldController = Yii::$app-&gt;controller;
-        Yii::$app-&gt;controller = $controller;
-        $result = $controller-&gt;runAction($actionID, $params);
-        if ($oldController !== null) {
-            Yii::$app-&gt;controller = $oldController;
-        }
+          
 
-        return $result;
-    } else {
-        $id = $this-&gt;getUniqueId();
-        throw new InvalidRouteException(&apos;Unable to resolve the request &quot;&apos; . ($id === &apos;&apos; ? $route : $id . &apos;/&apos; . $route) . &apos;&quot;.&apos;);
-    }
-}</code></pre><p>##yii2登录</p>
-<pre><code>if ($this-&gt;validate()) {
+          
 
-        return Yii::$app-&gt;user-&gt;login($this-&gt;getUser(), $this-&gt;rememberMe ? 3600*24*30 : 0);
+        </div>
+      </header>
+    
 
-根据以下规则验证
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
-public function rules()
-    {
-        return [
-            // username and password are both required
-            [[&apos;username&apos;, &apos;password&apos;], &apos;required&apos;],
-            // rememberMe must be a boolean value
-            [&apos;rememberMe&apos;, &apos;boolean&apos;],
-            // password is validated by validatePassword()
-            [&apos;password&apos;, &apos;validatePassword&apos;],
-        ];</code></pre><p><a href="http://blog.csdn.net/a553181867/article/details/50994388" target="_blank" rel="noopener">http://blog.csdn.net/a553181867/article/details/50994388</a></p>
+      
+      
+
+      
+        
+          
+            <p>##mysql主从分离</p>
+<p>GRANT REPLICATION SLAVE ON <em>.</em> to ‘rep1’@’45.76.100.149’ identified by ‘daitechang’;</p>
+<p>关闭主从</p>
+<p>stop slave;</p>
+<p>show slave status\G</p>
+<p><a href="http://www.cnblogs.com/xuejie/archive/2013/03/26/2983601.html" target="_blank" rel="noopener">http://www.cnblogs.com/xuejie/archive/2013/03/26/2983601.html</a></p>
 
           
         
@@ -625,7 +724,7 @@ public function rules()
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2016-11-6-ioscorner/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/19/2016-10-19-vpnnote/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -644,7 +743,7 @@ public function rules()
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2016-11-6-ioscorner/" itemprop="url">ios 圆角</a></h1>
+                <a class="post-title-link" href="/2016/10/19/2016-10-19-vpnnote/" itemprop="url">vpn架设</a></h1>
         
 
         <div class="post-meta">
@@ -656,8 +755,8 @@ public function rules()
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-19T00:00:00+08:00">
+                2016-10-19
               </time>
             
 
@@ -696,24 +795,9 @@ public function rules()
       
         
           
-            <h2 id="ios性能优化"><a href="#ios性能优化" class="headerlink" title="ios性能优化"></a>ios性能优化</h2><p>很多 CPU 的操作都会延迟 GPU 开始渲染的时间：</p>
-<p>布局的计算 - 如果你的视图层级太过于复杂，或者视图需要重复多次进行布局，尤其是在使用 Auto Layout 进行自动布局时，对性能影响尤为严重；</p>
-<p>视图的惰性加载 - 在 iOS 中只有当视图控制器的视图显示到屏幕时才会加载；</p>
-<p>解压图片 - iOS 通常会在真正绘制时才会解码图片，对于一个较大的图片，无论是直接或间接使用 UIImageView 或者绘制到 Core Graphics 中，都需要对图片进行解压；</p>
-<p>ASDK 对于绘制过程的优化有三部分：分别是栅格化子视图、绘制图像以及绘制文字。</p>
-<h3 id="查看性能工具"><a href="#查看性能工具" class="headerlink" title="查看性能工具"></a>查看性能工具</h3><p>使用Core Animation工具</p>
-<h3 id="图层混合"><a href="#图层混合" class="headerlink" title="图层混合"></a>图层混合</h3><p>color a值不要设，设置背景色</p>
-<h3 id="慎用离屏渲染"><a href="#慎用离屏渲染" class="headerlink" title="慎用离屏渲染"></a>慎用离屏渲染</h3><h4 id="ios圆角性能优化"><a href="#ios圆角性能优化" class="headerlink" title="ios圆角性能优化"></a>ios圆角性能优化</h4><h3 id="AsyncDisplayKit"><a href="#AsyncDisplayKit" class="headerlink" title="AsyncDisplayKit"></a>AsyncDisplayKit</h3><pre><code>对应表
-UIKit                AsyncDisplayKit
-UIView                ASDisplayNode
-UILabel                ASTextNode
-UIImageView                ASImageNode
-UIButton                    ASButtonNode
-UITableView                ASTableView
-UICollectionView            ASCollectionView
-UITableViewCell            ASCellNode
-UICollectionViewCell    ASCellNode</code></pre><p>masksToBounds离屏渲染带来的性能损耗</p>
-<p><a href="http://www.jianshu.com/p/619cf14640f3" target="_blank" rel="noopener">http://www.jianshu.com/p/619cf14640f3</a></p>
+            <p>##VPN架设</p>
+<p>在digitalocean上架设vpn服务器，国内访问有点慢<br>在vultr买了东京的</p>
+<p>freeradius 连接中国的数据库有点慢，导致vpn连接很慢，应该把数据库都架在vpn服务器上。用户注册时候，把用户信息分发在各自的数据库里。</p>
 
           
         
@@ -762,7 +846,7 @@ UICollectionViewCell    ASCellNode</code></pre><p>masksToBounds离屏渲染带�
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2016-11-29-interview/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/17/2016-10-17-architecture/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -781,7 +865,7 @@ UICollectionViewCell    ASCellNode</code></pre><p>masksToBounds离屏渲染带�
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2016-11-29-interview/" itemprop="url">面试</a></h1>
+                <a class="post-title-link" href="/2016/10/17/2016-10-17-architecture/" itemprop="url">架构</a></h1>
         
 
         <div class="post-meta">
@@ -793,8 +877,8 @@ UICollectionViewCell    ASCellNode</code></pre><p>masksToBounds离屏渲染带�
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-17T00:00:00+08:00">
+                2016-10-17
               </time>
             
 
@@ -833,459 +917,13 @@ UICollectionViewCell    ASCellNode</code></pre><p>masksToBounds离屏渲染带�
       
         
           
-            <p>##面试准备</p>
-<p>###设计模式<br>    装饰器的作用就是为已经存在的对象添加额外的功能<br>    例如，查看一个函数的执行时间，把函数装饰成有计时功能。<br>        def foo():  </p>
-<pre><code>    print &apos;in foo()&apos;  
+            <p>##架构</p>
+<p>分层</p>
+<p>事件驱动</p>
+<p>微核</p>
+<p>微服务</p>
+<p>云架构</p>
 
-
-
-# 定义一个计时器，传入一个，并返回另一个附加了计时功能的方法  
-
-def timeit(func):  
-
-
-
-    # 定义一个内嵌的包装函数，给传入的函数加上计时功能的包装  
-
-    def wrapper():  
-
-        start = time.clock()  
-
-        func()  
-
-        end =time.clock()  
-
-        print &apos;used:&apos;, end - start  
-
-
-
-    # 将包装后的函数返回  
-
-    return wrapper  
-
-
-
-foo = timeit(foo)  
-
-foo()  </code></pre><p>###php</p>
-<p>###docker</p>
-<p>###python</p>
-<p>###ios</p>
-<p>熟悉CocoaTouch，CoreData，Runtime，对iOS下的并行开发，网络管理，数据存储，内存管理，GUI开发，消息通讯机制，安全机制有自己的深入体会； </p>
-<pre><code>http://www.swifthumb.com/thread-11284-1-1.html</code></pre><p>###服务端框架<br>    yii</p>
-<p>###javascript</p>
-<p>Javascript是一种基于对象（object-based）的语言，你遇到的所有东西几乎都是对象。但是，它又不是一种真正的面向对象编程（OOP）语言，因为它的语法中没有class</p>
-<p>Javascript语言不支持”类”，但是可以用一些变通的方法，模拟出”类”。<br>一、构造函数法</p>
-<p>它用构造函数模拟”类”，在其内部用this关键字指代实例对象</p>
-<pre><code>function Cat() {
-    this.name = &quot;大毛&quot;;
-}
-
-
-var cat1 = new Cat();
-alert(cat1.name); // 大毛</code></pre><p>二、Object.create()法</p>
-<pre><code>var Cat = {
-　　　　name: &quot;大毛&quot;,
-　　　　makeSound: function(){ alert(&quot;喵喵喵&quot;); }
-　　};
-var cat1 = Object.create(Cat);
-alert(cat1.name); // 大毛
-cat1.makeSound(); // 喵喵喵</code></pre><p>三、极简主义法</p>
-<pre><code>　　var Cat = {
-　　　　createNew: function(){
-　　　　　　var cat = {};
-　　　　　　cat.name = &quot;大毛&quot;;
-　　　　　　cat.makeSound = function(){ alert(&quot;喵喵喵&quot;); };
-　　　　　　return cat;
-　　　　}
-　　};
-　　var cat1 = Cat.createNew();
-　　cat1.makeSound(); // 喵喵喵
-　
-　</code></pre><p>javascript Prototype</p>
-<pre><code>Javascript规定，每一个构造函数都有一个prototype属性，指向另一个对象。这个对象的所有属性和方法，都会被构造函数的实例继承。
-这意味着，我们可以把那些不变的属性和方法，直接定义在prototype对象上。
-　　function Cat(name,color){
-　　　　this.name = name;
-　　　　this.color = color;
-　　}
-　　Cat.prototype.type = &quot;猫科动物&quot;;
-　　Cat.prototype.eat = function(){alert(&quot;吃老鼠&quot;)};
-然后，生成实例。
-　　var cat1 = new Cat(&quot;大毛&quot;,&quot;黄色&quot;);
-　　var cat2 = new Cat(&quot;二毛&quot;,&quot;黑色&quot;);
-　　alert(cat1.type); // 猫科动物
-　　cat1.eat(); // 吃老鼠</code></pre><p>　　<br>　　　<br>###前端<br>    最近在看哪些前端方面的书？</p>
-<pre><code>js的基本数据类型有哪些？
-
---字符串、数字、布尔、数组、对象、Null、Undefined
-
-解释下什么是闭包？
-
---全局变量、局部变量
---闭包就是能够读取其他函数内部变量的函数
----http://www.ruanyifeng.com/blog/2009/08/learning_javascript_closures.html
-
-CSS常用的样式有哪些？
-
-了解CSS3么？
-CSS3 用于控制网页的样式和布局
-选择器
-盒模型
-背景和边框
-文字特效
-2D/3D转换
-动画
-多列布局
-用户界面
-
-
-知道哪些HTML5的新特性？
-
-
-1. 新的Doctype 
-尽管使用&lt;!DOCTYPE html&gt;，即使浏览器不懂这句话也会按照标准模式去渲染 
-2. Figure元素 
-用&lt;figure&gt;和&lt;figcaption&gt;来语义化地表示带标题的图片 
-&lt;figure&gt; 
-&lt;img src=”path/to/image” alt=”About image” /&gt; 
-&lt;figcaption&gt; 
-&lt;p&gt;This is an image of something interesting. &lt;/p&gt; 
-&lt;/figcaption&gt; 
-&lt;/figure&gt; 
-3. 重新定义的&lt;small&gt; 
-&lt;small&gt;已经被重新定义了，现在被用来表示小的排版，如网站底部的版权声明 
-4. 去掉link和script标签里面的type属性 
-5. 加/不加 括号 
-HTML5没有严格的要求属性必须加引号，闭合不闭合，但是建议加上引号和闭合标签 
-6. 让你的内容可编辑，只需要加一个contenteditable属性 
-7. Email Inputs 
-如果我们给Input的type设置为email，浏览器就会验证这个输入是否是email类型，当然不能只依赖前端的校验，后端也得有相应的校验 
-8. Placeholders 
-这个input属性的意义就是不必通过javascript来做placeholder的效果了 
-9. Local Storage 
-使用Local Storage可以永久存储大的数据片段在客户端（除非主动删除），目前大部分浏览器已经支持，在使用之前可以检测一下window.localStorage是否存在 
-10. 语义化的header和footer 
-11. 更多的HTML5表单特性 
-12. IE和HTML5 
-默认的，HTML5新元素被以inline的方式渲染，不过可以通过下面这种方式让 
-其以block方式渲染 
-header, footer, article, section, nav, menu, hgroup { 
-display: block; 
-} 
-不幸的是IE会忽略这些样式，可以像下面这样fix: 
-document.createElement(”article”); 
-document.createElement(”footer”); 
-document.createElement(”header”); 
-document.createElement(”hgroup”); 
-document.createElement(”nav”); 
-document.createElement(”menu”); 
-13. hgroup 
-一般在header里面用来将一组标题组合在一起，如 
-&lt;header&gt; 
-&lt;hgroup&gt; 
-&lt;h1&gt; Recall Fan Page &lt;/h1&gt; 
-&lt;h2&gt; Only for people who want the memory of a lifetime. &lt;/h2&gt; 
-&lt;/hgroup&gt; 
-&lt;/header&gt; 
-14. Required属性 
-required属性定义了一个input是否是必须的，你可以像下面这样声明 
-&lt;input type=”text” name=”someInput” required&gt; 
-或者 
-&lt;input type=”text” name=”someInput” required=”required”&gt; 
-15. Autofocus属性 
-正如它的词义，就是聚焦到输入框里面 
-&lt;input type=”text” name=”someInput” placeholder=”Douglas Quaid” required autofocus&gt; 
-16. Audio支持 
-HTML5提供了&lt;audio&gt;标签，你不需要再按照第三方插件来渲染音频，大多数现代浏览器提供了对于HTML5 Audio的支持，不过目前仍旧需要提供一些兼容处理，如 
-&lt;audio autoplay=”autoplay” controls=”controls”&gt; 
-&lt;source src=”file.ogg” /&gt;&lt;!–FF–&gt; 
-&lt;source src=”file.mp3″ /&gt;&lt;!–Webkit–&gt; 
-&lt;a href=”file.mp3″&gt;Download this file.&lt;/a&gt; 
-&lt;/audio&gt; 
-17. Video支持 
-和Audio很像，&lt;video&gt;标签提供了对于video的支持，由于HTML5文档并没有给video指定一个特定的编码，所以浏 览器去决定要支持哪些编码，导致了很多不一致。Safari和IE支持H.264编码的格式，Firefox和Opera支持Theora和Vorbis 编码的格式，当使用HTML5 video的时候，你必须都提供： 
-&lt;video controls preload&gt; 
-&lt;source src=”cohagenPhoneCall.ogv” type=”video/ogg; codecs=’vorbis, theora’” /&gt; 
-&lt;source src=”cohagenPhoneCall.mp4″ type=”video/mp4; ’codecs=’avc1.42E01E, mp4a.40.2′” /&gt; 
-&lt;p&gt; Your browser is old. &lt;a href=”cohagenPhoneCall.mp4″&gt;Download this video instead.&lt;/a&gt; &lt;/p&gt; 
-&lt;/video&gt; 
-18. 预加载视频 
-preload属性就像它的字面意思那么简单，你需要决定是否需要在页面加载的时候去预加载视频 
-&lt;video preload&gt; 
-19. 显示视频控制 
-&lt;video preload controls&gt; 
-20. 正则表达式 
-由于pattern属性，我们可以在你的markup里面直接使用正则表达式了 
-&lt;form action=”&quot; method=”post”&gt; 
-&lt;label for=”username”&gt;Create a Username: &lt;/label&gt; 
-&lt;input type=”text” name=”username” id=”username” placeholder=”4 &lt;&gt; 10″ pattern=”[A-Za-z]{4,10}” autofocus required&gt; 
-&lt;button type=”submit”&gt;Go &lt;/button&gt; 
-&lt;/form&gt; 
-21. 检测属性支持 
-除了Modernizr之外我们还可以通过javascript简单地检测一些属性是否支持，如： 
-&lt;script&gt; 
-if (!’pattern’ in document.createElement(’input’) ) { 
-// do client/server side validation 
-} 
-&lt;/script&gt; 
-22. Mark元素 
-把&lt;mark&gt;元素看做是高亮的作用，当我选择一段文字的时候，javascript对于HTML的markup效果应该是这样的： 
-&lt;h3&gt; Search Results &lt;/h3&gt; 
-&lt;p&gt; They were interrupted, just after Quato said, &lt;mark&gt;”Open your Mind”&lt;/mark&gt;. &lt;/p&gt; 
-23. 什么时候用&lt;div&gt; 
-HTML5已经引入了这么多元素，那么div我们还要用吗？div你可以在没有更好的元素的时候去用。 
-24. 想立即使用HTML5? 
-不要等2022了，现在就可以使用了，just do it. 
-25. 哪些不是HTML5 
-1)SVG 
-2)CSS3 
-3)Geolocation 
-4)Client Storage 
-5)Web Sockets 
-26. Data属性 
-&lt;div id=”myDiv” data-custom-attr=”My Value”&gt; Bla Bla &lt;/div&gt; 
-CSS中使用： 
-&lt;style&gt; 
-h1:hover:after { 
-content: attr(data-hover-response); 
-color: black; 
-position: absolute; 
-left: 0; 
-} 
-&lt;/style&gt; 
-&lt;h1 data-hover-response=”I Said Don’t Touch Me!”&gt; Don’t Touch Me &lt;/h1&gt; 
-27. Output元素 
-&lt;output&gt;元素用来显示计算结果，也有一个和label一样的for属性 
-28. 用Range Input来创建滑块 
-HTML5引用的range类型可以创建滑块，它接受min, max, step和value属性 
-可以使用css的:before和:after来显示min和max的值 
-&lt;input type=”range” name=”range” min=”0″ max=”10″ step=”1″ value=”&quot;&gt; 
-input[type=range]:before { content: attr(min); padding-right: 5px; 
-} 
-input[type=range]:after { content: attr(max); padding-left: 5px;} 
-
-了解AJAX么，如何实现跨域？
-
-浏览器的同源策略：浏览器最基本的安全功能，同源是指，域名，协议，端口相同（所以我写的接口部署端口分别为1122和2211即不是同源，属于跨域）
-
-ajax：是一种技术方案，依赖的是CSS/HTML/Javascript，最核心依赖是浏览器提供的XMLHttpRequest对象，这个对象使得浏览器可以发出HTTP请求与接收HTTP响应。
-
-XMLHttpRequest Level 1主要存在以下缺点:
-
-1.受同源策略的限制，不能发送跨域请求；
-
-2.不能发送二进制文件（如图片、视频、音频等），只能发送纯文本数据；
-
-3.发送和获取数据的过程中，无法实时获取进度信息，只能判断是否完成；
-
-XMLHttpRequest Level 2中新增了以下功能:
-
-1.可以发送跨域请求，在服务端允许的情况下；
-
-2.支持发送和接收二进制数据；
-
-3.新增formData对象，支持发送表单数据；
-
-4.发送和获取数据时，可以获取进度信息；
-
-5.可以设置请求的超时时间；
-
-使用Javascript向服务器提出请求并处理响应而不阻塞用户！核心对象XMLHTTPRequest。通过这个对象，您的 JavaScript 可在不重载页面的情况与Web服务器交换数据，即在不需要刷新页面的情况下，就可以产生局部刷新的效果。
-
-跨域:
-浏览器对于javascript的同源策略的限制,例如a.cn下面的js不能调用b.cn中的js,对象或数据(因为a.cn和b.cn是不同域),所以跨域就出现了.
-
-上面提到的,同域的概念又是什么呢??? 简单的解释就是相同域名,端口相同,协议相同
-
-基于script标签实现跨域
-
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-&lt;meta charset=&quot;UTF-8&quot;&gt;
-&lt;title&gt;Insert title here&lt;/title&gt;
-
-&lt;script type=&quot;text/javascript&quot;&gt;
-    var message = function(data) {
-        alert(data[1].title);
-    };
-&lt;/script&gt;
-
-&lt;script type=&quot;text/javascript&quot; src=&quot;http://web.cn/js/message.js&quot;&gt;&lt;/script&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;div id=&apos;testdiv&apos;&gt;&lt;/div&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-
-    message([
- {&quot;id&quot;:&quot;1&quot;, &quot;title&quot;:&quot;天津新闻联播，雷人搞笑的男主持人&quot;},
- {&quot;id&quot;:&quot;2&quot;, &quot;title&quot;:&quot;楼市告别富得流油 专家:房价下跌是大概率事件&quot;},
- {&quot;id&quot;:&quot;3&quot;, &quot;title&quot;:&quot;法国人关注时事 八成年轻人每天阅读新闻&quot;},
- {&quot;id&quot;:&quot;4&quot;, &quot;title&quot;:&quot;新闻中的历史,历史中的新闻&quot;},
- {&quot;id&quot;:&quot;5&quot;, &quot;title&quot;:&quot;东阳新闻20140222&quot;},
- {&quot;id&quot;:&quot;6&quot;, &quot;title&quot;:&quot;23个职能部门要增加新闻发布频次&quot;},
- {&quot;id&quot;:&quot;7&quot;, &quot;title&quot;:&quot;《贵州新闻联播》 中国美丽乡村&quot;},
- {&quot;id&quot;:&quot;8&quot;, &quot;title&quot;:&quot;朝韩离散家属团聚首轮活动结束&quot;},
- {&quot;id&quot;:&quot;9&quot;, &quot;title&quot;:&quot;索契冬奥会一天曝出两例兴奋剂事件&quot;},
- {&quot;id&quot;:&quot;10&quot;, &quot;title&quot;:&quot;今天中国多地仍将出现中度霾&quot;}</code></pre><p> ]);</p>
-<pre><code>基于jquery跨域
-
-$(document).ready(function(){
-   var url=&apos;http://localhost:8080/WorkGroupManagment/open/getGroupById&quot;
-       +&quot;?id=1&amp;callback=?&apos;;
-   $.ajax({
-     url:url,
-     dataType:&apos;jsonp&apos;,
-     processData: false, 
-     type:&apos;get&apos;,
-     success:function(data){
-       alert(data.name);
-     },
-     error:function(XMLHttpRequest, textStatus, errorThrown) {
-       alert(XMLHttpRequest.status);
-       alert(XMLHttpRequest.readyState);
-       alert(textStatus);
-     }});
-   });    
-
-那么如何用jquery来实现我们的跨域呢???jquery已经把跨域封装到ajax上了,而且封装得非常的好,使用起来也特别方便
-
-通过iframe来跨子域
-基于iframe实现的跨域要求两个域具有aa.xx.com,bb.xx.com 这种特点，
-
-也就是两个页面必须属于一个基础域（例如都是xxx.com)，使用同一协议和同一端口，这样在两个页面中同时添加document.domain，就可以实现父页面调用子页面的函数
-
-要点就是 :通过修改document.domain来跨子域
-
-
-
-对jQuery了解多少？看过源码么？
-javascript 库
-
-在浏览器中输入域名到显示，其背后是怎样的一系列流程？
-
-如何优化页面的显示速度？
-
-了解数据结构么？常用的数据结构有哪些？
-
-用C语言的数组实现一个队列(手撕代码)
-
-简单介绍一下双向循环链表。
-
-介绍一下树的前中后三种遍历方式。
-
-简单说一下最短路径算法。
-
-随便列举出五个状态码。
-
-讲述一下域名到页面的过程。
-
-HTTP方法除了GET和POST还有哪些？
-
-GET请求和POST请求有长度限制么？
-
-头信息中与HTTP缓存有关的信息有哪些？
-
-CSS中的position属性有哪些值？
-
-如何水平垂直居中一个div？
-
-解释闭包。
-
-哪些操作会造成内存泄漏？
-
-前端的安全性问题有哪些？
-
-JS实现继承有哪几种方法？
-
-有涉及后端的项目么？
-
-了解React、Angular、Node么？ 
-
-Canvas画饼状图(个人项目)
-
-js如何实现定时器？简述定时器原理。
-
-左固定右自适应的两列布局(手撕)
-
-了解HTTP协议么?
-
-为什么HTTP协议基于TCP协议？TCP与UDP的区别。
-
-HTTPS和HTTP的端口号各是多少？HTTPS中的S是什么？
-
-了解跨域么？详细讲述一下JSONP的原理。
-
-简单实现一个原型继承(手撕)
-
-实现一个方法，输入为若干个数组，合并、去重、排序并返回(手撕)
-
-写一个快速排序算法(手撕)
-
-前端学习多久了？   
-
-SQL语句(笔试题)
-
-jQuery的选择器有哪些？
-
-了解Angular么？
-
-常用的排序算法有哪些？哪些是稳定的？
-
-项目吹牛
-
-SQL语句(笔试题)
-
-对jQuery熟悉么？
-
-介绍一下Node
-
-项目吹牛
-
-未来个人职业发展
-
-优秀的前端页面是怎样的？
-
-现场看项目提问细节 Canvas如何实现雷达图。
-项目吹牛
-
-display有哪些属性值？
-
-什么是inline-block，inline-block的间隙问题。
-
-行内元素float:left后是否变为块级元素？
-
-如果想隐藏页面中的一段文字，有哪些方法可以实现？
-
-Z-index可以设置为负数么？设为负数有什么用？
-
-调出了笔试时中的一道算法题，讲解思路。
-
-实现一个效果，当鼠标移动，在移动的路径上有从小到大变化后消失的心形动画。简述实现的思路。
-
-了解SVG么？Canvas和SVG有什么区别？
-
-Cookies有什么用？
-
-了解CSS预处理么？
-
-js高级程序设计
-
-
-
-《CSS网站布局实录》——国产CSS2入门书，有些技巧已经淘汰，但仍不失为最好的CSS入门教程。
-《无懈可击的Web设计》——讲CSS应用技巧的书，国内外粉丝别多，说是开创了CSS技巧流派也不为过。
-《DOM JavaScript编程艺术——JavaScript最好的入门书，没有之一，这本书是帮助你了解如何将DOM、CSS和JavaScript连接起来的一本书。严格来说，后端Node根本不算JavaScript，JavaScript是基于ES语法的一门脱水语言，如何实现的胶水？这本书将带你入门。
-《JavaScript高级程序设计》 ——JavaScript必读的一本精典，读完之后对JavaScript的理解和实 
-践会上升非常大的一个台阶。
-《编写高质量代码——Web前端开发修炼之道》 —— 举贤不避亲，这本书是我写的。推荐的原因是，这本书重点讲团队合作的注意事项。虽然一些具体的技巧，在今天已然过时，比如IE6的hack，但在团队合作方面的思考，直到今天我也没看到其他书在讲，这些思想没有其他书可替代。
-《HTML5和CSS3权威指南》——目前为止，我读过的HTML5方面最好的一本原创书。配合实例进行API讲解，非常详细具体。连HTML5都提供了哪些底层的东西都不知道，又该如何去用好它呢？在我看来，是学习HTML5的必读书。
-《响应式Web设计：HTML5和CSS3实战》——作者是《无懈可击的Web设计》忠实粉丝，所以很自然地，这也是本CSS技巧流派的书，侧重点在CSS3的实践技巧上，让人大开眼界。
-《JavaScript设计模式》——JavaScript在实战时的高级技巧。
-
-    未来几年内，前端一定将三分天下：其一，是以Ext为代表js库将传统页面的表现形式发挥到极至;其二，Adobe的flash/flex凭着成熟的技术和丰富的经验，以及不断创新的热情，引领着前端的技术走向；其三，微软的sliverlight凭借着公司强大的技术团队和.net体系协同做战的优势，奋起直追，很有可能追赶上flash/flex．</code></pre>
           
         
       
@@ -1333,7 +971,7 @@ js高级程序设计
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2016-11-22-monocmd/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/17/2016-10-17-react/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -1352,7 +990,7 @@ js高级程序设计
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2016-11-22-monocmd/" itemprop="url">mono cmd</a></h1>
+                <a class="post-title-link" href="/2016/10/17/2016-10-17-react/" itemprop="url">react</a></h1>
         
 
         <div class="post-meta">
@@ -1364,8 +1002,8 @@ js高级程序设计
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-17T00:00:00+08:00">
+                2016-10-17
               </time>
             
 
@@ -1404,11 +1042,11 @@ js高级程序设计
       
         
           
-            <p>##mono 命令</p>
-<pre><code>$mono_path/bin/xbuild /p:Configuration=&quot;Release Mono&quot; /p:Platform=&quot;Any CPU&quot; /t:clean MediaBrowser.Mono.sln
-$mono_path/bin/xbuild /p:Configuration=&quot;Release Mono&quot; /p:Platform=&quot;Any CPU&quot; /t:build MediaBrowser.Mono.sln
+            <p>##react</p>
+<p>###组件</p>
+<p>React 允许将代码封装成组件（component），然后像插入普通 HTML 标签一样，在网页中插入这个组件</p>
+<p><a href="http://www.ruanyifeng.com/blog/2015/03/react.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2015/03/react.html</a></p>
 
-xbuild /p:Configuration=Debug  /t:clean AppFrame.sln</code></pre>
           
         
       
@@ -1456,7 +1094,7 @@ xbuild /p:Configuration=Debug  /t:clean AppFrame.sln</code></pre>
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2016-11-2-docker/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/10/2016-10-10-feifeivpnprivacy/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -1475,7 +1113,7 @@ xbuild /p:Configuration=Debug  /t:clean AppFrame.sln</code></pre>
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2016-11-2-docker/" itemprop="url">docker</a></h1>
+                <a class="post-title-link" href="/2016/10/10/2016-10-10-feifeivpnprivacy/" itemprop="url">飞飞VPN隐私政策</a></h1>
         
 
         <div class="post-meta">
@@ -1487,8 +1125,8 @@ xbuild /p:Configuration=Debug  /t:clean AppFrame.sln</code></pre>
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-10T00:00:00+08:00">
+                2016-10-10
               </time>
             
 
@@ -1527,158 +1165,15 @@ xbuild /p:Configuration=Debug  /t:clean AppFrame.sln</code></pre>
       
         
           
-            <h2 id="docker"><a href="#docker" class="headerlink" title="docker"></a>docker</h2><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/docker.png" alt=""></p>
-<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/docker2.png" alt=""></p>
-<p>镜像</p>
-<p>对于 Linux 而言，内核启动后，会挂载 root 文件系统为其提供用户空间支持。而 Docker 镜像（Image），就相当于是一个 root 文件系统</p>
-<p>容器</p>
-<p>镜像（Image）和容器（Container）的关系，就像是面向对象程序设计中的类和实例一样，镜像是静态的定义，容器是镜像运行时的实体。容器可以被创建、启动、停止、删除、暂停等。</p>
-<p>代码是放在主机中，然后通过docker run的-v参数（数据卷）共享给每个需要的容器，编码的时候，只需要在主机本地修改代码就可以。</p>
-<h3 id="安装docker"><a href="#安装docker" class="headerlink" title="安装docker"></a>安装docker</h3><pre><code>使用官方提供的脚本来安装 Docker
-sudo curl -sSL https://get.docker.com/ | sh
+            <p>##飞飞VPN隐私政策</p>
+<p>###隐私政策</p>
+<p>您在注册帐号或使用本服务的过程中，可能需要填写一些必要的信息。若国家法律法规有特殊规定的，您需要填写真实的身份信息。若您填写的信息不完整，则无法使用本服务或在使用过程中受到限制。</p>
+<p>一般情况下，您可随时浏览、修改自己提交的信息，但出于安全性和身份识别（如号码申诉服务）的考虑，您可能无法修改注册时提供的初始注册信息及其他验证信息。</p>
+<p>我们运用各种安全技术和程序建立完善的管理制度来保护您的个人信息，以免遭受未经授权的访问、使用或披露。</p>
+<p>未经您的同意，我们不会向其他任何公司、组织和个人披露您的个人敏感信息，但法律法规或本协议另有规定的除外。</p>
+<p>###隐私政策条款</p>
+<p>使用本App即表示您同意此隐私政策的条款和条件。如果您不同意本政策，请不要使用该App。我们保留权利，在我们决定更改，修改，增加或删除本政策的部分，在任何时候。请定期浏览此网页查阅任何修改。如果您继续使用我们的App以后的任何更改这些条款的发布将意味着你已经接受了这些调整。</p>
 
-可以配置让 Docker 服务在系统启动后自动启动。
-
-sudo chkconfig docker on
-
-sudo service docker start</code></pre><h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><pre><code>1.下面的命令输出一个 “Hello World”，之后终止容器
-sudo docker run ubuntu:14.04 /bin/echo &apos;Hello world&apos;
-
-2.下面的命令则启动一个 bash 终端，允许用户进行交互
-sudo docker run -t -i ubuntu:14.04 /bin/bash
-
-3.当利用 docker run 来创建容器时，Docker 在后台运行的标准操作包括：
-检查本地是否存在指定的镜像，不存在就从公有仓库下载
-利用镜像创建并启动一个容器
-分配一个文件系统，并在只读的镜像层外面挂载一层可读写层
-从宿主主机配置的网桥接口中桥接一个虚拟接口到容器中去
-从地址池配置一个 ip 地址给容器
-执行用户指定的应用程序
-执行完毕后容器被终止
-
-4.快速准确的调度容器--给容器起名字
-root# docker run -t -i -d --name helloubuntu ubuntu:14.04 /bin/sh -c &quot;while true; do echo hello world; sleep 1; done&quot;
-
-5.列出所有正在运行的容器和它们的基本信息
-root# docker ps -a
-
-6.以下管理命令都可以通过传入容器的 ID 或者名字来管理指定的容器：
-stop 停止一个正在运行的容器。
-start 运行一个正在停止的容器。
-restart 重启一个容器。
-rm 删除一个容器。
-
-7.创建image
-
-
-8.安装nginx镜像
-(1)下载镜像，docker pull nginx:1.9
-(2)启动容器，docker run -d -p 8080:80 nginx:1.9，把容器内的nginx的80端口，映射到当前服务器的8080端
-
-9.进入容器
-sudo docker attach 44fc0f0582d9  </code></pre><p><a href="http://www.arkulo.com/2015/04/25/dockerlnmp/" target="_blank" rel="noopener">http://www.arkulo.com/2015/04/25/dockerlnmp/</a></p>
-<pre><code>下载镜像: docker pull memcache
-查看已有镜像: docker images
-查看所有的容器: docker ps
-创建镜像: docker build -t 镜像名字 目录
-查看当前boot2docker的ip地址：boot2docker ip （本文的IP是：192.168.59.103）
-进入一个容器的shell：docker exec -i -t 665b4a1e17b6 bash
-更新一个容器至镜像: docker -m &quot;描述&quot; -a &quot;作者&quot; 665b4a1e17b6 arkulo/php-fpm:v1
-打包镜像（传播）：docker save arkulo/nginx &gt; /tmp/arkulonginx.tar
-导入镜像：docker load &lt; /tmp/arkulonginx.tar
-查看容器内部运行程序：docker top 容器id
-
-
-
-首先需要先注册一个帐号https://hub.docker.com/
-然后添加一个仓库：Add Repository -&gt; Repository
-然后填上你的名字和简介
-然后在你的机器上登录
-
-$sudo docker login
-
-现在我们需要一个镜像
-
-$sudo docker images
-这个可以列出当前系统的docker镜像，刚开始的话试空的
-
-现在我们把这个修改了的容器写到y一个新的Image里面，假设我们刚刚在docker hub 上创建的仓库名叫mymusise/test
-
-sudo docker commit -m &quot;add vim&quot;  191b86560986 mymusise/test
-191... is CONTAINER ID  
-
-sudo docker push mymusise/spider
-
-类似github
-
-run容器，nginx for example
-run一个nginx容器，开放端口，并映射到本地的 8080 端口，html文件夹映射到/some/content
-sudo docker run --name some-nginx -v /some/content:/usr/share/nginx/html:ro -d -p 8088:80 gagatechang/zhulongnginx(REPOSITORY)
-
-进入容器内部
-$ sudo docker exec -it 1801a32aab54 /bin/bash
-查看nginx目录
-cd /etc/nginx/
-
-
-
-php docker
-
-docker run -p 9000:9000 -v ~/opt:/var/www --name phpfpm -it fancive/php
-
-
-pip install docker-compose
-if pkg_resources.DistributionNotFound: backports.ssl-match-hostname&gt;=3.5
-sudo pip install backports.ssl_match_hostname --upgrade
-
-docker-compose.yml 
-web:
- image: nginx:latest
- ports:
-  - &quot;8080:80&quot;
- volumes:
-  - ./ubangwang:/code
-  - ./site.conf:/etc/nginx/conf.d/default.conf
- links:
-  - php
-php:
-  image: php:7-fpm
-  volumes:
-    - ./ubangwang:/code
-
-
- docker-compose up -d
-
-
-
-
-
-
-FROM nginx:latest
-
-ADD  nginx.conf      /etc/nginx/nginx.conf
-ADD  sites-enabled/*    /etc/nginx/conf.d/
-RUN  mkdir /opt/htdocs &amp;&amp; mkdir /opt/log &amp;&amp; mkdir /opt/log/nginx
-RUN  chown -R www-data.www-data /opt/htdocs /opt/log
-
-VOLUME [&quot;/opt&quot;]
-
-
-同样构建一下镜像
-docker build -t eva/nginx ./nginx
-
-并运行容器
-docker run -p 80:80 -v ~/opt:/opt -it eva/nginx</code></pre><p>docker for mysql</p>
-<pre><code>docker run -p 3306:3306 -v ~/opt/data/mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 -it eva/mysql
-
-mysql -uroot -pmypass -h127.0.0.1
-
-
-
-移除所有的容器和镜像（大扫除） 用一行命令大扫除：
-
-docker kill $(docker ps -q) ; docker rm $(docker ps -a -q) ; docker rmi $(docker images -q -a) </code></pre><p>docker command</p>
-<pre><code>http://dockerlux.github.io/pdf/cheat-sheet-v2.pdf?spm=5176.100239.blogcont57839.60.kfpwer&amp;file=cheat-sheet-v2.pdf</code></pre>
           
         
       
@@ -1726,7 +1221,7 @@ docker kill $(docker ps -q) ; docker rm $(docker ps -a -q) ; docker rmi $(docker
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2016-10-8-ios%E5%86%85%E8%B4%AD/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/09/2016-10-09-linux%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -1745,7 +1240,7 @@ docker kill $(docker ps -q) ; docker rm $(docker ps -a -q) ; docker rmi $(docker
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2016-10-8-ios%E5%86%85%E8%B4%AD/" itemprop="url">ios内购</a></h1>
+                <a class="post-title-link" href="/2016/10/09/2016-10-09-linux%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4/" itemprop="url">linux常用指令</a></h1>
         
 
         <div class="post-meta">
@@ -1757,8 +1252,159 @@ docker kill $(docker ps -q) ; docker rm $(docker ps -a -q) ; docker rmi $(docker
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-09T00:00:00+08:00">
+                2016-10-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>##linux常用指令</p>
+<p>###增加用户和用户组<br>    useradd xx<br>    passwd xx<br>    用户添加到sudu组<br>    chmod u+w /etc/sudoers<br>    vi /etc/sudoers 加入用户</p>
+<p>###修改文件用户和用户组<br>    chown [-R] 账号名称 文件或目录<br>    chown [-R] 账号名称:用户组名称 文件或目录</p>
+<p>###yum<br>    yum install<br>    yum provides */libssl.so.6</p>
+<p>###查看文件变化<br>    tail -f</p>
+<p>###du df<br>    du查看目录大小，df查看磁盘使用情况。<br>    我常使用的命令（必要时，sudo使用root权限），<br>    1.查看某个目录的大小：du -hs /home/master/documents<br>      查看目录下所有目录的大小并按大小降序排列：sudo du -sm /etc/* | sort -nr | less<br>    2.查看磁盘使用情况（文件系统的使用情况）：sudo df -h<br>      df –block-size=GB</p>
+<p>###查看操作系统版本<br>    lsb_release -a</p>
+<p>###查看端口占用</p>
+<pre><code>lsof -i:xxx</code></pre><p>###firewall</p>
+<pre><code>永久打开一个端口： firewall-cmd --permanent --add-port=8080/tcp
+永久关闭一个端口： firewall-cmd --permanent --remove-port=8080/tcp
+永久打开某项服务： firewall-cmd --permanent --add-service=http
+永久关闭某项服务： firewall-cmd --permanent --remove-service=http
+进行端口转发：  firewall-cmd --permanent --add-forward-port=port=80:proto=tcp:toport=8080:toaddr=192.0.2.55
+允许转发到其他地址： firewall-cmd --permanent --add-masquerade
+重新加载防火墙： firewall-cmd --reload
+运行、停止、禁用firewalld
+
+启动：# systemctl start firewalld
+查看状态：# systemctl status firewalld 或者 firewall-cmd –state
+停止：# systemctl disable firewalld
+禁用：# systemctl stop firewalld
+配置firewalld
+
+查看版本：$ firewall-cmd –version
+查看帮助：$ firewall-cmd –help
+查看设置：
+显示状态：$ firewall-cmd –state
+查看区域信息: $ firewall-cmd –get-active-zones
+查看指定接口所属区域：$ firewall-cmd –get-zone-of-interface=eth0
+拒绝所有包：# firewall-cmd –panic-on
+取消拒绝状态：# firewall-cmd –panic-off
+查看是否拒绝：$ firewall-cmd –query-panic</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/08/2016-10-8-ios%E5%86%85%E8%B4%AD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/10/08/2016-10-8-ios%E5%86%85%E8%B4%AD/" itemprop="url">ios内购</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-08T00:00:00+08:00">
+                2016-10-08
               </time>
             
 
@@ -1799,459 +1445,6 @@ docker kill $(docker ps -q) ; docker rm $(docker ps -a -q) ; docker rmi $(docker
           
             <p>##ios内购</p>
 <p><a href="http://yimouleng.com/2015/12/17/ios-AppStore/" target="_blank" rel="noopener">http://yimouleng.com/2015/12/17/ios-AppStore/</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2016-10-24-vue/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2016-10-24-vue/" itemprop="url">vue</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="vue"><a href="#vue" class="headerlink" title="vue"></a>vue</h2><h3 id="webpack"><a href="#webpack" class="headerlink" title="webpack"></a>webpack</h3><p>webpack是近期最火的一款模块加载器兼打包工具，它能把各种资源，例如JS（含JSX）、coffee、样式（含less/sass）、图片等都作为模块来使用和处理。</p>
-<h3 id="MVVM"><a href="#MVVM" class="headerlink" title="MVVM"></a>MVVM</h3><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/vue.png" alt="">  </p>
-<pre><code>&lt;!-- 这是我们的 View --&gt;
-&lt;div id=&quot;example-1&quot;&gt;
-  Hello {{ name }}!
-&lt;/div&gt;
-
-// 这是我们的 Model
-var exampleData = {
-  name: &apos;Vue.js&apos;
-}
-
-// 创建一个 Vue 实例或 &quot;ViewModel&quot;
-// 它连接 View 与 Model
-var exampleVM = new Vue({
-  el: &apos;#example-1&apos;,
-  data: exampleData
-})</code></pre><h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><pre><code>安装淘宝镜像
-
-npm install -g cnpm --registry=https://registry.npm.taobao.org
-安装webpack
-
-cnpm install webpack -g
-安装vue脚手架
-
-npm install vue-cli -g
-
-vue init webpack-simple 工程名字&lt;工程名字不能用中文&gt;
-
-npm install</code></pre><h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><p>v-bind 属性与数据绑定</p>
-<p>v-if </p>
-<p>v-for</p>
-<p>v-on</p>
-<p>监听事件</p>
-<p>v-model</p>
-<h3 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h3><h3 id="run"><a href="#run" class="headerlink" title="run"></a>run</h3><p>这一行命令代表着它会去找到package.json的scripts对象，执行node bulid/dev-server.js。在这文件里，配置了Webpack，会让它去编译项目文件，并且运行服务器，我们在localhost:8080即可查看我们的应用</p>
-<h3 id="引入jquery"><a href="#引入jquery" class="headerlink" title="引入jquery"></a>引入jquery</h3><p>修改build文件夹下面的webpack.base.conf.js文件，</p>
-<pre><code>var webpack = require(&apos;webpack&apos;)
-
-加入
-plugins: [
-  new webpack.ProvidePlugin({
-    $: &quot;jquery&quot;,
-    jQuery: &quot;jquery&quot;,
-    &quot;windows.jQuery&quot;: &quot;jquery&quot;
-  })
-],
-
-
-alias: {
-  &apos;jquery&apos;: path.resolve(__dirname, &apos;../src/assets/scripts/jquery.min&apos;)
-}</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2016-10-22-nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2016-10-22-nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" itemprop="url">网站加速</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##nginx负载均衡</p>
-<pre><code>upstream支持的负载均衡分配方式
-
-1.轮询（默认）
-每个请求按时间顺序逐一分配到不同的后端服务器，如果后端服务器down掉，会自动剔除。
-2.weight
-指定轮询机率，weight和访问比率成正比，用于后端服务器性能不均的情况
-3.ip_hash
-每个请求按访问的ip做ip_hash计算定位到同一台服务器，以解决session共享的问题。
-当负载调度算法为ip_hash时，后端服务器在负载均衡调度中的状态不能是weight和backup。
-4.fair（第三方）
-按后端服务器的响应时间来分配请求，响应时间短的优先分配。Nginx本身不支持fair，如果要使用此种算法需下载Nginx的upstream_fair模块。
-5.url_hash（第三方）
-按访问url的hash结果来分配请求，使每个url定向到同一个后端服务器，后端服务器为缓存时比较有效果。
-Ningx本身不支持url_hash，如果要使用这种算法，要下载安装hash软件包。
-
-weight=NUMBER：设置服务器的权重，权重越高，被分配到的客户端请求数越多，如无设置权重值 ，则默认为权重为1。
-max_fails＝NUMBER：指定的时间内对后端服务器请求失败的次数，如果检测到后端服务器无法连接及发生服务器错误（404除外），则标记为失改。哪果没有设置，则为默认值1，设为0表示关闭检查项。
-fail_timeout=TIME：mqx_fails次失败后，暂停的时间。
-down：标记服务器永久离线状态，用于ip_hash中。
-backup：仅仅在非backup服务器全部宕机或繁忙时才启用。
-
-http
-{
-upstream test {
-server 192.168.110.11:80 weight=3;
-server 192.168.110.22:8080 max_fails=3 fail_timeout=30s;
-server 192.168.110.33 backup;
-}
-server
-{
-    listen 80;
-    server_name  www.linux78.com;
-    index index.html index.php;
-    root /www/web;
-
-location / {
-        proxy_pass   http://test;
-        proxy_next_upstream  http_500 http_502 _ http_503 error timeout invalid_header;
-        include   /usr/local/nginx/conf/proxy.conf;
-        }
-  }
-}</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2016-10-20-webspeed/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2016-10-20-webspeed/" itemprop="url">网站加速</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##网站加速</p>
-<p>浏览器缓存</p>
-<p>多服务器，负载均衡</p>
 
           
         
@@ -2337,7 +1530,7 @@ location / {
               
                 <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">273</span>
+                  <span class="site-state-item-count">271</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

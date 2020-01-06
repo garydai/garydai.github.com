@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="常用git命令   流程工作区 add 到 stage区，再commit到分支 本地代码库回滚git reset --hard  xxx放弃工作区文件修改让文件回到最近一次git commit或git add时的状态，checkout出本地版本库里的文件 git checkout -- file放弃暂存区文件修改把暂存区（stage）的文件修改撤销 git reset HEAD file关联远程库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="git command">
+<meta property="og:url" content="http://yoursite.com/2015/09/16/2015-9-16-gitCommand/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="常用git命令   流程工作区 add 到 stage区，再commit到分支 本地代码库回滚git reset --hard  xxx放弃工作区文件修改让文件回到最近一次git commit或git add时的状态，checkout出本地版本库里的文件 git checkout -- file放弃暂存区文件修改把暂存区（stage）的文件修改撤销 git reset HEAD file关联远程库">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/git.jpeg">
+<meta property="article:published_time" content="2015-09-15T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-01-06T07:17:32.518Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/git.jpeg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/09/16/2015-9-16-gitCommand/"/>
+
+
+
+
+
+  <title>git command | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/09/16/2015-9-16-gitCommand/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">git command</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-09-16T00:00:00+08:00">
+                2015-09-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="常用git命令"><a href="#常用git命令" class="headerlink" title="常用git命令"></a>常用git命令</h2><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/git.jpeg" alt="">  </p>
+<h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><p>工作区 add 到 stage区，再commit到分支</p>
+<h3 id="本地代码库回滚"><a href="#本地代码库回滚" class="headerlink" title="本地代码库回滚"></a>本地代码库回滚</h3><pre><code>git reset --hard  xxx</code></pre><h3 id="放弃工作区文件修改"><a href="#放弃工作区文件修改" class="headerlink" title="放弃工作区文件修改"></a>放弃工作区文件修改</h3><p>让文件回到最近一次git commit或git add时的状态，checkout出本地版本库里的文件</p>
+<pre><code>git checkout -- file</code></pre><h3 id="放弃暂存区文件修改"><a href="#放弃暂存区文件修改" class="headerlink" title="放弃暂存区文件修改"></a>放弃暂存区文件修改</h3><p>把暂存区（stage）的文件修改撤销</p>
+<pre><code>git reset HEAD file</code></pre><h3 id="关联远程库"><a href="#关联远程库" class="headerlink" title="关联远程库"></a>关联远程库</h3><pre><code>get remote add origin git@github.com:xxx/xxx.git</code></pre><h3 id="本地库推送到远程库"><a href="#本地库推送到远程库" class="headerlink" title="本地库推送到远程库"></a>本地库推送到远程库</h3><pre><code>git push -u origin master</code></pre><h3 id="从远程库clone"><a href="#从远程库clone" class="headerlink" title="从远程库clone"></a>从远程库clone</h3><pre><code>git clone git@github.com:xxx/xxx.git</code></pre><h3 id="分支管理"><a href="#分支管理" class="headerlink" title="分支管理"></a>分支管理</h3><p>我们创建dev分支，然后切换到dev分支</p>
+<pre><code>git checkout -b dev</code></pre><p>git checkout命令加上-b参数表示创建并切换，相当于以下两条命令：</p>
+<pre><code>git branch dev
+git checkout dev</code></pre><p>合并某分支到当前分支</p>
+<pre><code>git merge &lt;name&gt;</code></pre><p>删除分支</p>
+<pre><code>git branch -d &lt;name&gt;</code></pre><h3 id="冲突"><a href="#冲突" class="headerlink" title="冲突"></a>冲突</h3><p>代码库中的文件完全覆盖本地工作版本. </p>
+<pre><code>git reset --hard
+
+git pull</code></pre><p>如果希望保留生产服务器上所做的改动,仅仅并入新配置项, 处理方法如下:</p>
+<pre><code>git stash
+
+git pull
+
+git stash pop</code></pre><p>然后可以使用git diff -w +文件名 来确认代码自动合并的情况.</p>
+<h3 id="标签"><a href="#标签" class="headerlink" title="标签"></a>标签</h3><p>命令git tag <name>用于新建一个标签，默认为HEAD，也可以指定一个commit id；</p>
+<p>git tag -a <tagname> -m “blablabla…”可以指定标签信息；</p>
+<p>git tag -s <tagname> -m “blablabla…”可以用PGP签名标签；</p>
+<p>命令git tag可以查看所有标签。</p>
+<p>命令git push origin <tagname>可以推送一个本地标签；</p>
+<p>命令git push origin –tags可以推送全部未推送过的本地标签；</p>
+<p>命令git tag -d <tagname>可以删除一个本地标签；</p>
+<p>命令git push origin :refs/tags/<tagname>可以删除一个远程标签。</p>
+<pre><code>命令    作用域    常用情景
+git reset    提交层面    在私有分支上舍弃一些没有提交的更改
+
+git reset    文件层面    将文件从缓存区中移除
+
+git checkout    提交层面    切换分支或查看旧版本
+
+git checkout    文件层面    舍弃工作目录中的更改
+
+git revert    提交层面    在公共分支上回滚更改
+
+git revert    文件层面    （然而并没有）
+
+git push origin test:master         // 提交本地test分支作为远程的master分支 //好像只写这一句，远程的github就会自动创建一个test分支</code></pre>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/09/10/2015-9-10-openfire/" rel="next" title="openfire">
+                <i class="fa fa-chevron-left"></i> openfire
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/09/16/2015-9-16-color/" rel="prev" title="color">
+                color <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">271</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#常用git命令"><span class="nav-number">1.</span> <span class="nav-text">常用git命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#流程"><span class="nav-number">1.1.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#本地代码库回滚"><span class="nav-number">1.2.</span> <span class="nav-text">本地代码库回滚</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#放弃工作区文件修改"><span class="nav-number">1.3.</span> <span class="nav-text">放弃工作区文件修改</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#放弃暂存区文件修改"><span class="nav-number">1.4.</span> <span class="nav-text">放弃暂存区文件修改</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关联远程库"><span class="nav-number">1.5.</span> <span class="nav-text">关联远程库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#本地库推送到远程库"><span class="nav-number">1.6.</span> <span class="nav-text">本地库推送到远程库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#从远程库clone"><span class="nav-number">1.7.</span> <span class="nav-text">从远程库clone</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分支管理"><span class="nav-number">1.8.</span> <span class="nav-text">分支管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#冲突"><span class="nav-number">1.9.</span> <span class="nav-text">冲突</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#标签"><span class="nav-number">1.10.</span> <span class="nav-text">标签</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,4 +1,5 @@
 ---
+date: 2015-1-15
 layout: default
 title: machine_learning
 

@@ -229,7 +229,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2020-1-5-datax/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/04/14/2013-4-14-hello-world/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -248,7 +248,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2020-1-5-datax/" itemprop="url">离线同步工具DataX</a></h1>
+                <a class="post-title-link" href="/2013/04/14/2013-4-14-hello-world/" itemprop="url">10年经历转载</a></h1>
         
 
         <div class="post-meta">
@@ -260,8 +260,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T13:59:23+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-04-14T00:00:00+08:00">
+                2013-04-14
               </time>
             
 
@@ -300,277 +300,8 @@
       
         
           
-            <h1 id="离线同步工具DataX"><a href="#离线同步工具DataX" class="headerlink" title="离线同步工具DataX"></a>离线同步工具DataX</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 生成模版</span><br><span class="line">python datax.py -r mysqlreader -w mysqlwriter &gt; mysql2mysql.json</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    &quot;job&quot;: &#123;</span><br><span class="line">        &quot;content&quot;: [</span><br><span class="line">            &#123;</span><br><span class="line">                &quot;reader&quot;: &#123;</span><br><span class="line">                    &quot;name&quot;: &quot;mysqlreader&quot;,</span><br><span class="line">                    &quot;parameter&quot;: &#123;</span><br><span class="line">                        &quot;column&quot;: [&quot;*&quot;],</span><br><span class="line">                        &quot;connection&quot;: [</span><br><span class="line">                            &#123;</span><br><span class="line">                                &quot;jdbcUrl&quot;: [&quot;jdbc:mysql:&#x2F;&#x2F;127.0.0.1:3306&#x2F;sally&quot;],</span><br><span class="line">                                &quot;table&quot;: [&quot;account&quot;]</span><br><span class="line">                            &#125;</span><br><span class="line">                        ],</span><br><span class="line">                        &quot;password&quot;: &quot;123456&quot;,</span><br><span class="line">                        &quot;username&quot;: &quot;test&quot;,</span><br><span class="line">                        &quot;where&quot;: &quot;&quot;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;,</span><br><span class="line">                &quot;writer&quot;: &#123;</span><br><span class="line">                    &quot;name&quot;: &quot;mysqlwriter&quot;,</span><br><span class="line">                    &quot;parameter&quot;: &#123;</span><br><span class="line">                        &quot;column&quot;: [&quot;*&quot;],</span><br><span class="line">                        &quot;connection&quot;: [</span><br><span class="line">                            &#123;</span><br><span class="line">                                &quot;jdbcUrl&quot;: &quot;jdbc:mysql:&#x2F;&#x2F;127.0.0.1:3306&#x2F;wzcredit2&quot;,</span><br><span class="line">                                &quot;table&quot;: [&quot;account&quot;]</span><br><span class="line">                            &#125;</span><br><span class="line">                        ],</span><br><span class="line">                        &quot;password&quot;: &quot;123456&quot;,</span><br><span class="line">                        &quot;preSql&quot;: [],</span><br><span class="line">                        &quot;session&quot;: [],</span><br><span class="line">                        &quot;username&quot;: &quot;test&quot;,</span><br><span class="line">                        &quot;writeMode&quot;: &quot;insert&quot;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        ],</span><br><span class="line">        &quot;setting&quot;: &#123;</span><br><span class="line">            &quot;speed&quot;: &#123;</span><br><span class="line">                &quot;channel&quot;: &quot;3&quot;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 执行数据同步</span><br><span class="line">python datax.py mysql2mysql.json</span><br></pre></td></tr></table></figure>
-
-<h2 id="job"><a href="#job" class="headerlink" title="job"></a>job</h2><p>整个抽取流程是个job，可以拆成多个task</p>
-<h2 id="task"><a href="#task" class="headerlink" title="task"></a>task</h2><p>通过RecordSender从数据源读数据，写入到channel</p>
-<p>通过RecordReceiver从channel中读取数据，写入目标数据源</p>
-<p><img src="/Users/daitechang/Documents/garydai.github.com/_posts/pic/image-20200105215735411.png" alt="image-20200105215735411"></p>
-<p>com.alibaba.datax.core.taskgroup.TaskGroupContainer#start</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// core.container.taskGroup.channel默认等于5</span></span><br><span class="line"><span class="keyword">int</span> channelNumber = <span class="keyword">this</span>.configuration.getInt(</span><br><span class="line">        CoreConstant.DATAX_CORE_CONTAINER_TASKGROUP_CHANNEL);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> channelsPerTaskGroup = <span class="keyword">this</span>.configuration.getInt(</span><br><span class="line">                CoreConstant.DATAX_CORE_CONTAINER_TASKGROUP_CHANNEL, <span class="number">5</span>);</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"core"</span>: &#123;</span><br><span class="line">       <span class="string">"transport"</span> : &#123;</span><br><span class="line">          <span class="string">"channel"</span>: &#123;</span><br><span class="line">             <span class="string">"speed"</span>: &#123;</span><br><span class="line">                <span class="string">"record"</span>: <span class="number">100</span>,</span><br><span class="line">                <span class="string">"byte"</span>: <span class="number">100</span></span><br><span class="line">             &#125;</span><br><span class="line">          &#125;</span><br><span class="line">       &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">"job"</span>: &#123;</span><br><span class="line">      <span class="string">"setting"</span>: &#123;</span><br><span class="line">        <span class="string">"speed"</span>: &#123;</span><br><span class="line">          <span class="string">"record"</span>: <span class="number">500</span>,</span><br><span class="line">          <span class="string">"byte"</span>: <span class="number">1000</span>,</span><br><span class="line">          <span class="string">"channel"</span> : <span class="number">1</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>首先计算按照字节数限速，channel的数目应该为 500 / 100 = 5</p>
-<p>然后按照记录数限速， channel的数目应该为 1000 ／ 100 = 10</p>
-<p>最后返回两者的最小值 5。虽然指定了channel为1， 但只有在没有限速的条件下，才会使用。</p>
-<p>adjustChannelNumber方法，实现了上述功能</p>
-<p>com.alibaba.datax.core.job.JobContainer#adjustChannelNumber</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">adjustChannelNumber</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> needChannelNumberByByte = Integer.MAX_VALUE;</span><br><span class="line">    <span class="keyword">int</span> needChannelNumberByRecord = Integer.MAX_VALUE;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 是否指定字节数限速</span></span><br><span class="line">    <span class="keyword">boolean</span> isByteLimit = (<span class="keyword">this</span>.configuration.getInt(</span><br><span class="line">            CoreConstant.DATAX_JOB_SETTING_SPEED_BYTE, <span class="number">0</span>) &gt; <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (isByteLimit) &#123;</span><br><span class="line">        <span class="comment">// 总的限速字节数</span></span><br><span class="line">        <span class="keyword">long</span> globalLimitedByteSpeed = <span class="keyword">this</span>.configuration.getInt(</span><br><span class="line">                CoreConstant.DATAX_JOB_SETTING_SPEED_BYTE, <span class="number">10</span> * <span class="number">1024</span> * <span class="number">1024</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 单个Channel的字节数</span></span><br><span class="line">        Long channelLimitedByteSpeed = <span class="keyword">this</span>.configuration</span><br><span class="line">                .getLong(CoreConstant.DATAX_CORE_TRANSPORT_CHANNEL_SPEED_BYTE);</span><br><span class="line">        <span class="keyword">if</span> (channelLimitedByteSpeed == <span class="keyword">null</span> || channelLimitedByteSpeed &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">            DataXException.asDataXException(</span><br><span class="line">                    FrameworkErrorCode.CONFIG_ERROR,</span><br><span class="line">                    <span class="string">"在有总bps限速条件下，单个channel的bps值不能为空，也不能为非正数"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 计算所需要的channel数目</span></span><br><span class="line">        needChannelNumberByByte =</span><br><span class="line">                (<span class="keyword">int</span>) (globalLimitedByteSpeed / channelLimitedByteSpeed);</span><br><span class="line">        needChannelNumberByByte =</span><br><span class="line">                needChannelNumberByByte &gt; <span class="number">0</span> ? needChannelNumberByByte : <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 是否指定记录数限速</span></span><br><span class="line">    <span class="keyword">boolean</span> isRecordLimit = (<span class="keyword">this</span>.configuration.getInt(</span><br><span class="line">            CoreConstant.DATAX_JOB_SETTING_SPEED_RECORD, <span class="number">0</span>)) &gt; <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (isRecordLimit) &#123;</span><br><span class="line">        <span class="comment">// 总的限速记录数</span></span><br><span class="line">        <span class="keyword">long</span> globalLimitedRecordSpeed = <span class="keyword">this</span>.configuration.getInt(</span><br><span class="line">                CoreConstant.DATAX_JOB_SETTING_SPEED_RECORD, <span class="number">100000</span>);</span><br><span class="line">        <span class="comment">// 获取单个channel的限定的记录数</span></span><br><span class="line">        Long channelLimitedRecordSpeed = <span class="keyword">this</span>.configuration.getLong(</span><br><span class="line">                CoreConstant.DATAX_CORE_TRANSPORT_CHANNEL_SPEED_RECORD);</span><br><span class="line">        <span class="keyword">if</span> (channelLimitedRecordSpeed == <span class="keyword">null</span> || channelLimitedRecordSpeed &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">            DataXException.asDataXException(FrameworkErrorCode.CONFIG_ERROR,</span><br><span class="line">                    <span class="string">"在有总tps限速条件下，单个channel的tps值不能为空，也不能为非正数"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 计算所需要的channel数目</span></span><br><span class="line">        needChannelNumberByRecord =</span><br><span class="line">                (<span class="keyword">int</span>) (globalLimitedRecordSpeed / channelLimitedRecordSpeed);</span><br><span class="line">        needChannelNumberByRecord =</span><br><span class="line">                needChannelNumberByRecord &gt; <span class="number">0</span> ? needChannelNumberByRecord : <span class="number">1</span>;</span><br><span class="line">        LOG.info(<span class="string">"Job set Max-Record-Speed to "</span> + globalLimitedRecordSpeed + <span class="string">" records."</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 取较小值</span></span><br><span class="line">    <span class="keyword">this</span>.needChannelNumber = needChannelNumberByByte &lt; needChannelNumberByRecord ?</span><br><span class="line">            needChannelNumberByByte : needChannelNumberByRecord;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 返回最小值</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.needChannelNumber &lt; Integer.MAX_VALUE) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 是否指定了channel数目</span></span><br><span class="line">    <span class="keyword">boolean</span> isChannelLimit = (<span class="keyword">this</span>.configuration.getInt(</span><br><span class="line">            CoreConstant.DATAX_JOB_SETTING_SPEED_CHANNEL, <span class="number">0</span>) &gt; <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (isChannelLimit) &#123;</span><br><span class="line">        <span class="keyword">this</span>.needChannelNumber = <span class="keyword">this</span>.configuration.getInt(</span><br><span class="line">                CoreConstant.DATAX_JOB_SETTING_SPEED_CHANNEL);</span><br><span class="line"></span><br><span class="line">        LOG.info(<span class="string">"Job set Channel-Number to "</span> + <span class="keyword">this</span>.needChannelNumber</span><br><span class="line">                + <span class="string">" channels."</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">throw</span> DataXException.asDataXException(</span><br><span class="line">            FrameworkErrorCode.CONFIG_ERROR,</span><br><span class="line">            <span class="string">"Job运行速度必须设置"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><p><a href="https://zhmin.github.io/2018/12/28/datax-job/" target="_blank" rel="noopener">https://zhmin.github.io/2018/12/28/datax-job/</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/My-New-Post/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/My-New-Post/" itemprop="url">My New Post</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T12:13:15+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T11:46:13+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
+            <h2></h2>
+<a href="http://hi.baidu.com/1qqqqcom/item/7715ecd8bc40950820e2501b" target="_blank" rel="noopener">一个清华“差生”的10年奋斗经历</a>
           
         
       
@@ -655,7 +386,7 @@
               
                 <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">273</span>
+                  <span class="site-state-item-count">271</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

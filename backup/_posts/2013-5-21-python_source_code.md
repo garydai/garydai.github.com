@@ -1,4 +1,5 @@
 ---
+date: 2013-5-21
 layout: default
 
 title: python对象机制

@@ -1,4 +1,5 @@
 ---
+date: 2013-6-11
 layout: default
 title: C++对象模型
 

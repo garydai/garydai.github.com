@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="##opencart code review mvc框架，同YII之类php web框架。 整个流程就在index.php中 ###流程 （1）system&#x2F;startup.php load需要的php &#x2F;&#x2F; Engine require_once(modification(DIR_SYSTEM . &amp;apos;engine&#x2F;action.php&amp;apos;)); require_once(mod">
+<meta property="og:type" content="article">
+<meta property="og:title" content="opencart code review">
+<meta property="og:url" content="http://yoursite.com/2015/10/20/2015-10-20-opencart/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="##opencart code review mvc框架，同YII之类php web框架。 整个流程就在index.php中 ###流程 （1）system&#x2F;startup.php load需要的php &#x2F;&#x2F; Engine require_once(modification(DIR_SYSTEM . &amp;apos;engine&#x2F;action.php&amp;apos;)); require_once(mod">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2015-10-19T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-01-06T07:17:32.480Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/10/20/2015-10-20-opencart/"/>
+
+
+
+
+
+  <title>opencart code review | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/10/20/2015-10-20-opencart/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">opencart code review</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-10-20T00:00:00+08:00">
+                2015-10-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>##opencart code review</p>
+<p>mvc框架，同YII之类php web框架。</p>
+<p>整个流程就在index.php中</p>
+<p>###流程</p>
+<p>（1）system/startup.php</p>
+<p>load需要的php</p>
+<pre><code>// Engine
+require_once(modification(DIR_SYSTEM . &apos;engine/action.php&apos;));
+require_once(modification(DIR_SYSTEM . &apos;engine/controller.php&apos;));
+require_once(modification(DIR_SYSTEM . &apos;engine/event.php&apos;));
+require_once(modification(DIR_SYSTEM . &apos;engine/front.php&apos;));
+require_once(modification(DIR_SYSTEM . &apos;engine/loader.php&apos;));
+require_once(modification(DIR_SYSTEM . &apos;engine/model.php&apos;));
+require_once(modification(DIR_SYSTEM . &apos;engine/registry.php&apos;));
+
+// Helper
+require_once(DIR_SYSTEM . &apos;helper/json.php&apos;);
+require_once(DIR_SYSTEM . &apos;helper/utf8.php&apos;);</code></pre><p>（2）创建Registry对象</p>
+<p>一个词典类key-value，把其他类实例保存到该registry对象</p>
+<p>（3）注册所有公共类</p>
+<p>set key to value</p>
+<p>（4）创建Front类对象，作为请求分发器（Dispatcher），分发action</p>
+<pre><code>// Front Controller
+$controller = new Front($registry);
+
+// Maintenance Mode
+$controller-&gt;addPreAction(new Action(&apos;common/maintenance&apos;));
+
+// SEO URL&apos;s
+$controller-&gt;addPreAction(new Action(&apos;common/seo_url&apos;));
+
+// Router
+if (isset($request-&gt;get[&apos;route&apos;])) {
+    $action = new Action($request-&gt;get[&apos;route&apos;]);
+} else {
+    $action = new Action(&apos;common/home&apos;);
+}
+
+// Dispatch
+$controller-&gt;dispatch($action, new Action(&apos;error/not_found&apos;));</code></pre><p>（5）根据用户请求（url）创建控制器对象及其动作。</p>
+<pre><code>action类根据url得到action对应的类$class,然后执行类中的方法
+
+在Front类私有函数execute($action)中如下语句
+
+$controller = new $class($this-&gt;registry); //创建控制器
+
+if (is_callable(array($controller, $this-&gt;method))) {
+        return call_user_func(array($controller, $this-&gt;method), $this-&gt;args);
+    } else {
+        return false;
+    }</code></pre><p>（6）controller控制器里可以加载相应的模型，如</p>
+<pre><code>$this-&gt;load-&gt;model(&apos;design/layout&apos;);
+
+该语句将创建相应的model对象。</code></pre><p>（7）controller控制器里可以获取模板，绘制（提取数据并启用output buffer）到页面输出区output中</p>
+<pre><code>$this-&gt;load-&gt;view(&apos;payment/alipay_direct.tpl&apos;, $data)
+
+$this-&gt;response-&gt;setOutput($this-&gt;load-&gt;view($this-&gt;config-&gt;get(&apos;config_template&apos;) . &apos;/template/account/account.tpl&apos;, $data));</code></pre><p>（8）最后Response对象把输出区的数据（页面）echo返回给用户</p>
+<pre><code>public function output() {
+        if ($this-&gt;output) {
+            if ($this-&gt;level) {
+                $output = $this-&gt;compress($this-&gt;output, $this-&gt;level);
+            } else {
+                $output = $this-&gt;output;
+            }
+
+            if (!headers_sent()) {
+                foreach ($this-&gt;headers as $header) {
+                    header($header, true);
+                }
+            }
+
+            echo $output;
+        }
+    }</code></pre><p>###架构核心<br>核心在system/engine</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/10/16/2015-10-16-ios-arch/" rel="next" title="ios架构笔记">
+                <i class="fa fa-chevron-left"></i> ios架构笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/10/22/2015-10-22-language/" rel="prev" title="程序语言">
+                程序语言 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">271</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

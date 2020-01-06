@@ -1,4 +1,5 @@
 ---
+date: 2014-6-17
 layout: default
 title: speech/music classification
 

@@ -1,4 +1,5 @@
 ---
+date: 2013-5-8
 layout: default
 title: C++ 命名空间
 

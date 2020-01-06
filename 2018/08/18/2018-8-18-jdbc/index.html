@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="jdbcjava data base connectivity java数据库链接 流程指定数据库驱动程序 加载数据库驱动 创建连接对象 创建statement对象 执行statement对象的sql语句 关闭连接 12345678910111213141516&#x2F;&#x2F;1.加载驱动程序Class.forName(&quot;com.mysql.jdbc.Driver&quot;);&#x2F;&#x2F;2.获得数据库的连接Connecti">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jdbc">
+<meta property="og:url" content="http://yoursite.com/2018/08/18/2018-8-18-jdbc/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="jdbcjava data base connectivity java数据库链接 流程指定数据库驱动程序 加载数据库驱动 创建连接对象 创建statement对象 执行statement对象的sql语句 关闭连接 12345678910111213141516&#x2F;&#x2F;1.加载驱动程序Class.forName(&quot;com.mysql.jdbc.Driver&quot;);&#x2F;&#x2F;2.获得数据库的连接Connecti">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-08-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-01-06T07:17:32.635Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/08/18/2018-8-18-jdbc/"/>
+
+
+
+
+
+  <title>jdbc | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/18/2018-8-18-jdbc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">jdbc</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-18T00:00:00+08:00">
+                2018-08-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="jdbc"><a href="#jdbc" class="headerlink" title="jdbc"></a>jdbc</h2><p>java data base connectivity java数据库链接</p>
+<h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><p>指定数据库驱动程序</p>
+<p>加载数据库驱动</p>
+<p>创建连接对象</p>
+<p>创建statement对象</p>
+<p>执行statement对象的sql语句</p>
+<p>关闭连接</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//1.加载驱动程序</span></span><br><span class="line">Class.forName(<span class="string">"com.mysql.jdbc.Driver"</span>);</span><br><span class="line"><span class="comment">//2.获得数据库的连接</span></span><br><span class="line">Connection conn = DriverManager.getConnection(URL, NAME, PASSWORD);</span><br><span class="line"><span class="comment">//3.通过数据库的连接操作数据库，实现增删改查</span></span><br><span class="line">Statement stmt = conn.createStatement();</span><br><span class="line">ResultSet rs = stmt.executeQuery(<span class="string">"select user_name,age from imooc_goddess"</span>);<span class="comment">//选择import java.sql.ResultSet;</span></span><br><span class="line"><span class="keyword">while</span>(rs.next())&#123;<span class="comment">//如果对象中有数据，就会循环打印出来</span></span><br><span class="line">  System.out.println(rs.getString(<span class="string">"user_name"</span>)+<span class="string">","</span>+rs.getInt(<span class="string">"age"</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">String sql = <span class="string">"delete from t_employee where id=? "</span>;</span><br><span class="line">PreparedStatement pstmt = conn.prepareStatement(sql);</span><br><span class="line">pstmt.setInt(<span class="number">1</span>, employee.getId());</span><br><span class="line"><span class="keyword">int</span> result = pstmt.executeUpdate();（execute、 executeQuery 和 executeUpdate）</span><br></pre></td></tr></table></figure>
+
+<p>厂商的driver实现获取连接</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">com.mysql.jdbc.NonRegisteringDriver#connect</span><br><span class="line">		Connection newConn = com.mysql.jdbc.ConnectionImpl.getInstance(host(props), port(props), props, database(props), url);</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="preparedStatement"><a href="#preparedStatement" class="headerlink" title="preparedStatement"></a>preparedStatement</h3><ol>
+<li><p>PreparedStatement的预编译，需要在url中指定开启预编译<code>useServerPrepStmts=true</code>，才会在创建PreparedStatement对象时<strong><em>向mysql发送预编译的请求</em></strong>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">this</span>.useServerPreparedStmts &amp;&amp; canServerPrepare) &#123;</span><br><span class="line">                <span class="keyword">if</span> (<span class="keyword">this</span>.getCachePreparedStatements()) &#123;</span><br><span class="line">                    <span class="keyword">synchronized</span> (<span class="keyword">this</span>.serverSideStatementCache) &#123;</span><br><span class="line">                        pStmt = (com.mysql.jdbc.ServerPreparedStatement) <span class="keyword">this</span>.serverSideStatementCache.remove(sql);</span><br><span class="line"></span><br><span class="line">                        <span class="keyword">if</span> (pStmt != <span class="keyword">null</span>) &#123;</span><br><span class="line">                            ((com.mysql.jdbc.ServerPreparedStatement) pStmt).setClosed(<span class="keyword">false</span>);</span><br><span class="line">                            pStmt.clearParameters();</span><br><span class="line">                        &#125;</span><br><span class="line"></span><br><span class="line">                        <span class="keyword">if</span> (pStmt == <span class="keyword">null</span>) &#123;</span><br><span class="line">                            <span class="keyword">try</span> &#123;</span><br><span class="line">                                pStmt = ServerPreparedStatement.getInstance(getMultiHostSafeProxy(), nativeSql, <span class="keyword">this</span>.database, resultSetType,</span><br><span class="line">                                        resultSetConcurrency);</span><br><span class="line">                                <span class="keyword">if</span> (sql.length() &lt; getPreparedStatementCacheSqlLimit()) &#123;</span><br><span class="line">                                    ((com.mysql.jdbc.ServerPreparedStatement) pStmt).isCached = <span class="keyword">true</span>;</span><br><span class="line">                                &#125;</span><br><span class="line"></span><br><span class="line">                                pStmt.setResultSetType(resultSetType);</span><br><span class="line">                                pStmt.setResultSetConcurrency(resultSetConcurrency);</span><br><span class="line">                            &#125; <span class="keyword">catch</span> (SQLException sqlEx) &#123;</span><br><span class="line">                                <span class="comment">// Punt, if necessary</span></span><br><span class="line">                                <span class="keyword">if</span> (getEmulateUnsupportedPstmts()) &#123;</span><br><span class="line">                                    pStmt = (PreparedStatement) clientPrepareStatement(nativeSql, resultSetType, resultSetConcurrency, <span class="keyword">false</span>);</span><br><span class="line"></span><br><span class="line">                                    <span class="keyword">if</span> (sql.length() &lt; getPreparedStatementCacheSqlLimit()) &#123;</span><br><span class="line">                                        <span class="keyword">this</span>.serverSideStatementCheckCache.put(sql, Boolean.FALSE);</span><br><span class="line">                                    &#125;</span><br><span class="line">                                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                                    <span class="keyword">throw</span> sqlEx;</span><br><span class="line">                                &#125;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        pStmt = ServerPreparedStatement.getInstance(getMultiHostSafeProxy(), nativeSql, <span class="keyword">this</span>.database, resultSetType, resultSetConcurrency);</span><br><span class="line"></span><br><span class="line">                        pStmt.setResultSetType(resultSetType);</span><br><span class="line">                        pStmt.setResultSetConcurrency(resultSetConcurrency);</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (SQLException sqlEx) &#123;</span><br><span class="line">                        <span class="comment">// Punt, if necessary</span></span><br><span class="line">                        <span class="keyword">if</span> (getEmulateUnsupportedPstmts()) &#123;</span><br><span class="line">                            pStmt = (PreparedStatement) clientPrepareStatement(nativeSql, resultSetType, resultSetConcurrency, <span class="keyword">false</span>);</span><br><span class="line">                        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                            <span class="keyword">throw</span> sqlEx;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                pStmt = (PreparedStatement) clientPrepareStatement(nativeSql, resultSetType, resultSetConcurrency, <span class="keyword">false</span>);</span><br><span class="line">            &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="2">
+<li><p>每次向mysql发送预编译请求，不管之前当前链接有没有编译过此SQL语句，mysql都会预编译一次，并返回此链接当前唯一的Statement ID，后续执行SQL语句的时候，程序只需拿着StatementID和参数就可以了。</p>
+</li>
+<li><p>若预编译的SQL语句有语法错误，则mysql的响应会携带错误信息，但此错误信息JDBC感知不到(或者说mysql-connetor-java.jar包里的实现将其忽略掉了)，此时还会继续往下执行代码，当执行到<code>executeXxx()</code>方法时，由于没有Statement ID，所以就会将拼接完整的SQL语句<code>值已经将占位符(?)替换掉</code>发给mysql请求执行，此时mysql响应有语法错误，然后JDBC就会抛出语法错误异常，所以检查语法那一步实在mysql-server中做的。</p>
+</li>
+<li><p>PreparedStatement对性能的提高是利用缓存实现的，此缓存是mysql-connetor-java.jar包里实现的，而非mysql-server中的缓存，缓存需要在url中指定开启<code>cachePrepStmts=true</code>才会有效，缓存的key是完整的sql语句，value是PreparedStatement对象。</p>
+</li>
+<li><p>mysql-connetor-java.jar包里缓存的实现：只有在PreparedStatement对象关闭时<code>close()</code>才会将PreparedStatement对象放到缓存中，所以只要缓存PreparedStatement对象没有关闭，你不管调用多少次<code>connection.prapareStatement(sql)</code>对相同的sql语句进行预编译，都会将预编译的请求发给mysql，mysql也会对每一个sql语句<code>不管是否相同</code>进行预编译，并生成一个唯一的Statement ID并返回</p>
+</li>
+<li><p>mysql-connetor-java.jar实现的缓存是针对链接的，每个链接都是独立的，不共享缓存</p>
+</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/13/2018-8-13-innodb/" rel="next" title="innodb">
+                <i class="fa fa-chevron-left"></i> innodb
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/18/2018-8-18-%E5%8E%8B%E6%B5%8B/" rel="prev" title="压测">
+                压测 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">271</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#jdbc"><span class="nav-number">1.</span> <span class="nav-text">jdbc</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#流程"><span class="nav-number">1.1.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#preparedStatement"><span class="nav-number">1.2.</span> <span class="nav-text">preparedStatement</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

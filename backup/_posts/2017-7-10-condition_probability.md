@@ -1,4 +1,5 @@
 ---
+date: 2017-7-10
 layout: default
 
 title: 条件概率

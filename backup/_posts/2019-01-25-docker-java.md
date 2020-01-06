@@ -1,4 +1,5 @@
 ---
+date: 2019-01-25
 layout: default
 
 title: docker-java

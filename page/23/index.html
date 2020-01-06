@@ -229,7 +229,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2013-9-13-heap/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/12/26/2013-12-26-linux_beginning/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -248,7 +248,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2013-9-13-heap/" itemprop="url">编程珠玑-堆</a></h1>
+                <a class="post-title-link" href="/2013/12/26/2013-12-26-linux_beginning/" itemprop="url">linux权威指南学习笔记</a></h1>
         
 
         <div class="post-meta">
@@ -260,8 +260,645 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-12-26T00:00:00+08:00">
+                2013-12-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>##linux权威指南学习笔记</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/12/02/2013-12-2-algorithm_probility/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2013/12/02/2013-12-2-algorithm_probility/" itemprop="url">算法题-概率</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-12-02T00:00:00+08:00">
+                2013-12-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>##概率题</p>
+<p>###题目</p>
+<p>已知等概率产生A、B、C、D，要求等概率产生ABCD的全排列。</p>
+<p>###分析<br>已知rand03，等概率产生0到3的数，代表A到B。</p>
+<p>借鉴洗牌算法，首先从4个字母里rand03产生一个字母，接着从剩下的3个字母里rand02产生一个字母，以此类推，产生最后的排列。</p>
+<p>则ABCD该排列的概率等于1/4*1/3*1/2=1/24。</p>
+<p>那么，如何通过rand03，产生rand02呢。</p>
+<pre><code>while(1)
+    r = ran03
+    if r == 3:
+        continue
+    else
+        return r</code></pre><p>上述代码产生0的概率是多少呢？</p>
+<p>1/4 + 1/4*1/4 + 1/4*1/4*1/4 + … + (1/4)^n*1/4 + …</p>
+<p>极限值= (1/4)/(1-1/4) = 1/3</p>
+<p>同理得到产生1和2的概率都是1/3</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/10/17/2013-10-17-friend_class/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2013/10/17/2013-10-17-friend_class/" itemprop="url">友元</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-10-17T00:00:00+08:00">
+                2013-10-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>##友元<br>友元类、友元函数friend XX,表明XX是我的朋友，它能访问我的任何成员变量，包括私有成员变量。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/10/17/2013-10-17-private_class/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2013/10/17/2013-10-17-private_class/" itemprop="url">C++类的私有权限</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-10-17T00:00:00+08:00">
+                2013-10-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>##C++类的私有权限</p>
+<p>在拷贝构造函数中为什么可以访问引用对象的私有变量？</p>
+<p>例如:</p>
+<pre><code>class Point
+{    
+public:
+        Point(int xx=0,int yy=0){X=xx;Y=yy;}
+        Point(Point &amp;p);
+private:
+        int X,Y;
+
+};
+Point::Point(Point &amp;p)
+{
+        X=p.X;
+        Y=p.Y;
+}</code></pre><p>C++类的私有权限是针对类的而不是针对类的对象。</p>
+<p>其他类不能访问本类的私有成员，而不是本类的其他对象不能访问该对象的私有成员。</p>
+<p>在本类的成员函数中能访问该类的私有成员。一个类的对象不是类的成员，所以它不能访问私有成员。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/09/19/2013-9-19-python_vm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2013/09/19/2013-9-19-python_vm/" itemprop="url">python框架</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-09-19T00:00:00+08:00">
+                2013-09-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>##python框架</p>
+<p>1.py文件先被虚拟机编译成字节码，保存在pyc文件里。</p>
+<p>2.虚拟机会一步一步执行pyc里的字节码。</p>
+<p>虚拟机是用C语言实现的，即用C语言实现的虚拟机解释python语言。</p>
+<p>python.exe主要调用pythonxx.dll，来解释python程序。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/09/13/2013-9-13-heap/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2013/09/13/2013-9-13-heap/" itemprop="url">编程珠玑-堆</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-09-13T00:00:00+08:00">
+                2013-09-13
               </time>
             
 
@@ -358,7 +995,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2013-8-23-gc/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/08/23/2013-8-23-gc/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -377,7 +1014,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2013-8-23-gc/" itemprop="url">GC垃圾回收</a></h1>
+                <a class="post-title-link" href="/2013/08/23/2013-8-23-gc/" itemprop="url">GC垃圾回收</a></h1>
         
 
         <div class="post-meta">
@@ -389,8 +1026,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-08-23T00:00:00+08:00">
+                2013-08-23
               </time>
             
 
@@ -527,7 +1164,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2013-7-8-probility_problem/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/07/22/2013-7-22-virtual_memory/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -546,7 +1183,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2013-7-8-probility_problem/" itemprop="url">概率题</a></h1>
+                <a class="post-title-link" href="/2013/07/22/2013-7-22-virtual_memory/" itemprop="url">虚拟内存</a></h1>
         
 
         <div class="post-meta">
@@ -558,545 +1195,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##概率题<br>###题目<br>已知随机函数old_rand(),以p的概率产生0，以1-p的概率产生1，要求设计一个新的随机函数newRand(),使其以等概率生成1和0。</p>
-<p>###解答</p>
-<pre><code>def new_rand():
-
-    first = old_rand()
-    second = old_rand()
-    if first == 0 and second == 1
-        return 0
-    if first == 1 and second == 0
-        return 1
-    else return new_rand()</code></pre><p>###分析<br>返回0的概率不是简单的从第一个if中得出p(1-p)，第三步也会有概率返回0</p>
-<p>设t = p(1-p)</p>
-<p>返回0的概率： t + (1-2t)*t + (1-2t)^2 *t + (1-2t)^3 *t + … + (1-2t)^n *t + … <del>~</del> t/(1-1+2t) = 1/2</p>
-<p>同理得出返回1的概率：1/2</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2013-7-7-probility-code/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2013-7-7-probility-code/" itemprop="url">编程实现k/n的概率</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="编程实现k-n的概率"><a href="#编程实现k-n的概率" class="headerlink" title="编程实现k/n的概率"></a>编程实现k/n的概率</h2><h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><pre><code>m = random(1, n);   
-if(m &lt; k)
-    return m;
-else -1;</code></pre><p>k/n的概率返回k内的数字，k内的数字m被选中的概率是多少?</p>
-<p>是k/n呢还是k/n * 1/k？</p>
-<pre><code>count = 0
-count2 = 0
-summ = 10000000
-for i in range(summ):
-    k = 6
-    m = random.choice(range(10))
-    if(m &lt; k):
-        count = count + 1
-        if m == 1:
-            count2 = count2 + 1
-
-print count * 1.0 / summ 0.5998247 ~~ 6/10
-print count2 * 1.0 / count 0.166646688608 ~~ 1/6</code></pre><p>###结论<br>k内的数字m被选中的概率是k/n * 1/k    = 1/n</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2013-7-7-match_choose/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2013-7-7-match_choose/" itemprop="url">多队伍比赛的对手抽签算法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##多队伍比赛的对手抽签算法</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2013-7-7-joseph/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2013-7-7-joseph/" itemprop="url">约瑟夫环问题</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##约瑟夫环问题<br>###问题<br>有编号从1到N的N个人坐成一圈报数，报到M的人出局，下一位再从1开始, 如此持续，直止剩下一位为止，报告此人的编号X。输入N,M，求出X。</p>
-<p>###分析<br>N=8 M=3</p>
-<pre><code>        0 1 2 3 4 5 6 7
-第1次    5 6 X 0 1 2 3 4
-第2次    2 3   4 5 X 0 1
- 3      X 0   1 2   3 4      
- 4        2   3 X   0 1 
- 5        X   0     1 2
- 6            0     1 X  
- 7            X     1
- 8                  0</code></pre><p>每一次去掉退出的人后，重新排编号</p>
-<p>第8次剩下0，对应初始编号6</p>
-<p>###代码</p>
-<pre><code>递归
-def recursion(n, m):
-    if(n == 1):
-        return 0
-    return (recursion(n - 1, m) + m)%n
-
-循环
-def loop(n, m):
-    a = 0
-    for i in range(2, n + 1):
-        a = (a + m) % i
-
-    return a
-
-
-print recursion(10, 11), loop(10, 11)</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2013-7-22-virtual_memory/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2013-7-22-virtual_memory/" itemprop="url">虚拟内存</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-07-22T00:00:00+08:00">
+                2013-07-22
               </time>
             
 
@@ -1196,7 +1296,7 @@ print recursion(10, 11), loop(10, 11)</code></pre>
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2013-7-5-pool_probilitymd/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/07/18/2013-7-18-probility_check/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -1215,7 +1315,7 @@ print recursion(10, 11), loop(10, 11)</code></pre>
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2013-7-5-pool_probilitymd/" itemprop="url">随机抽样与洗牌算法</a></h1>
+                <a class="post-title-link" href="/2013/07/18/2013-7-18-probility_check/" itemprop="url">随机数据的一般检验方法</a></h1>
         
 
         <div class="post-meta">
@@ -1227,139 +1327,8 @@ print recursion(10, 11), loop(10, 11)</code></pre>
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##随机抽样与洗牌算法<br>###问题-选择抽样<br>给出一个数据流，这个数据流的长度很大或者未知。并且对该数据流中数据只能访问一次。请写出一个随机选择算法，使得数据流中所有数据被选中的概率相等。<br>###解答<br>数据流一个接着一个的过来，根据一定的概率选择取或不取</p>
-<p>数据流里只有一个数据，那么直接取该数据，概率为1</p>
-<p>数据流里有两个数据，当第一个数据到达，取该数据，第二个数据达到，以1/2的概率取该数据，或者以1/2的概率取上一次取的数据。则数据流中数据被选中概率为1/2</p>
-<p>数据流里有三个数据，当第一个、第二个数据到达，同上分析，当第三个数据到达，以1/3的概率取该数据，以2/3的数据取上一次的数据。则取到上一次数据的概率为2/3*1/2 = 1/3。</p>
-<p>数据1被选中的概率1/2 * 2/3 = 1/3<br>数据2被选中的概率1/2 * 2/3 = 1/3<br>数据3被选中的概率1/3</p>
-<p>所以假设选择算法为：当第n个数据到来时，以1/n的概率选择该数据，否则选中上一个数据。</p>
-<p>推导：假设当有n-1个数据，假设成立，则选择其中一个数据的概率为1/(n-1)，当第n个数据到来，以1/n的概率选择该数据，否则以(n-1)/n选择上一个数据。则上一个数据被选择的概率为1/(n-1)*(n-1)/n=1/n，则每个数据选择的概率都为1/n。</p>
-<p>###问题2-水库抽样<br>如果从数据流里以相同概率选中k个数据。</p>
-<p>假设选择两个数据。</p>
-<p>两个数据选两个，第一个数据到来，以概率1选中，第二个到来也以概率1选中。</p>
-<p>三个数据，所求概率为2/3。第三个数据到来，以2/3的概率选中该数据，前两个数据被留下的概率为2/3*1/2=1/3。当1/3的概率没选中第三个数据，则前两个数据被留下的概率为1/3，综合两种情形，前两个数据被留下的概率为1/3+1/3 = 2/3。则每个数据被留下的概率都为2/3</p>
-<p>###问题3-洗牌</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2013-7-18-probility_check/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2013-7-18-probility_check/" itemprop="url">随机数据的一般检验方法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-07-18T00:00:00+08:00">
+                2013-07-18
               </time>
             
 
@@ -1448,7 +1417,7 @@ print recursion(10, 11), loop(10, 11)</code></pre>
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2013-6-3-memory/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/07/08/2013-7-8-probility_problem/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -1467,7 +1436,7 @@ print recursion(10, 11), loop(10, 11)</code></pre>
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2013-6-3-memory/" itemprop="url">windows内存模型</a></h1>
+                <a class="post-title-link" href="/2013/07/08/2013-7-8-probility_problem/" itemprop="url">概率题</a></h1>
         
 
         <div class="post-meta">
@@ -1479,8 +1448,8 @@ print recursion(10, 11), loop(10, 11)</code></pre>
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-07-08T00:00:00+08:00">
+                2013-07-08
               </time>
             
 
@@ -1519,45 +1488,20 @@ print recursion(10, 11), loop(10, 11)</code></pre>
       
         
           
-            <h2 id="windows内存模型"><a href="#windows内存模型" class="headerlink" title="windows内存模型"></a>windows内存模型</h2><p>系统调拨物理存储器(磁盘中的页交换文件和文件映像)给进程的数据与程序，把地址映射到进程地址空间。<br>一开始进程所有页面都在磁盘上，内存中没有数据与程序，所以要先从它们的物理存储器中调入内存。<br><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/read_memory.PNG" alt="">    </p>
-<h3 id="进程虚拟地址空间"><a href="#进程虚拟地址空间" class="headerlink" title="进程虚拟地址空间"></a>进程虚拟地址空间</h3><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/virtual_memory.PNG" alt="">        </p>
-<h3 id="虚拟内存"><a href="#虚拟内存" class="headerlink" title="虚拟内存"></a>虚拟内存</h3><p>让磁盘空间看起来像内存一样，这部分磁盘空间称为页交换文件。<br>页交换文件在硬盘上，一种内存的后备存储器。把页交换文件映射到进程地址空间。      </p>
-<h4 id="使用虚拟内存"><a href="#使用虚拟内存" class="headerlink" title="使用虚拟内存"></a>使用虚拟内存</h4><p>1.预定地址空间区域   </p>
-<pre><code>PVOID VirtualAlloc(
-    PVOID pvAddress,
-    SIZE_T dwSize,
-    DWORD fdwAllocationType,
-    DWORD fdwProtect);</code></pre><p>fdwAllocationType设置为MEM_RESERVE    </p>
-<p>2.调拨物理存储器(页交换文件)<br>fdwAllocationType设置为MEM_COMMIT<br>3.撤销调拨物理存储器及释放区域   </p>
-<pre><code>BOOL VirtualFree(
-    LPVOID pvAddress,
-    SIZE_T dwSize,
-    DWORD fdwFreeType);</code></pre><h4 id="线程栈"><a href="#线程栈" class="headerlink" title="线程栈"></a>线程栈</h4><p>系统创建线程时，会给线程栈预订一块地址空间区域，并调拨页交换文件(大小由.exe的PE文件头中变量指定)。</p>
-<h3 id="内存映射文件"><a href="#内存映射文件" class="headerlink" title="内存映射文件"></a>内存映射文件</h3><p>文件映像(.exe文件或DLL)，另一种后备存储器，称之为内存映射文件，映射到进程地址空间。<br>硬盘上的文件映射在进程的地址空间中。<br>1.创建或打开文件，创建文件内核对象    </p>
-<pre><code>HANDLE CreateFile(
-    PCSTR pszFileName,
-    DWORD dwDesiredAccess,
-    DWORD dwShareMode,
-    PSECURITY_ATTRIBUTES psa,
-    DWORD dwCreationDisposition,
-    DWORD dwFlagsAndAttributes,
-    HANDLE hTemplateFile);</code></pre><p>2.创建内存映射文件内核对象   </p>
-<pre><code>HANDLE CreateFileMapping(
-    HANDLE hFile,
-    PSECURITY_ATTRIBUTES psa,
-    DWORD fdwProtect,
-    DWORD dwMaximumSizeHigh,
-    DWORD dwMaximumSizeLow,
-    PCTSTR pszName);</code></pre><p>3.映射到进程地址空间，在地址空间中预订区域并调拨物理存储器  </p>
-<pre><code>PVOID MapViewOfFile(
-    HANDLE hFileMappingObject,
-    DWORD dwDesiredAccess,
-    DWORD dwFileOffSetHigh,
-    DWORD dwFileOffSetLow,
-    SIZE_T dwNumberOfBytesToMap);</code></pre><h4 id="用应用程序的共享段实现多个实例间的共享静态数据"><a href="#用应用程序的共享段实现多个实例间的共享静态数据" class="headerlink" title="用应用程序的共享段实现多个实例间的共享静态数据"></a>用应用程序的共享段实现多个实例间的共享静态数据</h4><p>告诉编译器把变量放入单独的段中    </p>
-<pre><code>#pragma data_seg(&quot;shared&quot;)
-#pragma data_set()
-#pragma comment(linker, &quot;/SECTION:Shared,RWS&quot;)</code></pre><p>####用内存映射文件在进程间共享数据<br>当启动一个应用程序，系统会先调用CreateFile打开.exe文件，接着调用CreateFileMapping创建文件映射对象，最后调用MapViewOfFileEx映射到进程的固定地址空间(有.exe的PE文件指定基地址)。打开同一个应用程序，系统发现已经存在文件映射对象，就调用MapViewOfFileEx映射.exe文件到对应进程的地址空间。所以系统把相同文件映射到不同进程中，令进程共享程序的代码与数据。<br>####以页交换文件为后备存储器的内存映射文件<br>不再以磁盘文件作为后备存储器，则不需要打开文件创建文件内核对象，直接创建内存映射文件对象，把页交换文件映射到内存。<br>多进程可以利用页交换文件的内存映射文件来共享数据。利用对映射文件对象取别名来标记对象。<br>###堆<br>进程创建的时候，系统会分配一个默认堆。<br>调拨的物理存储器来自页交换文件。<br>####创建额外堆<br>    HeapCreate(<br>        DWORD fdwOptions,<br>        SIZE_T dwInitialSize,<br>        SIZE_T dwMaximumSize);<br>不能保证线程独占堆则不能设置fdwOptions为HEAP_NO_SERIALIZE，保证多线程对同一个堆的访问时依次进行。<br>####从堆中分配内存<br>    PVOID HeapAlloc(<br>        HANDLE hHeap,<br>        DWORD fdwFlags,<br>        SIZE_T dwBytes);</p>
+            <p>##概率题<br>###题目<br>已知随机函数old_rand(),以p的概率产生0，以1-p的概率产生1，要求设计一个新的随机函数newRand(),使其以等概率生成1和0。</p>
+<p>###解答</p>
+<pre><code>def new_rand():
+
+    first = old_rand()
+    second = old_rand()
+    if first == 0 and second == 1
+        return 0
+    if first == 1 and second == 0
+        return 1
+    else return new_rand()</code></pre><p>###分析<br>返回0的概率不是简单的从第一个if中得出p(1-p)，第三步也会有概率返回0</p>
+<p>设t = p(1-p)</p>
+<p>返回0的概率： t + (1-2t)*t + (1-2t)^2 *t + (1-2t)^3 *t + … + (1-2t)^n *t + … <del>~</del> t/(1-1+2t) = 1/2</p>
+<p>同理得出返回1的概率：1/2</p>
 
           
         
@@ -1643,7 +1587,7 @@ print recursion(10, 11), loop(10, 11)</code></pre>
               
                 <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">273</span>
+                  <span class="site-state-item-count">271</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

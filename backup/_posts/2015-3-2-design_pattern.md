@@ -1,4 +1,5 @@
 ---
+date: 2015-3-2
 layout: default
 title: 设计模式
 

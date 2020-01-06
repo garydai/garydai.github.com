@@ -229,7 +229,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2017-4-10-hive/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/24/2017-6-24-mysql/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -248,7 +248,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2017-4-10-hive/" itemprop="url">hive</a></h1>
+                <a class="post-title-link" href="/2017/06/24/2017-6-24-mysql/" itemprop="url">InnoDB锁</a></h1>
         
 
         <div class="post-meta">
@@ -260,8 +260,576 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-24T00:00:00+08:00">
+                2017-06-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="InnoDB锁"><a href="#InnoDB锁" class="headerlink" title="InnoDB锁"></a>InnoDB锁</h2><h3 id="事务并发"><a href="#事务并发" class="headerlink" title="事务并发"></a>事务并发</h3><p>脏读（Dirty Read）：<br>A 看到 B 进行中更新的数据，并以此为根据继续执行相关的操作；B 回滚，导致 A 操作的是脏数据。</p>
+<p>不可重复读（Non-repeatable Read）：<br>A 先查询一次数据，然后 B 更新之并提交，A 再次查询，得到和上一次不同的查询结果。</p>
+<p>幻读（Phantom Read）：<br>A 查询一批数据，B 插入或删除了某些记录并提交，A 再次查询，发现结果集中出现了上次没有的记录，或者上次有的记录消失了。</p>
+<p>第二类丢失更新 (覆盖丢失)：<br>A 和 B 更新同一条记录并提交，后提交的数据将覆盖先提交的，通常这是没问题的，但是在某些情况下，如在程序中自增自减、程序中的读-改-全量更新，就会出现并发问题。这类问题更像是应用层面的，不属于DB范畴。</p>
+<h3 id="事务隔离级别"><a href="#事务隔离级别" class="headerlink" title="事务隔离级别"></a>事务隔离级别</h3><p>read uncommited<br>最弱，事务的任何动作对其他事务都是立即可见的。存在脏读、不可重复读、幻读问题（除了回滚丢失，其他的并发问题都有）。</p>
+<p>read commited<br>只能读到其他事务已提交的数据，中间状态的数据则看不到，解决了脏读问题。</p>
+<p>repeatable read (InnoDB的默认隔离级别)<br>根据标准的SQL规范，该级别解决了不可重复读的问题，保证在一个事务内，对同一条记录的重复读都是一致的。</p>
+<p>InnoDB 的 Repeatable Read 通过 MVCC 和 间隙锁 机制额外解决了幻读问题。</p>
+<p>serial<br>最高，所有读写都是串行的。</p>
+<p>Serializable隔离级别，影响的是SQL1：select * from t1 where id = 10; 这条SQL，在RC，RR隔离级别下，都是快照读，不加锁。但是在Serializable隔离级别，SQL1会加读锁，也就是说快照读不复存在，MVCC并发控制降级为Lock-Based CC</p>
+<p>InnoDB 对事务隔离级别的实现依赖两个手段：锁、MVCC(多版本控制协议)。MVCC可以认为是对锁机制的优化，让普通select避免加锁，同时还能有事务隔离级别的语义保证。</p>
+<h3 id="2PL：Two-Phase-Locking"><a href="#2PL：Two-Phase-Locking" class="headerlink" title="2PL：Two-Phase Locking"></a>2PL：Two-Phase Locking</h3><p>2PL (二阶段锁)</p>
+<p>事务开始加锁，事务结束解锁</p>
+<h3 id="MVCC"><a href="#MVCC" class="headerlink" title="MVCC"></a>MVCC</h3><p>MVCC，Multi-Version Concurrency Control，为一条记录维护多个不同的snapshot，并记录各snapshot对应的版本号（事务ID），每个事务可以读到的snapshot是受限的，从而隔离其他事务的并发动作。</p>
+<p>MVCC并发控制中，读操作分为两类：快照读 (snapshot read)与当前读 (current read)。前者读取的是记录的snapshot(有可能是历史版本)，不用加锁；后者读取的是记录的最新版本，且会加上锁，保证其他事务不会并发修改这条记录。</p>
+<p>快照读：</p>
+<p>普通的select均为快照读，不用加锁；<br>当前读：</p>
+<p>select… lock in shared mode: 读锁<br>select… for update: 写锁<br>DML（insert/delete/update）：写锁<br>MVCC 只工作在RC &amp; RR两个隔离级别下，Read Uncommited 直接读数据；Serializable 所有读都是当前读。</p>
+<p>在RR级别下，快照读只能读取本事务开始之前的snapshot，反复读同一条记录，不会看到其他事务对它的更新动作；反复执行同一条查询，不会看到其他事务插入的新记录，也不会丢失其他事务删除的记录（删除并非立刻物理删除）。可以看到，RR级别下，普通的select没有不可重复读和幻读的问题。</p>
+<p>快照读：简单的select操作，属于快照读，不加锁。(当然，也有例外，下面会分析)<br>select * from table where ?;</p>
+<p>当前读：特殊的读操作，插入/更新/删除操作，属于当前读，需要加锁。</p>
+<p>select * from table where ? lock in share mode;</p>
+<p>select * from table where ? for update;</p>
+<p>insert into table values (…);</p>
+<p>update table set ? where ?;</p>
+<p>delete from table where ?;</p>
+<p>所有以上的语句，都属于当前读，读取记录的最新版本。并且，读取之后，还需要保证其他并发事务不能修改当前记录，对读取记录加锁。其中，除了第一条语句，对读取记录加S锁 (共享锁)外，其他的操作，都加的是X锁 (排它锁)。</p>
+<p>在RC级别下，快照读读取的是记录最新的snapshot，可以看到其他事务已提交的内容。</p>
+<p>innoDB 是一致性非锁定读，如果读取的行被锁住了，innoDB会去读行的一个快照数据。</p>
+<p>事务的隔离级别默认REPEATABLE-READ</p>
+<p>InnoDB是一个支持行锁的存储引擎，锁的类型有：共享锁（S）、排他锁（X）、意向共享（IS）、意向排他（IX）。为了提供更好的并发，InnoDB提供了非锁定读：不需要等待访问行上的锁释放，读取行的一个快照。该方法是通过InnoDB的一个特性：MVCC来实现的。</p>
+<h3 id="行锁"><a href="#行锁" class="headerlink" title="行锁"></a>行锁</h3><p>####S共享锁</p>
+<p>共享锁又称读锁，是读取操作创建的锁。其他用户可以并发读取数据，但任何事务都不能对数据进行修改（获取数据上的排他锁），直到已释放所有共享锁。</p>
+<p>如果事务T对数据A加上共享锁后，则其他事务只能对A再加共享锁，不能加排他锁。获准共享锁的事务只能读数据，不能修改数据。</p>
+<pre><code>SELECT ... LOCK IN SHARE MODE;</code></pre><p>####X排它锁</p>
+<p>排他锁又称写锁，如果事务T对数据A加上排他锁后，则其他事务不能再对A加任任何类型的封锁。获准排他锁的事务既能读数据，又能修改数据。</p>
+<pre><code>SELECT ... FOR UPDATE;
+
+insert、update、delete</code></pre><h4 id="Gap锁"><a href="#Gap锁" class="headerlink" title="Gap锁"></a>Gap锁</h4><p>有索引的列加上行锁，会产生Gap锁，会在对应行，和左右两边的gap都加上锁</p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/gap_lock.png" alt="">  </p>
+<h3 id="表锁"><a href="#表锁" class="headerlink" title="表锁"></a>表锁</h3><p>IS</p>
+<p>IX</p>
+<p>意向锁是表级锁，其设计目的主要是为了在一个事务中揭示下一行将要被请求锁的类型。InnoDB中的两个表锁：</p>
+<p>意向共享锁（IS）：表示事务准备给数据行加入共享锁，也就是说一个数据行加共享锁前必须先取得该表的IS锁</p>
+<p>意向排他锁（IX）：类似上面，表示事务准备给数据行加入排他锁，说明事务在一个数据行加排他锁前必须先取得该表的IX锁。</p>
+<p>意向锁是InnoDB自动加的，不需要用户干预。</p>
+<p>意向锁是表级锁，但表示事务试图读或写某一行记录，而不是整个表。所以意向锁之间不会产生冲突，真正的冲突在加行锁时检查。</p>
+<p>在给一行记录加锁前，首先要给该表加意向锁。也就是要同时加表意向锁和行锁。</p>
+<h3 id="AUTO-INC表锁"><a href="#AUTO-INC表锁" class="headerlink" title="AUTO_INC表锁"></a>AUTO_INC表锁</h3><p>InnoDB有三种行锁的算法：</p>
+<p>1，Record Lock：单个行记录上的锁。</p>
+<p>2，Gap Lock：间隙锁，锁定一个范围，但不包括记录本身。GAP锁的目的，是为了防止同一事务的两次当前读，出现幻读的情况，锁住索引之间的间隙。</p>
+<p>3，Next-Key Lock：1+2，锁定一个范围，并且锁定记录本身。对于行的查询，都是采用该方法，主要目的是解决幻读的问题。</p>
+<p>下面我们针对大部分的SQL类型分析是如何加锁的，假设事务隔离级别为可重复读。</p>
+<p>select .. from<br>不加任何类型的锁</p>
+<p>select…from lock in share mode<br>在扫描到的任何索引记录上加共享的（shared）next-key lock，还有主键聚集索引加排它锁 </p>
+<p>select..from for update<br>在扫描到的任何索引记录上加排它的next-key lock，还有主键聚集索引加排它锁 </p>
+<p>update..where   delete from..where<br>在扫描到的任何索引记录上加next-key lock，还有主键聚集索引加排它锁 </p>
+<p>insert into..<br>简单的insert会在insert的行对应的索引记录上加一个排它锁，这是一个record lock，并没有gap，所以并不会阻塞其他session在gap间隙里插入记录。不过在insert操作之前，还会加一种锁，官方文档称它为insertion intention gap lock，也就是意向的gap锁。这个意向gap锁的作用就是预示着当多事务并发插入相同的gap空隙时，只要插入的记录不是gap间隙中的相同位置，则无需等待其他session就可完成，这样就使得insert操作无须加真正的gap lock。想象一下，如果一个表有一个索引idx_test，表中有记录1和8，那么每个事务都可以在2和7之间插入任何记录，只会对当前插入的记录加record lock，并不会阻塞其他session插入与自己不同的记录，因为他们并没有任何冲突。</p>
+<p>假设发生了一个唯一键冲突错误，那么将会在重复的索引记录上加读锁。当有多个session同时插入相同的行记录时，如果另外一个session已经获得改行的排它锁，那么将会导致死锁。</p>
+<h3 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h3><p>死锁的发生与否，并不在于事务中有多少条SQL语句，死锁的关键在于：两个(或以上)的Session加锁的顺序不一致。而使用本文上面提到的，分析MySQL每条SQL语句的加锁规则，分析出每条语句的加锁顺序，然后检查多个并发SQL间是否存在以相反的顺序加锁的情况，就可以分析出各种潜在的死锁情况，也可以分析出线上死锁发生的原因。</p>
+<h3 id="SQL中的where条件，在数据库中提取与应用浅析"><a href="#SQL中的where条件，在数据库中提取与应用浅析" class="headerlink" title="SQL中的where条件，在数据库中提取与应用浅析"></a>SQL中的where条件，在数据库中提取与应用浅析</h3><ol>
+<li>index key</li>
+</ol>
+<p>判断索引范围</p>
+<ol start="2">
+<li><p>index filter<br>过滤索引</p>
+</li>
+<li><p>table filter<br>在表里过滤不在索引里的条件 </p>
+</li>
+</ol>
+<p><a href="http://blog.csdn.net/cug_jiang126com/article/details/50596729" target="_blank" rel="noopener">http://blog.csdn.net/cug_jiang126com/article/details/50596729</a></p>
+<p><a href="http://novoland.github.io/%E6%95%B0%E6%8D%AE%E5%BA%93/2015/08/17/InnoDB%20%E9%94%81.html" target="_blank" rel="noopener">http://novoland.github.io/%E6%95%B0%E6%8D%AE%E5%BA%93/2015/08/17/InnoDB%20%E9%94%81.html</a></p>
+<p><a href="http://hedengcheng.com/?p=771#_Toc374698307" target="_blank" rel="noopener">http://hedengcheng.com/?p=771#_Toc374698307</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/15/2017-6-15-python-yield/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/06/15/2017-6-15-python-yield/" itemprop="url">python-yield</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-15T00:00:00+08:00">
+                2017-06-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="python-yield"><a href="#python-yield" class="headerlink" title="python-yield"></a>python-yield</h2><h3 id="迭代器-iterator"><a href="#迭代器-iterator" class="headerlink" title="迭代器(iterator)"></a>迭代器(iterator)</h3><p>python专门为for关键字做了迭代器的语法糖。在for循环中，Python将自动调用工厂函数iter()获得迭代器，自动调用next()获取元素，还完成了检查StopIteration异常的工作</p>
+<h3 id="生成器-constructor"><a href="#生成器-constructor" class="headerlink" title="生成器(constructor)"></a>生成器(constructor)</h3><p>包含yield语句的函数会被特地编译成生成器</p>
+<p>生成器函数在生成值后会自动挂起并暂停他们的执行和状态，他的本地变量将保存状态信息，这些信息在函数恢复时将再度有效</p>
+<pre><code>def g(n):
+    for i in range(n):
+        yield i **2
+
+t = g(5) 生成器
+t.next() 0
+t.next() 1
+t.next() 4
+
+
+for i in g(5):
+    print i,&quot;:&quot;,
+
+0 : 1 : 4 : 9 : 16 :</code></pre><p>带有 yield 的函数不再是一个普通函数，而是一个生成器generator，可用于迭代</p>
+<p>yield 是一个类似 return 的关键字，迭代一次遇到yield时就返回yield后面的值。重点是：下一次迭代时，从上一次迭代遇到的yield后面的代码开始执行。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/19/2017-5-19-jmx/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/05/19/2017-5-19-jmx/" itemprop="url">jmx</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-19T00:00:00+08:00">
+                2017-05-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="jmx"><a href="#jmx" class="headerlink" title="jmx"></a>jmx</h2><p>JMX(Java Management Extensions)是一个为应用程序植入管理功能的框架。JMX是一套标准的代理和服务，实际上，用户可以在任何Java应用程序中使用这些代理和服务实现管理</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/15/2017-5-15-express/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/05/15/2017-5-15-express/" itemprop="url">express</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-15T00:00:00+08:00">
+                2017-05-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="node-js-express"><a href="#node-js-express" class="headerlink" title="node.js express"></a>node.js express</h2>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/10/2017-4-10-hive/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/04/10/2017-4-10-hive/" itemprop="url">hive</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-10T00:00:00+08:00">
+                2017-04-10
               </time>
             
 
@@ -350,7 +918,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2017-3-6-jetty/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/06/2017-4-6-neo4j/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -369,7 +937,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2017-3-6-jetty/" itemprop="url">jetty</a></h1>
+                <a class="post-title-link" href="/2017/04/06/2017-4-6-neo4j/" itemprop="url">neo4j</a></h1>
         
 
         <div class="post-meta">
@@ -381,8 +949,251 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-06T00:00:00+08:00">
+                2017-04-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id=""><a href="#" class="headerlink" title=""></a></h2>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/27/2017-3-27-go/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/03/27/2017-3-27-go/" itemprop="url">go入门</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-27T00:00:00+08:00">
+                2017-03-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="go"><a href="#go" class="headerlink" title="go"></a>go</h2><p>###设置环境变量 配置 GOROOT 和 GOPATH</p>
+<p>创建家目录下的go文件夹： mkdir ~/go</p>
+<p>export GOROOT=/usr/share/go</p>
+<p>export GOPATH=$HOME/go</p>
+<p>export PATH=$PATH:$GOROOT/bin  </p>
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/06/2017-3-6-jetty/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/03/06/2017-3-6-jetty/" itemprop="url">jetty</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-06T00:00:00+08:00">
+                2017-03-06
               </time>
             
 
@@ -489,7 +1300,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2017-3-3-hadoop/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/03/2017-3-3-hadoop/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -508,7 +1319,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2017-3-3-hadoop/" itemprop="url">hadoop</a></h1>
+                <a class="post-title-link" href="/2017/03/03/2017-3-3-hadoop/" itemprop="url">hadoop</a></h1>
         
 
         <div class="post-meta">
@@ -520,8 +1331,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-03T00:00:00+08:00">
+                2017-03-03
               </time>
             
 
@@ -614,7 +1425,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2017-3-27-go/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/25/2017-2-25-consistency/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -633,7 +1444,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2017-3-27-go/" itemprop="url">go入门</a></h1>
+                <a class="post-title-link" href="/2017/02/25/2017-2-25-consistency/" itemprop="url">分布式系统的事务处理</a></h1>
         
 
         <div class="post-meta">
@@ -645,443 +1456,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="go"><a href="#go" class="headerlink" title="go"></a>go</h2><p>###设置环境变量 配置 GOROOT 和 GOPATH</p>
-<p>创建家目录下的go文件夹： mkdir ~/go</p>
-<p>export GOROOT=/usr/share/go</p>
-<p>export GOPATH=$HOME/go</p>
-<p>export PATH=$PATH:$GOROOT/bin  </p>
-<h3 id=""><a href="#" class="headerlink" title=""></a></h3>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2017-2-7-ios-web-mvc-mvvm/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2017-2-7-ios-web-mvc-mvvm/" itemprop="url">前端mvc mvvm</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="ios-web前端mvc-mvvm，后端mvc"><a href="#ios-web前端mvc-mvvm，后端mvc" class="headerlink" title="ios web前端mvc mvvm，后端mvc"></a>ios web前端mvc mvvm，后端mvc</h2><p>数据和UI通信</p>
-<h3 id="ios"><a href="#ios" class="headerlink" title="ios"></a>ios</h3><h4 id="mvc"><a href="#mvc" class="headerlink" title="mvc"></a>mvc</h4><p>ios中vc之间和mv之间的绑定</p>
-<p>1.mc</p>
-<p>controller -&gt; model </p>
-<p>controller直接调用model数据</p>
-<p>model -&gt; controller</p>
-<p>model通过kvo&amp;notification机制与controller通信，观察者模式</p>
-<pre><code>kvo
-kvo(键值观察)
-kvo是一个典型的观察者模式，观察者在键值改变时会得到通知。
-
-stockForKVO = [[StockData alloc] init];  
-[stockForKVO setValue:@&quot;searph&quot; forKey:@&quot;stockName&quot;];
-[stockForKVO setValue:@&quot;10.0&quot; forKey:@&quot;price&quot;];        
-[stockForKVO addObserver:self forKeyPath:@&quot;price&quot; options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:NULL];  
-
--(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context  
-{  
-    if([keyPath isEqualToString:@&quot;price&quot;])  
-    {  
-        myLabel.text = [stockForKVO valueForKey:@&quot;price&quot;];  
-    }  
-}  
-
-
-通知中心
-
-通知中心就是以NSNotificationCenter为中心，观察者往Center中注册对某个主题对象的变化感兴趣，主体对象通过NSNotificationCenter进行变化广播，所有的变化和监听行为都向同一个中心进行注册，所有对象的变化也通过同一个中心对外广播。
-
-NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-//注册成为观察者 观察对象是Observer 
-[notificationCenter addObserver:self selector:@selector(doAction:) name:@&quot;Observer&quot; object:nil];
-
-NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-
-[notificationCenter postNotificationName:@&quot;Observer&quot; object:self userInfo:info];</code></pre><p>2.vc</p>
-<p>controller -&gt; view </p>
-<p>controller通过outlet，直接控制view</p>
-<p>view -&gt; controller</p>
-<p>View通过action和delegate机制向Controller报告事件的发生</p>
-<pre><code>代理机制，协议与代理
-A
-@protocol XDelegate &lt;NSObject&gt;
-- (void)xx;
-@end
-
-@interface X : NSObject
-@property (nonatomic, weak) id &lt;XDelegate&gt; delegate;
-@end
-
- if ([self.delegate respondsToSelector:@selector(xx)]) {
-    [self.delegate xx];
-}
-
-B
-@interface Y ()&lt;XDelegate&gt;
-
-- (void)xx{
-
-}</code></pre><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/MVCPattern.png" alt=""></p>
-<h4 id="mvvm"><a href="#mvvm" class="headerlink" title="mvvm"></a>mvvm</h4><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/MVVM.png" alt=""></p>
-<p>viewmodel代替MVC中model的位置</p>
-<p>####web前端 mvc模式</p>
-<p>ios view与model之间是通过controller来通信，web前端view与model可以数据绑定，即将对象属性变化绑定到UI。</p>
-<p>双向数据绑定指的是将对象属性变化绑定到UI，或者反之</p>
-<p>双向绑定的实现有三个步骤：</p>
-<p>1.我们需要一个方法来识别哪个UI元素被绑定了相应的属性 </p>
-<p>2.我们需要监视属性和UI元素的变化 </p>
-<p>3.我们需要将所有变化传播到绑定的对象和元素</p>
-<p>可以用发布者-订阅者模式实现。<br>vm绑定<br>客户端根据用户的行为修改客户端Model -&gt; 客户端更新和该Model相关的View -&gt; 客户端Model发送sync请求到服务器，只包含改变了哪些数据 -&gt; 服务器审核数据改动是否合法，只需回复是否修改成功 -&gt; 客户端收到成功，什么都不用做；不成功，则把刚才改的View改回来，然后通知用户。</p>
-<p>####vue.js</p>
-<p>dom与数据绑定，数据改变，dom相应改变。</p>
-<p>###yii2框架mvc模式</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2017-2-25-sqlvsnosql/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2017-2-25-sqlvsnosql/" itemprop="url">关系型和非关系型数据库</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="关系型和非关系型数据库"><a href="#关系型和非关系型数据库" class="headerlink" title="关系型和非关系型数据库"></a>关系型和非关系型数据库</h2>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2017-2-25-consistency/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2017-2-25-consistency/" itemprop="url">分布式系统的事务处理</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-25T00:00:00+08:00">
+                2017-02-25
               </time>
             
 
@@ -1128,370 +1504,6 @@ B
 <p>试图通过建立在一个不可靠的连接上的交流来协调一项行动的隐患和设计上的巨大挑战。</p>
 <p><a href="http://coolshell.cn/articles/10910.html" target="_blank" rel="noopener">http://coolshell.cn/articles/10910.html</a></p>
 
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2017-12-26-blade_server/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2017-12-26-blade_server/" itemprop="url">blade server</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="blade-server"><a href="#blade-server" class="headerlink" title="blade server"></a>blade server</h2><h3 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h3><p>接收客户的请求</p>
-<p>执行中间件（如果有的话）</p>
-<p>执行WebHook（如果有的话）</p>
-<p>执行路由方法</p>
-<p>向客户端发送响应</p>
-<p>移除当前线程Request、Response</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2017-12-26-aop/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2017-12-26-aop/" itemprop="url">spring aop</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="aop"><a href="#aop" class="headerlink" title="aop"></a>aop</h2><p>代理模式</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2017-12-23-Effective%20java/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2017-12-23-Effective%20java/" itemprop="url">Effective java</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Effective-java"><a href="#Effective-java" class="headerlink" title="Effective java"></a>Effective java</h2>
           
         
       
@@ -1576,7 +1588,7 @@ B
               
                 <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">273</span>
+                  <span class="site-state-item-count">271</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

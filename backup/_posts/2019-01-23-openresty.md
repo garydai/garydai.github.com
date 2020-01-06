@@ -1,10 +1,10 @@
 ---
+date: 2019-01-23
 layout: default
 
 title: openresty
 
 ---
-
 ## openresty
 
 ### 安装

@@ -1,4 +1,5 @@
 ---
+date: 2013-7-7
 layout: default
 title: 编程实现k/n的概率
 

@@ -1,4 +1,5 @@
 ---
+date: 2015-10-23
 layout: default
 
 title: javascript笔记

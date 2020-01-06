@@ -1,4 +1,5 @@
 ---
+date: 2015-9-16
 layout: default
 
 title: git command

@@ -1,4 +1,5 @@
 ---
+date: 2013-7-8
 layout: default
 title: 概率题
 

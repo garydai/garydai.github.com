@@ -1,4 +1,5 @@
 ---
+date: 2016-10-19
 layout: default
 
 title: mysql主从分离

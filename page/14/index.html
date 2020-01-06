@@ -229,7 +229,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2017-12-15-java-ioc/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/25/2017-2-25-sqlvsnosql/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -248,7 +248,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2017-12-15-java-ioc/" itemprop="url">spring IOC</a></h1>
+                <a class="post-title-link" href="/2017/02/25/2017-2-25-sqlvsnosql/" itemprop="url">关系型和非关系型数据库</a></h1>
         
 
         <div class="post-meta">
@@ -260,8 +260,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-25T00:00:00+08:00">
+                2017-02-25
               </time>
             
 
@@ -300,11 +300,198 @@
       
         
           
-            <h2 id="ioc"><a href="#ioc" class="headerlink" title="ioc"></a>ioc</h2><p>主要流程：读取XML资源，并解析，最终注册到Bean Factory</p>
-<p>创建beanFactory</p>
-<p>注册bean</p>
-<p>注入Property</p>
-<p>获取bean</p>
+            <h2 id="关系型和非关系型数据库"><a href="#关系型和非关系型数据库" class="headerlink" title="关系型和非关系型数据库"></a>关系型和非关系型数据库</h2>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/07/2017-2-7-ios-web-mvc-mvvm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/02/07/2017-2-7-ios-web-mvc-mvvm/" itemprop="url">前端mvc mvvm</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-07T00:00:00+08:00">
+                2017-02-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="ios-web前端mvc-mvvm，后端mvc"><a href="#ios-web前端mvc-mvvm，后端mvc" class="headerlink" title="ios web前端mvc mvvm，后端mvc"></a>ios web前端mvc mvvm，后端mvc</h2><p>数据和UI通信</p>
+<h3 id="ios"><a href="#ios" class="headerlink" title="ios"></a>ios</h3><h4 id="mvc"><a href="#mvc" class="headerlink" title="mvc"></a>mvc</h4><p>ios中vc之间和mv之间的绑定</p>
+<p>1.mc</p>
+<p>controller -&gt; model </p>
+<p>controller直接调用model数据</p>
+<p>model -&gt; controller</p>
+<p>model通过kvo&amp;notification机制与controller通信，观察者模式</p>
+<pre><code>kvo
+kvo(键值观察)
+kvo是一个典型的观察者模式，观察者在键值改变时会得到通知。
+
+stockForKVO = [[StockData alloc] init];  
+[stockForKVO setValue:@&quot;searph&quot; forKey:@&quot;stockName&quot;];
+[stockForKVO setValue:@&quot;10.0&quot; forKey:@&quot;price&quot;];        
+[stockForKVO addObserver:self forKeyPath:@&quot;price&quot; options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:NULL];  
+
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context  
+{  
+    if([keyPath isEqualToString:@&quot;price&quot;])  
+    {  
+        myLabel.text = [stockForKVO valueForKey:@&quot;price&quot;];  
+    }  
+}  
+
+
+通知中心
+
+通知中心就是以NSNotificationCenter为中心，观察者往Center中注册对某个主题对象的变化感兴趣，主体对象通过NSNotificationCenter进行变化广播，所有的变化和监听行为都向同一个中心进行注册，所有对象的变化也通过同一个中心对外广播。
+
+NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+//注册成为观察者 观察对象是Observer 
+[notificationCenter addObserver:self selector:@selector(doAction:) name:@&quot;Observer&quot; object:nil];
+
+NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+
+[notificationCenter postNotificationName:@&quot;Observer&quot; object:self userInfo:info];</code></pre><p>2.vc</p>
+<p>controller -&gt; view </p>
+<p>controller通过outlet，直接控制view</p>
+<p>view -&gt; controller</p>
+<p>View通过action和delegate机制向Controller报告事件的发生</p>
+<pre><code>代理机制，协议与代理
+A
+@protocol XDelegate &lt;NSObject&gt;
+- (void)xx;
+@end
+
+@interface X : NSObject
+@property (nonatomic, weak) id &lt;XDelegate&gt; delegate;
+@end
+
+ if ([self.delegate respondsToSelector:@selector(xx)]) {
+    [self.delegate xx];
+}
+
+B
+@interface Y ()&lt;XDelegate&gt;
+
+- (void)xx{
+
+}</code></pre><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/MVCPattern.png" alt=""></p>
+<h4 id="mvvm"><a href="#mvvm" class="headerlink" title="mvvm"></a>mvvm</h4><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/MVVM.png" alt=""></p>
+<p>viewmodel代替MVC中model的位置</p>
+<p>####web前端 mvc模式</p>
+<p>ios view与model之间是通过controller来通信，web前端view与model可以数据绑定，即将对象属性变化绑定到UI。</p>
+<p>双向数据绑定指的是将对象属性变化绑定到UI，或者反之</p>
+<p>双向绑定的实现有三个步骤：</p>
+<p>1.我们需要一个方法来识别哪个UI元素被绑定了相应的属性 </p>
+<p>2.我们需要监视属性和UI元素的变化 </p>
+<p>3.我们需要将所有变化传播到绑定的对象和元素</p>
+<p>可以用发布者-订阅者模式实现。<br>vm绑定<br>客户端根据用户的行为修改客户端Model -&gt; 客户端更新和该Model相关的View -&gt; 客户端Model发送sync请求到服务器，只包含改变了哪些数据 -&gt; 服务器审核数据改动是否合法，只需回复是否修改成功 -&gt; 客户端收到成功，什么都不用做；不成功，则把刚才改的View改回来，然后通知用户。</p>
+<p>####vue.js</p>
+<p>dom与数据绑定，数据改变，dom相应改变。</p>
+<p>###yii2框架mvc模式</p>
 
           
         
@@ -353,7 +540,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2016-9-29-websecurity/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/04/2017-1-4-https/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -372,7 +559,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2016-9-29-websecurity/" itemprop="url">web安全</a></h1>
+                <a class="post-title-link" href="/2017/01/04/2017-1-4-https/" itemprop="url">https</a></h1>
         
 
         <div class="post-meta">
@@ -384,143 +571,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="web安全"><a href="#web安全" class="headerlink" title="web安全"></a>web安全</h2><h3 id="PHP安全函数"><a href="#PHP安全函数" class="headerlink" title="PHP安全函数"></a>PHP安全函数</h3><p>1.addslashes</p>
-<p>对SQL语句中的特殊字符进行转义操作，包括(‘), (“), (), (NUL)四个字符</p>
-<p>2.htmlspecialchars</p>
-<p>htmlspecialchars把HTML中的几个特殊字符转义成HTML Entity(格式：&xxxx;)形式，包括(&amp;),(‘),(“),(&lt;),(&gt;)五个字符。</p>
-<pre><code>&amp; (AND) =&gt; &amp;amp;
-” (双引号) =&gt; &amp;quot; (当ENT_NOQUOTES没有设置的时候)
-‘ (单引号) =&gt; &amp;#039; (当ENT_QUOTES设置)
-&lt; (小于号) =&gt; &amp;lt;
-&gt; (大于号) =&gt; &amp;gt;   </code></pre><p>3.htmlentities</p>
-<p>htmlentities把HTML中可以转义的内容转义成HTML Entity。html_entity_decode为htmlentities的decode函数。</p>
-<p>4.mysql_real_escape_string</p>
-<p>mysql_real_escape_string会调用MySQL的库函数mysql_real_escape_string，对(\x00), (\n), (\r), (), (‘), (\x1a)进行转义，即在前面添加反斜杠()，预防SQL注入。</p>
-<p>5.strip_tags</p>
-<p>strip_tags会过滤掉NUL，HTML和PHP的标签。</p>
-<p><a href="http://weizhifeng.net/php-security-functions.html" target="_blank" rel="noopener">http://weizhifeng.net/php-security-functions.html</a></p>
-<h3 id="SQL注入"><a href="#SQL注入" class="headerlink" title="SQL注入"></a>SQL注入</h3><p><a href="http://www.techug.com/post/sql-injection-attacks-by-example.html" target="_blank" rel="noopener">http://www.techug.com/post/sql-injection-attacks-by-example.html</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2017-1-4-https/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2017-1-4-https/" itemprop="url">https</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-01-04T00:00:00+08:00">
+                2017-01-04
               </time>
             
 
@@ -623,7 +675,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2016-9-26-workerman/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/29/2016-12-29-nginx-rewrite/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -642,7 +694,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2016-9-26-workerman/" itemprop="url">php server workerman</a></h1>
+                <a class="post-title-link" href="/2016/12/29/2016-12-29-nginx-rewrite/" itemprop="url">nginx rewrite</a></h1>
         
 
         <div class="post-meta">
@@ -654,8 +706,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-29T00:00:00+08:00">
+                2016-12-29
               </time>
             
 
@@ -694,11 +746,341 @@
       
         
           
-            <p>##workerman</p>
-<pre><code>git clone https://github.com/walkor/Workerman
+            <p>##nginx rewrite</p>
+<pre><code>一．正则表达式匹配，其中：
+* ~ 为区分大小写匹配
+* ~* 为不区分大小写匹配
+* !~和!~*分别为区分大小写不匹配及不区分大小写不匹配
 
-php start.php start(debug)
-php start.php start -d(守护进程)</code></pre><p><a href="http://doc3.workerman.net/install/install.html" target="_blank" rel="noopener">http://doc3.workerman.net/install/install.html</a></p>
+二．文件及目录匹配，其中：
+* -f和!-f用来判断是否存在文件
+* -d和!-d用来判断是否存在目录
+* -e和!-e用来判断是否存在文件或目录
+* -x和!-x用来判断文件是否可执行
+
+三．rewrite指令的最后一项参数为flag标记，flag标记有：
+1.last    相当于apache里面的[L]标记，表示rewrite。
+2.break本条规则匹配完成后，终止匹配，不再匹配后面的规则。
+3.redirect  返回302临时重定向，浏览器地址会显示跳转后的URL地址。
+4.permanent  返回301永久重定向，浏览器地址会显示跳转后的URL地址。</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/28/2016-12-28-yii2restful/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/12/28/2016-12-28-yii2restful/" itemprop="url">yii2 restful</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-28T00:00:00+08:00">
+                2016-12-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>##yii2 restful</p>
+<p>###First, create a controller class </p>
+<p>app\controllers\UserController as follows:</p>
+<pre><code>namespace app\controllers;
+
+use yii\rest\ActiveController;
+
+class UserController extends ActiveController
+{
+    public $modelClass = &apos;app\models\User&apos;;
+}</code></pre><p>###Configuring URL Rules</p>
+<p>Then, modify the configuration of the urlManager component in your application configuration:</p>
+<pre><code>&apos;urlManager&apos; =&gt; [
+    &apos;enablePrettyUrl&apos; =&gt; true,
+    &apos;enableStrictParsing&apos; =&gt; true,
+    &apos;showScriptName&apos; =&gt; false,
+    &apos;rules&apos; =&gt; [
+        [&apos;class&apos; =&gt; &apos;yii\rest\UrlRule&apos;, &apos;controller&apos; =&gt; &apos;user&apos;],
+    ],
+]
+
+
+GET /users: list all users page by page;
+HEAD /users: show the overview information of user listing;
+POST /users: create a new user;
+GET /users/123: return the details of the user 123;
+HEAD /users/123: show the overview information of user 123;
+PATCH /users/123 and PUT /users/123: update the user 123;
+DELETE /users/123: delete the user 123;
+OPTIONS /users: show the supported verbs regarding endpoint /users;
+OPTIONS /users/123: show the supported verbs regarding endpoint /users/123.</code></pre><p>###override action</p>
+<pre><code>public function actions()  
+{  
+    $actions = parent::actions();  
+
+    // 注销系统自带的实现方法  
+    unset($actions[&apos;index&apos;]);  
+
+    //unset($actions[&apos;create&apos;]);  
+    //unset($actions[&apos;update&apos;]);  
+    //unset($actions[&apos;delete&apos;]);  
+
+  return $actions;  
+}  
+
+//覆盖父类的actionIndex方法,并进行重写  
+public function actionIndex()  
+{  
+    //获取用户所有信息  
+    ......  
+}  </code></pre><p>或者修改urlmanger</p>
+<pre><code>&apos;urlManager&apos; =&gt; [
+            &apos;enablePrettyUrl&apos; =&gt; true,
+          //  &apos;enableStrictParsing&apos; =&gt; true,
+            &apos;showScriptName&apos; =&gt; false,
+            &apos;rules&apos; =&gt; [
+                [
+
+                    &apos;class&apos; =&gt; &apos;yii\rest\UrlRule&apos;, 
+                    &apos;controller&apos; =&gt; [&apos;user&apos;],
+                    &apos;extraPatterns&apos; =&gt; [
+                        &apos;POST /adduser&apos; =&gt; &apos;adduser&apos;, // &apos;adduser&apos; refers to &apos;actionAdduser&apos;
+                        &apos;POST /getuser&apos; =&gt; &apos;getuser&apos;,
+
+                    ],
+
+
+                ],
+            ],
+
+        ],</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/28/2016-12-28-vpnapp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/12/28/2016-12-28-vpnapp/" itemprop="url">vpn app</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-28T00:00:00+08:00">
+                2016-12-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>##vpn app </p>
+<p>###ios</p>
+<p>1.上传用户设备号，如果是新用户则注册用户</p>
+<p>2.获取服务器列表</p>
+<p>###后台</p>
+<p>第一版使用的python flask，web应用，感觉不稳定</p>
+<p>第二版使用yii2 restful</p>
+<p>###广告<br>加入谷歌banner广告</p>
+<p>todo：百度banner广告</p>
+<p>###服务器</p>
+<p>日本服务器 vultr<br>纽约服务器 digitalocean<br>阿里云服务器</p>
 
           
         
@@ -747,7 +1129,7 @@ php start.php start -d(守护进程)</code></pre><p><a href="http://doc3.workerm
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2016-9-23-opencart%E5%8A%A0%E9%80%9F/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/21/2016-12-21-object/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -766,7 +1148,7 @@ php start.php start -d(守护进程)</code></pre><p><a href="http://doc3.workerm
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2016-9-23-opencart%E5%8A%A0%E9%80%9F/" itemprop="url">opencart加速</a></h1>
+                <a class="post-title-link" href="/2016/12/21/2016-12-21-object/" itemprop="url">面向对象</a></h1>
         
 
         <div class="post-meta">
@@ -778,8 +1160,8 @@ php start.php start -d(守护进程)</code></pre><p><a href="http://doc3.workerm
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-21T00:00:00+08:00">
+                2016-12-21
               </time>
             
 
@@ -818,8 +1200,36 @@ php start.php start -d(守护进程)</code></pre><p><a href="http://doc3.workerm
       
         
           
-            <p>##opencart加速</p>
+            <p>###面向对象</p>
+<p>在面向对象编程中，类（class）是对象（object）的模板，定义了同一组对象（又称”实例”）共有的属性和方法</p>
+<p>####javascript</p>
+<p>Javascript是一种基于对象（object-based）的语言，你遇到的所有东西几乎都是对象。但是，它又不是一种真正的面向对象编程（OOP）语言，因为它的语法中没有class</p>
+<p>Javascript语言不支持”类”，但是可以用一些变通的方法，模拟出”类”。<br>一、构造函数法</p>
+<p>它用构造函数模拟”类”，在其内部用this关键字指代实例对象</p>
+<pre><code>function Cat() {
+    this.name = &quot;大毛&quot;;
+}
 
+
+var cat1 = new Cat();
+alert(cat1.name); // 大毛</code></pre><p>二、Object.create()法</p>
+<pre><code>var Cat = {
+　　　　name: &quot;大毛&quot;,
+　　　　makeSound: function(){ alert(&quot;喵喵喵&quot;); }
+　　};
+var cat1 = Object.create(Cat);
+alert(cat1.name); // 大毛
+cat1.makeSound(); // 喵喵喵</code></pre><p>三、极简主义法</p>
+<pre><code>　　var Cat = {
+　　　　createNew: function(){
+　　　　　　var cat = {};
+　　　　　　cat.name = &quot;大毛&quot;;
+　　　　　　cat.makeSound = function(){ alert(&quot;喵喵喵&quot;); };
+　　　　　　return cat;
+　　　　}
+　　};
+　　var cat1 = Cat.createNew();
+　　cat1.makeSound(); // 喵喵喵</code></pre>
           
         
       
@@ -867,7 +1277,7 @@ php start.php start -d(守护进程)</code></pre><p><a href="http://doc3.workerm
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2016-9-22-mysql%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/16/2016-12-16-jquery/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -886,7 +1296,7 @@ php start.php start -d(守护进程)</code></pre><p><a href="http://doc3.workerm
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2016-9-22-mysql%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4/" itemprop="url">mysql常用指令</a></h1>
+                <a class="post-title-link" href="/2016/12/16/2016-12-16-jquery/" itemprop="url">jquery</a></h1>
         
 
         <div class="post-meta">
@@ -898,8 +1308,8 @@ php start.php start -d(守护进程)</code></pre><p><a href="http://doc3.workerm
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-16T00:00:00+08:00">
+                2016-12-16
               </time>
             
 
@@ -938,472 +1348,277 @@ php start.php start -d(守护进程)</code></pre><p><a href="http://doc3.workerm
       
         
           
-            <p>##mysql常用指令</p>
-<p>###用户权限</p>
-<pre><code>CREATE USER yy@&apos;%&apos; IDENTIFIED BY &apos;123&apos;;
-
-GRANT ALL PRIVILEGES ON *.* TO user@localhost
-
- flush privileges;
-
- select host,user from mysql.user; </code></pre><p>###utf8 -&gt; utf8mb4 </p>
-<pre><code> vi /etc/my.cnf
-
- [client]
-default-character-set = utf8mb4
-
-[mysql]
-default-character-set = utf8mb4
-
-
-[mysqld]
-character-set-client-handshake = FALSE
-character-set-server = utf8mb4
-collation-server = utf8mb4_unicode_ci
-init_connect=&apos;SET NAMES utf8mb4&apos;</code></pre><p>###导出表结构和数据</p>
-<pre><code>mysqldump -u用户名 -p密码 数据库名 &gt; 数据库名.sql
-mysqldump -uroot -p abc &gt; abc.sql</code></pre><p>###导入备份<br>    mysql -uabc_f -p abc &lt; abc.sql</p>
-<p>###centos7安装mysql-server</p>
-<pre><code>centos7 yum instlal mysql-server 失败，需要加入
-rpm -Uvh http://dev.mysql.com/get/mysql-community-release-el7-5.noarch.rpm
-yum install mysql</code></pre><p>###删除库<br>drop database xxx</p>
-<p>###数据<br>    MySQL默认的数据文档存储目录为/var/lib/mysql<br>    /etc/目录下有配置文件my.cnf</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2016-9-19-ikev2-freeradius/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2016-9-19-ikev2-freeradius/" itemprop="url">centos安装搭建ikev2+freeradius</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##centos安装搭建ikev2+freeradius</p>
-<p>###安装 strongSwan</p>
-<pre><code>wget https://download.strongswan.org/strongswan-5.5.0.tar.bz2</code></pre><p>需要下载源文件，enable radius，编译</p>
-<pre><code>yum install gcc
-yum install gmp-devel
-
-centos7 yum instlal mysql-server 失败，需要加入
-sudo rpm -Uvh http://dev.mysql.com/get/mysql-community-release-el7-5.noarch.rpm
-yum install mysql
-
-./configure --prefix=/usr --sysconfdir=/etc/strongswan  --enable-xauth-eap --enable-openssl --enable-ext-auth --enable-nat-transport --enable-sql --enable-mysql  --enable-shared --enable-md4 --enable-eap-mschapv2 --enable-eap-aka --enable-eap-aka-3gpp2 --enable-eap-gtc --enable-eap-identity  --enable-eap-md5 --enable-eap-peap --enable-eap-radius --enable-eap-sim --enable-eap-sim-file --enable-eap-simaka-pseudonym --enable-eap-simaka-reauth --enable-eap-simaka-sql --enable-eap-tls --enable-eap-tnc --enable-eap-ttls
-make
-make install</code></pre><p>###生成证书<br>同上篇博文<br>    strongswan命令改为ipsec</p>
-<p>###配置 vpn<br>    vi /etc/strongswan/ipsec.conf</p>
-<pre><code>rightauth = eap-radius</code></pre><p>###修改 dns 配置<br>加入插件</p>
-<pre><code>vi /etc/strongswan/strongswan.d/charon.conf
-
-plugins {
-     eap-radius {
-           accounting = yes
-           servers {
-              radiusServer {
-                   secret = testing123
-                   address = 127.0.0.1
-                   auth_port = 1812   # default
-                   acct_port = 1813   # default
-               }
-           }
-      }
-   }</code></pre><p>###配置验证方式的用户名与密码</p>
-<p>###开启内核转发</p>
-<p>###配置防火墙</p>
-<p>加入<br>    vi /etc/sysconfig/iptables</p>
-<pre><code>-A INPUT  -p udp --dport 1812 -j ACCEPT
--A INPUT  -p tcp --dport 1813 -j ACCEPT
-
-
-systemctl restart iptables</code></pre><p>###配置完防火墙后重启 strongswan 服务</p>
-<p>###客户端配置</p>
-<pre><code>psk不需要下载证书</code></pre><p>###配置freeradius</p>
-<pre><code>yum install -y freeradius freeradius-mysql freeradius-utils 
-
-vim /etc/raddb/users
-查找steve Cleartext-Password，取消注释
-
-不要忘了上面的防火墙设置
-
-测试是否配置成功
-radiusd -X
-radtest steve testing localhost 0 testing123
-
-创建数据库
-create database radius;
-grant all on radius.* to radius@localhost identified by &quot;radpass&quot;
-
-导入表结构
-mysql -u root radius &lt; /etc/raddb/mods-config/sql/main/mysql/schema.sql 
-
-建立表信息
-INSERT INTO radgroupreply (groupname,attribute,op,VALUE) VALUES (&apos;user&apos;,&apos;Auth-Type&apos;,&apos;:=&apos;,&apos;Local&apos;);
-INSERT INTO radgroupreply (groupname,attribute,op,VALUE) VALUES (&apos;user&apos;,&apos;Service-Type&apos;,&apos;:=&apos;,&apos;Framed-User&apos;);
-INSERT INTO radgroupreply (groupname,attribute,op,VALUE) VALUES (&apos;user&apos;,&apos;Framed-IP-Address&apos;,&apos;:=&apos;,&apos;255.255.255.255&apos;);
-INSERT INTO radgroupreply (groupname,attribute,op,VALUE) VALUES (&apos;user&apos;,&apos;Framed-IP-Netmask&apos;,&apos;:=&apos;,&apos;255.255.255.0&apos;);    
-
-修改认证配置
-cd /etc/raddb/mods-enabled
-ln -s ../mods-available/sql
-
-修改配置文件
-vi /etc/raddb/mods-available/sql
-找到driver=&quot;rlm_sql_null&quot; 修改为 rlm_sql_mysql 
-dialect=&quot;sqlite&quot;改为mysql
-
-
-radiusd start</code></pre><p><a href="http://download.csdn.net/detail/cluniquecui/8336111" target="_blank" rel="noopener">http://download.csdn.net/detail/cluniquecui/8336111</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2016-9-14-ikev2%20vpn/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2016-9-14-ikev2%20vpn/" itemprop="url">centos安装搭建ikev2 vpn服务</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##centos7安装搭建ikev2 vpn服务<br>###安装 strongSwan</p>
-<pre><code>yum install strongswan
-systemctl enable strongswan
-systemctl start strongswan</code></pre><p>###生成证书<br>####生成 CA 根证书<br>    1. 生成一个私钥：<br>        strongswan pki –gen –outform pem &gt; ca.key.pem</p>
-<pre><code>2. 基于这个私钥自己签一个 CA 根证书：
-    strongswan pki --self --in ca.key.pem --dn &quot;C=CN, O=ITnmg, CN=ITnmg StrongSwan CA&quot; --ca --lifetime 3650 --outform pem &gt; ca.cert.pem</code></pre><p>####生成服务器端证书</p>
-<pre><code>strongswan pki --gen --outform pem &gt; server.key.pem
-
-#从私钥生成公钥
-strongswan pki --pub --in server.key.pem --outform pem &gt; server.pub.pem
-
-#用刚生成的公钥生成服务器证书
-strongswan pki --issue --lifetime 3600 --cacert ca.cert.pem --cakey ca.key.pem --in server.pub.pem --dn &quot;C=CN, O=ITnmg, CN=vpn.itnmg.net&quot; --san=&quot;vpn.itnmg.net&quot; --flag serverAuth --flag ikeIntermediate --outform pem &gt; server.cert.pem
-
-vpn.itnmg.net换成自己的ip或域名</code></pre><p>####安装证书<br>    cp -r ca.key.pem /etc/strongswan/ipsec.d/private/<br>    cp -r ca.cert.pem /etc/strongswan/ipsec.d/cacerts/<br>    cp -r server.cert.pem /etc/strongswan/ipsec.d/certs/<br>    cp -r server.pub.pem /etc/strongswan/ipsec.d/certs/<br>    cp -r server.key.pem /etc/strongswan/ipsec.d/private/</p>
-<p>###配置 vpn<br>    vi /etc/strongswan/ipsec.conf</p>
-<pre><code>config setup
-uniqueids=no
-
-conn %default
-    compress = yes
-    esp = aes256-sha256,aes256-sha1,3des-sha1!
-    ike = aes256-sha256-modp2048,aes256-sha1-modp2048,aes128-sha1-modp2048,3des-sha1-modp2048,aes256-sha256-modp1024,aes256-sha1-modp1024,aes128-sha1-modp1024,3des-sha1-modp1024!
-    keyexchange = ike
-    keyingtries = 1
-    leftdns = 8.8.8.8,8.8.4.4
-    rightdns = 8.8.8.8,8.8.4.4
-
-conn ikev2-eap
-    leftca = &quot;C=CN, O=ITnmg, CN=ITnmg StrongSwan CA&quot;
-    leftcert = server.cert.pem
-    leftsendcert = always
-    rightsendcert = never
-    leftid = @vpn.itnmg.net
-    left = %any
-    right = %any
-    leftauth = pubkey
-    rightauth = eap-mschapv2
-    leftfirewall = yes
-    leftsubnet = 0.0.0.0/0
-    rightsourceip = 10.1.0.0/16
-    fragmentation = yes
-    rekey = no
-    eap_identity=%any
-    auto = add</code></pre><p>###修改 dns 配置<br>    vi /etc/strongswan/strongswan.d/charon.conf</p>
-<pre><code>charon {
-    duplicheck.enable = no #同时连接多个设备,把冗余检查关闭.
-
-    # windows 公用 dns
-    dns1 = 8.8.8.8
-    dns2 = 8.8.4.4
-
-    #以下是日志输出, 生产环境请关闭.
-    filelog {
-        /var/log/charon.log {
-            # add a timestamp prefix
-            time_format = %b %e %T
-            # prepend connection name, simplifies grepping
-            ike_name = yes
-            # overwrite existing files
-            append = no
-            # increase default loglevel for all daemon subsystems
-            default = 1
-            # flush each line to disk
-            flush_line = yes
-        }
+            <p>##jquery源码分析</p>
+<p>选择网页元素</p>
+<p>###js基础知识</p>
+<p>匿名函数声明完就立即执行</p>
+<pre><code>!function(a,b)(pa, pb);
+等同于(function(a,b))(pa, pb);</code></pre><p>prototype</p>
+<p>###使用方法<br>jQuery(“ul&gt;li:first”).addClass(“selected”);</p>
+<p>其中jQuery()可替换为快捷方式$()，如果$被其它对象占用，可使用jQuery.noConflict()函数取消快捷方式。</p>
+<p>###$().xxx()</p>
+<p>$()返回一个对象</p>
+<pre><code>分析一：jQuery的无new构建
+
+JavaScript是函数式语言，函数可以实现类，类就是面向对象编程中最基本的概念
+
+复制代码
+var aQuery = function(selector, context) {
+        //构造函数
+}
+aQuery.prototype = {
+    //原型
+    name:function(){},
+    age:function(){}
+}
+
+var a = new aQuery();
+
+a.name();
+
+
+
+var aQuery = function(selector, context) {
+   return  aQuery.prototype.init();
+}
+aQuery.prototype = {
+    init:function(){
+        return this;
     }
-}</code></pre><p>###配置验证方式的用户名与密码<br>    vi /etc/strongswan/ipsec.secrets</p>
-<pre><code>#使用证书验证时的服务器端私钥
-#格式 : RSA &lt;private key file&gt; [ &lt;passphrase&gt; | %prompt ]
-: RSA server.key.pem
-
-#使用预设加密密钥, 越长越好
-#格式 [ &lt;id selectors&gt; ] : PSK &lt;secret&gt;
-%any : PSK &quot;预设加密密钥&quot;
+    name:function(){},
+    age:function(){}
+}
 
 
-#EAP 方式, 格式同 psk 相同
-用户名 : EAP &quot;密码&quot;
 
-#XAUTH 方式, 只适用于 IKEv1
-#格式 [ &lt;servername&gt; ] &lt;username&gt; : XAUTH &quot;&lt;password&gt;&quot;
-用户名 : XAUTH &quot;密码&quot;</code></pre><p>###开启内核转发</p>
-<pre><code>vi /etc/sysctl.conf
+A = n.fn.init = function(a, b) {
+        var c, d;
+        if (!a) return this;
+        if (&quot;string&quot; == typeof a) {
+            if (c = &quot;&lt;&quot; === a[0] &amp;&amp; &quot;&gt;&quot; === a[a.length - 1] &amp;&amp; a.length &gt;= 3 ? [null, a, null] : z.exec(a), !c || !c[1] &amp;&amp; b) return ! b || b.jquery ? (b || y).find(a) : this.constructor(b).find(a);
+            if (c[1]) {
+                if (b = b instanceof n ? b[0] : b, n.merge(this, n.parseHTML(c[1], b &amp;&amp; b.nodeType ? b.ownerDocument || b: l, !0)), v.test(c[1]) &amp;&amp; n.isPlainObject(b)) for (c in b) n.isFunction(this[c]) ? this[c](b[c]) : this.attr(c, b[c]);
+                return this
+            }
+            return d = l.getElementById(c[2]),
+            d &amp;&amp; d.parentNode &amp;&amp; (this.length = 1, this[0] = d),
+            this.context = l,
+            this.selector = a,
+            this
+        }
+        return a.nodeType ? (this.context = this[0] = a, this.length = 1, this) : n.isFunction(a) ? &quot;undefined&quot; != typeof y.ready ? y.ready(a) : a(n) : (void 0 !== a.selector &amp;&amp; (this.selector = a.selector, this.context = a.context), n.makeArray(a, this))
+    };
+A.prototype = n.fn,</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
 
-# VPN
-net.ipv4.ip_forward = 1
-net.ipv6.conf.all.forwarding=1
-保存退出, 执行下面命令.
+    
 
-sysctl -p</code></pre><p>###配置防火墙</p>
-<pre><code>centos7下iptables问题
-yum install iptables-services -y
-http://stackoverflow.com/questions/24756240/how-can-i-use-iptables-on-centos-7
+    
 
-vi /etc/sysconfig/iptables
-*nat
--A POSTROUTING -s 10.11.0.0/24  -j MASQUERADE
--A POSTROUTING -s 10.11.1.0/24  -j MASQUERADE
--A POSTROUTING -s 10.11.2.0/24  -j MASQUERADE
+    
 
-*filter
--A INPUT -i eth0 -p esp -j ACCEPT
--A INPUT -i eth0 -p udp -m udp --dport 500 -j ACCEPT
--A INPUT -i eth0 -p tcp -m tcp --dport 500 -j ACCEPT
--A INPUT -i eth0 -p udp -m udp --dport 4500 -j ACCEPT
--A INPUT -i eth0 -p udp -m udp --dport 1701 -j ACCEPT
--A INPUT -i eth0 -p tcp -m tcp --dport 1723 -j ACCEPT
+    <footer class="post-footer">
+      
 
--A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
--A FORWARD -s 10.11.0.0/24 -j ACCEPT
--A FORWARD -s 10.11.1.0/24 -j ACCEPT
--A FORWARD -s 10.11.2.0/24 -j ACCEPT
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
 
 
-systemctl restart iptables</code></pre><p>###配置完防火墙后重启 strongswan 服务</p>
-<pre><code>strongswan stop #使用strongswan 自身的命令停止服务
-systemctl start strongswan #使用 systemctl 命令启动服务</code></pre><p>###客户端配置</p>
-<pre><code>IOS:
+    
+      
 
-先导入 CA 证书
+  
 
-将之前创建的 ca.cert.pem 用 ftp 导出 , 写邮件以附件的方式发到邮箱, 在 ios 浏览器登录邮箱, 下载附件, 安装 ca 证书.</code></pre><p><a href="https://blog.itnmg.net/centos7-ipsec-vpn/" target="_blank" rel="noopener">https://blog.itnmg.net/centos7-ipsec-vpn/</a></p>
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/05/2016-12-5-ecshop/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/12/05/2016-12-5-ecshop/" itemprop="url">ecShop架构分析</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-05T00:00:00+08:00">
+                2016-12-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>##ecShop架构分析</p>
+<p>###数据库设计</p>
+<pre><code>ecs_order_action 对订单操作日志表
+    action_id mediumint 流水号
+    order_id mediumint 被操作的交易号
+    action_user varchar 操作该次的人员
+    order_status tinyint 作何操作.0，未确认；1，已确 认；2，已取消；3，无效；4，退货；
+    shipping_status tinyint 发货状态。0，未发货；1， 已发货；2，已收货；3，备货中
+    pay_status tinyint 支付状态.0,未付款;1,付款中;2, 已付款;
+    action_note varchar 操作备注
+    log_time int 操作时间
+
+ecs_order_goods 订单的商品信息，注：订单的 商品信息基本都是从购物车所对应的
+    rec_id mediumint 订单商品信息自增id
+    order_id mediumint 订单商品信息对应的详细信息id， 取值order_info的order_id
+    goods_id mediumint 商品的的id，取值表ecs_goods 的 goods_id
+    goods_name varchar 商品的名称，取值表ecs_goods
+    goods_sn varchar 商品的唯一货号，取值ecs_goods
+    goods_number smallint 商品的购买数量
+    market_price decimal 商品的市场售价，取值ecs_goods
+    goods_price decimal 商品的本店售价，取值ecs_goods
+    goods_attr text 购买该商品时所选择的属性；
+    send_number smallint 当不是实物时，是否已发货，0 ，否；1，是
+    is_real tinyint 是否是实物，0，否；1，是；取值 ecs_goods
+    extension_code varchar 商品的扩展属性，比如像虚拟卡。取值ecs_goods
+    parent_id mediumint 父商品id，取值于ecs_cart的 parent_id；如果有该值则是值多代表的物品的配件
+    is_gift smallint 是否参加优惠活动，0，否；其他， 取值于ecs_cart 的is_gift，跟其一样，是参加的优惠活动的id
+
+ecs_order_info 订单的配送，贺卡等详细信息
+    order_id mediumint 订单详细信息自增id
+    order_sn varchar 订单号，唯一
+    user_id mediumint 用户id，同ecs_users的user_id
+    order_status tinyint 订单状态。0，未确认；1，已确 认；2，已取消；3，无效；4，退货；
+    shipping_status tinyint 商品配送情况，0，未发货； 1，已发货；2，已收货；3，备货中
+    pay_status tinyint 支付状态；0，未付款；1，付款中 ；2，已付款
+    consignee varchar 收货人的姓名，用户页面填写，默认取值于表 user_address
+    country smallint 收货人的国家，用户页面填写，默认 取值于表user_address，其id对应的值在ecs_region
+    province smallint 收货人的省份，用户页面填写，默 认取值于表user_address，其id对应的值在ecs_region
+    city smallint 收货人的城市，用户页面填写，默认取 值于表user_address，其id对应的值在ecs_region
+    district smallint 收货人的地区，用户页面填写，默 认取值于表user_address，其id对应的值在ecs_region
+    address varchar 收货人的详细地址，用户页面填写，默认取值于表 user_address
+    zipcode varchar 收货人的邮编，用户页面填写，默认取值于表 user_address
+    tel varchar 收货人的电话，用户页面填写，默认取值于表user_address
+    mobile varchar 收货人的手机，用户页面填写，默认取值于表user_address
+    email varchar 收货人的手机，用户页面填写，默认取值于表user_address
+    best_time varchar 收货人的最佳送货时间，用户页面填写，默认取值于表 user_address
+    sign_building varchar 收货人的地址的标志性建筑，用户页面填写，默认取 值于表user_address
+    postscript varchar 订单附言，由用户提交订单前填写
+    shipping_id tinyint 用户选择的配送方式id，取值表 ecs_shipping
+    shipping_name varchar 用户选择的配送方式的名称，取值表ecs_shipping
+    pay_id tinyint 用户选择的支付方式的id，取值表ecs_payment
+    pay_name varchar 用户选择的支付方式的名称，取值表ecs_payment
+    how_oos varchar 缺货处理方式，等待所有商品备齐后再发； 取消订单；与 店主协商
+    how_surplus varchar 根据字段猜测应该是余额处理方式，程序未作这部分实 现
+    pack_name varchar 包装名称，取值表ecs_pack
+    card_name varchar 贺卡的名称，取值ecs_card
+    card_message varchar 贺卡内容，由用户提交
+    inv_payee varchar 发票抬头，用户页面填写
+    inv_content varchar 发票内容，用户页面选择，取值ecs_shop_config的 code字段的值为invoice_content的value
+    goods_amount decimal 商品总金额
+    shipping_fee decimal 配送费用
+    insure_fee decimal 保价费用
+    pay_fee decimal 支付费用,跟支付方式的配置相关，取值 表ecs_payment
+    pack_fee decimal 包装费用，取值表取值表ecs_pack
+    card_fee decimal 贺卡费用，取值ecs_card
+    money_paid decimal 已付款金额
+    surplus decimal 该订单使用余额的数量，取用户设定余额 ，用户可用余额，订单金额中最小者
+    integral int 使用的积分的数量，取用户使用积分， 商品可用积分，用户拥有积分中最小者
+    integral_money decimal 使用积分金额
+    bonus decimal 使用红包金额
+    order_amount decimal 应付款金额
+    from_ad smallint 订单由某广告带来的广告id，应该取值于 ecs_ad
+    referer varchar 订单的来源页面
+    add_time int 订单生成时间
+    confirm_time int 订单确认时间
+    pay_time int 订单支付时间
+    shipping_time int 订单配送时间
+    pack_id tinyint 包装id，取值取值表ecs_pack
+    card_id tinyint 贺卡id，用户在页面选择，取值取值 ecs_card
+    bonus_id smallint 红包的id，ecs_user_bonus的 bonus_id
+    invoice_no varchar 发货单号，发货时填写，可在订单查询查看
+    extension_code varchar 通过活动购买的商品的代号；GROUP_BUY是团购； AUCTION，是拍卖；SNATCH，夺宝奇兵；正常普通产品该处为空
+    extension_id mediumint 通过活动购买的物品的id，取 值ecs_goods_activity；如果是正常普通商品，该处为0
+    to_buyer varchar 商家给客户的留言,当该字段有值时可以在订单查询看到
+    pay_note varchar 付款备注，在订单管理里编辑修改
+    agency_id smallint 该笔订单被指派给的办事处的id，根据订单内容 和办事处负责范围自动决定，也可以有管理员修改，取值于表ecs_agency
+    inv_type varchar 发票类型，用户页面选择，取值ecs_shop_config的code字 段的值为invoice_type的value
+    tax decimal 发票税额
+    is_separate tinyint 0，未分成或等待分成；1，已分成；2，取 消分成；
+    parent_id mediumint 能获得推荐分成的用户id，id取 值于表ecs_users
+    discount decimal 折扣金额</code></pre><p><a href="http://www.ecshoptemplate.com/ecshop-mysql.html" target="_blank" rel="noopener">http://www.ecshoptemplate.com/ecshop-mysql.html</a></p>
+<p>###订单业务逻辑</p>
 
           
         
@@ -1452,7 +1667,7 @@ systemctl start strongswan #使用 systemctl 命令启动服务</code></pre><p>#
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2016-9-12-pptp%20vpn/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/05/2016-12-5-session/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -1471,7 +1686,7 @@ systemctl start strongswan #使用 systemctl 命令启动服务</code></pre><p>#
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2016-9-12-pptp%20vpn/" itemprop="url">centos安装搭建pptp vpn服务</a></h1>
+                <a class="post-title-link" href="/2016/12/05/2016-12-5-session/" itemprop="url">web_session</a></h1>
         
 
         <div class="post-meta">
@@ -1483,8 +1698,8 @@ systemctl start strongswan #使用 systemctl 命令启动服务</code></pre><p>#
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-05T00:00:00+08:00">
+                2016-12-05
               </time>
             
 
@@ -1523,166 +1738,14 @@ systemctl start strongswan #使用 systemctl 命令启动服务</code></pre><p>#
       
         
           
-            <p>##centos安装搭建pptp vpn服务</p>
-<p>###检测是否符合pptp的搭建环境的要求<br>    modprobe ppp-compress-18 &amp;&amp; echo ok</p>
-<p>###安装ppp和iptables<br>    yum install -y perl ppp iptables<br>###安装pptpd<br>    yum install pptpd<br>###修改配置文件</p>
-<pre><code>1.
-
-cp /etc/ppp/options.pptpd /etc/ppp/options.pptpd.bak
-vi /etc/ppp/options.pptpd
-add
-ms-dns 8.8.8.8
-ms-dns 8.8.4.4
-
-
-2.
-
-cp /etc/ppp/chap-secrets   /etc/ppp/chap-secrets.bak
-vi /etc/ppp/chap-secrets
-add
-myusername pptpd mypassword *
-
-//myusername是你的vpn帐号，mypassword是你的vpn的密码，*表示对任何ip
-
-
-3.
-
-cp /etc/pptpd.conf     /etc/pptpd.conf.bak
-vi /etc/pptpd.conf
-add
-localip 192.168.9.1
-remoteip 192.168.9.11-30 //表示vpn客户端获得ip的范围
-
-4.
-
-vi /etc/sysctl.conf
-net.ipv4.ip_forward = 1
-保存修改后的文件
-/sbin/sysctl -p</code></pre><p>###启动pptp vpn服务和iptables<br>    /sbin/service pptpd start<br>###添加iptables转发规则<br>    /sbin/service iptables start<br>    /sbin/iptables -t nat -A POSTROUTING    -s 192.168.9.0/24 -j SNAT –to-source 207.210.83.140<br>    207.210.83.140替换成你的vps的公网ip地址<br>    /sbin/service iptables save<br>    /sbin/service iptables restart<br>###重启pptp vpn<br>    /sbin/service pptpd restart</p>
-<p><a href="http://www.dabu.info/centos6-4-structures-pptp-vpn.html" target="_blank" rel="noopener">http://www.dabu.info/centos6-4-structures-pptp-vpn.html</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2016-5-23-mono_alipay/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2016-5-23-mono_alipay/" itemprop="url">mono problem with 阿里支付load私钥</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##mono problem with 阿里支付load私钥</p>
-<p>Could not create machine key store ‘/usr/share/.mono/keypairs’</p>
-<p>解决方法</p>
-<p>创建该路径</p>
+            <p>##session and cookie</p>
+<p>用户使用http协议访问web页面时，大部分时间是在浏览网页，所以这个连接在大部分时候是空闲的，所以采用短连接策略，减少连接资源的浪费。</p>
+<p>即使http1.1默认长连接，但http还是具有无状态特性，发展出cookie和session来保存状态即一些数据。</p>
+<p>cookie和session，二者都能记录状态，前者是将状态数据保存在客户端，后者则保存在服务端。</p>
+<p>cookie:无论使用何种服务端技术，只要发送回的HTTP响应中包含如下形式的头，则视为服务器要求设置一个cookie：<br>Set-cookie:name=name;expires=date;path=path;domain=domain</p>
+<p>session:服务器保持数据在内存或硬盘，通过生成唯一的sessionid来标识session，这个sessionid可以通过1.cookie或者2.在请求的url上都带上sessionid参数即url重写。</p>
+<p>如果cookie被浏览器禁止，url重写是个好策略。</p>
+<p><a href="http://www.cnblogs.com/shoru/archive/2010/02/19/1669395.html" target="_blank" rel="noopener">http://www.cnblogs.com/shoru/archive/2010/02/19/1669395.html</a></p>
 
           
         
@@ -1768,7 +1831,7 @@ net.ipv4.ip_forward = 1
               
                 <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">273</span>
+                  <span class="site-state-item-count">271</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

@@ -229,7 +229,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2015-9-16-gitCommand/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/12/16/2015-12-16-apprefine/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -248,7 +248,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2015-9-16-gitCommand/" itemprop="url">git command</a></h1>
+                <a class="post-title-link" href="/2015/12/16/2015-12-16-apprefine/" itemprop="url">2015-12-16-apprefine</a></h1>
         
 
         <div class="post-meta">
@@ -260,8 +260,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-12-16T00:00:00+08:00">
+                2015-12-16
               </time>
             
 
@@ -300,176 +300,10 @@
       
         
           
-            <h2 id="常用git命令"><a href="#常用git命令" class="headerlink" title="常用git命令"></a>常用git命令</h2><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/git.jpeg" alt="">  </p>
-<h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><p>工作区 add 到 stage区，再commit到分支</p>
-<h3 id="本地代码库回滚"><a href="#本地代码库回滚" class="headerlink" title="本地代码库回滚"></a>本地代码库回滚</h3><pre><code>git reset --hard  xxx</code></pre><h3 id="放弃工作区文件修改"><a href="#放弃工作区文件修改" class="headerlink" title="放弃工作区文件修改"></a>放弃工作区文件修改</h3><p>让文件回到最近一次git commit或git add时的状态，checkout出本地版本库里的文件</p>
-<pre><code>git checkout -- file</code></pre><h3 id="放弃暂存区文件修改"><a href="#放弃暂存区文件修改" class="headerlink" title="放弃暂存区文件修改"></a>放弃暂存区文件修改</h3><p>把暂存区（stage）的文件修改撤销</p>
-<pre><code>git reset HEAD file</code></pre><h3 id="关联远程库"><a href="#关联远程库" class="headerlink" title="关联远程库"></a>关联远程库</h3><pre><code>get remote add origin git@github.com:xxx/xxx.git</code></pre><h3 id="本地库推送到远程库"><a href="#本地库推送到远程库" class="headerlink" title="本地库推送到远程库"></a>本地库推送到远程库</h3><pre><code>git push -u origin master</code></pre><h3 id="从远程库clone"><a href="#从远程库clone" class="headerlink" title="从远程库clone"></a>从远程库clone</h3><pre><code>git clone git@github.com:xxx/xxx.git</code></pre><h3 id="分支管理"><a href="#分支管理" class="headerlink" title="分支管理"></a>分支管理</h3><p>我们创建dev分支，然后切换到dev分支</p>
-<pre><code>git checkout -b dev</code></pre><p>git checkout命令加上-b参数表示创建并切换，相当于以下两条命令：</p>
-<pre><code>git branch dev
-git checkout dev</code></pre><p>合并某分支到当前分支</p>
-<pre><code>git merge &lt;name&gt;</code></pre><p>删除分支</p>
-<pre><code>git branch -d &lt;name&gt;</code></pre><h3 id="冲突"><a href="#冲突" class="headerlink" title="冲突"></a>冲突</h3><p>代码库中的文件完全覆盖本地工作版本. </p>
-<pre><code>git reset --hard
-
-git pull</code></pre><p>如果希望保留生产服务器上所做的改动,仅仅并入新配置项, 处理方法如下:</p>
-<pre><code>git stash
-
-git pull
-
-git stash pop</code></pre><p>然后可以使用git diff -w +文件名 来确认代码自动合并的情况.</p>
-<h3 id="标签"><a href="#标签" class="headerlink" title="标签"></a>标签</h3><p>命令git tag <name>用于新建一个标签，默认为HEAD，也可以指定一个commit id；</p>
-<p>git tag -a <tagname> -m “blablabla…”可以指定标签信息；</p>
-<p>git tag -s <tagname> -m “blablabla…”可以用PGP签名标签；</p>
-<p>命令git tag可以查看所有标签。</p>
-<p>命令git push origin <tagname>可以推送一个本地标签；</p>
-<p>命令git push origin –tags可以推送全部未推送过的本地标签；</p>
-<p>命令git tag -d <tagname>可以删除一个本地标签；</p>
-<p>命令git push origin :refs/tags/<tagname>可以删除一个远程标签。</p>
-<pre><code>命令    作用域    常用情景
-git reset    提交层面    在私有分支上舍弃一些没有提交的更改
-
-git reset    文件层面    将文件从缓存区中移除
-
-git checkout    提交层面    切换分支或查看旧版本
-
-git checkout    文件层面    舍弃工作目录中的更改
-
-git revert    提交层面    在公共分支上回滚更改
-
-git revert    文件层面    （然而并没有）
-
-git push origin test:master         // 提交本地test分支作为远程的master分支 //好像只写这一句，远程的github就会自动创建一个test分支</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2015-9-16-color/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2015-9-16-color/" itemprop="url">color</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##极简色彩学</p>
-<p>三种原色，红、黄、蓝，两两组合成三种间色，原色与间色组合成六中复色。</p>
-<p>三种原色、三种间色和六种复色组成的系统就统称为十二色环（colorwheel），也是学习色彩搭配的基础。</p>
-<p>###搭配<br>单色搭配</p>
-<p>补色搭配</p>
-<p>分散互补色搭配</p>
-<p>类似色搭配</p>
-<p>三角对立配色</p>
-<p>###调色三要素</p>
-<p>色相</p>
-<p>饱和度</p>
-<p>明度</p>
+            <p>##怎样让自己的app看上去更专业</p>
+<p>###细节</p>
+<p>1.字体</p>
+<p>2.颜色</p>
 
           
         
@@ -518,7 +352,7 @@ git push origin test:master         // 提交本地test分支作为远程的mast
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2015-9-10-openfire/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/12/15/2015-12-15-sql-case/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -537,7 +371,7 @@ git push origin test:master         // 提交本地test分支作为远程的mast
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2015-9-10-openfire/" itemprop="url">openfire</a></h1>
+                <a class="post-title-link" href="/2015/12/15/2015-12-15-sql-case/" itemprop="url">sql case</a></h1>
         
 
         <div class="post-meta">
@@ -549,8 +383,8 @@ git push origin test:master         // 提交本地test分支作为远程的mast
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-12-15T00:00:00+08:00">
+                2015-12-15
               </time>
             
 
@@ -589,11 +423,171 @@ git push origin test:master         // 提交本地test分支作为远程的mast
       
         
           
-            <p>##openfire</p>
-<p>create database</p>
-<p>config openfire</p>
-<p>add plugin Monitoring Service for save history</p>
-<p><a href="http://www.cnblogs.com/dsxniubility/p/4304570.html" target="_blank" rel="noopener">reference</a>.</p>
+            <p>##sql case语句</p>
+<pre><code>(a.Orderer = {1} or case  when a.Visibility &gt; 2  then ( ISNULL({0}) or (a.Visibility &amp; {0})&gt;0 )
+  else  (a.Visibility &amp; {0})&gt;0 end )
+
+
+  case when distance &lt; 5 then 0 when distance &lt; 10  then 1 when distance &lt; 20  then 2 &quot; +
+              &quot; else  3 end, </code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/12/03/2015-12-3-ios-property/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2015/12/03/2015-12-3-ios-property/" itemprop="url">ios property</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-12-03T00:00:00+08:00">
+                2015-12-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>##ios-@property</p>
+<p>1.</p>
+<pre><code>@interface Car : NSObject
+
+@property BOOL running;
+
+@end
+
+编译器翻译成
+
+
+- (BOOL)running {
+    return _reunning;
+}
+
+- (void)setRunning:(BOOL)newValue {
+    _running = newValue;
+}
+ setter和getter方法</code></pre><p>1.1</p>
+<pre><code>getter= 跟 setter=     
+改变默认getter、setter方法名
+@property (getter=isRunning) BOOL running;
+
+Car *honda = [[Car alloc] init];
+honda.running = YES; // [honda setRunning: YES]
+NSLog(@&quot;%d&quot;, honda.running); // [honda isRunning]
+NSLog(@&quot;%d&quot;, [honda running]); // Error: method no longer exists</code></pre><p>1.2 </p>
+<pre><code>readonly 只读</code></pre><p>1.3</p>
+<pre><code>nonatomic
+
+property默认是线程安全，属性是原子性的</code></pre><p>1.4</p>
+<pre><code>strong
+
+强引用，循环引用会无法释放对象</code></pre><p>1.5</p>
+<pre><code>weak
+
+弱引用，父对象销毁，子对象指向父对象的指针置为0</code></pre><p>1.6</p>
+<pre><code>copy
+
+创建被分配的值的拷贝，而不是直接引用原对象</code></pre><p><a href="">http://www.pandara.xyz/2015/10/09/objc_property/</a></p>
 
           
         
@@ -642,7 +636,7 @@ git push origin test:master         // 提交本地test分支作为远程的mast
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2015-7-2-oc_note/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/10/23/2015-10-23-javascript/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -661,7 +655,7 @@ git push origin test:master         // 提交本地test分支作为远程的mast
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2015-7-2-oc_note/" itemprop="url">object c备忘</a></h1>
+                <a class="post-title-link" href="/2015/10/23/2015-10-23-javascript/" itemprop="url">javascript笔记</a></h1>
         
 
         <div class="post-meta">
@@ -673,8 +667,8 @@ git push origin test:master         // 提交本地test分支作为远程的mast
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-10-23T00:00:00+08:00">
+                2015-10-23
               </time>
             
 
@@ -713,814 +707,1010 @@ git push origin test:master         // 提交本地test分支作为远程的mast
       
         
           
-            <p>##object c</p>
-<ol>
-<li>@property内存管理策略的选择</li>
-</ol>
-<p>1.1非ARC</p>
-<p>1.1.1 copy : 只用于NSString、block；</p>
-<p>1.1.2 retain : 除NSString、block以外的OC对象；指针复制</p>
-<p>1.1.3 assign : 基本数据类型、枚举、结构体（非OC对象），当2个对象相互引用，一端用retain，一端用assign</p>
-<p>1.2.ARC</p>
-<p>1.2.1 copy : 只用于NSString、block；</p>
-<p>1.2.2 strong : 除NSString、block以外的OC对象；</p>
-<p>1.2.3 weak : 当2个对象相互引用，一端用strong，一端用weak；</p>
-<p>1.2.4 assgin : 基本数据类型、枚举、结构体（非OC对象）</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2015-7-16-ios_MVC/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2015-7-16-ios_MVC/" itemprop="url">ios MVC MVVM</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h2><p>model -&gt; controller kvo, notification</p>
-<p>view -&gt; controller action, delegate</p>
-<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/MVCPattern.png" alt=""></p>
-<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/MVVM.png" alt=""></p>
-<p>viewmodel代替MVC中model的位置</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2015-7-2-newsfeed/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2015-7-2-newsfeed/" itemprop="url">社交网络的feed系统</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##newsfeed</p>
-<p><a href="https://github.com/tschellenbach/Stream-Framework" target="_blank" rel="noopener">https://github.com/tschellenbach/Stream-Framework</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2015-7-10-ios_message/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2015-7-10-ios_message/" itemprop="url">ios 消息机制</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##ios 消息机制</p>
-<p>KVO、Notification、delegation、block以及target-action</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2015-6-5-cgi/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2015-6-5-cgi/" itemprop="url">cgi与web服务器与web应用</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##cgi</p>
-<p>common gateway interface</p>
-<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/cgi.png" alt=""></p>
-<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191017105915972.png" alt="image-20191017105915972"></p>
-<p>cgi作为一个中间分子，桥梁web server和php，但是每次连接都会fork一个进程，Fork-and-execute</p>
-<h3 id="fastcgi"><a href="#fastcgi" class="headerlink" title="fastcgi"></a>fastcgi</h3><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191017151702929.png" alt="image-20191017151702929"></p>
-<ol>
-<li>Web Server启动时载入FastCGI进程管理器（Apache Module或IIS ISAPI等)</li>
-<li>FastCGI进程管理器自身初始化，启动多个CGI解释器进程(可建多个php-cgi)，并等待来自Web Server的连接。</li>
-<li>当客户端请求到达Web Server时，FastCGI进程管理器选择并连接到一个CGI解释器。Web server将CGI环境变量和标准输入发送到FastCGI子进程php-cgi。</li>
-<li>FastCGI子进程完成处理后，将标准输出和错误信息从同一连接返回Web Server。当FastCGI子进程关闭连接时，请求便告处理完成。FastCGI子进程接着等待，并处理来自FastCGI进程管理器(运行在Web Server中)的下一个连接。 在CGI模式中，php-cgi在此便退出了。</li>
-</ol>
-<h3 id="php-fpm"><a href="#php-fpm" class="headerlink" title="php-fpm"></a>php-fpm</h3><p>PHP-CGI是PHP实现FastCGI协议的程序</p>
-<p>PHP-FPM 是对于 FastCGI 协议的具体实现，他负责管理一个进程池，来处理来自Web服务器的请求。</p>
-<p>因为PHP-CGI只是个CGI程序，他自己本身只能解析请求，返回结果，不会进程管理。所以就出现了一些能够调度 php-cgi 进程的程序，比如说由lighthttpd分离出来的spawn-fcgi。同样，PHP-FPM也是用于调度管理PHP解析器php-cgi的管理程序。</p>
-<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191017152416580.png" alt="image-20191017152416580"></p>
-<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><p><a href="https://mengkang.net/668.html" target="_blank" rel="noopener">https://mengkang.net/668.html</a></p>
-<p><a href="https://www.awaimai.com/371.html" target="_blank" rel="noopener">https://www.awaimai.com/371.html</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2015-6-19-dto/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2015-6-19-dto/" itemprop="url">dto</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##dto</p>
-<p>data transfer object</p>
-<p><a href="http://www.cnblogs.com/loveis715/p/4379656.html" target="_blank" rel="noopener">http://www.cnblogs.com/loveis715/p/4379656.html</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2015-4-16-interview/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2015-4-16-interview/" itemprop="url">面试题</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##面试题</p>
-<p>1.题目：输入一棵二元查找树，将该二元查找树转换成一个排序的双向链表。要求不能创建任何新的结点，只调整指针的指向。</p>
-<p>2.题目：求1+2+…+n，要求不能使用乘除法、for、while、if、else、switch、case等关键字以及条件判断语句（A?B:C）。</p>
-<p>3.题目：输入一个单向链表，输出该链表中倒数第k个结点。链表的倒数第0个结点为链表的尾指针。</p>
-<p>4.题目：输入一个已经按升序排序过的数组和一个数字，在数组中查找两个数，使得它们的和正好是输入的那个数字。要求时间复杂度是O(n)。如果有多对数字的和等于输入的数字，输出任意一对即可。</p>
-<p>例如输入数组1、2、4、7、11、15和数字15。由于4+11=15，因此输出4和11。</p>
-<p>5.题目：在一个字符串中找到第一个只出现一次的字符。如输入abaccdeff，则输出b。</p>
-<p>6.题目：n个数字（0,1,…,n-1）形成一个圆圈，从数字0开始，每次从这个圆圈中删除第m个数字（第一个为当前数字本身，第二个为当前数字的下一个数字）。当一个数字删除后，从被删除数字的下一个继续删除第m个数字。求出在这个圆圈中剩下的最后一个数字。</p>
-<p>7.题目：定义Fibonacci数列如下：</p>
-<pre><code>        /  0                      n=0
-f(n)=      1                      n=1
-        \  f(n-1)+f(n-2)          n=2</code></pre><p>输入n，用最快的方法求该数列的第n项。</p>
-<p>8.题目：输入一个字符串，打印出该字符串中字符的所有排列。例如输入字符串abc，则输出由字符a、b、c所能排列出来的所有字符串abc、acb、bac、bca、cab和cba。</p>
-<p>扩展1：如果不是求字符的所有排列，而是求字符的所有组合，应该怎么办呢？当输入的字符串中含有相同的字符串时，相同的字符交换位置是不同的排列，但是同一个组合。举个例子，如果输入abc，它的组合有a、b、c、ab、ac、bc、abc。</p>
-<p>扩展2：输入一个含有8个数字的数组，判断有没有可能把这8个数字分别放到正方体的8个顶点上，使得正方体上三组相对的面上的4个顶点的和相等。</p>
-<p>9.题目：输入一棵二元树的根结点，求该树的深度。从根结点到叶结点依次经过的结点（含根、叶结点）形成树的一条路径，最长路径的长度为树的深度。</p>
-<p>10.题目：输入一个正数n，输出所有和为n连续正数序列。(O(logn))</p>
-<p>例如输入15，由于1+2+3+4+5=4+5+6=7+8=15，所以输出3个连续序列1-5、4-6和7-8。</p>
-<p>11.题目：输入一个整数n，求从1到n这n个整数的十进制表示中1出现的次数。</p>
-<p>例如输入12，从1到12这些整数中包含1 的数字有1，10，11和12，1一共出现了5次。</p>
-<p>12.题目：输入一个正整数数组，将它们连接起来排成一个数，输出能排出的所有数字中最小的一个。例如输入数组{32,  321}，则输出这两个能排成的最小数字32132。请给出解决问题的算法，并证明该算法。</p>
-<p>13.题目：输入两个字符串，从第一字符串中删除第二个字符串中所有的字符。例如，输入”They are students.”和”aeiou”，则删除之后的第一个字符串变成”Thy r stdnts.”。</p>
-<p>14.题目：输入一个字符串，输出该字符串中对称的子字符串的最大长度。比如输入字符串“google”，由于该字符串里最长的对称子字符串是“goog”，因此输出4。</p>
-<p>15.题目：数组中有一个数字出现的次数超过了数组长度的一半，找出这个数字。</p>
-<p>16.题目：二叉树的结点定义如下：</p>
-<pre><code>struct TreeNode
+            <p>##javascript笔记</p>
+<p>简单的脚本语言</p>
+<p>###对象</p>
+<p><a href="http://www.cnblogs.com/dolphinX/p/3286177.html" target="_blank" rel="noopener">http://www.cnblogs.com/dolphinX/p/3286177.html</a></p>
+<p>JavaScript 是面向对象的语言，但 JavaScript 不使用类。</p>
+<p>在 JavaScript 中，不会创建类，也不会通过类来创建对象（就像在其他面向对象的语言中那样）。</p>
+<p>JavaScript 基于 prototype，而不是基于类的。</p>
+<p>每个函数都有一个prototype属性，这个属性是指向一个对象的引用，这个对象称为原型对象，原型对象包含函数实例共享的方法和属性，也就是说将函数用作构造函数调用（使用new操作符调用）的时候，新创建的对象会从原型对象上继承属性和方法。</p>
+<p>创建对象</p>
+<pre><code>1.
+创建直接的实例
+这个例子创建了对象的一个新实例，并向其添加了四个属性：
+实例
+person=new Object();
+person.firstname=&quot;Bill&quot;;
+person.lastname=&quot;Gates&quot;;
+person.age=56;
+person.eyecolor=&quot;blue&quot;;
+
+2.
+使用对象构造器
+本例使用函数来构造对象：
+实例
+function person(firstname,lastname,age,eyecolor)
 {
-    int m_nvalue;
-    TreeNode* m_pLeft;
-    TreeNode* m_pRight;
-};</code></pre><p>输入二叉树中的两个结点，输出这两个结点在数中最低的共同父结点。</p>
-<hr>
-<p>1.1 中序遍历，保存节点，遍历节点改变指针指向</p>
-<p>1.2 边遍历边调整指针指向</p>
-<p>2.1.构造函数</p>
-<p>2.2.递归，0的时候如何返回是难点</p>
-<p>3.双指针</p>
-<p>4.数组两边向中间靠拢</p>
-<p>5.哈希</p>
-<p>6.递归</p>
-<p>7.有个logn的算法</p>
-<p>8.全排列，利于对递归的理解</p>
-<p>9.递归</p>
-<p>10.</p>
-<p>11.计算各个位置为1的个数</p>
-<p>12.因为ab&lt;ba所以a排在b前面 a&lt;b, 证明a&lt;b b&lt;c =&gt; a&lt;c</p>
-<p>13.删除有技巧</p>
-<p>14.O(n2)</p>
-<p>15.O(n)</p>
-<p>16.1 递归</p>
-<p>16.2 两个链表的交叉点</p>
+this.firstname=firstname;
+this.lastname=lastname;
+this.age=age;
+this.eyecolor=eyecolor;
+}
+var myFather=new person(&quot;Bill&quot;,&quot;Gates&quot;,56,&quot;blue&quot;);</code></pre><p>私有变量、函数</p>
+<pre><code>function Obj(){
+                var a=0; //私有变量
+                var fn=function(){ //私有函数
+
+                }
+            }</code></pre><p>静态变量、函数</p>
+<pre><code>function Obj(){
+
+            }
+
+            Obj.a=0; //静态变量
+
+            Obj.fn=function(){ //静态函数
+
+            }</code></pre><p>实例变量、函数</p>
+<pre><code>function Obj(){
+                this.a=[]; //实例变量
+                this.fn=function(){ //实例方法
+
+                }
+            }</code></pre><p>如果函数里有定义函数，不同实例，会有多个相同函数，但多个函数内容都是一样的，应只保留一个函数，引入prototype。prototype维护一个函数列表，函数里有prototype属性指向这个prototype。有点像C++里的虚函数概念，类里面有虚函数指针指向虚函数表，表里都是虚函数地址。</p>
+<p>###prototype</p>
+<p><a href="http://www.cnblogs.com/dolphinX/p/3286177.html" target="_blank" rel="noopener">http://www.cnblogs.com/dolphinX/p/3286177.html</a></p>
+<p>无论什么时候，只要创建了一个新函数，就会根据一组特定的规则为该函数创建一个prototype属性，prototype里有一个构造函数constructor，指向的是该函数。</p>
+<p>如果新建一个实例，实例会生成一个<strong>proto</strong>属性，指向的是函数的prototype.</p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/javascript-prototype.png" alt=""></p>
+<p>###this</p>
+<p>1.作为函数调用，this指全局对象</p>
+<pre><code>var x = 1;
+function test(){
+　　　　alert(this.x);
+　　}
+test(); // 1</code></pre><p>　　</p>
+<p>2.作为对象方法的调用，this指对象</p>
+<pre><code>　function test(){
+　　　　alert(this.x);
+　　}
+　　var o = {};
+　　o.x = 1;
+　　o.m = test;
+　　o.m(); // 1</code></pre><p>　　<br>3.作为构造函数调用</p>
+<pre><code>　　function test(){
+　　　　this.x = 1;
+　　}
+　　var o = new test();
+　　alert(o.x); // 1</code></pre><p>###双向绑定</p>
+<pre><code>双向数据绑定指的是将对象属性变化绑定到UI</code></pre><p>####双向绑定实现<br>#####观察者设计模式</p>
+<p>订阅者在发布者那里注册回调函数，当发布者发生变化，则调用这些函数</p>
+<pre><code>function PubSub(){  
+    var pubSub = {
+        callbacks: {},
+        on: function(msg,callback) {
+            this.callbacks[msg] = this.callbacks[msg] || [];
+            this.callbacks[msg].push(callback);
+        },
+        publish: function(msg) {
+            this.callbacks[msg] = this.callbacks[msg] || [];
+            for (var i = 0,len = this.callbacks[msg].length; i &lt; len; i++) {
+                this.callbacks[msg][i].apply(this,arguments);
+            };
+        }
+      }
+      return pubSub;
+}
+
+var writer = new PubSub();  
+var reader = {  
+    read: function(){alert(&quot;我读了这本新书&quot;)}
+};
+writer.on(&quot;newbook&quot;, function(){reader.read()});  
+writer.publish(&quot;newbook&quot;);  </code></pre><p>#####利用观察者模式实现</p>
+<pre><code>function DataBinder(object_id){
+  // 创建一个简单的pubSub对象
+  var pubSub = {
+    callbacks: {},
+    on: function(msg,callback) {
+      this.callbacks[msg] = this.callbacks[msg] || [];
+      this.callbacks[msg].push(callback);
+    },
+    publish: function(msg) {
+      this.callbacks[msg] = this.callbacks[msg] || [];
+      for (var i = 0,len = this.callbacks[msg].length; i &lt; len; i++) {
+        this.callbacks[msg][i].apply(this,arguments);
+      };
+    }
+  },
+
+      data_attr = &quot;data-bind-&quot; + object_id,
+      message   = object_id + &quot;:change&quot;,
+
+      changeHandler = function(event) {
+        var target    = event.target || event.srcElement, // IE8兼容
+            prop_name = target.getAttribute(data_attr);
+
+        if (prop_name &amp;&amp; prop_name !== &quot;&quot;) {
+          pubSub.publish(message,prop_name,target.value);
+        }
+      };
+
+  // 监听事件变化，并代理到pubSub
+  if (document.addEventListener) {
+    document.addEventListener(&quot;keyup&quot;,changeHandler,false);
+  } else{
+    // IE8使用attachEvent而不是addEventListenter
+    document.attachEvent(&quot;onkeyup&quot;,changeHandler);
+  };
+
+  // pubSub将变化传播到所有绑定元素
+  pubSub.on(message,function(event,prop_name,new_val){
+    var elements = document.querySelectorAll(&quot;[&quot; + data_attr + &quot;=&quot; +prop_name + &quot;]&quot;),
+        tag_name;
+    for (var i = 0,len = elements.length; i &lt; len; i++) {
+      tag_name = elements[i].tagName.toLowerCase();
+      console.log(tag_name);
+      if (tag_name === &quot;input&quot; || tag_name === &quot;textarea&quot; || tag_name === &quot;select&quot;) {
+        elements[i].value = new_val;
+      } else{
+        elements[i].innerHTML = new_val;
+      };
+      console.log(&quot;prop_name:&quot;+new_val);
+    };
+  })
+
+  return pubSub;
+}
+
+function User(uid) {
+  var binder = new DataBinder(uid),
+      user   = {
+        attribute : {},
+
+        // 属性设置器使用数据绑定器pubSub来发布
+        set : function(attr_name,val) {
+          this.attribute[attr_name] = val;
+          binder.publish(uid + &quot;:change&quot;,attr_name,val,this);
+        },
+
+        get : function(attr_name) {
+          return this.attribute[attr_name];
+        },
+
+        _binder : binder
+      };
+
+  binder.on(uid + &quot;:change&quot;,function(event,attr_name,new_val,initiator) {
+    if (initiator !== user) {
+      user.set(attr_name,new_val);
+    }
+  });
+
+  return user;
+}
+var user = new User( 123 );
+user.set( &quot;name&quot;, &quot;lwl&quot; );
+
+
+html:
+
+&lt;input type=&quot;text&quot; data-bind-123=&quot;name&quot; /&gt;
+&lt;p data-bind-123=&quot;name&quot;&gt;&lt;/p&gt;</code></pre><p>ref: <a href="http://codepen.io/anon/pen/mRdLYd?editors=1010" target="_blank" rel="noopener">http://codepen.io/anon/pen/mRdLYd?editors=1010</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/10/23/2015-10-23-iospush/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2015/10/23/2015-10-23-iospush/" itemprop="url">ios推送</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-10-23T00:00:00+08:00">
+                2015-10-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>##ios推送证书生成</p>
+<p>1.create App ID whit push service</p>
+<p>该步骤会引导生产push Certificate推送证书</p>
+<p>2.create Provisioning Profile (adhoc for example)<br>and choose the app id which created by first step.</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/10/22/2015-10-22-flask/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2015/10/22/2015-10-22-flask/" itemprop="url">flask restful</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-10-22T00:00:00+08:00">
+                2015-10-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>##flask restful</p>
+<p>一个用Python实现的web服务器和web框架</p>
+<p>###安装<br>    pip install Flask</p>
+<p>###restful<br>    pip install flask-restful<br>###mysql<br>    pip install flask-mysql</p>
+<pre><code>[https://github.com/codehandbook/RESTfulApiUsingPythonFlask/blob/master/api.py](https://github.com/codehandbook/RESTfulApiUsingPythonFlask/blob/master/api.py)</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/10/22/2015-10-22-language/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2015/10/22/2015-10-22-language/" itemprop="url">程序语言</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-10-22T00:00:00+08:00">
+                2015-10-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>##程序语言</p>
+<p>###程序语言共性</p>
+<p>数据结构</p>
+<p>函数</p>
+<p>对象</p>
+<p>自省</p>
+<p>###程序语言个性</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/10/20/2015-10-20-opencart/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2015/10/20/2015-10-20-opencart/" itemprop="url">opencart code review</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-10-20T00:00:00+08:00">
+                2015-10-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>##opencart code review</p>
+<p>mvc框架，同YII之类php web框架。</p>
+<p>整个流程就在index.php中</p>
+<p>###流程</p>
+<p>（1）system/startup.php</p>
+<p>load需要的php</p>
+<pre><code>// Engine
+require_once(modification(DIR_SYSTEM . &apos;engine/action.php&apos;));
+require_once(modification(DIR_SYSTEM . &apos;engine/controller.php&apos;));
+require_once(modification(DIR_SYSTEM . &apos;engine/event.php&apos;));
+require_once(modification(DIR_SYSTEM . &apos;engine/front.php&apos;));
+require_once(modification(DIR_SYSTEM . &apos;engine/loader.php&apos;));
+require_once(modification(DIR_SYSTEM . &apos;engine/model.php&apos;));
+require_once(modification(DIR_SYSTEM . &apos;engine/registry.php&apos;));
+
+// Helper
+require_once(DIR_SYSTEM . &apos;helper/json.php&apos;);
+require_once(DIR_SYSTEM . &apos;helper/utf8.php&apos;);</code></pre><p>（2）创建Registry对象</p>
+<p>一个词典类key-value，把其他类实例保存到该registry对象</p>
+<p>（3）注册所有公共类</p>
+<p>set key to value</p>
+<p>（4）创建Front类对象，作为请求分发器（Dispatcher），分发action</p>
+<pre><code>// Front Controller
+$controller = new Front($registry);
+
+// Maintenance Mode
+$controller-&gt;addPreAction(new Action(&apos;common/maintenance&apos;));
+
+// SEO URL&apos;s
+$controller-&gt;addPreAction(new Action(&apos;common/seo_url&apos;));
+
+// Router
+if (isset($request-&gt;get[&apos;route&apos;])) {
+    $action = new Action($request-&gt;get[&apos;route&apos;]);
+} else {
+    $action = new Action(&apos;common/home&apos;);
+}
+
+// Dispatch
+$controller-&gt;dispatch($action, new Action(&apos;error/not_found&apos;));</code></pre><p>（5）根据用户请求（url）创建控制器对象及其动作。</p>
+<pre><code>action类根据url得到action对应的类$class,然后执行类中的方法
+
+在Front类私有函数execute($action)中如下语句
+
+$controller = new $class($this-&gt;registry); //创建控制器
+
+if (is_callable(array($controller, $this-&gt;method))) {
+        return call_user_func(array($controller, $this-&gt;method), $this-&gt;args);
+    } else {
+        return false;
+    }</code></pre><p>（6）controller控制器里可以加载相应的模型，如</p>
+<pre><code>$this-&gt;load-&gt;model(&apos;design/layout&apos;);
+
+该语句将创建相应的model对象。</code></pre><p>（7）controller控制器里可以获取模板，绘制（提取数据并启用output buffer）到页面输出区output中</p>
+<pre><code>$this-&gt;load-&gt;view(&apos;payment/alipay_direct.tpl&apos;, $data)
+
+$this-&gt;response-&gt;setOutput($this-&gt;load-&gt;view($this-&gt;config-&gt;get(&apos;config_template&apos;) . &apos;/template/account/account.tpl&apos;, $data));</code></pre><p>（8）最后Response对象把输出区的数据（页面）echo返回给用户</p>
+<pre><code>public function output() {
+        if ($this-&gt;output) {
+            if ($this-&gt;level) {
+                $output = $this-&gt;compress($this-&gt;output, $this-&gt;level);
+            } else {
+                $output = $this-&gt;output;
+            }
+
+            if (!headers_sent()) {
+                foreach ($this-&gt;headers as $header) {
+                    header($header, true);
+                }
+            }
+
+            echo $output;
+        }
+    }</code></pre><p>###架构核心<br>核心在system/engine</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/10/16/2015-10-16-ios-arch/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2015/10/16/2015-10-16-ios-arch/" itemprop="url">ios架构笔记</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-10-16T00:00:00+08:00">
+                2015-10-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>##ios架构之路</p>
+<p>###why</p>
+<p>让业务开发人员方便的开发业务流程，比如调用网络API，页面展示，本地持久化等。</p>
+<p>###方法论<br>模块分类</p>
+<p>架构分层，展现层，业务层，网络层</p>
+<p>###KVO</p>
+<p>Key-Value Observing，观察对象的属性变化，如果改变，通过回调函数来通知观察者</p>
+<p>model与controller之间的数据流</p>
+<p>数据绑定应该把model绑定到view，数据的变化直接表现在控件上</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/10/16/2015-10-16-ios-animation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2015/10/16/2015-10-16-ios-animation/" itemprop="url">ios动画</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-10-16T00:00:00+08:00">
+                2015-10-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>##ios动画</p>
 
           
         
@@ -1606,7 +1796,7 @@ f(n)=      1                      n=1
               
                 <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">273</span>
+                  <span class="site-state-item-count">271</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

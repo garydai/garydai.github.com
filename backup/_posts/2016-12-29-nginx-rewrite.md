@@ -1,4 +1,5 @@
 ---
+date: 2016-12-29
 layout: default
 
 title: nginx rewrite

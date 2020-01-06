@@ -229,7 +229,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2013-5-9-word-segmentation/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/06/11/2013-6-11-c++_object_model/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -248,7 +248,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2013-5-9-word-segmentation/" itemprop="url">中文分词</a></h1>
+                <a class="post-title-link" href="/2013/06/11/2013-6-11-c++_object_model/" itemprop="url">C++对象模型</a></h1>
         
 
         <div class="post-meta">
@@ -260,8 +260,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-06-11T00:00:00+08:00">
+                2013-06-11
               </time>
             
 
@@ -300,133 +300,41 @@
       
         
           
-            <h2 id="中文分词"><a href="#中文分词" class="headerlink" title="中文分词"></a>中文分词</h2><h3 id="what"><a href="#what" class="headerlink" title="what"></a>what</h3><h3 id="how"><a href="#how" class="headerlink" title="how"></a>how</h3><h4 id="实现第一版"><a href="#实现第一版" class="headerlink" title="实现第一版"></a>实现第一版</h4><p>一个句子S由很多不同的分词组合,W01W02W03…W0n,W11W12W13…W1n,Wi1Wi2Win,<br>对于不同的分词结果,取P(Wi1)P(Wi2)P(Wi3)…P(Win)最大为最后的分词结果,比向前向后匹配概率要高<br>(P(Wi1)等于Wi1在词库里的词频)</p>
-<h4 id="实现第二版"><a href="#实现第二版" class="headerlink" title="实现第二版"></a>实现第二版</h4><p>采用HMM<br>S由S1S2S3…Sn,n个字组成,S1隐含的状态是S1是一个词语的开头或中间还是结尾.根据已知求隐含<br>所以P(H1H2H3…Hn|S1S2S3…Sn)=<strong>P(S1S2S3…Sn|H1H2H3…Hn)**</strong>P(H1H2H3…Hn)**/P(S1S2S3…Sn)  </p>
-<p><strong>P(S1S2S3…Sn|H1H2H3…Hn)</strong>=P(S1|H1)P(S2|H2)…P(Sn|Hn)<br>P(S1|H1)=P(H1S1)/P(H1)<br>含义:以H1H2..Hn分法,成为该句子的概率(开头结尾开头中间结尾…该分法组成句子的概率(不等于句子合不合法))</p>
-<p><strong>P(H1H2H3…Hn)</strong>=P(H1)P(H2|H1)P(H3|H1H2)…P(Hn|H1H2H3…)=<strong>P(H1)P(H2|H1)P(H3|H2)…(Hn|Hn-1)</strong>(2-gram)<br>含义:马尔科夫链，Hn只有Hn-1决定。H1H2H3…Hn分法的概率   </p>
-<h5 id="结论公式"><a href="#结论公式" class="headerlink" title="结论公式"></a>结论公式</h5><p><strong>P(H1H2H3…Hn|S1S2S3…Sn)~P(S1|H1)P(H1)P(S2|H2)P(H2|H1)…P(Sn|Hn)(Hn|Hn-1)</strong><br>一个字有四种隐藏状态，s一个词的开头，e一个词的结尾，m一个词的中间，a单个字。<br>状态数目<br>states:{s,e,m,a}<br>s有一定的概率是字X<br>每个状态下可能的观察值<br>observations:{X}<br>初始状态空间的概率分布  </p>
-<p>状态转移<br>transition_probility:{<br>s:{e:x, m:x, a:x}<br>e:{}…<br>}<br>好像错误率挺高，训练不好</p>
-<h4 id="第三版数学之美"><a href="#第三版数学之美" class="headerlink" title="第三版数学之美"></a>第三版数学之美</h4>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2013-5-7-how-google-works/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2013-5-7-how-google-works/" itemprop="url">How Google Works</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##How Google Works</p>
-<p>一张谷歌搜索如何工作的科普图<br><a href="http://www.ppcblog.com/how-google-works/" target="_blank" rel="noopener">http://www.ppcblog.com/how-google-works/</a><br><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/how-google-works.jpg" alt=""></p>
+            <h2 id="C-对象模型"><a href="#C-对象模型" class="headerlink" title="C++对象模型"></a>C++对象模型</h2><h3 id="C-对象模型-1"><a href="#C-对象模型-1" class="headerlink" title="C++对象模型"></a>C++对象模型</h3><p>1非静态数据与指向存放虚函数地址的虚函数表的指针放在类的object内，其他静态数据、静态函数、非静态函数独立在object之外，包括虚函数表。<br>2继承基类的子类对象包含基类信息与自己的信息。<br>3虚继承的子类对象，     </p>
+<h3 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h3><h4 id="缺省构造函数"><a href="#缺省构造函数" class="headerlink" title="缺省构造函数"></a>缺省构造函数</h4><h5 id="没用的-trivial-缺省构造函数"><a href="#没用的-trivial-缺省构造函数" class="headerlink" title="没用的(trivial)缺省构造函数"></a>没用的(trivial)缺省构造函数</h5><p>对于一个类，没用用户声明的构造函数，编译器不会合成缺省构造函数，只合成以下四种有用的构造函数。没有的函数当然不需要合成，很合理。      </p>
+<h5 id="有用的缺省构造函数"><a href="#有用的缺省构造函数" class="headerlink" title="有用的缺省构造函数"></a>有用的缺省构造函数</h5><h6 id="一个类包含具有有构造函数的成员类"><a href="#一个类包含具有有构造函数的成员类" class="headerlink" title="一个类包含具有有构造函数的成员类"></a>一个类包含具有有构造函数的成员类</h6><pre><code>Class A
+{
+public:
+    B b;
+    int i;
+}
+Class B
+{
+public:
+    B();
+}</code></pre><p>编译器会在A的构造函数里显式的调用B的构造函数   </p>
+<pre><code>Class A
+{
+public:
+    inline A()
+    {
+        B::B();
+    }
+    B b;
+    int i;
+}</code></pre><p>如果程序员已经定义了A的构造函数，则编译器也会在构造函数开头插入调用B的构造函数的代码。   </p>
+<pre><code>Class A
+{
+public:
+    A()
+    {
+        **B::B();**
+        i = 0;
+    }
+    B b;
+}</code></pre><h6 id="继承带有缺省构造函数的基类"><a href="#继承带有缺省构造函数的基类" class="headerlink" title="继承带有缺省构造函数的基类"></a>继承带有缺省构造函数的基类</h6><p>编译器会合成构造函数来调用基类的构造函数，如果有多个基类，则根据声明顺序调用之。  </p>
+<h6 id="带有虚函数的类"><a href="#带有虚函数的类" class="headerlink" title="带有虚函数的类"></a>带有虚函数的类</h6><p>编译器安插构造函数初始化虚函数表指针   </p>
+<h6 id="虚继承的类"><a href="#虚继承的类" class="headerlink" title="虚继承的类"></a>虚继承的类</h6><p>同上类似，编译器需要初始化一些关于操作虚基类的代码。以后介绍。  </p>
 
           
         
@@ -475,7 +383,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2013-5-8-c++namespace/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/06/07/2013-6-7-ucc_compiler_code_review/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -494,7 +402,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2013-5-8-c++namespace/" itemprop="url">C++ 命名空间</a></h1>
+                <a class="post-title-link" href="/2013/06/07/2013-6-7-ucc_compiler_code_review/" itemprop="url">一款开源C语言编译器源码解析</a></h1>
         
 
         <div class="post-meta">
@@ -506,8 +414,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-06-07T00:00:00+08:00">
+                2013-06-07
               </time>
             
 
@@ -546,8 +454,378 @@
       
         
           
-            <p>##C++ 命名空间</p>
-<p>###C命名空间<br>####what<br>####why<br>####how(编译)<br>###C++命名空间<br>####extension<br>####why<br>####how</p>
+            <p>##一款开源C语言编译器源码解析<br>###预编译</p>
+<p>###词法分析 lex.c<br>token表     </p>
+<pre><code>//keywords
+TOKEN(TK_AUTO,      &quot;auto&quot;)
+TOKEN(TK_EXTERN,    &quot;extern&quot;)
+TOKEN(TK_REGISTER,  &quot;register&quot;)
+TOKEN(TK_STATIC,    &quot;static&quot;)
+TOKEN(TK_TYPEDEF,   &quot;typedef&quot;)
+TOKEN(TK_CONST,     &quot;const&quot;)
+TOKEN(TK_VOLATILE,  &quot;volatile&quot;)
+TOKEN(TK_SIGNED,    &quot;signed&quot;)
+TOKEN(TK_UNSIGNED,  &quot;unsigned&quot;)
+TOKEN(TK_SHORT,     &quot;short&quot;)
+TOKEN(TK_LONG,      &quot;long&quot;)
+TOKEN(TK_CHAR,      &quot;char&quot;)
+TOKEN(TK_INT,       &quot;int&quot;)
+TOKEN(TK_INT64,     &quot;__int64&quot;)
+TOKEN(TK_FLOAT,     &quot;float&quot;)
+TOKEN(TK_DOUBLE,    &quot;double&quot;)
+TOKEN(TK_ENUM,      &quot;enum&quot;)
+TOKEN(TK_STRUCT,    &quot;struct&quot;)
+TOKEN(TK_UNION,     &quot;union&quot;)
+TOKEN(TK_VOID,      &quot;void&quot;)
+TOKEN(TK_BREAK,     &quot;break&quot;)
+TOKEN(TK_CASE,      &quot;case&quot;)
+TOKEN(TK_CONTINUE,  &quot;continue&quot;)
+TOKEN(TK_DEFAULT,   &quot;default&quot;)
+TOKEN(TK_DO,        &quot;do&quot;)
+TOKEN(TK_ELSE,      &quot;else&quot;)
+TOKEN(TK_FOR,       &quot;for&quot;)
+TOKEN(TK_GOTO,      &quot;goto&quot;)
+TOKEN(TK_IF,        &quot;if&quot;)
+TOKEN(TK_RETURN,    &quot;return&quot;)
+TOKEN(TK_SWITCH,    &quot;switch&quot;)
+TOKEN(TK_WHILE,     &quot;while&quot;)
+TOKEN(TK_SIZEOF,    &quot;sizeof&quot;)
+
+//identifier
+TOKEN(TK_ID,        &quot;ID&quot;)
+
+//constant
+TOKEN(TK_INTCONST,     &quot;int&quot;)
+TOKEN(TK_UINTCONST,    &quot;unsigned int&quot;)
+TOKEN(TK_LONGCONST,    &quot;long&quot;)
+TOKEN(TK_ULONGCONST,   &quot;unsigned long&quot;)
+TOKEN(TK_LLONGCONST,   &quot;long long&quot;)
+TOKEN(TK_ULLONGCONST,  &quot;unsigned long long&quot;)
+TOKEN(TK_FLOATCONST,   &quot;float&quot;)
+TOKEN(TK_DOUBLECONST,  &quot;double&quot;)
+TOKEN(TK_LDOUBLECONST, &quot;long double&quot;)
+TOKEN(TK_STRING,       &quot;STR&quot;)
+TOKEN(TK_WIDESTRING,   &quot;WSTR&quot;)
+
+//operators
+TOKEN(TK_COMMA,         &quot;,&quot;)
+TOKEN(TK_QUESTION,      &quot;?&quot;)
+TOKEN(TK_COLON,         &quot;:&quot;)
+TOKEN(TK_ASSIGN,        &quot;=&quot;)
+TOKEN(TK_BITOR_ASSIGN,  &quot;|=&quot;)
+TOKEN(TK_BITXOR_ASSIGN, &quot;^=&quot;)
+TOKEN(TK_BITAND_ASSIGN, &quot;&amp;=&quot;)
+TOKEN(TK_LSHIFT_ASSIGN, &quot;&lt;&lt;=&quot;)
+TOKEN(TK_RSHIFT_ASSIGN, &quot;&gt;&gt;=&quot;)
+TOKEN(TK_ADD_ASSIGN,    &quot;+=&quot;)
+TOKEN(TK_SUB_ASSIGN,    &quot;-=&quot;)
+TOKEN(TK_MUL_ASSIGN,    &quot;*=&quot;)
+TOKEN(TK_DIV_ASSIGN,    &quot;/=&quot;)
+TOKEN(TK_MOD_ASSIGN,    &quot;%=&quot;)
+TOKEN(TK_OR,            &quot;||&quot;)
+TOKEN(TK_AND,           &quot;&amp;&amp;&quot;)
+TOKEN(TK_BITOR,         &quot;|&quot;)
+TOKEN(TK_BITXOR,        &quot;^&quot;)
+TOKEN(TK_BITAND,        &quot;&amp;&quot;)
+TOKEN(TK_EQUAL,         &quot;==&quot;)
+TOKEN(TK_UNEQUAL,       &quot;!=&quot;)
+TOKEN(TK_GREAT,         &quot;&gt;&quot;)
+TOKEN(TK_LESS,          &quot;&lt;&quot;)
+TOKEN(TK_GREAT_EQ,      &quot;&gt;=&quot;)
+TOKEN(TK_LESS_EQ,       &quot;&lt;=&quot;)
+TOKEN(TK_LSHIFT,        &quot;&lt;&lt;&quot;)
+TOKEN(TK_RSHIFT,        &quot;&gt;&gt;&quot;)
+TOKEN(TK_ADD,           &quot;+&quot;)
+TOKEN(TK_SUB,           &quot;-&quot;)
+TOKEN(TK_MUL,           &quot;*&quot;)
+TOKEN(TK_DIV,           &quot;/&quot;)
+TOKEN(TK_MOD,           &quot;%&quot;)
+TOKEN(TK_INC,           &quot;++&quot;)
+TOKEN(TK_DEC,           &quot;--&quot;)
+TOKEN(TK_NOT,           &quot;!&quot;)
+TOKEN(TK_COMP,          &quot;~&quot;)
+TOKEN(TK_DOT,           &quot;.&quot;)
+TOKEN(TK_POINTER,       &quot;-&gt;&quot;)
+TOKEN(TK_LPAREN,        &quot;(&quot;)
+TOKEN(TK_RPAREN,        &quot;)&quot;)
+TOKEN(TK_LBRACKET,      &quot;[&quot;)
+TOKEN(TK_RBRACKET,      &quot;]&quot;)
+
+//punctuators
+TOKEN(TK_LBRACE,        &quot;{&quot;)
+TOKEN(TK_RBRACE,        &quot;}&quot;)
+TOKEN(TK_SEMICOLON,     &quot;;&quot;)
+TOKEN(TK_ELLIPSE,       &quot;...&quot;)
+TOKEN(TK_POUND,         &quot;#&quot;)
+TOKEN(TK_NEWLINE,       &quot;\n&quot;)
+
+TOKEN(TK_END,           &quot;EOF&quot;)</code></pre><p>各种处理字符的函数scanxxx，组成函数指针数组。 </p>
+<pre><code>static Scanner        Scanners[256]; </code></pre><p>得到每个token    </p>
+<pre><code>#define NEXT_TOKEN  CurrentToken = GetNextToken();</code></pre><p>###语法解析<br>语法解析与词法分析一起执行，取一个token然后解析。 </p>
+<p>将整个cpp，解析成一个语法树。 </p>
+<pre><code>Decl.c
+transUnit = ParseTranslationUnit(file);</code></pre><p>####语法解析程序结构</p>
+<pre><code>ParseTranslationUnit
+
+    ParseExternalDeclaration//解析外部声明
+
+        ParseCommonHeader//各种声明的共同部分
+
+            ParseDeclarationSpecifiers//处理类型限定符(const)、说明符(int)、存储地说明符(auto)
+
+            ParseInitDeclarator
+
+                ParseDeclarator
+
+                ParsePostfixDeclarator
+
+                    ParseDirectDeclarator
+
+        GetFunctionDeclarator
+
+        ParseCompoundStatement//如果是函数定义，解析函数的实现、
+
+            ParseDeclaration
+
+            ParseStatement
+
+                ParseLabelStatement
+
+                ParseCaseStatement
+
+                ParseDefaultStatement
+
+                ParseIfStatement
+
+                ParseSwitchStatement
+
+                ParseWhileStatement
+
+                ParseDoStatement
+
+                ParseForStatement
+
+                ParseGotoStatement
+
+                ParseContinueStatement
+
+                ParseBreakStatement
+
+                ParseReturnStatement
+
+                ParseCompoundStatement
+
+                ParseExpressionStatement                                        </code></pre><p>####解析表达式</p>
+<pre><code>ParseExpression
+
+/**
+ *  assignment-expression:
+ *      conditional-expression
+
+ *      unary-expression assignment-operator assignment-expression
+ *  assignment-operator:
+ *      = *= /= %= += -= &lt;&lt;= &gt;&gt;= &amp;= ^= |=
+ *  There is a little twist here: the parser always treats the first nonterminal
+ *  as a conditional expression.
+ */    
+    ParseAssignmentExpression
+
+        ParseConditionalExpression
+
+        ParseAssignmentExpression</code></pre><p>####语法树<br>    typedef struct astNode<br>    {<br>        AST_NODE_COMMON<br>    } *AstNode;</p>
+<pre><code>ast节点结构
+#define AST_NODE_COMMON   \
+    int kind;             \节点类型
+    struct astNode *next; \
+    struct coord coord;
+
+节点类型
+enum nodeKind 
+{ 
+    NK_TranslationUnit,     NK_Function,           NK_Declaration,
+    NK_TypeName,            NK_Specifiers,         NK_Token,                
+    NK_TypedefName,         NK_EnumSpecifier,      NK_Enumerator,            
+    NK_StructSpecifier,     NK_UnionSpecifier,     NK_StructDeclaration,    
+    NK_StructDeclarator,    NK_PointerDeclarator,  NK_ArrayDeclarator,        
+    NK_FunctionDeclarator,  NK_ParameterTypeList,  NK_ParameterDeclaration,
+    NK_NameDeclarator,      NK_InitDeclarator,     NK_Initializer,
+
+    NK_Expression,
+
+    NK_ExpressionStatement, NK_LabelStatement,     NK_CaseStatement,        
+    NK_DefaultStatement,    NK_IfStatement,        NK_SwitchStatement,        
+    NK_WhileStatement,      NK_DoStatement,        NK_ForStatement,        
+    NK_GotoStatement,       NK_BreakStatement,     NK_ContinueStatement,        
+    NK_ReturnStatement,     NK_CompoundStatement
+};
+
+编译单元cpp
+struct astTranslationUnit
+{
+    AST_NODE_COMMON
+    AstNode extDecls;
+};</code></pre><p>###语义分析    </p>
+<pre><code>CheckTranslationUnit(transUnit);</code></pre><p>####语法解析程序结构</p>
+<pre><code>CheckFunction
+
+CheckGlobalDeclaration</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/06/03/2013-6-3-memory/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2013/06/03/2013-6-3-memory/" itemprop="url">windows内存模型</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-06-03T00:00:00+08:00">
+                2013-06-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="windows内存模型"><a href="#windows内存模型" class="headerlink" title="windows内存模型"></a>windows内存模型</h2><p>系统调拨物理存储器(磁盘中的页交换文件和文件映像)给进程的数据与程序，把地址映射到进程地址空间。<br>一开始进程所有页面都在磁盘上，内存中没有数据与程序，所以要先从它们的物理存储器中调入内存。<br><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/read_memory.PNG" alt="">    </p>
+<h3 id="进程虚拟地址空间"><a href="#进程虚拟地址空间" class="headerlink" title="进程虚拟地址空间"></a>进程虚拟地址空间</h3><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/virtual_memory.PNG" alt="">        </p>
+<h3 id="虚拟内存"><a href="#虚拟内存" class="headerlink" title="虚拟内存"></a>虚拟内存</h3><p>让磁盘空间看起来像内存一样，这部分磁盘空间称为页交换文件。<br>页交换文件在硬盘上，一种内存的后备存储器。把页交换文件映射到进程地址空间。      </p>
+<h4 id="使用虚拟内存"><a href="#使用虚拟内存" class="headerlink" title="使用虚拟内存"></a>使用虚拟内存</h4><p>1.预定地址空间区域   </p>
+<pre><code>PVOID VirtualAlloc(
+    PVOID pvAddress,
+    SIZE_T dwSize,
+    DWORD fdwAllocationType,
+    DWORD fdwProtect);</code></pre><p>fdwAllocationType设置为MEM_RESERVE    </p>
+<p>2.调拨物理存储器(页交换文件)<br>fdwAllocationType设置为MEM_COMMIT<br>3.撤销调拨物理存储器及释放区域   </p>
+<pre><code>BOOL VirtualFree(
+    LPVOID pvAddress,
+    SIZE_T dwSize,
+    DWORD fdwFreeType);</code></pre><h4 id="线程栈"><a href="#线程栈" class="headerlink" title="线程栈"></a>线程栈</h4><p>系统创建线程时，会给线程栈预订一块地址空间区域，并调拨页交换文件(大小由.exe的PE文件头中变量指定)。</p>
+<h3 id="内存映射文件"><a href="#内存映射文件" class="headerlink" title="内存映射文件"></a>内存映射文件</h3><p>文件映像(.exe文件或DLL)，另一种后备存储器，称之为内存映射文件，映射到进程地址空间。<br>硬盘上的文件映射在进程的地址空间中。<br>1.创建或打开文件，创建文件内核对象    </p>
+<pre><code>HANDLE CreateFile(
+    PCSTR pszFileName,
+    DWORD dwDesiredAccess,
+    DWORD dwShareMode,
+    PSECURITY_ATTRIBUTES psa,
+    DWORD dwCreationDisposition,
+    DWORD dwFlagsAndAttributes,
+    HANDLE hTemplateFile);</code></pre><p>2.创建内存映射文件内核对象   </p>
+<pre><code>HANDLE CreateFileMapping(
+    HANDLE hFile,
+    PSECURITY_ATTRIBUTES psa,
+    DWORD fdwProtect,
+    DWORD dwMaximumSizeHigh,
+    DWORD dwMaximumSizeLow,
+    PCTSTR pszName);</code></pre><p>3.映射到进程地址空间，在地址空间中预订区域并调拨物理存储器  </p>
+<pre><code>PVOID MapViewOfFile(
+    HANDLE hFileMappingObject,
+    DWORD dwDesiredAccess,
+    DWORD dwFileOffSetHigh,
+    DWORD dwFileOffSetLow,
+    SIZE_T dwNumberOfBytesToMap);</code></pre><h4 id="用应用程序的共享段实现多个实例间的共享静态数据"><a href="#用应用程序的共享段实现多个实例间的共享静态数据" class="headerlink" title="用应用程序的共享段实现多个实例间的共享静态数据"></a>用应用程序的共享段实现多个实例间的共享静态数据</h4><p>告诉编译器把变量放入单独的段中    </p>
+<pre><code>#pragma data_seg(&quot;shared&quot;)
+#pragma data_set()
+#pragma comment(linker, &quot;/SECTION:Shared,RWS&quot;)</code></pre><p>####用内存映射文件在进程间共享数据<br>当启动一个应用程序，系统会先调用CreateFile打开.exe文件，接着调用CreateFileMapping创建文件映射对象，最后调用MapViewOfFileEx映射到进程的固定地址空间(有.exe的PE文件指定基地址)。打开同一个应用程序，系统发现已经存在文件映射对象，就调用MapViewOfFileEx映射.exe文件到对应进程的地址空间。所以系统把相同文件映射到不同进程中，令进程共享程序的代码与数据。<br>####以页交换文件为后备存储器的内存映射文件<br>不再以磁盘文件作为后备存储器，则不需要打开文件创建文件内核对象，直接创建内存映射文件对象，把页交换文件映射到内存。<br>多进程可以利用页交换文件的内存映射文件来共享数据。利用对映射文件对象取别名来标记对象。<br>###堆<br>进程创建的时候，系统会分配一个默认堆。<br>调拨的物理存储器来自页交换文件。<br>####创建额外堆<br>    HeapCreate(<br>        DWORD fdwOptions,<br>        SIZE_T dwInitialSize,<br>        SIZE_T dwMaximumSize);<br>不能保证线程独占堆则不能设置fdwOptions为HEAP_NO_SERIALIZE，保证多线程对同一个堆的访问时依次进行。<br>####从堆中分配内存<br>    PVOID HeapAlloc(<br>        HANDLE hHeap,<br>        DWORD fdwFlags,<br>        SIZE_T dwBytes);</p>
 
           
         
@@ -596,7 +874,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2013-5-6-nltk/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/06/02/2013-6-2-puzzle/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -615,7 +893,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2013-5-6-nltk/" itemprop="url">code review</a></h1>
+                <a class="post-title-link" href="/2013/06/02/2013-6-2-puzzle/" itemprop="url">面试题</a></h1>
         
 
         <div class="post-meta">
@@ -627,8 +905,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-06-02T00:00:00+08:00">
+                2013-06-02
               </time>
             
 
@@ -667,8 +945,7 @@
       
         
           
-            <p><a href="http://cs.nyu.edu/~tk883/software/annotate/annotate.py.txt" target="_blank" rel="noopener">一个开源项目源码解析</a></p>
-<h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h3><h3 id="思想"><a href="#思想" class="headerlink" title="思想"></a>思想</h3><p>token:分词<br>tag:标注词性<br>parser:提取信息,根据语法(例如提取动名词或动词之类的)<br>提取tags中 &lt;NN&gt;&lt;NN&gt;的名词结构,作为title.</p>
+            <p>##面试题<br>###题目<br>有一个淘宝商户，在某城市有n个仓库，每个仓库的储货量不同，现在要通过货物运输，将每个仓库的储货量变成一致的，n个仓库之间的运输线路围城一个圈，即1-&gt;2-&gt;3-&gt;4-&gt;…-&gt;n-&gt;1-&gt;…，货物只能通过连接的仓库运输，设计最小的运送成本（运货量*路程）达到淘宝商户的要求，并写出代码。<br>###思路<br>###code<br>###类似题目<br>均分纸牌<br>石子合并问题<br>矩阵连乘问题</p>
 
           
         
@@ -717,7 +994,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2013-5-4-bayes/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/06/01/2013-6-1-IO/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -736,7 +1013,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2013-5-4-bayes/" itemprop="url">贝叶斯方法</a></h1>
+                <a class="post-title-link" href="/2013/06/01/2013-6-1-IO/" itemprop="url">I/O</a></h1>
         
 
         <div class="post-meta">
@@ -748,8 +1025,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-06-01T00:00:00+08:00">
+                2013-06-01
               </time>
             
 
@@ -788,391 +1065,55 @@
       
         
           
-            <h2 id="贝叶斯方法学习笔记"><a href="#贝叶斯方法学习笔记" class="headerlink" title="贝叶斯方法学习笔记"></a>贝叶斯方法学习笔记</h2><h3 id="贝叶斯方法"><a href="#贝叶斯方法" class="headerlink" title="贝叶斯方法"></a>贝叶斯方法</h3><h4 id="what"><a href="#what" class="headerlink" title="what"></a>what</h4><h4 id="why"><a href="#why" class="headerlink" title="why"></a>why</h4><h4 id="how"><a href="#how" class="headerlink" title="how"></a>how</h4><h4 id="when"><a href="#when" class="headerlink" title="when"></a>when</h4><ol>
-<li>中文分词  </li>
-<li>拼写纠错  </li>
-<li>统计机器翻译  </li>
-<li>贝叶斯图像识别  </li>
-<li>EM 算法与基于模型的聚类  </li>
-<li>最大似然与最小二乘  </li>
-</ol>
-<h3 id="朴素贝叶斯方法"><a href="#朴素贝叶斯方法" class="headerlink" title="朴素贝叶斯方法"></a>朴素贝叶斯方法</h3><h4 id="what-1"><a href="#what-1" class="headerlink" title="what"></a>what</h4><p>假设事件独立<br>p(a|b) = p(a) 假设事件a,b独立  </p>
-<h4 id="when-1"><a href="#when-1" class="headerlink" title="when"></a>when</h4><ol>
-<li>贝叶斯垃圾邮件过滤器  </li>
-</ol>
-<h3 id="层级贝叶斯模型"><a href="#层级贝叶斯模型" class="headerlink" title="层级贝叶斯模型"></a>层级贝叶斯模型</h3><p><a href="http://www.52nlp.cn/hmm-learn-best-practices-one-introduction" target="_blank" rel="noopener" title="隐马尔可夫模型(HMM)">1. 隐马尔可夫模型(HMM) </a><br>用途：汉语分词、词性标注及语音识别</p>
-<h3 id="贝叶斯网络"><a href="#贝叶斯网络" class="headerlink" title="贝叶斯网络"></a>贝叶斯网络</h3><p>###reference<br><a href="http://blog.csdn.net/pongba/article/details/2958094" target="_blank" rel="noopener">http://blog.csdn.net/pongba/article/details/2958094</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2013-5-5-generics/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2013-5-5-generics/" itemprop="url">宏与泛型与继承</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="泛型与继承的区别"><a href="#泛型与继承的区别" class="headerlink" title="泛型与继承的区别"></a>泛型与继承的区别</h2><h3 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h3><p>泛型的最初动机:建立通用标准容器库\通用算法<br>实现通用标准容器库的几种方法:继承\泛型\宏</p>
-<h3 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h3><p>算法重用,函数重用,无须重载  </p>
-<h3 id="笔记"><a href="#笔记" class="headerlink" title="笔记"></a>笔记</h3><p>宏是在预处理阶段进行文本替换,没有类型检查</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2013-5-3-kmp/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2013-5-3-kmp/" itemprop="url">KMP & BM</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##KMP &amp; BM<br>###小问题<br>字符串abcabd<br>a的后缀[a, ab, abc, abca, abcab, abcabd]<br>b的前缀[b,ab]<br>求各个字符的前缀与第一个字符a的后缀完全相同的最大长度，例如第二个b的前缀ab与a的后缀ab相同</p>
-<p>t[] = abcabd<br>p[] = [-1, -1, -1, 0, 1, -1]表示t[i]字符与a的后缀匹配下标  </p>
-<p>####递推公式<br>如果t[p[i-1] + 1] == p[i]则p[i] = p[i-1] + 1<br>如果t[p[i-1] + 1] != p[i]则比较t[p[p[i-1]] + 1] 和 p[i]，不断嵌套直到两者相等，因为p[i-1]能保证得到t[i-1]最长后缀</p>
-<p>###正题<br>字符串s:abcabcabd<br>匹配串t:abcabd<br>当t[5]‘d’匹配到s[5]‘c’，匹配失败，<br>效率低的方法：<br>t向右移一位，然后重新从a开始和s匹配，s,t的下标从0开始<br>KMP:<br>可以略过t[5-1]的前缀和t[0]后缀相同部分ab，让t向右移动两位,且从c开始匹配，而s的小标也无需改变继续匹配</p>
-<p>###时间复杂度分析<br>平摊分析</p>
-<p>##BM<br>Boyer-Moore算法效率比KMP高,各种文本编辑器的查找功能都是采用该算法.<br>###匹配策略<br>####坏字符规则  </p>
+            <p>阻塞式I/O(默认)，非阻塞式I/O(nonblock)，I/O复用(select/poll/epoll)都属于同步I/O，因为它们在数据由内核空间复制回进程缓冲区时都是阻塞的(不能干别的事)。只有异步I/O模型(AIO)是符合异步I/O操作的含义的，即在1数据准备完成、2由内核空间拷贝回缓冲区后 通知进程，在等待通知的这段时间里可以干别的事。</p>
+<h2 id="windows-I-O"><a href="#windows-I-O" class="headerlink" title="windows I/O"></a>windows I/O</h2><h3 id="常见IO设备"><a href="#常见IO设备" class="headerlink" title="常见IO设备"></a>常见IO设备</h3><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/io.PNG" alt=""></p>
+<h3 id="同步IO"><a href="#同步IO" class="headerlink" title="同步IO"></a>同步IO</h3><p>线程请求IO操作，会阻塞被挂起。  </p>
+<h3 id="异步IO"><a href="#异步IO" class="headerlink" title="异步IO"></a>异步IO</h3><p>线程请求IO操作，线程继续进行，不会阻塞。  </p>
+<h4 id="将IO请求添加到设备驱动程序处理队列"><a href="#将IO请求添加到设备驱动程序处理队列" class="headerlink" title="将IO请求添加到设备驱动程序处理队列"></a>将IO请求添加到设备驱动程序处理队列</h4><p>在CreateFile创建设备对象的时候，传入FILE_FLAG_OVERLAPPED参数，告诉系统以异步方式访问设备。调用读写设备函数ReadFile、WriteFile，系统会将IO请求加入到设备驱动程序的队列中，并马上返回。设备驱动程序以最合理的顺序处理队列中的IO请求并非先进先处理。<br><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/readfile.PNG" alt=""><br>其中最重要的是OVERLAPPED结构，overlapped的意思是线程的执行与IO操作是同时发生的，执行时间是重叠的。<br><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/overlapped.PNG" alt=""><br>IO请求处理结束会返回该结构地址，可以创建一个包含OVERLAPPED结构的context结构，保存上下文，根据返回的OVERLAPPED结构地址，通过以下宏可以算出context结构的地址。   </p>
+<pre><code>#define CONTAINING_RECORD(address, type, field) ((type *)( \ 
+(PCHAR)(address) - \ 
+(ULONG_PTR)(&amp;((type *)0)-&gt;field)))  field=context结构中的OVERLAPPED结构</code></pre><h4 id="接收IO请求完成的通知"><a href="#接收IO请求完成的通知" class="headerlink" title="接收IO请求完成的通知"></a>接收IO请求完成的通知</h4><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/iocomplete.PNG" alt="">   </p>
+<h5 id="1-触发设备内核对象："><a href="#1-触发设备内核对象：" class="headerlink" title="1.触发设备内核对象："></a>1.触发设备内核对象：</h5><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/ioc1.PNG" alt=""><br>缺点：同时发出多个IO请求，例如先read,然后write,最后waitforobject，不知道最后触发的设备内核对象是针对哪个IO请求。  </p>
+<h5 id="2-触发事件内核对象："><a href="#2-触发事件内核对象：" class="headerlink" title="2.触发事件内核对象："></a>2.触发事件内核对象：</h5><p>对不同请求创建事件并赋值给OVERLAPPED结构里的hEvent成员变量。<br><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/ioc2_1.PNG" alt=""><br><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/ioc2_2.PNG" alt="">  </p>
+<h5 id="3-可提醒IO："><a href="#3-可提醒IO：" class="headerlink" title="3.可提醒IO："></a>3.可提醒IO：</h5><p>当系统创建线程的时候，会创建与它相关联的异步过程调用队列(asynchronous procedure call,APC)。当发出一个IO请求的时候，可以告诉设备驱动系统，<strong>当设备驱动程序完成IO操作，就在APC队列中添加回调函数</strong>。<br><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/ioc3.PNG" alt=""><br>最后线程可用6个函数将自己睡去并设置为可唤醒状态。如果APC队列里有回调函数，系统会唤醒线程并在同线程内执行回调函数，清空队列后，该6个函数就返回。<br><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/ioc3_1.PNG" alt=""><br>缺点：1.回调函数提供的上下文少。2.一个线程发出的多个IO请求只能在同一个线程内执行，负载不够均衡。<br>windows还提供QueueUserAPC函数，允许程序员向线程APC队列里添加回调函数。  </p>
+<h5 id="4-IO完成端口"><a href="#4-IO完成端口" class="headerlink" title="4.IO完成端口"></a>4.IO完成端口</h5><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/ioc4.PNG" alt="">   </p>
+<p>创建一个IO完成端口，可以将多个设备及各自的完成键(表明IO请求类型(读文件、写文件或者发送套接字等等))与一个完成端口联系起来，并指定几个线程来处理完成端口中完成队列里的IO请求完成的消息。  </p>
+<p>线程调用GetQueuedCompletionStatus函数令自己进入睡眠状态，并把自己的线程ID放入等待线程队列，让完成端口内核对象知道有哪些线程在等待IO请求完成，线程等待设备驱动程序处理IO请求并把IO请求的完成键等记录放入IO完成队列后，线程被唤醒，根据IO完成队列里的记录处理IO请求完成后的业务。  </p>
+<p>IO完成队列里的记录包括已传输的字节数、完成键、错误代码、OVERLAPPED结构地址，通过返回GetQueuedCompletionStatus函数的参数告知线程。<br><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/ioc4_1.PNG" alt="">   </p>
+<p>设备列表与等待线程列表<br><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/iocp5.PNG" alt=""> </p>
+<h2 id="linux-I-O"><a href="#linux-I-O" class="headerlink" title="linux I/O"></a>linux I/O</h2><h3 id="1-阻塞IO"><a href="#1-阻塞IO" class="headerlink" title="1.阻塞IO"></a>1.阻塞IO</h3><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/io1.png" alt=""> </p>
+<h3 id="2-非阻塞IO"><a href="#2-非阻塞IO" class="headerlink" title="2.非阻塞IO"></a>2.非阻塞IO</h3><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/io2.png" alt=""> </p>
+<h3 id="3-IO多路复用"><a href="#3-IO多路复用" class="headerlink" title="3.IO多路复用:"></a>3.IO多路复用:</h3><p>一个进程处理多个IO请求</p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/io3.png" alt=""> </p>
+<p>3.1. select/pselect</p>
+<p>监视一系列sockets（文件描述符）并阻塞程序，直到至少有一个准备好时行I/O操作。</p>
+<p>需要把fd集合从用户态拷贝到内核态返回时还要从内核态拷贝到用户态</p>
+<p>内核会先轮询IO是否完成，如果没有再睡眠进程</p>
+<p>select支持的文件描述符数量太小了，默认是1024</p>
+<p>3.2. poll</p>
+<p>和select类似，不同的是传入fd数组，没有个数限制</p>
+<p>3.3. epoll</p>
+<p>与select不同，不会轮询IO是否完成，而是IO完成后，通过回调函数将发生的事件写入就绪事件链表，写入用户空间。</p>
+<p><a href="http://www.cnblogs.com/haippy/archive/2012/01/09/2317269.html" target="_blank" rel="noopener">example1</a></p>
+<p><a href="http://www.cnblogs.com/Anker/p/3263780.html" target="_blank" rel="noopener">example2</a></p>
+<p>epoll_create创建epoll句柄</p>
+<h3 id="4-信号驱动的IO"><a href="#4-信号驱动的IO" class="headerlink" title="4.信号驱动的IO"></a>4.信号驱动的IO</h3><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/io4.PNG" alt=""> </p>
+<h3 id="5-异步IO"><a href="#5-异步IO" class="headerlink" title="5.异步IO"></a>5.异步IO</h3><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/io5.PNG" alt=""> </p>
+<p>5.1.信号回调函数机制</p>
+<p>5.2.线程回调函数机制</p>
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><p><a href="http://blog.csdn.net/mikeszhang/article/details/8891089" target="_blank" rel="noopener">http://blog.csdn.net/mikeszhang/article/details/8891089</a></p>
+<h2 id="知乎关于阻塞非阻塞同步非同步的讨论"><a href="#知乎关于阻塞非阻塞同步非同步的讨论" class="headerlink" title="知乎关于阻塞非阻塞同步非同步的讨论"></a>知乎关于阻塞非阻塞同步非同步的讨论</h2><p><a href="http://www.zhihu.com/question/19732473" target="_blank" rel="noopener">http://www.zhihu.com/question/19732473</a></p>
+<p>因为中文语意的问题，很多时候确实会导致混用，而且语境不一样意义也可能不一样。如果只是从计算机编程这个角度说， 讨论最多的也是IO 模型 ，阻塞非阻塞 和 同步异步说的应该是不同的东西。</p>
+<p>阻塞非阻塞：可以简单理解为需要做一件事能不能立即得到返回应答，如果不能立即获得返回，需要等待，那就阻塞了，否则就可以理解为非阻塞。<br>同步异步： 你总是做完一件再去做另一件，不管是否需要时间等待，这就是同步；异步呢则反之，你可以同时做几件事，并非一定需要一件事做完再做另一件事。同步简单理解成一问一答同步进行，异步可以简单理解为不必等一个问题有答了再去问另一个问题，尽管问，有答了再通知你。</p>
+<p>2015/2/4 还有人问，这里补充下，其他楼层也有很好的解释，包括从技术角度都有的详细解释。主要搞清楚本质就行了，他们的不同在于：</p>
 <ol>
-<li>从pattern的尾部向前匹配,被匹配串中与模式串不相等的字符称为坏字符  </li>
-<li>坏字符不在pattern里,则移动pattern至坏字符之后  </li>
-<li>若坏字符在pattern中(如果有多个取从头到尾<code>最后一个</code>),则移动pattern对齐该坏字符  </li>
+<li>阻塞非阻塞表示下面 买书过程中 可能出现的状态，是从 我 这个单角色角度来看待这个买书这个问题。</li>
+<li>同步异步表示一种协作方式，是从全局更高的角度 “进程之间 合作的方式” 来看待买书这个业务。两个进程之间如果商量采用异步方式处理买书这一业务，就不存在阻塞这种状态。</li>
 </ol>
-<p>####好后缀规则  </p>
-<h5 id="模式串与被匹配串具有相同后缀-把该后缀称为好后缀"><a href="#模式串与被匹配串具有相同后缀-把该后缀称为好后缀" class="headerlink" title="模式串与被匹配串具有相同后缀,把该后缀称为好后缀"></a>模式串与被匹配串具有相同后缀,把该后缀称为好后缀</h5><h5 id="若模式串中有好后缀的相同子串-移动pattern对齐该好后缀"><a href="#若模式串中有好后缀的相同子串-移动pattern对齐该好后缀" class="headerlink" title="若模式串中有好后缀的相同子串,移动pattern对齐该好后缀"></a>若模式串中有好后缀的相同子串,移动pattern对齐该好后缀</h5><h5 id="模式串的最长前缀等于好后缀-移动pattern对齐该好后缀"><a href="#模式串的最长前缀等于好后缀-移动pattern对齐该好后缀" class="headerlink" title="模式串的最长前缀等于好后缀,移动pattern对齐该好后缀"></a>模式串的最长前缀等于好后缀,移动pattern对齐该好后缀</h5><h5 id="不满足以上条件则移动整个模式串长度距离"><a href="#不满足以上条件则移动整个模式串长度距离" class="headerlink" title="不满足以上条件则移动整个模式串长度距离"></a>不满足以上条件则移动整个模式串长度距离</h5><p>(还有一种情况:找好后缀的后缀在模式串中的子串,该情况没有意义,因为如果该子串不是被匹配串的前缀,移动模式匹配串到对齐位置一定是不合理的.而如果该子串是被匹配的前缀,移动即合理,符合情况三)  </p>
-<p>最后取坏字符规则与好后缀规则的最大移动距离  </p>
-<p>###预处理好后缀规则<br>寻找字符串中与各个后缀串相同的子串  </p>
-<p>###时间复杂度</p>
-<p>##源代码</p>
-<pre><code>#coding: utf-8
-p = [-1]
-def ini(pattern):
-    for i in range(1, len(pattern)):
-        if pattern[i] == pattern[0]:
-            p.append(0)
-        else:
-            p.append(-1)
-
-        j = i - 1
-        while(j != -1):
-            if pattern[p[j] + 1] == pattern[i]:
-                p[i] = p[j] + 1
-                break
-            else:
-                j = p[j]
-    #print p
-
-def kmp(s, t):
-    ini(t)
-    j = 0
-    i = 0
-    while(i != len(s)):
-        while(j != len(t)):
-            if t[j] == s[i]:
-                j = j + 1
-                i = i + 1 
-            else:
-                if j == 0:
-                    i = i + 1
-                    break
-                j = p[j - 1] + 1 
-        if j == len(t):
-            return 1
-    return 0
-
-preGS = []
-GS = []
-BC = {}
-#O(n^2/2)
-def pre_build(pattern):
-    #以i为右边界与后缀相同的字符个数
-    for i in range(len(pattern)):
-        GS.append(-1)
-        t = i
-        j = len(pattern) - 1
-        while(j &gt;= 0 and t &gt;= 0 and t != j):
-            if pattern[t] == pattern[j]:
-                t = t - 1
-                j = j - 1
-            else:
-                break
-        preGS.append(i - t)
-    #print &apos;preGS&apos;, preGS
-
-def build_good_shuffix(pattern):
-    pre_build(pattern)
-
-    #情况三,模式串的前缀=后缀
-    for i in range(len(pattern)):  
-
-##        if preGS[i] == i + 1:
-            #最左的后缀字符下标
-##            GS[len(pattern) - preGS[i]] = len(pattern) - preGS[i]
-    #情况二,模式串的子串=后缀
-##    for i in range(len(pattern)):
-    #情况二和三,同下代码
-    #等式右边表示模式串移动多少距离
-        if preGS[i] != 0:
-            GS[len(pattern) - preGS[i]] = len(pattern) - preGS[i]
-    #print &apos;GS&apos; ,GS
-
-
-def build_bad_char(pattern):
-    for i in range(len(pattern)):
-            BC[pattern[i]] = i
-    #print &apos;BC&apos;, BC
-
-def bm(s, t):
-    build_good_shuffix(t)
-    build_bad_char(t)
-    if len(s) &lt; len(t):
-        return False
-    i = len(t) - 1
-    j = len(t) - 1
-    while(i &lt; len(s)):
-        while(j &gt;= 0):
-            if s[i] == t[j]:
-                i = i - 1
-                j = j - 1
-            else:
-                break
-        if j == -1:
-            return True
-        else:
-            skip = GS[j]
-            if(BC.has_key(s[i])):
-                if BC[s[i]] &lt; j:
-                    skip = max(skip, j - BC[s[i]])
-            if skip &lt;= 0:
-                skip = len(t)
-        #print &apos;skip&apos;, skip
-
-        i = i + skip
-        j = len(t) - 1    
-        #print &apos;i&apos;, i
-        #print &apos;j&apos;, j
-    return False
-
-
-if __name__ == &apos;__main__&apos;:
-    print kmp(&apos;faeadsfasdfcasdfasdfasdfabcxsdfsadfadfxdesadffeabcxxxabcdwawasdfsdfsaasdf&apos;, &apos;abcxxxabc&apos;)
-    print bm(&apos;faeadsfasdfasaewcaasdfasdfdbcxsdfsadfadfxdesadffeabcxxxabcdwawasdfsdfsaasdf&apos;, &apos;abcxxxabc&apos;)</code></pre><p>##reference<br><a href="http://www.searchtb.com/2011/07/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%E9%82%A3%E4%BA%9B%E4%BA%8B%EF%BC%88%E4%B8%80%EF%BC%89.html" target="_blank" rel="noopener">http://www.searchtb.com/2011/07/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%E9%82%A3%E4%BA%9B%E4%BA%8B%EF%BC%88%E4%B8%80%EF%BC%89.html</a></p>
+<p>举个例子：<br>我去买一本书，立即买到了，这就是非阻塞；<br>如果恰好书店没有，我就等一直等到书店有了这本书买到了才走，这就是阻塞；<br>如果书店恰好没有，我就告诉书店老板，书来了告诉我一声让我来取或者直接送到我家，然后我就走了，这就是异步。<br>那同步呢？ 前面两种情况，非阻塞和阻塞都可以称为同步。<br>如果说书店有这书，我还让老板通知我以后来取就没这个必要了。</p>
+<p>反映在编程方面就是 用户进程 调用 系统调用。(用户进程对应我，内核 对应 书店老板，书对应数据资源data ， 买书就是一个系统调用了)<br>这阻塞非阻塞与同步异步IO机制，都是伴随计算机系统发展，用来解决一些出现的问题。阻塞非阻塞、同步异步可以组合，但是没必要组合，应该说是不同的IO机制，没必要纠结怎么区分，如果定要组合心里才爽，可以 这样认为：阻塞非阻塞都是同步，异步就没什么阻塞不阻塞了，都异步了还阻塞啥，肯定是非阻塞了。(异步非阻塞听起来多别扭)</p>
+<p>unix网络编程中说到：<br>将IO模型分为五类：阻塞IO，非阻塞IO，IO复用，信号驱动，异步IO<br>其中阻塞IO就是那种recv, read，一直等，等到有了拷贝了数据才返回；<br>非阻塞就是不用等，立即返回，设置描述符为非阻塞就行了，但是要进程自己一直检查是否可读；<br>IO复用其实也是阻塞的，不过可以用来等很多描述符；<br>信号驱动采用信号机制等待；<br>异步IO就不用等待了，当他告知你的时候，已经可以返回了，数据都拷贝好了。</p>
+<p>posix.1严格定义的异步IO是要求没有任何一点阻塞，而上述的前面四个（阻塞IO，非阻塞IO，IO复用，信号驱动）都不同程度阻塞了，而且都有一个共同的阻塞： 内核拷贝数据到进程空间的这段时间需要等待。</p>
 
           
         
@@ -1221,7 +1162,7 @@ if __name__ == &apos;__main__&apos;:
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2013-5-29-sync_thread/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/05/29/2013-5-29-dll/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -1240,7 +1181,7 @@ if __name__ == &apos;__main__&apos;:
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2013-5-29-sync_thread/" itemprop="url">window线程同步</a></h1>
+                <a class="post-title-link" href="/2013/05/29/2013-5-29-dll/" itemprop="url">windows动态链接库DLL</a></h1>
         
 
         <div class="post-meta">
@@ -1252,8 +1193,136 @@ if __name__ == &apos;__main__&apos;:
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-05-29T00:00:00+08:00">
+                2013-05-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="winodws动态链接库dll"><a href="#winodws动态链接库dll" class="headerlink" title="winodws动态链接库dll"></a>winodws动态链接库dll</h2><h3 id="what"><a href="#what" class="headerlink" title="what"></a>what</h3><h3 id="why"><a href="#why" class="headerlink" title="why"></a>why</h3><h3 id="how"><a href="#how" class="headerlink" title="how"></a>how</h3><h3 id="将DLL映射到进程地址空间"><a href="#将DLL映射到进程地址空间" class="headerlink" title="将DLL映射到进程地址空间"></a>将DLL映射到进程地址空间</h3><h4 id="隐式链接"><a href="#隐式链接" class="headerlink" title="隐式链接"></a>隐式链接</h4><p>应用程序的源代码里引用了DLL的符号，加载程序会自动将DLL加载到进程的地址空间中。所以应用程序需要包含模块的头文件。     </p>
+<h4 id="显示链接"><a href="#显示链接" class="headerlink" title="显示链接"></a>显示链接</h4><p>应用程序主动调用LoadLibrary将DLL载入到进程的地址空间中。<br>GetProcAddress引用该dll导出的符号。</p>
+<h4 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h4><p>程序开始运行首先加载DLL，然后执行主线程。<br>在程序运行到LoadLibrary函数的时候加载DLL。    </p>
+<h3 id="创建dll"><a href="#创建dll" class="headerlink" title="创建dll"></a>创建dll</h3><pre><code>__declspec(dllexport)</code></pre><p>1.创建dll时会创建相应.lib文件，保存dll导出的变量和函数的符号。<br>2.dll文件也会有导入段、导出段，保存dll导入导出的变量和函数符号。<br>3.exe可执行文件里的导入段记录需要导入的dll文件和变量函数符号。    </p>
+<h3 id="运行应用程序"><a href="#运行应用程序" class="headerlink" title="运行应用程序"></a>运行应用程序</h3><p>1.启动应用程序时，系统的加载程序会先为进程创建虚拟地址空间，接着把可执行模块映射到进程地址空间，之后检查可执行模块的导入段，把所需的dll定位并映射到进程的地址空间。同时会检查所需dll是否需要dll。<br>2.由于导入段里没有dll在硬盘中的路径，所以加载程序会按一定顺序搜索文件。<br>3.将所以dll模块载入到进程空间后，加载程序检查模块的导入段符号是否存在于相应dll的导出段中，存在则计算符号在进程空间中的地址，并把该地址写入到导入段中。      </p>
+<h3 id="DLL入口点函数DllMain"><a href="#DLL入口点函数DllMain" class="headerlink" title="DLL入口点函数DllMain"></a>DLL入口点函数DllMain</h3><p>1.当系统第一次载入dll或LoadLibrary，映射到进程的地址空间，进程主线程会调用该入口点函数并传入DLL_PROCESS_ATTACH，执行相关操作例如创建一个进程堆，当映射完成调用C/C++运行时的启动代码，然后调用可执行模块的入口点函数_tmain。<br>2.当系统将dll的映射撤销出地址空间，例如ExitProcess或FreeLibrary，调用dllMain并传入DLL_PROCESS_DETACH参数。<br>3.创建线程时，线程执行进程中的所有DLL入口点函数，并传入DLL_THREAD_ATTACH参数。<br>4.ExitThread终止线程时，调用各个dll入口点函数。   </p>
+<h3 id="延迟载入DLL"><a href="#延迟载入DLL" class="headerlink" title="延迟载入DLL"></a>延迟载入DLL</h3><p>对于隐式链接，只有当我们的代码引用DLL里的符号时，系统才会载入该DLL。        </p>
+<h3 id="模块基地址"><a href="#模块基地址" class="headerlink" title="模块基地址"></a>模块基地址</h3><p>可执行文件和DLL模块都有一个在进程地址空间中的首选基地址，如果该地址已被其他模块占用，则加载程序需要修改模块代码，对该模块中任何地址操作进行重定位。应选择合适的dll基地址，防止重定位。         </p>
+<h3 id="模块绑定"><a href="#模块绑定" class="headerlink" title="模块绑定"></a>模块绑定</h3><p>绑定一个模块即修改他导入表中的符号在进程空间中的实际地址。           </p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/05/29/2013-5-29-sync_thread/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2013/05/29/2013-5-29-sync_thread/" itemprop="url">window线程同步</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-05-29T00:00:00+08:00">
+                2013-05-29
               </time>
             
 
@@ -1374,7 +1443,7 @@ if __name__ == &apos;__main__&apos;:
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2013-5-29-dll/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/05/21/2013-5-21-python_source_code/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -1393,7 +1462,7 @@ if __name__ == &apos;__main__&apos;:
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2013-5-29-dll/" itemprop="url">windows动态链接库DLL</a></h1>
+                <a class="post-title-link" href="/2013/05/21/2013-5-21-python_source_code/" itemprop="url">python对象机制</a></h1>
         
 
         <div class="post-meta">
@@ -1405,136 +1474,8 @@ if __name__ == &apos;__main__&apos;:
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="winodws动态链接库dll"><a href="#winodws动态链接库dll" class="headerlink" title="winodws动态链接库dll"></a>winodws动态链接库dll</h2><h3 id="what"><a href="#what" class="headerlink" title="what"></a>what</h3><h3 id="why"><a href="#why" class="headerlink" title="why"></a>why</h3><h3 id="how"><a href="#how" class="headerlink" title="how"></a>how</h3><h3 id="将DLL映射到进程地址空间"><a href="#将DLL映射到进程地址空间" class="headerlink" title="将DLL映射到进程地址空间"></a>将DLL映射到进程地址空间</h3><h4 id="隐式链接"><a href="#隐式链接" class="headerlink" title="隐式链接"></a>隐式链接</h4><p>应用程序的源代码里引用了DLL的符号，加载程序会自动将DLL加载到进程的地址空间中。所以应用程序需要包含模块的头文件。     </p>
-<h4 id="显示链接"><a href="#显示链接" class="headerlink" title="显示链接"></a>显示链接</h4><p>应用程序主动调用LoadLibrary将DLL载入到进程的地址空间中。<br>GetProcAddress引用该dll导出的符号。</p>
-<h4 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h4><p>程序开始运行首先加载DLL，然后执行主线程。<br>在程序运行到LoadLibrary函数的时候加载DLL。    </p>
-<h3 id="创建dll"><a href="#创建dll" class="headerlink" title="创建dll"></a>创建dll</h3><pre><code>__declspec(dllexport)</code></pre><p>1.创建dll时会创建相应.lib文件，保存dll导出的变量和函数的符号。<br>2.dll文件也会有导入段、导出段，保存dll导入导出的变量和函数符号。<br>3.exe可执行文件里的导入段记录需要导入的dll文件和变量函数符号。    </p>
-<h3 id="运行应用程序"><a href="#运行应用程序" class="headerlink" title="运行应用程序"></a>运行应用程序</h3><p>1.启动应用程序时，系统的加载程序会先为进程创建虚拟地址空间，接着把可执行模块映射到进程地址空间，之后检查可执行模块的导入段，把所需的dll定位并映射到进程的地址空间。同时会检查所需dll是否需要dll。<br>2.由于导入段里没有dll在硬盘中的路径，所以加载程序会按一定顺序搜索文件。<br>3.将所以dll模块载入到进程空间后，加载程序检查模块的导入段符号是否存在于相应dll的导出段中，存在则计算符号在进程空间中的地址，并把该地址写入到导入段中。      </p>
-<h3 id="DLL入口点函数DllMain"><a href="#DLL入口点函数DllMain" class="headerlink" title="DLL入口点函数DllMain"></a>DLL入口点函数DllMain</h3><p>1.当系统第一次载入dll或LoadLibrary，映射到进程的地址空间，进程主线程会调用该入口点函数并传入DLL_PROCESS_ATTACH，执行相关操作例如创建一个进程堆，当映射完成调用C/C++运行时的启动代码，然后调用可执行模块的入口点函数_tmain。<br>2.当系统将dll的映射撤销出地址空间，例如ExitProcess或FreeLibrary，调用dllMain并传入DLL_PROCESS_DETACH参数。<br>3.创建线程时，线程执行进程中的所有DLL入口点函数，并传入DLL_THREAD_ATTACH参数。<br>4.ExitThread终止线程时，调用各个dll入口点函数。   </p>
-<h3 id="延迟载入DLL"><a href="#延迟载入DLL" class="headerlink" title="延迟载入DLL"></a>延迟载入DLL</h3><p>对于隐式链接，只有当我们的代码引用DLL里的符号时，系统才会载入该DLL。        </p>
-<h3 id="模块基地址"><a href="#模块基地址" class="headerlink" title="模块基地址"></a>模块基地址</h3><p>可执行文件和DLL模块都有一个在进程地址空间中的首选基地址，如果该地址已被其他模块占用，则加载程序需要修改模块代码，对该模块中任何地址操作进行重定位。应选择合适的dll基地址，防止重定位。         </p>
-<h3 id="模块绑定"><a href="#模块绑定" class="headerlink" title="模块绑定"></a>模块绑定</h3><p>绑定一个模块即修改他导入表中的符号在进程空间中的实际地址。           </p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2013-5-21-python_source_code/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2013-5-21-python_source_code/" itemprop="url">python对象机制</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-05-21T00:00:00+08:00">
+                2013-05-21
               </time>
             
 
@@ -1693,6 +1634,274 @@ struct _intblock {
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/05/21/2013-5-21-interview_code/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2013/05/21/2013-5-21-interview_code/" itemprop="url">面试编程题</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-05-21T00:00:00+08:00">
+                2013-05-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="面试编程题"><a href="#面试编程题" class="headerlink" title="面试编程题"></a>面试编程题</h2><h3 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h3><p>括号匹配：给定字符串，输出括号是否匹配，例如，”()” yes；”)(“ no；”(abcd(e)” no；”(a)(b)” yes。要求必须用递归写，整个实现不可以出现一个循环语句。</p>
+<h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><p>遇到’(‘,count++，遇到’)’，count–，递归过程中，如果count&lt;0，则括号不匹配</p>
+<h3 id="code"><a href="#code" class="headerlink" title="code"></a>code</h3><pre><code>#coding: utf-8
+def dfs(string, count):
+    if count &lt; 0:
+        return False
+    if len(string) == 1:
+        if string == &apos;(&apos;:
+            return False
+        elif string == &apos;)&apos;:
+            count = count - 1
+
+        if count == 0:
+            return True
+        else:
+            return False
+    else:
+
+        if string[0] == &apos;(&apos;:
+            count = count + 1
+        elif string[0] == &apos;)&apos;:
+            count = count - 1
+        string = string[1:len(string)]
+        return dfs(string, count)
+
+if __name__ == &apos;__main__&apos;:
+    print dfs(&apos;(a)(b))11()(a)(b)1&apos;, 0)</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/05/19/2013-5-19-probability/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2013/05/19/2013-5-19-probability/" itemprop="url">概率题</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-05-19T00:00:00+08:00">
+                2013-05-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="一道概率题"><a href="#一道概率题" class="headerlink" title="一道概率题"></a>一道概率题</h2><h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>有三扇门,一扇后面有玛莎拉蒂,另外两扇门后面是白纸,你先选择一道门,然后我打开一道后面是白纸的门,然后问你要不要选择换一道门.</p>
+<h3 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h3><p>第一次选择后面是玛莎拉蒂的门的概率是1/3,换门一定是错误选择.<br>第一次选择后面是白纸的门的概率是2/3,换门一定是正确选择.<br>所以选择换门,有2/3的概率选择正确,所以应该要选择换门.  </p>
+<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><p>如果有四道门,分析方法一样,第一次选择白纸的概率是3/4,换门后选对的概率是1/2,所以选择换门有3/8概率选择正确.不换则有1/4概率选择正确.选择换比较正确.<br>如果有5道门,选择换门有4/5*1/3=4/15概率选择正确.不换则有1/5概率选择正确.<br>如果有N道门,换门正确概率为(n-1)/n*1/(n-2) = (n-1)/(n(n-2)),不换正确概率为1/n=(n-2)/(n(n-2))&lt;换门正确概率.  </p>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>无论有几扇门,都应该选择换</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
@@ -1743,7 +1952,7 @@ struct _intblock {
               
                 <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">273</span>
+                  <span class="site-state-item-count">271</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

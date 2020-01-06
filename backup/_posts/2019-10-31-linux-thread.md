@@ -1,4 +1,5 @@
 ---
+date: 2019-10-31
 layout: default
 
 title: linux线程同步

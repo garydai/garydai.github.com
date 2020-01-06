@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="windows线程同步volatile限定符volatile易变的、不可优化的，易变所以要直接从内存里拿变量 阻止编译器对变量的代码优化，确保当读取变量时是从内存中读取而不是寄存器。防止出现其他一个线程修改了全局变量，而线程中操作变量的代码优化后是操作该变量第一次搬到的寄存器里的值。   所以多线程编程时，应该对那些共享变量加上volatile类型。     用户模式下的线程同步原子访问保证对值的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="window线程同步">
+<meta property="og:url" content="http://yoursite.com/2013/05/29/2013-5-29-sync_thread/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="windows线程同步volatile限定符volatile易变的、不可优化的，易变所以要直接从内存里拿变量 阻止编译器对变量的代码优化，确保当读取变量时是从内存中读取而不是寄存器。防止出现其他一个线程修改了全局变量，而线程中操作变量的代码优化后是操作该变量第一次搬到的寄存器里的值。   所以多线程编程时，应该对那些共享变量加上volatile类型。     用户模式下的线程同步原子访问保证对值的">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/interlock_stack.PNG">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/spinlock.PNG">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/mutex_cs.PNG">
+<meta property="article:published_time" content="2013-05-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-01-06T07:17:32.414Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/interlock_stack.PNG">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2013/05/29/2013-5-29-sync_thread/"/>
+
+
+
+
+
+  <title>window线程同步 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/05/29/2013-5-29-sync_thread/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">window线程同步</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-05-29T00:00:00+08:00">
+                2013-05-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="windows线程同步"><a href="#windows线程同步" class="headerlink" title="windows线程同步"></a>windows线程同步</h2><h3 id="volatile限定符"><a href="#volatile限定符" class="headerlink" title="volatile限定符"></a>volatile限定符</h3><p>volatile易变的、不可优化的，易变所以要直接从内存里拿变量</p>
+<p>阻止编译器对变量的代码优化，确保当读取变量时是从内存中读取而不是寄存器。防止出现其他一个线程修改了全局变量，而线程中操作变量的代码优化后是操作该变量第一次搬到的寄存器里的值。  </p>
+<p>所以多线程编程时，应该对那些共享变量加上volatile类型。    </p>
+<h3 id="用户模式下的线程同步"><a href="#用户模式下的线程同步" class="headerlink" title="用户模式下的线程同步"></a>用户模式下的线程同步</h3><h4 id="原子访问"><a href="#原子访问" class="headerlink" title="原子访问"></a>原子访问</h4><p>保证对值的修改是以原子方式进行。    </p>
+<p>InterlockedExchangeAdd等,涉及加减、与或。   </p>
+<p>Interlocked函数调用一次占用50个以内的时钟周期。  </p>
+<p>除了对整数或布尔值进行原子操作外，还能对Interlocked单向链表的栈进行原子操作。  </p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/interlock_stack.PNG" alt=""></p>
+<h5 id="旋转锁spinlock"><a href="#旋转锁spinlock" class="headerlink" title="旋转锁spinlock"></a>旋转锁spinlock</h5><p>利用原子操作函数实现旋转锁  </p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/spinlock.PNG" alt=""></p>
+<p>建议少用，因为长时间的while循环消耗cpu资源，应该采用在等待过程中，线程被挂起不浪费CPU资源，并由系统唤醒线程的机制。    </p>
+<p>原子访问只能原子访问一个变量，不能控制访问一些共享资源，旋转锁轮询机制浪费CPU，因此引入：</p>
+<h4 id="关键段critical-section"><a href="#关键段critical-section" class="headerlink" title="关键段critical section"></a>关键段critical section</h4><pre><code>VOID EnterCriticalSection(PCRITICAL_SECTION pcs)  </code></pre><p>EnterCriticalSection函数会检查pcs结构中的变量，这些变量表明是否有其他线程在访问资源。  </p>
+<p>如果成员变量表示有其他线程在使用资源，则该函数会使用一个事件内核对象把调用线程切换到等待状态，不会浪费CPU时间。系统会记住该线程想要访问这个资源，当其他线程离开关键段，系统会更新该成员变量且唤醒该线程。</p>
+<p>LeaveCriticalSection函数会检查是否关键段没有被任何线程访问，如果没有则唤醒那些等待着的线程。  </p>
+<p><strong>enter和leave函数内部都是通过原子方式来检查测试成员变量。</strong>   </p>
+<p>缺点：   </p>
+<p>能且只能用在一个进程中的多线程同步。可能陷入死锁，因为我们无法为进入关键段的线程设置最大等待时间  </p>
+<h4 id="关键段-旋转锁"><a href="#关键段-旋转锁" class="headerlink" title="关键段+旋转锁"></a>关键段+旋转锁</h4><p>使用关键段的线程在得不到资源访问权的时候，会被系统挂起，从用户态切换到内核态，消耗的CPU周期比较大(1000个cpu周期)，切换过程中，占用资源的线程可能已经释放控制。所以可以加入旋转锁，在得不到资源访问权，线程切换前，自循环一段时间。  </p>
+<h4 id="slim读、写锁"><a href="#slim读、写锁" class="headerlink" title="slim读、写锁"></a>slim读、写锁</h4><p>同关键段原理，区别的地方在读资源线程可以允许其他读线程访问同一资源，而写线程不允许其他线程读写资源。  </p>
+<p>写线程使用AcquireSRWLockExclusive,ReleaseSRWLockExclusive两个函数。  </p>
+<p>读线程使用AcquireSRWLockShared，ReleaseSRWLockShared。 </p>
+<h4 id="条件变量"><a href="#条件变量" class="headerlink" title="条件变量"></a>条件变量</h4><p>在共享区域外面有关键段的条件下，进入关键段后，根据条件变量决定是否释放关键段的锁，以原子方式把锁释放并将自己阻塞，直到某一个条件成立为止。可以用于读写队列同步线程，例如对于读线程，进入关键段后，当队列为空时，就释放锁并阻塞自己，直到其他线程写完队列后唤醒该线程。  </p>
+<p>主要函数SleepConditionVariableCS、SleepConditionVariableSRW、WakeConditionVariable、WakeAllConditionVariable  </p>
+<h3 id="用内核对象进行线程同步"><a href="#用内核对象进行线程同步" class="headerlink" title="用内核对象进行线程同步"></a>用内核对象进行线程同步</h3><p>较之用户模式下的线程同步该机制的缺点是调用内核模式下的线程同步函数，调用线程从用户态切换到内核态，切换耗时。  </p>
+<p>几乎所有内核对象内部维护一个变量true、false表示该对象触发、或触发（进程、线程、作业、文件以及控制台的标准输入、输出、错误流、事件、可等待的计时器、信号量、互斥量）。</p>
+<p>等待函数WaitForSingleObject、WaitForMultipleObjects等待内核对象触发。</p>
+<p>可等待的计时器内核对象：指定某个时刻触发事件或每隔一段时间触发事件。  </p>
+<p>信号量：信号量内核对象维护一个资源计数，当计数大于0，信号量对象处于触发状态。  </p>
+<p>互斥量：与用户态下的关键段相似，不同于其他内核对象，互斥量对象维护了当前运行的线程ID。   </p>
+<p>消费者生成者模型原理：</p>
+<p>利用信号量和互斥量创建线程安全的队列。用互斥量锁住公共队列；生产者令信号量表示的资源数加1，使得信号量处于触发状态；消费者wait互斥量与信号量都处于触发状态，才能拿队列里的产品。</p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/mutex_cs.PNG" alt=""></p>
+<h3 id="linux线程"><a href="#linux线程" class="headerlink" title="linux线程"></a>linux线程</h3><p><a href="http://garydai.github.io/2019/10/31/linux-thread.html" target="_blank" rel="noopener">http://garydai.github.io/2019/10/31/linux-thread.html</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2013/05/21/2013-5-21-python_source_code/" rel="next" title="python对象机制">
+                <i class="fa fa-chevron-left"></i> python对象机制
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2013/05/29/2013-5-29-dll/" rel="prev" title="windows动态链接库DLL">
+                windows动态链接库DLL <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">271</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#windows线程同步"><span class="nav-number">1.</span> <span class="nav-text">windows线程同步</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#volatile限定符"><span class="nav-number">1.1.</span> <span class="nav-text">volatile限定符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用户模式下的线程同步"><span class="nav-number">1.2.</span> <span class="nav-text">用户模式下的线程同步</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#原子访问"><span class="nav-number">1.2.1.</span> <span class="nav-text">原子访问</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#旋转锁spinlock"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">旋转锁spinlock</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关键段critical-section"><span class="nav-number">1.2.2.</span> <span class="nav-text">关键段critical section</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关键段-旋转锁"><span class="nav-number">1.2.3.</span> <span class="nav-text">关键段+旋转锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#slim读、写锁"><span class="nav-number">1.2.4.</span> <span class="nav-text">slim读、写锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#条件变量"><span class="nav-number">1.2.5.</span> <span class="nav-text">条件变量</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用内核对象进行线程同步"><span class="nav-number">1.3.</span> <span class="nav-text">用内核对象进行线程同步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#linux线程"><span class="nav-number">1.4.</span> <span class="nav-text">linux线程</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,4 +1,5 @@
 ---
+date: 2016-10-10
 layout: default
 
 title: 飞飞VPN隐私政策

@@ -1,4 +1,5 @@
 ---
+date: 2013-10-17
 layout: default
 title: 友元
 

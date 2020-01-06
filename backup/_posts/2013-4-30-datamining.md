@@ -1,4 +1,5 @@
 ---
+date: 2013-4-30
 layout: default
 title: 数据挖掘笔记
 

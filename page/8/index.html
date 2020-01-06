@@ -229,7 +229,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2018-8-20-php/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/25/2019-01-25-docker-java/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -248,7 +248,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2018-8-20-php/" itemprop="url">php-fpm</a></h1>
+                <a class="post-title-link" href="/2019/01/25/2019-01-25-docker-java/" itemprop="url">docker-java</a></h1>
         
 
         <div class="post-meta">
@@ -260,8 +260,374 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-25T00:00:00+08:00">
+                2019-01-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="docker-java"><a href="#docker-java" class="headerlink" title="docker-java"></a>docker-java</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install -y yum-utils device-mapper-persistent-data lvm2</span><br><span class="line">sudo yum-config-manager --add-repo http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;docker-ce&#x2F;linux&#x2F;centos&#x2F;docker-ce.repo</span><br><span class="line">sudo yum makecache fast</span><br><span class="line">安装docker </span><br><span class="line">sudo yum -y install docker-ce</span><br><span class="line">安装pip</span><br><span class="line">sudo yum install python-pip -y</span><br><span class="line">安装docker-compose</span><br><span class="line">sudo pip install docker-compose</span><br><span class="line">启动</span><br><span class="line">sudo systemctl start docker</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>dockerfile</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">FROM java:8</span><br><span class="line"></span><br><span class="line">ENV TZ Asia&#x2F;Shanghai</span><br><span class="line"></span><br><span class="line">COPY pailie_wallet-*-SNAPSHOT.jar &#x2F;opt&#x2F;pailie_wallet_api&#x2F;lib&#x2F;pailie_wallet.jar</span><br><span class="line">COPY conf &#x2F;opt&#x2F;pailie_wallet_api&#x2F;conf</span><br><span class="line"></span><br><span class="line">WORKDIR &#x2F;opt&#x2F;pailie_wallet_api&#x2F;lib</span><br><span class="line"></span><br><span class="line">RUN ln -snf &#x2F;usr&#x2F;share&#x2F;zoneinfo&#x2F;$TZ &#x2F;etc&#x2F;localtime &amp;&amp; echo $TZ &gt; &#x2F;etc&#x2F;timezone</span><br><span class="line"></span><br><span class="line">ENTRYPOINT [&quot;java&quot;,&quot;-Djava.security.egd&#x3D;file:&#x2F;dev&#x2F;.&#x2F;urandom -Dlogging.config&#x3D;&#x2F;opt&#x2F;pailie_wallet_api&#x2F;conf&#x2F;logback.xml \</span><br><span class="line">-Dspring.profiles.active&#x3D;$&#123;SPRING_PROFILES_ACTIVE&#125; -Xms1024m -Xmx1024m&quot;, &quot;-jar&quot;, &quot;pailie_wallet.jar&quot;]</span><br></pre></td></tr></table></figure>
+
+<p>docker-compose.yml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">version: &#39;3&#39;</span><br><span class="line">services:</span><br><span class="line">  app-api:</span><br><span class="line">    image: pailie_wallet:IMAGE_TAG</span><br><span class="line">    volumes:</span><br><span class="line">      - ~&#x2F;Documents&#x2F;pailie&#x2F;pailie_wallet&#x2F;log:&#x2F;var&#x2F;log&#x2F;pailie_wallet_api</span><br><span class="line">    ports:</span><br><span class="line">      - SPRING_PORT:8091</span><br><span class="line">    environment:</span><br><span class="line">      - SPRING_PROFILES_ACTIVE&#x3D;docker-staging</span><br></pre></td></tr></table></figure>
+
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>docker images -a会显示所有repostory和tag都为空的中间镜像</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/23/2019-01-23-openresty/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/23/2019-01-23-openresty/" itemprop="url">openresty</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-23T00:00:00+08:00">
+                2019-01-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="openresty"><a href="#openresty" class="headerlink" title="openresty"></a>openresty</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install yum-utils</span><br><span class="line"></span><br><span class="line">sudo yum-config-manager --add-repo https:&#x2F;&#x2F;openresty.org&#x2F;package&#x2F;centos&#x2F;openresty.repo</span><br><span class="line"></span><br><span class="line">sudo yum install openresty -y</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/24/2018-11-24-message_queue/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/24/2018-11-24-message_queue/" itemprop="url">消息队列</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-24T00:00:00+08:00">
+                2018-11-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h2><h3 id=""><a href="#" class="headerlink" title=""></a></h3>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/20/2018-8-20-php/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/20/2018-8-20-php/" itemprop="url">php-fpm</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-20T00:00:00+08:00">
+                2018-08-20
               </time>
             
 
@@ -364,7 +730,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2018-8-18-%E5%8E%8B%E6%B5%8B/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/18/2018-8-18-%E5%8E%8B%E6%B5%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -383,7 +749,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2018-8-18-%E5%8E%8B%E6%B5%8B/" itemprop="url">压测</a></h1>
+                <a class="post-title-link" href="/2018/08/18/2018-8-18-%E5%8E%8B%E6%B5%8B/" itemprop="url">压测</a></h1>
         
 
         <div class="post-meta">
@@ -395,8 +761,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-18T00:00:00+08:00">
+                2018-08-18
               </time>
             
 
@@ -486,7 +852,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2018-8-18-jdbc/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/18/2018-8-18-jdbc/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -505,7 +871,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2018-8-18-jdbc/" itemprop="url">jdbc</a></h1>
+                <a class="post-title-link" href="/2018/08/18/2018-8-18-jdbc/" itemprop="url">jdbc</a></h1>
         
 
         <div class="post-meta">
@@ -517,8 +883,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-18T00:00:00+08:00">
+                2018-08-18
               </time>
             
 
@@ -639,7 +1005,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2018-8-13-sql%E8%A7%84%E8%8C%83/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/13/2018-8-13-innodb/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -658,7 +1024,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2018-8-13-sql%E8%A7%84%E8%8C%83/" itemprop="url">restful规范</a></h1>
+                <a class="post-title-link" href="/2018/08/13/2018-8-13-innodb/" itemprop="url">innodb</a></h1>
         
 
         <div class="post-meta">
@@ -670,332 +1036,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="restful规范"><a href="#restful规范" class="headerlink" title="restful规范"></a>restful规范</h2><p>[http method] resource</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2018-8-13-restful%E8%A7%84%E8%8C%83/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2018-8-13-restful%E8%A7%84%E8%8C%83/" itemprop="url">sql</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="sql规范"><a href="#sql规范" class="headerlink" title="sql规范"></a>sql规范</h2><p>一、基础规范</p>
-<p>（1）必须使用InnoDB存储引擎</p>
-<p>解读：支持事务、行级锁、并发性能更好、CPU及内存缓存页优化使得资源利用率更高</p>
-<p>（2）必须使用UTF8字符集</p>
-<p>解读：万国码，无需转码，无乱码风险，节省空间</p>
-<p>（3）数据表、数据字段必须加入中文注释</p>
-<p>解读：N年后谁tm知道这个r1,r2,r3字段是干嘛的</p>
-<p>（4）禁止使用存储过程、视图、触发器、Event</p>
-<p>解读：高并发大数据的互联网业务，架构设计思路是“解放数据库CPU，将计算转移到服务层”，并发量大的情况下，这些功能很可能将数据库拖死，业务逻辑放到服务层具备更好的扩展性，能够轻易实现“增机器就加性能”。数据库擅长存储与索引，CPU计算还是上移吧</p>
-<p>（5）禁止存储大文件或者大照片</p>
-<p>解读：为何要让数据库做它不擅长的事情？大文件和照片存储在文件系统，数据库里存URI多好</p>
-<p>二、命名规范</p>
-<p>（6）只允许使用内网域名，而不是ip连接数据库</p>
-<p>（7）线上环境、开发环境、测试环境数据库内网域名遵循命名规范</p>
-<p>业务名称：xxx</p>
-<p>线上环境：dj.xxx.db</p>
-<p>开发环境：dj.xxx.rdb</p>
-<p>测试环境：dj.xxx.tdb</p>
-<p>从库在名称后加-s标识，备库在名称后加-ss标识</p>
-<p>线上从库：dj.xxx-s.db</p>
-<p>线上备库：dj.xxx-sss.db</p>
-<p>（8）库名、表名、字段名：小写，下划线风格，不超过32个字符，必须见名知意，禁止拼音英文混用</p>
-<p>（9）表名t_xxx，非唯一索引名idx_xxx，唯一索引名uniq_xxx</p>
-<p>三、表设计规范</p>
-<p>（10）单实例表数目必须小于500</p>
-<p>（11）单表列数目必须小于30</p>
-<p>（12）表必须有主键，例如自增主键</p>
-<p>解读：</p>
-<p>a）主键递增，数据行写入可以提高插入性能，可以避免page分裂，减少表碎片提升空间和内存的使用</p>
-<p>b）主键要选择较短的数据类型， Innodb引擎普通索引都会保存主键的值，较短的数据类型可以有效的减少索引的磁盘空间，提高索引的缓存效率</p>
-<p>c） 无主键的表删除，在row模式的主从架构，会导致备库夯住</p>
-<p>（13）禁止使用外键，如果有外键完整性约束，需要应用程序控制</p>
-<p>解读：外键会导致表与表之间耦合，update与delete操作都会涉及相关联的表，十分影响sql 的性能，甚至会造成死锁。高并发情况下容易造成数据库性能，大数据高并发业务场景数据库使用以性能优先</p>
-<p>四、字段设计规范</p>
-<p>（14）必须把字段定义为NOT NULL并且提供默认值</p>
-<p>解读：</p>
-<p>a）null的列使索引/索引统计/值比较都更加复杂，对MySQL来说更难优化</p>
-<p>b）null 这种类型MySQL内部需要进行特殊处理，增加数据库处理记录的复杂性；同等条件下，表中有较多空字段的时候，数据库的处理性能会降低很多</p>
-<p>c）null值需要更多的存储空，无论是表还是索引中每行中的null的列都需要额外的空间来标识</p>
-<p>d）对null 的处理时候，只能采用is null或is not null，而不能采用=、in、&lt;、&lt;&gt;、!=、not in这些操作符号。如：where name!=’shenjian’，如果存在name为null值的记录，查询结果就不会包含name为null值的记录</p>
-<p>（15）禁止使用TEXT、BLOB类型</p>
-<p>解读：会浪费更多的磁盘和内存空间，非必要的大量的大字段查询会淘汰掉热数据，导致内存命中率急剧降低，影响数据库性能</p>
-<p>（16）禁止使用小数存储货币</p>
-<p>解读：使用整数吧，小数容易导致钱对不上</p>
-<p>（17）必须使用varchar(20)存储手机号</p>
-<p>解读：</p>
-<p>a）涉及到区号或者国家代号，可能出现+-()</p>
-<p>b）手机号会去做数学运算么？</p>
-<p>c）varchar可以支持模糊查询，例如：like“138%”</p>
-<p>（18）禁止使用ENUM，可使用TINYINT代替</p>
-<p>解读：</p>
-<p>a）增加新的ENUM值要做DDL操作</p>
-<p>b）ENUM的内部实际存储就是整数，你以为自己定义的是字符串？</p>
-<p>五、索引设计规范</p>
-<p>（19）单表索引建议控制在5个以内</p>
-<p>（20）单索引字段数不允许超过5个</p>
-<p>解读：字段超过5个时，实际已经起不到有效过滤数据的作用了</p>
-<p>（21）禁止在更新十分频繁、区分度不高的属性上建立索引</p>
-<p>解读：</p>
-<p>a）更新会变更B+树，更新频繁的字段建立索引会大大降低数据库性能</p>
-<p>b）“性别”这种区分度不大的属性，建立索引是没有什么意义的，不能有效过滤数据，性能与全表扫描类似</p>
-<p>（22）建立组合索引，必须把区分度高的字段放在前面</p>
-<p>解读：能够更加有效的过滤数据</p>
-<p>六、SQL使用规范</p>
-<p>（23）禁止使用SELECT *，只获取必要的字段，需要显示说明列属性</p>
-<p>解读：</p>
-<p>a）读取不需要的列会增加CPU、IO、NET消耗</p>
-<p>b）不能有效的利用覆盖索引</p>
-<p>c）使用SELECT *容易在增加或者删除字段后出现程序BUG</p>
-<p>（24）禁止使用INSERT INTO t_xxx VALUES(xxx)，必须显示指定插入的列属性</p>
-<p>解读：容易在增加或者删除字段后出现程序BUG</p>
-<p>（25）禁止使用属性隐式转换</p>
-<p>解读：SELECT uid FROM t_user WHERE phone=13812345678 会导致全表扫描，而不能命中phone索引，猜猜为什么？（这个线上问题不止出现过一次）</p>
-<p>（26）禁止在WHERE条件的属性上使用函数或者表达式</p>
-<p>解读：SELECT uid FROM t_user WHERE from_unixtime(day)&gt;=’2017-02-15’ 会导致全表扫描</p>
-<p>正确的写法是：SELECT uid FROM t_user WHERE day&gt;= unix_timestamp(‘2017-02-15 00:00:00’)</p>
-<p>（27）禁止负向查询，以及%开头的模糊查询</p>
-<p>解读：</p>
-<p>a）负向查询条件：NOT、!=、&lt;&gt;、!&lt;、!&gt;、NOT IN、NOT LIKE等，会导致全表扫描</p>
-<p>b）%开头的模糊查询，会导致全表扫描</p>
-<p>（28）禁止大表使用JOIN查询，禁止大表使用子查询</p>
-<p>解读：会产生临时表，消耗较多内存与CPU，极大影响数据库性能</p>
-<p>（29）禁止使用OR条件，必须改为IN查询</p>
-<p>解读：旧版本Mysql的OR查询是不能命中索引的，即使能命中索引，为何要让数据库耗费更多的CPU帮助实施查询优化呢？</p>
-<p>（30）应用程序必须捕获SQL异常，并有相应处理</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2018-8-13-innodb/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2018-8-13-innodb/" itemprop="url">innodb</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-13T00:00:00+08:00">
+                2018-08-13
               </time>
             
 
@@ -1198,7 +1240,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2018-7-01-%E6%B3%A8%E8%A7%A3/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/13/2018-8-13-sql%E8%A7%84%E8%8C%83/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -1217,7 +1259,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2018-7-01-%E6%B3%A8%E8%A7%A3/" itemprop="url">java注解</a></h1>
+                <a class="post-title-link" href="/2018/08/13/2018-8-13-sql%E8%A7%84%E8%8C%83/" itemprop="url">restful规范</a></h1>
         
 
         <div class="post-meta">
@@ -1229,8 +1271,332 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-13T00:00:00+08:00">
+                2018-08-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="restful规范"><a href="#restful规范" class="headerlink" title="restful规范"></a>restful规范</h2><p>[http method] resource</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/13/2018-8-13-restful%E8%A7%84%E8%8C%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/13/2018-8-13-restful%E8%A7%84%E8%8C%83/" itemprop="url">sql</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-13T00:00:00+08:00">
+                2018-08-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="sql规范"><a href="#sql规范" class="headerlink" title="sql规范"></a>sql规范</h2><p>一、基础规范</p>
+<p>（1）必须使用InnoDB存储引擎</p>
+<p>解读：支持事务、行级锁、并发性能更好、CPU及内存缓存页优化使得资源利用率更高</p>
+<p>（2）必须使用UTF8字符集</p>
+<p>解读：万国码，无需转码，无乱码风险，节省空间</p>
+<p>（3）数据表、数据字段必须加入中文注释</p>
+<p>解读：N年后谁tm知道这个r1,r2,r3字段是干嘛的</p>
+<p>（4）禁止使用存储过程、视图、触发器、Event</p>
+<p>解读：高并发大数据的互联网业务，架构设计思路是“解放数据库CPU，将计算转移到服务层”，并发量大的情况下，这些功能很可能将数据库拖死，业务逻辑放到服务层具备更好的扩展性，能够轻易实现“增机器就加性能”。数据库擅长存储与索引，CPU计算还是上移吧</p>
+<p>（5）禁止存储大文件或者大照片</p>
+<p>解读：为何要让数据库做它不擅长的事情？大文件和照片存储在文件系统，数据库里存URI多好</p>
+<p>二、命名规范</p>
+<p>（6）只允许使用内网域名，而不是ip连接数据库</p>
+<p>（7）线上环境、开发环境、测试环境数据库内网域名遵循命名规范</p>
+<p>业务名称：xxx</p>
+<p>线上环境：dj.xxx.db</p>
+<p>开发环境：dj.xxx.rdb</p>
+<p>测试环境：dj.xxx.tdb</p>
+<p>从库在名称后加-s标识，备库在名称后加-ss标识</p>
+<p>线上从库：dj.xxx-s.db</p>
+<p>线上备库：dj.xxx-sss.db</p>
+<p>（8）库名、表名、字段名：小写，下划线风格，不超过32个字符，必须见名知意，禁止拼音英文混用</p>
+<p>（9）表名t_xxx，非唯一索引名idx_xxx，唯一索引名uniq_xxx</p>
+<p>三、表设计规范</p>
+<p>（10）单实例表数目必须小于500</p>
+<p>（11）单表列数目必须小于30</p>
+<p>（12）表必须有主键，例如自增主键</p>
+<p>解读：</p>
+<p>a）主键递增，数据行写入可以提高插入性能，可以避免page分裂，减少表碎片提升空间和内存的使用</p>
+<p>b）主键要选择较短的数据类型， Innodb引擎普通索引都会保存主键的值，较短的数据类型可以有效的减少索引的磁盘空间，提高索引的缓存效率</p>
+<p>c） 无主键的表删除，在row模式的主从架构，会导致备库夯住</p>
+<p>（13）禁止使用外键，如果有外键完整性约束，需要应用程序控制</p>
+<p>解读：外键会导致表与表之间耦合，update与delete操作都会涉及相关联的表，十分影响sql 的性能，甚至会造成死锁。高并发情况下容易造成数据库性能，大数据高并发业务场景数据库使用以性能优先</p>
+<p>四、字段设计规范</p>
+<p>（14）必须把字段定义为NOT NULL并且提供默认值</p>
+<p>解读：</p>
+<p>a）null的列使索引/索引统计/值比较都更加复杂，对MySQL来说更难优化</p>
+<p>b）null 这种类型MySQL内部需要进行特殊处理，增加数据库处理记录的复杂性；同等条件下，表中有较多空字段的时候，数据库的处理性能会降低很多</p>
+<p>c）null值需要更多的存储空，无论是表还是索引中每行中的null的列都需要额外的空间来标识</p>
+<p>d）对null 的处理时候，只能采用is null或is not null，而不能采用=、in、&lt;、&lt;&gt;、!=、not in这些操作符号。如：where name!=’shenjian’，如果存在name为null值的记录，查询结果就不会包含name为null值的记录</p>
+<p>（15）禁止使用TEXT、BLOB类型</p>
+<p>解读：会浪费更多的磁盘和内存空间，非必要的大量的大字段查询会淘汰掉热数据，导致内存命中率急剧降低，影响数据库性能</p>
+<p>（16）禁止使用小数存储货币</p>
+<p>解读：使用整数吧，小数容易导致钱对不上</p>
+<p>（17）必须使用varchar(20)存储手机号</p>
+<p>解读：</p>
+<p>a）涉及到区号或者国家代号，可能出现+-()</p>
+<p>b）手机号会去做数学运算么？</p>
+<p>c）varchar可以支持模糊查询，例如：like“138%”</p>
+<p>（18）禁止使用ENUM，可使用TINYINT代替</p>
+<p>解读：</p>
+<p>a）增加新的ENUM值要做DDL操作</p>
+<p>b）ENUM的内部实际存储就是整数，你以为自己定义的是字符串？</p>
+<p>五、索引设计规范</p>
+<p>（19）单表索引建议控制在5个以内</p>
+<p>（20）单索引字段数不允许超过5个</p>
+<p>解读：字段超过5个时，实际已经起不到有效过滤数据的作用了</p>
+<p>（21）禁止在更新十分频繁、区分度不高的属性上建立索引</p>
+<p>解读：</p>
+<p>a）更新会变更B+树，更新频繁的字段建立索引会大大降低数据库性能</p>
+<p>b）“性别”这种区分度不大的属性，建立索引是没有什么意义的，不能有效过滤数据，性能与全表扫描类似</p>
+<p>（22）建立组合索引，必须把区分度高的字段放在前面</p>
+<p>解读：能够更加有效的过滤数据</p>
+<p>六、SQL使用规范</p>
+<p>（23）禁止使用SELECT *，只获取必要的字段，需要显示说明列属性</p>
+<p>解读：</p>
+<p>a）读取不需要的列会增加CPU、IO、NET消耗</p>
+<p>b）不能有效的利用覆盖索引</p>
+<p>c）使用SELECT *容易在增加或者删除字段后出现程序BUG</p>
+<p>（24）禁止使用INSERT INTO t_xxx VALUES(xxx)，必须显示指定插入的列属性</p>
+<p>解读：容易在增加或者删除字段后出现程序BUG</p>
+<p>（25）禁止使用属性隐式转换</p>
+<p>解读：SELECT uid FROM t_user WHERE phone=13812345678 会导致全表扫描，而不能命中phone索引，猜猜为什么？（这个线上问题不止出现过一次）</p>
+<p>（26）禁止在WHERE条件的属性上使用函数或者表达式</p>
+<p>解读：SELECT uid FROM t_user WHERE from_unixtime(day)&gt;=’2017-02-15’ 会导致全表扫描</p>
+<p>正确的写法是：SELECT uid FROM t_user WHERE day&gt;= unix_timestamp(‘2017-02-15 00:00:00’)</p>
+<p>（27）禁止负向查询，以及%开头的模糊查询</p>
+<p>解读：</p>
+<p>a）负向查询条件：NOT、!=、&lt;&gt;、!&lt;、!&gt;、NOT IN、NOT LIKE等，会导致全表扫描</p>
+<p>b）%开头的模糊查询，会导致全表扫描</p>
+<p>（28）禁止大表使用JOIN查询，禁止大表使用子查询</p>
+<p>解读：会产生临时表，消耗较多内存与CPU，极大影响数据库性能</p>
+<p>（29）禁止使用OR条件，必须改为IN查询</p>
+<p>解读：旧版本Mysql的OR查询是不能命中索引的，即使能命中索引，为何要让数据库耗费更多的CPU帮助实施查询优化呢？</p>
+<p>（30）应用程序必须捕获SQL异常，并有相应处理</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/01/2018-7-01-%E6%B3%A8%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/01/2018-7-01-%E6%B3%A8%E8%A7%A3/" itemprop="url">java注解</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-01T00:00:00+08:00">
+                2018-07-01
               </time>
             
 
@@ -1328,374 +1694,6 @@ public Annotation[] getAnnotations() {}</code></pre>
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2018-6-8-android/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2018-6-8-android/" itemprop="url">android</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="安卓开发入门"><a href="#安卓开发入门" class="headerlink" title="安卓开发入门"></a>安卓开发入门</h2><h3 id="思维脑图"><a href="#思维脑图" class="headerlink" title="思维脑图"></a>思维脑图</h3><p>环境搭建</p>
-<p>常用UI控件与事件处理机制</p>
-<p>android四大组件和intent组件</p>
-<p>fragment</p>
-<p>数据存储</p>
-<p>绘画与动画</p>
-<p>多媒体开发</p>
-<p>系统api，地图定位</p>
-<p>项目实践</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2018-7-01-%E5%8D%95%E4%BE%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2018-7-01-%E5%8D%95%E4%BE%8B/" itemprop="url">单例</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="单例"><a href="#单例" class="headerlink" title="单例"></a>单例</h2><h3 id="单例vs静态方法类"><a href="#单例vs静态方法类" class="headerlink" title="单例vs静态方法类"></a>单例vs静态方法类</h3><p>单例比起静态方法类，主要优点是具有继承和多态特性，提供不同功能的实现，Java中java.lang.Runtime ,该类就是一个singleton的, 调用getRuntime(),基于不同的JVM ,返回不同的实现对象</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2018-6-4-load_balance/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2018-6-4-load_balance/" itemprop="url">常见负载均衡算法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="常见负载均衡算法"><a href="#常见负载均衡算法" class="headerlink" title="常见负载均衡算法"></a>常见负载均衡算法</h2><h3 id="权重随机算法"><a href="#权重随机算法" class="headerlink" title="权重随机算法"></a>权重随机算法</h3><h3 id="权重轮询算法"><a href="#权重轮询算法" class="headerlink" title="权重轮询算法"></a>权重轮询算法</h3><h3 id="一致性Hash"><a href="#一致性Hash" class="headerlink" title="一致性Hash"></a>一致性Hash</h3><h3 id="最小连接数加权"><a href="#最小连接数加权" class="headerlink" title="最小连接数加权"></a>最小连接数加权</h3><p><a href="https://juejin.im/entry/5b13e712e51d4506da5a039b" target="_blank" rel="noopener">https://juejin.im/entry/5b13e712e51d4506da5a039b</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1746,7 +1744,7 @@ public Annotation[] getAnnotations() {}</code></pre>
               
                 <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">273</span>
+                  <span class="site-state-item-count">271</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

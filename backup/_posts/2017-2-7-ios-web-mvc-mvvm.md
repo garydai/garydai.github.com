@@ -1,4 +1,5 @@
 ---
+date: 2017-2-7
 layout: default
 title: 前端mvc mvvm
 

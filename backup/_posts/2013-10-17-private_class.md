@@ -1,4 +1,5 @@
 ---
+date: 2013-10-17
 layout: default
 title: C++类的私有权限
 

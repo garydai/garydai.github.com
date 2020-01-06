@@ -229,7 +229,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2015-1-22-nginx/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/01/29/2015-1-29-socket/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -248,7 +248,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2015-1-22-nginx/" itemprop="url">nginx&apeche</a></h1>
+                <a class="post-title-link" href="/2015/01/29/2015-1-29-socket/" itemprop="url">socket</a></h1>
         
 
         <div class="post-meta">
@@ -260,8 +260,184 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-01-29T00:00:00+08:00">
+                2015-01-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="socket"><a href="#socket" class="headerlink" title="socket"></a>socket</h2><h4 id="接收网络数据"><a href="#接收网络数据" class="headerlink" title="接收网络数据"></a>接收网络数据</h4><p>网卡收到网线传来的数据，通过硬件电路的传输，将数据写入到内存中的某个地址上</p>
+<p>当网卡把数据写入到内存后，网卡向 CPU 发出一个中断信号，操作系统便能得知有新数据到来，再通过网卡中断程序去处理数据。</p>
+<p>从操作系统进程调度的角度来看数据接收。阻塞是进程调度的关键一环，指的是进程在等待某事件（如接收到网络数据）发生之前的等待状态，recv、select 和 epoll 都是阻塞方法</p>
+<h4 id="阻塞的原理"><a href="#阻塞的原理" class="headerlink" title="阻塞的原理"></a>阻塞的原理</h4><p>操作系统为了支持多任务，实现了进程调度的功能，会把进程分为“运行”和“等待”等几种状态。运行状态是进程获得 CPU 使用权，正在执行代码的状态；等待状态是阻塞状态，比如上述程序运行到 recv 时，程序会从运行状态变为等待状态，接收到数据后又变回运行状态。操作系统会分时执行各个运行状态的进程，由于速度很快，看上去就像是同时执行多个任务。</p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191113091525419.png" alt="image-20191113091525419"></p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191113091722640.png" alt="image-20191113091722640"></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//创建socket</span></span><br><span class="line"><span class="keyword">int</span> s = socket(AF_INET, SOCK_STREAM, <span class="number">0</span>);   </span><br><span class="line"><span class="comment">//绑定</span></span><br><span class="line">bind(s, ...)</span><br><span class="line"><span class="comment">//监听</span></span><br><span class="line"><span class="built_in">listen</span>(s, ...)</span><br><span class="line"><span class="comment">//接受客户端连接</span></span><br><span class="line"><span class="keyword">int</span> c = accept(s, ...)</span><br><span class="line"><span class="comment">//接收客户端数据</span></span><br><span class="line">recv(c, ...);</span><br><span class="line"><span class="comment">//将数据打印出来</span></span><br><span class="line"><span class="built_in">printf</span>(...)</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="操作系统如何知道网络数据对应于哪个-socket？"><a href="#操作系统如何知道网络数据对应于哪个-socket？" class="headerlink" title="操作系统如何知道网络数据对应于哪个 socket？"></a>操作系统如何知道网络数据对应于哪个 socket？</h5><p>因为一个 socket 对应着一个端口号，而网络数据包中包含了 ip 和端口的信息，内核可以通过端口号找到对应的 socket</p>
+<h5 id="如何同时监视多个-socket-的数据？"><a href="#如何同时监视多个-socket-的数据？" class="headerlink" title="如何同时监视多个 socket 的数据？"></a>如何同时监视多个 socket 的数据？</h5><p><strong>select、poll、epoll</strong></p>
+<h6 id="select方式"><a href="#select方式" class="headerlink" title="select方式"></a>select方式</h6><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> s = socket(AF_INET, SOCK_STREAM, <span class="number">0</span>);  </span><br><span class="line">bind(s, ...);</span><br><span class="line"><span class="built_in">listen</span>(s, ...);</span><br><span class="line"><span class="keyword">int</span> fds[] =  存放需要监听的socket;</span><br><span class="line"><span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">    <span class="keyword">int</span> n = select(..., fds, ...)</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i &lt; fds.count; i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(FD_ISSET(fds[i], ...))&#123;</span><br><span class="line">            <span class="comment">//fds[i]的数据处理</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其一，每次调用 select 都需要将进程加入到所有监视 socket 的等待队列，每次唤醒都需要从每个队列中移除。这里涉及了两次遍历，而且每次都要将整个 fds 列表传递给内核，有一定的开销。正是因为遍历操作开销大，出于效率的考量，才会规定 select 的最大监视数量，默认只能监视 1024 个 socket。</p>
+<p>其二，进程被唤醒后，程序并不知道哪些 socket 收到数据，还需要遍历一次。</p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191206135442670.png" alt="image-20191206135442670"></p>
+<h6 id="epoll"><a href="#epoll" class="headerlink" title="epoll"></a>epoll</h6><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> s = socket(AF_INET, SOCK_STREAM, <span class="number">0</span>);   </span><br><span class="line">bind(s, ...)</span><br><span class="line"><span class="built_in">listen</span>(s, ...)</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> epfd = epoll_create(...);</span><br><span class="line">epoll_ctl(epfd, ...); <span class="comment">//将所有需要监听的socket添加到epfd中</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">    <span class="keyword">int</span> n = epoll_wait(...)</span><br><span class="line">    <span class="keyword">for</span>(接收到数据的socket)&#123;</span><br><span class="line">        <span class="comment">//处理</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>select 低效的原因之一是将“维护等待队列”和“阻塞进程”两个步骤合二为一。如下图所示，每次调用 select 都需要这两步操作，然而大多数应用场景中，需要监视的 socket 相对固定，并不需要每次都修改。epoll 将这两个操作分开，先用 epoll_ctl 维护等待队列，再调用 epoll_wait 阻塞进程。显而易见地，效率就能得到提升。</p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191113093959871.png" alt="image-20191113093959871"></p>
+<p>select 低效的一个原因在于程序不知道哪些 socket 收到数据，只能一个个遍历。如果内核维护一个“就绪列表”，引用收到数据的 socket，就能避免遍历</p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191206135936683.png" alt="image-20191206135936683"></p>
+<p>当 socket 收到数据后，中断程序会给 eventpoll 的“就绪列表”添加 socket 引用。如下图展示的是 sock2 和 sock3 收到数据后，中断程序让 rdlist 引用这两个 socket。</p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191113095241992.png" alt="image-20191113095241992"></p>
+<p>某个进程调用 epoll_create 方法时，内核会创建一个 eventpoll 对象（也就是程序中 epfd 所代表的对象）。eventpoll 对象也是文件系统中的一员，和 socket 一样，它也会有等待队列。</p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191206140246220.png" alt="image-20191206140246220"></p>
+<p>当 socket 收到数据后，中断程序会操作 eventpoll 对象，而不是直接操作进程</p>
+<p>当 socket 收到数据后，中断程序会给 eventpoll 的“就绪列表”添加 socket 引用</p>
+<p>当程序执行到 epoll_wait 时，如果 rdlist 已经引用了 socket，那么 epoll_wait 直接返回，如果 rdlist 为空，阻塞进程，如下图</p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191113095838347.png" alt="image-20191113095838347"></p>
+<p>epoll 使用双向链表来实现就绪队列（rdllist）</p>
+<p>用红黑树保存监视的socket，根据端口，能快速找到对应的socket</p>
+<p>eventpoll 对象相当于 socket 和进程之间的中介，socket 的数据接收并不直接影响进程，而是通过改变 eventpoll 的就绪列表来改变进程状态。</p>
+<p>当程序执行到 epoll_wait 时，如果 rdlist 已经引用了 socket，那么 epoll_wait 直接返回，如果 rdlist 为空，阻塞进程。</p>
+<p><strong>当 socket 接收到数据，中断程序一方面修改 rdlist，另一方面唤醒 eventpoll 等待队列中的进程，进程 A 再次进入运行状态（如下图）。也因为 rdlist 的存在，进程 A 可以知道哪些 socket 发生了变化</strong></p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191206141422914.png" alt="image-20191206141422914"></p>
+<h4 id="socket-1"><a href="#socket-1" class="headerlink" title="socket"></a>socket</h4><p>socket套接字是一种有相应描述符的打开文件（open—write/read—close）</p>
+<p>socket 维护两个队列。一个是已经建立了连接的队列，这时候连接三次握手已经完毕，处于 established 状态；一个是还没有完全建立连接的队列，这个时候三次握手还没完成，处于 syn_rcvd 的状态</p>
+<p>socket 在 Linux 中就是以文件的形式存在的，即对应一个文件描述符</p>
+<p>每一个进程都有一个数据结构 task_struct，里面指向一个文件描述符数组，来列出这个进程打开的所有文件的文件描述符。文件描述符是一个整数，是这个数组的下标</p>
+<p>socket结构里，主要的是两个队列，一个是发送队列，一个是接收队列。在这两个队列里面保存的是一个缓存 sk_buff。这个缓存里面能够看到完整的包的结构</p>
+<p>socket上定义了几个IO事件：状态改变事件、有数据可读事件、有发送缓存可写事件、有IO错误事件。对于这些事件，socket中分别定义了相应的事件处理函数，也称回调函数。</p>
+<p>Socket I/O事件的处理过程中，要使用到sock上的两个队列：等待队列和异步通知队列，这两个队列中都保存着等待该Socket I/O事件的进程。</p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191112151603487.png" alt="image-20191112151603487"></p>
+<h5 id="流程："><a href="#流程：" class="headerlink" title="流程："></a>流程：</h5><p>进程 A 运行到了 epoll_wait 语句，内核会将进程 A 放入 eventpoll 的等待队列wq中，阻塞进程，eventpoll红黑树rbr维护监听的socket，当 socket 接收到数据（ip：port），中断程序快速查找socket，并放入eventpoll就绪队列rdlist，唤醒 eventpoll 等待队列中的进程</p>
+<h4 id="tcp连接："><a href="#tcp连接：" class="headerlink" title="tcp连接："></a>tcp连接：</h4><h3 id="server端"><a href="#server端" class="headerlink" title="server端"></a>server端</h3><p>1.1.创建套接字，协议、类型</p>
+<pre><code>socket()</code></pre><p>1.2.绑定地址、端口</p>
+<pre><code>bind()</code></pre><p>1.3.声明该套接字用于监听</p>
+<p>mark a connection-mode socket, specified by the socket argument, as accepting connections.</p>
+<p>默认的socket是主动性套接字，用于客户端，listen函数告诉内核该socket是用于监听。</p>
+<pre><code>listen()</code></pre><p>1.4.监听套接字直到连接到来，每次接受连接请求会生成已连接描述符，用于客户端通信</p>
+<pre><code>accept()</code></pre><p>Accept a connection with the accept() system call. This call typically blocks until a client connects with the server.</p>
+<p>如果已经建立了连接的队列有新连接，则accept返回新连接的socket，否则一直阻塞</p>
+<h3 id="client端"><a href="#client端" class="headerlink" title="client端:"></a>client端:</h3><pre><code>2.1.socket()
+
+2.2.connect()</code></pre><h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><p><a href="https://my.oschina.net/editorial-story/blog/3052308" target="_blank" rel="noopener">https://my.oschina.net/editorial-story/blog/3052308</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/01/22/2015-1-22-nginx/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2015/01/22/2015-1-22-nginx/" itemprop="url">nginx&apeche</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-01-22T00:00:00+08:00">
+                2015-01-22
               </time>
             
 
@@ -899,7 +1075,7 @@ ngx_epoll_init(ngx_cycle_t *cycle, ngx_msec_t timer)
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2015-1-20-webframe/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/01/20/2015-1-20-webframe/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -918,7 +1094,7 @@ ngx_epoll_init(ngx_cycle_t *cycle, ngx_msec_t timer)
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2015-1-20-webframe/" itemprop="url">2015-1-20-webframe</a></h1>
+                <a class="post-title-link" href="/2015/01/20/2015-1-20-webframe/" itemprop="url">2015-1-20-webframe</a></h1>
         
 
         <div class="post-meta">
@@ -930,8 +1106,8 @@ ngx_epoll_init(ngx_cycle_t *cycle, ngx_msec_t timer)
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-01-20T00:00:00+08:00">
+                2015-01-20
               </time>
             
 
@@ -1032,7 +1208,7 @@ ngx_epoll_init(ngx_cycle_t *cycle, ngx_msec_t timer)
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2015-1-15-machine_learning/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/01/15/2015-1-15-machine_learning/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -1051,7 +1227,7 @@ ngx_epoll_init(ngx_cycle_t *cycle, ngx_msec_t timer)
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2015-1-15-machine_learning/" itemprop="url">machine_learning</a></h1>
+                <a class="post-title-link" href="/2015/01/15/2015-1-15-machine_learning/" itemprop="url">machine_learning</a></h1>
         
 
         <div class="post-meta">
@@ -1063,8 +1239,8 @@ ngx_epoll_init(ngx_cycle_t *cycle, ngx_msec_t timer)
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-01-15T00:00:00+08:00">
+                2015-01-15
               </time>
             
 
@@ -1161,7 +1337,7 @@ ngx_epoll_init(ngx_cycle_t *cycle, ngx_msec_t timer)
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2014-8-5-ios_frame/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/12/22/2014-12-22-sentiment/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -1180,7 +1356,7 @@ ngx_epoll_init(ngx_cycle_t *cycle, ngx_msec_t timer)
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2014-8-5-ios_frame/" itemprop="url">iso frame</a></h1>
+                <a class="post-title-link" href="/2014/12/22/2014-12-22-sentiment/" itemprop="url">sentiment</a></h1>
         
 
         <div class="post-meta">
@@ -1192,8 +1368,8 @@ ngx_epoll_init(ngx_cycle_t *cycle, ngx_msec_t timer)
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-12-22T00:00:00+08:00">
+                2014-12-22
               </time>
             
 
@@ -1232,9 +1408,16 @@ ngx_epoll_init(ngx_cycle_t *cycle, ngx_msec_t timer)
       
         
           
-            <p>##iso frame </p>
-<p>The frame rectangle … describes the view’s location and size in its superview’s coordinate system.</p>
-<p>The viewʼs bounds rectangle describe the position and size of the visible area.</p>
+            <p>##sentiment<br>情感分析</p>
+<p>precision = tp/(tp+fp)</p>
+<p>tp:true positive A被分类到到A</p>
+<p>fp:false positive 其他类被分类到A</p>
+<p>fn:false negative 其他类被分类到其他类</p>
+<p>precision = tp/(tp+fn)</p>
+<p>1.字典法</p>
+<p>构造情绪字典</p>
+<p>2.机器学习法</p>
+<p>训练已分类的语料库，学习出类别的特征</p>
 
           
         
@@ -1283,7 +1466,7 @@ ngx_epoll_init(ngx_cycle_t *cycle, ngx_msec_t timer)
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2014-9-24-privacy/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/12/05/2014-12-5-gearman/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -1302,7 +1485,7 @@ ngx_epoll_init(ngx_cycle_t *cycle, ngx_msec_t timer)
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2014-9-24-privacy/" itemprop="url">艺考管家隐私政策</a></h1>
+                <a class="post-title-link" href="/2014/12/05/2014-12-5-gearman/" itemprop="url">gearman</a></h1>
         
 
         <div class="post-meta">
@@ -1314,8 +1497,661 @@ ngx_epoll_init(ngx_cycle_t *cycle, ngx_msec_t timer)
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-12-05T00:00:00+08:00">
+                2014-12-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>##gearman<br>任务分发系统</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/11/25/2014-11-25-yii/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2014/11/25/2014-11-25-yii/" itemprop="url">yii</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-11-25T00:00:00+08:00">
+                2014-11-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="yii架构分析"><a href="#yii架构分析" class="headerlink" title="yii架构分析"></a>yii架构分析</h2><p>yii是由php编写的web后端框架</p>
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>1.请求url进入到yii的入口</p>
+<p>2.如何解析url</p>
+<p>3.MVC之间的接口</p>
+<p>4.yii一直在监听的主程序</p>
+<p>5.祖先类</p>
+<p>6.结果怎么传给客户端</p>
+<p>7.yii 事件机制</p>
+<p>8.nginx yii参数传递</p>
+<p>9.view 和layout关系</p>
+<p>###分析</p>
+<p>4.框架加载（when）</p>
+<p>index.php </p>
+<pre><code>&lt;?php
+
+// change the following paths if necessary
+$yii=dirname(__FILE__).&apos;/../../framework/yii.php&apos;;
+$config=dirname(__FILE__).&apos;/protected/config/main.php&apos;;
+
+// remove the following line when in production mode
+// defined(&apos;YII_DEBUG&apos;) or define(&apos;YII_DEBUG&apos;,true);
+
+require_once($yii);
+Yii::createWebApplication($config)-&gt;run();</code></pre><p>abstract class CApplication extends CModule</p>
+<pre><code>public function __construct($config=null)
+{
+    Yii::setApplication($this);
+
+    // set basePath at early as possible to avoid trouble
+    if(is_string($config))
+        $config=require($config);
+    if(isset($config[&apos;basePath&apos;]))
+    {
+        $this-&gt;setBasePath($config[&apos;basePath&apos;]);
+        unset($config[&apos;basePath&apos;]);
+    }
+    else
+        $this-&gt;setBasePath(&apos;protected&apos;);
+    Yii::setPathOfAlias(&apos;application&apos;,$this-&gt;getBasePath());
+    Yii::setPathOfAlias(&apos;webroot&apos;,dirname($_SERVER[&apos;SCRIPT_FILENAME&apos;]));
+    if(isset($config[&apos;extensionPath&apos;]))
+    {
+        $this-&gt;setExtensionPath($config[&apos;extensionPath&apos;]);
+        unset($config[&apos;extensionPath&apos;]);
+    }
+    else
+        Yii::setPathOfAlias(&apos;ext&apos;,$this-&gt;getBasePath().DIRECTORY_SEPARATOR.&apos;extensions&apos;);
+    if(isset($config[&apos;aliases&apos;]))
+    {
+        $this-&gt;setAliases($config[&apos;aliases&apos;]);
+        unset($config[&apos;aliases&apos;]);
+    }
+
+    $this-&gt;preinit();
+
+    $this-&gt;initSystemHandlers();
+    $this-&gt;registerCoreComponents();
+
+    $this-&gt;configure($config);
+    $this-&gt;attachBehaviors($this-&gt;behaviors);
+    $this-&gt;preloadComponents();
+
+    $this-&gt;init();
+}</code></pre><p>CModule.php</p>
+<pre><code>public function configure($config)
+{
+    if(is_array($config))
+    {
+        foreach($config as $key=&gt;$value)
+            $this-&gt;$key=$value;
+    }
+}</code></pre><p>CWebApplication.run</p>
+<pre><code>if($this-&gt;hasEventHandler(&apos;onBeginRequest&apos;))
+    $this-&gt;onBeginRequest(new CEvent($this));
+register_shutdown_function(array($this,&apos;end&apos;),0,false);
+$this-&gt;processRequest();
+if($this-&gt;hasEventHandler(&apos;onEndRequest&apos;))
+    $this-&gt;onEndRequest(new CEvent($this));</code></pre><p>CComponent.php</p>
+<pre><code>public function raiseEvent($name,$event)
+{
+    $name=strtolower($name);
+    if(isset($this-&gt;_e[$name]))
+    {
+        foreach($this-&gt;_e[$name] as $handler)
+        {
+            if(is_string($handler))
+                call_user_func($handler,$event);
+            elseif(is_callable($handler,true))
+            {
+                if(is_array($handler))
+                {
+                    // an array: 0 - object, 1 - method name
+                    list($object,$method)=$handler;
+                    if(is_string($object))    // static method call
+                        call_user_func($handler,$event);
+                    elseif(method_exists($object,$method))
+                        $object-&gt;$method($event);
+                    else
+                        throw new CException(Yii::t(&apos;yii&apos;,&apos;Event &quot;{class}.{event}&quot; is attached with an invalid handler &quot;{handler}&quot;.&apos;,
+                            array(&apos;{class}&apos;=&gt;get_class($this), &apos;{event}&apos;=&gt;$name, &apos;{handler}&apos;=&gt;$handler[1])));
+                }
+                else // PHP 5.3: anonymous function
+                    call_user_func($handler,$event);
+            }
+            else
+                throw new CException(Yii::t(&apos;yii&apos;,&apos;Event &quot;{class}.{event}&quot; is attached with an invalid handler &quot;{handler}&quot;.&apos;,
+                    array(&apos;{class}&apos;=&gt;get_class($this), &apos;{event}&apos;=&gt;$name, &apos;{handler}&apos;=&gt;gettype($handler))));
+            // stop further handling if param.handled is set true
+            if(($event instanceof CEvent) &amp;&amp; $event-&gt;handled)
+                return;
+        }
+    }
+    elseif(YII_DEBUG &amp;&amp; !$this-&gt;hasEvent($name))
+        throw new CException(Yii::t(&apos;yii&apos;,&apos;Event &quot;{class}.{event}&quot; is not defined.&apos;,
+            array(&apos;{class}&apos;=&gt;get_class($this), &apos;{event}&apos;=&gt;$name)));
+}</code></pre><p>CWebApplication.php</p>
+<pre><code>    /**
+ * Processes the current request.
+ * It first resolves the request into controller and action,
+ * and then creates the controller to perform the action.
+ */
+public function processRequest()
+{
+    if(is_array($this-&gt;catchAllRequest) &amp;&amp; isset($this-&gt;catchAllRequest[0]))
+    {
+        $route=$this-&gt;catchAllRequest[0];
+        foreach(array_splice($this-&gt;catchAllRequest,1) as $name=&gt;$value)
+            $_GET[$name]=$value;
+    }
+    else
+        $route=$this-&gt;getUrlManager()-&gt;parseUrl($this-&gt;getRequest());
+    $this-&gt;runController($route);
+}
+
+
+
+
+
+public function runController($route)
+{
+    if(($ca=$this-&gt;createController($route))!==null)
+    {
+        list($controller,$actionID)=$ca;
+        $oldController=$this-&gt;_controller;
+        $this-&gt;_controller=$controller;
+        $controller-&gt;init();
+        $controller-&gt;run($actionID);
+        $this-&gt;_controller=$oldController;
+    }
+    else
+        throw new CHttpException(404,Yii::t(&apos;yii&apos;,&apos;Unable to resolve the request &quot;{route}&quot;.&apos;,
+            array(&apos;{route}&apos;=&gt;$route===&apos;&apos;?$this-&gt;defaultController:$route)));
+}</code></pre><p>CController.php</p>
+<pre><code>public function run($actionID)
+{
+    if(($action=$this-&gt;createAction($actionID))!==null)
+    {
+        if(($parent=$this-&gt;getModule())===null)
+            $parent=Yii::app();
+        if($parent-&gt;beforeControllerAction($this,$action))
+        {
+            $this-&gt;runActionWithFilters($action,$this-&gt;filters());
+            $parent-&gt;afterControllerAction($this,$action);
+        }
+    }
+    else
+        $this-&gt;missingAction($actionID);
+}
+
+
+
+public function runActionWithFilters($action,$filters)
+{
+    if(empty($filters))
+        $this-&gt;runAction($action);
+    else
+    {
+        $priorAction=$this-&gt;_action;
+        $this-&gt;_action=$action;
+        CFilterChain::create($this,$action,$filters)-&gt;run();
+        $this-&gt;_action=$priorAction;
+    }
+}
+
+
+public function runAction($action)
+{
+    $priorAction=$this-&gt;_action;
+    $this-&gt;_action=$action;
+    if($this-&gt;beforeAction($action))
+    {
+        if($action-&gt;runWithParams($this-&gt;getActionParams())===false)
+            $this-&gt;invalidActionParams($action);
+        else
+            $this-&gt;afterAction($action);
+    }
+    $this-&gt;_action=$priorAction;
+}</code></pre><p>CAction.php</p>
+<pre><code>public function runWithParams($params)
+{
+    $method=new ReflectionMethod($this, &apos;run&apos;);
+    if($method-&gt;getNumberOfParameters()&gt;0)
+        return $this-&gt;runWithParamsInternal($this, $method, $params);
+    else
+        return $this-&gt;run();
+}
+
+
+protected function runWithParamsInternal($object, $method, $params)
+{
+    $ps=array();
+    foreach($method-&gt;getParameters() as $i=&gt;$param)
+    {
+        $name=$param-&gt;getName();
+        if(isset($params[$name]))
+        {
+            if($param-&gt;isArray())
+                $ps[]=is_array($params[$name]) ? $params[$name] : array($params[$name]);
+            elseif(!is_array($params[$name]))
+                $ps[]=$params[$name];
+            else
+                return false;
+        }
+        elseif($param-&gt;isDefaultValueAvailable())
+            $ps[]=$param-&gt;getDefaultValue();
+        else
+            return false;
+    }
+    $method-&gt;invokeArgs($object,$ps);
+    return true;
+}</code></pre><p>CViewAction.php</p>
+<pre><code>public function run()
+{
+    $this-&gt;resolveView($this-&gt;getRequestedView());
+    $controller=$this-&gt;getController();
+    if($this-&gt;layout!==null)
+    {
+        $layout=$controller-&gt;layout;
+        $controller-&gt;layout=$this-&gt;layout;
+    }
+
+    $this-&gt;onBeforeRender($event=new CEvent($this));
+    if(!$event-&gt;handled)
+    {
+        if($this-&gt;renderAsText)
+        {
+            $text=file_get_contents($controller-&gt;getViewFile($this-&gt;view));
+            $controller-&gt;renderText($text);
+        }
+        else
+            $controller-&gt;render($this-&gt;view);
+        $this-&gt;onAfterRender(new CEvent($this));
+    }
+
+    if($this-&gt;layout!==null)
+        $controller-&gt;layout=$layout;
+}</code></pre><p>CController.php</p>
+<pre><code>public function renderText($text,$return=false)
+{
+    if(($layoutFile=$this-&gt;getLayoutFile($this-&gt;layout))!==false)
+        $text=$this-&gt;renderFile($layoutFile,array(&apos;content&apos;=&gt;$text),true);
+
+    $text=$this-&gt;processOutput($text);
+
+    if($return)
+        return $text;
+    else
+        echo $text;
+}
+
+public function render($view,$data=null,$return=false)
+{
+    if($this-&gt;beforeRender($view))
+    {
+        $output=$this-&gt;renderPartial($view,$data,true);
+        if(($layoutFile=$this-&gt;getLayoutFile($this-&gt;layout))!==false)
+            $output=$this-&gt;renderFile($layoutFile,array(&apos;content&apos;=&gt;$output),true);
+
+        $this-&gt;afterRender($view,$output);
+
+        $output=$this-&gt;processOutput($output);
+
+        if($return)
+            return $output;
+        else
+            echo $output;
+    }
+}</code></pre><p>5.祖先类</p>
+<p>CComponent</p>
+<p>6.结果怎么传给客户端</p>
+<p>php echo HTML 给web服务器，web服务器会打包成HTTP reponse给浏览器</p>
+<p>###流程</p>
+<p>请求url-&gt;解析url-&gt;controller-&gt;view</p>
+<p>###模块</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/11/25/2014-11-25-work/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2014/11/25/2014-11-25-work/" itemprop="url">work</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-11-25T00:00:00+08:00">
+                2014-11-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>##个人作品</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/09/24/2014-9-24-privacy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2014/09/24/2014-9-24-privacy/" itemprop="url">艺考管家隐私政策</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-09-24T00:00:00+08:00">
+                2014-09-24
               </time>
             
 
@@ -1410,7 +2246,7 @@ ngx_epoll_init(ngx_cycle_t *cycle, ngx_msec_t timer)
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2014-7-3-lpnm/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/08/05/2014-8-5-ios_frame/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -1429,7 +2265,7 @@ ngx_epoll_init(ngx_cycle_t *cycle, ngx_msec_t timer)
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2014-7-3-lpnm/" itemprop="url">linux+php+nginx+mysql+wordpress</a></h1>
+                <a class="post-title-link" href="/2014/08/05/2014-8-5-ios_frame/" itemprop="url">iso frame</a></h1>
         
 
         <div class="post-meta">
@@ -1441,8 +2277,8 @@ ngx_epoll_init(ngx_cycle_t *cycle, ngx_msec_t timer)
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-08-05T00:00:00+08:00">
+                2014-08-05
               </time>
             
 
@@ -1481,644 +2317,9 @@ ngx_epoll_init(ngx_cycle_t *cycle, ngx_msec_t timer)
       
         
           
-            <p>##centos安装linux+php+nginx+mysql+wordpress</p>
-<p>###pcre<br>    wget <a href="http://sourceforge.net/projects/pcre/files/pcre/8.35/pcre-8.35.tar.gz" target="_blank" rel="noopener">http://sourceforge.net/projects/pcre/files/pcre/8.35/pcre-8.35.tar.gz</a></p>
-<pre><code>tar -xf pcre-8.35.tar.gz
-
-cd pcre-8.35
-
-./configure
-
-make
-
-make install</code></pre><p>###zlilb<br>    wget <a href="http://prdownloads.sourceforge.net/libpng/zlib-1.2.8.tar.gz" target="_blank" rel="noopener">http://prdownloads.sourceforge.net/libpng/zlib-1.2.8.tar.gz</a></p>
-<pre><code>tar -xf zlib-1.2.8.tar.gz
-
-./configure
-
-make
-
-sudo make install</code></pre><p>###openssl<br>    支持openssl<br>    sudo yum -y install openssl-devel<br>    make&amp;make install<br>###mysql</p>
-<pre><code>sudo yum install mysql mysql-server mysql-devel(for python mysql module)
-
-sudo /etc/init.d/mysqld restart</code></pre><p>###nginx</p>
-<pre><code>wget http://nginx.org/download/nginx-1.7.3.tar.gz
-
-tar -xf nginx-1.7.3.tar.gz
-
-./configure --prefix=/home/admin/nginx --with-pcre=/home/admin/pcre-8.35 --with-zlib=/home/admin/zlib-1.2.8
-
-make
-
-sudo make install
-
-sudo chown -R admin nginx
-
-sudo chgrp -R admin nginx
-
-vi conf/nginx.conf ----user admin;</code></pre><p>###libpng</p>
-<pre><code>sudo yum install libpng-devel -y</code></pre><p>###php<br>    wget <a href="http://cn2.php.net/get/php-5.5.15.tar.gz/from/this/mirror" target="_blank" rel="noopener">http://cn2.php.net/get/php-5.5.15.tar.gz/from/this/mirror</a> -O php-5.5.15.tar.gz</p>
-<pre><code>tar -xf php-5.5.15.tar.gz
-
-sudo yum install libxml2-devel -y
-
-
-./configure --prefix=/home/admin/php --enable-fpm --with-mysql --with-zlib --with-jpeg-dir=/home/admin/jpeg-9a/  --with-gd --with-openssl --enable-pdo --with-pdo-mysql
-
-
-
-make
-
-sudo make install
-
-sudo chown -R admin php
-
-sudo chgrp -R admin php
-
-cp php.ini-development /home/admin/php/lib/php.ini
-
-vi php.ini ---cgi.fix_pathinfo=0
-
-cp php-fpm.conf.default php-fpm.conf
-
-vi php-fpm.conf ----user=admin; group=admin</code></pre><p>####配置nginx<br>    vi nginx.conf</p>
-<pre><code>location / {
-root   html;
-index  index.php index.html index.htm;
-}
-
-
-location ~ \.php$ {
-    root           html;
-    fastcgi_pass   127.0.0.1:9000;
-    fastcgi_index  index.php;
-    fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
-    fastcgi_param  SCRIPT_NAME      $fastcgi_script_name;
-    include        fastcgi_params;
-}
-sudo ./nginx -s reload</code></pre><p>###wordpress<br>    wget <a href="http://wordpress.org/latest.tar.gz" target="_blank" rel="noopener">http://wordpress.org/latest.tar.gz</a></p>
-<pre><code>tar -xf latest.tar.gz
-
-mysql -u root -p
-
-CREATE DATABASE wordpress;
-
-CREATE USER wordpressuser@localhost;
-
-SET PASSWORD FOR wordpressuser@localhost= PASSWORD(&quot;password&quot;);
-
-GRANT ALL PRIVILEGES ON wordpress.* TO wordpressuser@localhost IDENTIFIED BY &apos;password&apos;;
-
-FLUSH PRIVILEGES;
-
-cp ~/wordpress/wp-config-sample.php ~/wordpress/wp-config.php
-
-vi ~/wordpress/wp-config.php
-
-
-define(&apos;DB_NAME&apos;, &apos;wordpress&apos;);
-
-/** MySQL database username */
-define(&apos;DB_USER&apos;, &apos;wordpressuser&apos;);
-
-/** MySQL database password */
-define(&apos;DB_PASSWORD&apos;, &apos;password&apos;);
-
-cp -r ~/wordpress nginx/html/wordpress
-
-vi nginx.conf
-
-root   /html/wordpress;
-
-
-wget http://sourceforge.net/projects/libpng/files/libpng15/older-releases/1.5.9/libpng-1.5.9.tar.xz/download -O libpng-1.5.9.tar.xz
-tar -xf libpng-1.5.9.tar.xz</code></pre><p>###memcached</p>
-<pre><code>下载libevent到windows,拷到linux服务器
-
-./configure --prefix=/home/admin/libevent
-
-make &amp; make install
-
-wget http://memcached.org/files/memcached-1.4.20.tar.gz
-
-tar -xvf memcached-1.4.20.tar.gz
-
-./configure --prefix=/home/admin/memcached --with-libevent=/home/admin/libevent
-
-make&amp;make install
-
-php扩展
-wget http://pecl.php.net/get/memcache-2.2.7.tgz
-
-tar &amp; cd
-
-/home/admin/php/bin/phpize
-
-./configure --enable-memcache --with-php-config=/home/admin/php/bin/php-config
-
-vi php.ini
-extension =memcache.so
-extension_dir = xx
-
-
-php.ini 要在lib下
-
-date.timezone = &quot;PRC&quot;</code></pre><p>###openssl的PHP扩展<br>    同memcache的PHP扩展</p>
-<p>###pdo的PHP扩展</p>
-<p>###pdo mysql的扩展</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2014-6-17-speechmusic/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2014-6-17-speechmusic/" itemprop="url">speech/music classification</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##speech/music classification</p>
-<p>###speech/music</p>
-<p>###过零率</p>
-<p>###低能量</p>
-<p>###Spectral “Flux” (Delta Spectrum Magnitude)</p>
-<p>###MFCC</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2014-7-25-decode/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2014-7-25-decode/" itemprop="url">python 编码</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##python 编码</p>
-<p>python内部用unicode保存字符</p>
-<p>###decode</p>
-<p>把其他编码解码成unicode</p>
-<p>###encode</p>
-<p>把unicode编码编码成其他</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2014-5-9-fastDFS/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2014-5-9-fastDFS/" itemprop="url">fastDFS分布式文件系统</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##fastDFS分布式文件系统</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2014-5-9-SVM/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2014-5-9-SVM/" itemprop="url">SVM</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##SVM</p>
-<p>In supervised classification Decision Tree (DT) and Support Vector Machine (SVM) are well known<br>classifier and used widely</p>
-<p>The first thing we can see from this definition, is that a SVM needs training data. Which means it is a supervised learning algorithm.</p>
-<p>有训练数据，所以是受监督的学习算法，主要用于分类</p>
+            <p>##iso frame </p>
+<p>The frame rectangle … describes the view’s location and size in its superview’s coordinate system.</p>
+<p>The viewʼs bounds rectangle describe the position and size of the visible area.</p>
 
           
         
@@ -2204,7 +2405,7 @@ date.timezone = &quot;PRC&quot;</code></pre><p>###openssl的PHP扩展<br>    同
               
                 <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">273</span>
+                  <span class="site-state-item-count">271</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

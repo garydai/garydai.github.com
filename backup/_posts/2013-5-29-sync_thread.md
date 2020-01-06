@@ -1,4 +1,5 @@
 ---
+date: 2013-5-29
 layout: default
 
 title: window线程同步

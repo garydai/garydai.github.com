@@ -1,4 +1,5 @@
 ---
+date: 2019-12-31
 layout: default
 title: 分布式系统数据同步
 

@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="css###基本元素 Block-level element: 指能够独立存在, 一般的块级元素之间以换行(如一个段落结束后另起一行)分隔. 常用的块级元素包括: p, h1~h6, div, ul等; Inline element: 指依附其他块级元素存在, 紧接于被联元素之间显示, 而不换行. 常用的内联元素包括: img, span, li, br等; Top-level element:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="css备忘">
+<meta property="og:url" content="http://yoursite.com/2016/11/09/2016-11-9-css/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="css###基本元素 Block-level element: 指能够独立存在, 一般的块级元素之间以换行(如一个段落结束后另起一行)分隔. 常用的块级元素包括: p, h1~h6, div, ul等; Inline element: 指依附其他块级元素存在, 紧接于被联元素之间显示, 而不换行. 常用的内联元素包括: img, span, li, br等; Top-level element:">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/cssmargin3d.jpg">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/cssmargin.jpg">
+<meta property="article:published_time" content="2016-11-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-01-06T07:17:32.540Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/cssmargin3d.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/11/09/2016-11-9-css/"/>
+
+
+
+
+
+  <title>css备忘 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/09/2016-11-9-css/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">css备忘</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-11-09T00:00:00+08:00">
+                2016-11-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="css"><a href="#css" class="headerlink" title="css"></a>css</h2><p>###基本元素</p>
+<p>Block-level element: 指能够独立存在, 一般的块级元素之间以换行(如一个段落结束后另起一行)分隔. 常用的块级元素包括: p, h1~h6, div, ul等;</p>
+<p>Inline element: 指依附其他块级元素存在, 紧接于被联元素之间显示, 而不换行. 常用的内联元素包括: img, span, li, br等;</p>
+<p>Top-level element: 包括html, body, frameset, 表现如Block-level element, 属于高级块级元素.</p>
+<h3 id="布局"><a href="#布局" class="headerlink" title="布局"></a>布局</h3><h4 id="display属性"><a href="#display属性" class="headerlink" title="display属性"></a>display属性</h4><h4 id="block"><a href="#block" class="headerlink" title="block"></a>block</h4><p>div 是一个标准的块级元素。一个块级元素会新开始一行并且尽可能撑满容器。其他常用的块级元素包括 p 、 form 和HTML5中的新元素： header 、 footer 、 section 等等。</p>
+<h4 id="inline"><a href="#inline" class="headerlink" title="inline"></a>inline</h4><p>span 是一个标准的行内元素。一个行内元素可以在段落中 <span> 像这样 </span> 包裹一些文字而不会打乱段落的布局。 a 元素是最常用的行内元素，它可以被用作链接。</p>
+<h4 id="none"><a href="#none" class="headerlink" title="none"></a>none</h4><p>另一个常用的display值是 none 。一些特殊元素的默认 display 值是它，例如 script 。 display:none 通常被 JavaScript 用来在不删除元素的情况下隐藏或显示元素。</p>
+<p>它和 visibility 属性不一样。把 display 设置成 none 元素不会占据它本来应该显示的空间，但是设置成 visibility: hidden; 还会占据空间。</p>
+<p>其他 display 值</p>
+<p>还有很多的更有意思的 display 值，例如 list-item 和 table 。这里有一份详细的列表。之后我们会讨论到 inline-block 和 flex </p>
+<pre><code>width: 600px;
+ margin: 0 auto;
+ 600px宽度居中</code></pre><p>ref:<a href="http://zh.learnlayout.com/display.html" target="_blank" rel="noopener">http://zh.learnlayout.com/display.html</a></p>
+<h4 id="inline-block"><a href="#inline-block" class="headerlink" title="inline-block"></a>inline-block</h4><p>结合inline和block的特性</p>
+<h4 id="Flex布局"><a href="#Flex布局" class="headerlink" title="Flex布局"></a>Flex布局</h4><pre><code>.box{
+  display: -webkit-flex; /* Safari */
+  display: flex;
+}</code></pre><p>采用Flex布局的元素，称为Flex容器（flex container），简称”容器”。它的所有子元素自动成为容器成员，称为Flex项目（flex item），简称”项目”。</p>
+<pre><code>6个属性
+flex-direction
+flex-wrap
+flex-flow
+justify-content
+align-items
+align-content</code></pre><h3 id="position"><a href="#position" class="headerlink" title="position"></a>position</h3><p>css绝对定位、相对定位和文档流</p>
+<p>默认是什么定位</p>
+<p>position:relative;原位置上偏移，不脱离文档流</p>
+<p>position:absolute是脱离文档流的,相对于他的第一个有position的祖先</p>
+<p>padding</p>
+<p>margin</p>
+<h3 id="jquery获取元素位置"><a href="#jquery获取元素位置" class="headerlink" title="jquery获取元素位置"></a>jquery获取元素位置</h3><pre><code>offset():
+
+获取匹配元素在当前视口的相对偏移。
+
+position():
+
+获取匹配元素相对父元素的偏移。</code></pre><p><a href="http://www.cnblogs.com/tim-li/archive/2012/07/09/2582618.html" target="_blank" rel="noopener">http://www.cnblogs.com/tim-li/archive/2012/07/09/2582618.html</a></p>
+<h3 id="隐藏"><a href="#隐藏" class="headerlink" title="隐藏"></a>隐藏</h3><p>visibility:hidden 占有空间<br>display:none不占有空间</p>
+<h3 id="image按比例缩小"><a href="#image按比例缩小" class="headerlink" title="image按比例缩小"></a>image按比例缩小</h3><h3 id="padding、margin属性的区别"><a href="#padding、margin属性的区别" class="headerlink" title="padding、margin属性的区别"></a>padding、margin属性的区别</h3><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/cssmargin3d.jpg" alt=""> </p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/cssmargin.jpg" alt="">  </p>
+<p>当你想让两个元素的content在垂直方向(vertically)分隔时, 既可以选择padding-top/bottom, 也可以选择margin-top/bottom, 再此Jorux建议你尽量使用padding-top/bottom来达到你的目的, 这是因为css中存在Collapsing margins(折叠的margins)的现象</p>
+<p>为什么会折叠: 造成以上现象的原因是, 我们在css中并没有声明id为ID1的元素div的height(高), 因此它的高便被设为auto(自动)了. 一旦其值被设为auto, 那么浏览器就会认为它的高为子元素ID2的border-top到border-bottom之间的距离, 即Fig. 4中bc的长度, 所以子元素ID2的margin-top/bottom(30px)就伸出到了父元素ID1之外, 出现了Fig. 4中ab与cd之间的空白区域. 因此父元素ID1的margin-top/bottom因子元素的”红杏出墙”而被折叠消失了.</p>
+<p>如何解决折叠问题: 可能大家最初想到的办法就是根据折叠发生的原因—auto, 来解决问题. 但是, 在实际操作中, 某些元素如div, h1, p等, 我们是不可能预先知道它的高是多少的, 因此在css文件中是不能常规通过声明元素的高来解决折叠问题.</p>
+<p>我们需要在css文件中加入如下代码:</p>
+<p>padding-top:1px;<br>padding-bottom:1px;</p>
+<p><a href="http://leepiao.blog.163.com/blog/static/485031302010427113653/" target="_blank" rel="noopener">http://leepiao.blog.163.com/blog/static/485031302010427113653/</a></p>
+<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><h4 id="inherit"><a href="#inherit" class="headerlink" title="inherit"></a>inherit</h4><p>继承父标签样式</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/07/2016-11-7-yii2login/" rel="next" title="yii2登录">
+                <i class="fa fa-chevron-left"></i> yii2登录
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/11/22/2016-11-22-monocmd/" rel="prev" title="mono cmd">
+                mono cmd <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">271</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#css"><span class="nav-number">1.</span> <span class="nav-text">css</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#布局"><span class="nav-number">1.1.</span> <span class="nav-text">布局</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#display属性"><span class="nav-number">1.1.1.</span> <span class="nav-text">display属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#block"><span class="nav-number">1.1.2.</span> <span class="nav-text">block</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#inline"><span class="nav-number">1.1.3.</span> <span class="nav-text">inline</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#none"><span class="nav-number">1.1.4.</span> <span class="nav-text">none</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#inline-block"><span class="nav-number">1.1.5.</span> <span class="nav-text">inline-block</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Flex布局"><span class="nav-number">1.1.6.</span> <span class="nav-text">Flex布局</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#position"><span class="nav-number">1.2.</span> <span class="nav-text">position</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jquery获取元素位置"><span class="nav-number">1.3.</span> <span class="nav-text">jquery获取元素位置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#隐藏"><span class="nav-number">1.4.</span> <span class="nav-text">隐藏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#image按比例缩小"><span class="nav-number">1.5.</span> <span class="nav-text">image按比例缩小</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#padding、margin属性的区别"><span class="nav-number">1.6.</span> <span class="nav-text">padding、margin属性的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#语法"><span class="nav-number">1.7.</span> <span class="nav-text">语法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#inherit"><span class="nav-number">1.7.1.</span> <span class="nav-text">inherit</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

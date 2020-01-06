@@ -229,7 +229,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2016-3-21-wxpay/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/04/2016-12-4-opencart/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -248,7 +248,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2016-3-21-wxpay/" itemprop="url">2016-3-21-wxpay</a></h1>
+                <a class="post-title-link" href="/2016/12/04/2016-12-4-opencart/" itemprop="url">opencart架构分析</a></h1>
         
 
         <div class="post-meta">
@@ -260,599 +260,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##微信支付的坑</p>
-<p>###回调</p>
-<p>微信请求回调地址的post参数是stream</p>
-<p>所以servicestack服务器的route应该写成如下格式</p>
-<pre><code>[Route(&quot;/callback/wxpay&quot;, &quot;Post&quot;)]
- public class WxPayCallback : IReturn&lt;string&gt;, IRequiresRequestStream
- {
-     /// &lt;summary&gt;
-     /// The raw Http Request Input Stream
-     /// &lt;/summary&gt;
-     public Stream RequestStream {get;set;}
- }</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2016-3-1-appstoreapply/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2016-3-1-appstoreapply/" itemprop="url">2016-3-1-appstoreapply</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##注册公司开发者账号</p>
-<p>###appleid</p>
-<p>###邓白氏码<br><a href=""><br>https://developer.apple.com/program/enroll/dunsLookupForm.action
-</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2016-12-5-session/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2016-12-5-session/" itemprop="url">web_session</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##session and cookie</p>
-<p>用户使用http协议访问web页面时，大部分时间是在浏览网页，所以这个连接在大部分时候是空闲的，所以采用短连接策略，减少连接资源的浪费。</p>
-<p>即使http1.1默认长连接，但http还是具有无状态特性，发展出cookie和session来保存状态即一些数据。</p>
-<p>cookie和session，二者都能记录状态，前者是将状态数据保存在客户端，后者则保存在服务端。</p>
-<p>cookie:无论使用何种服务端技术，只要发送回的HTTP响应中包含如下形式的头，则视为服务器要求设置一个cookie：<br>Set-cookie:name=name;expires=date;path=path;domain=domain</p>
-<p>session:服务器保持数据在内存或硬盘，通过生成唯一的sessionid来标识session，这个sessionid可以通过1.cookie或者2.在请求的url上都带上sessionid参数即url重写。</p>
-<p>如果cookie被浏览器禁止，url重写是个好策略。</p>
-<p><a href="http://www.cnblogs.com/shoru/archive/2010/02/19/1669395.html" target="_blank" rel="noopener">http://www.cnblogs.com/shoru/archive/2010/02/19/1669395.html</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2016-12-5-ecshop/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2016-12-5-ecshop/" itemprop="url">ecShop架构分析</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##ecShop架构分析</p>
-<p>###数据库设计</p>
-<pre><code>ecs_order_action 对订单操作日志表
-    action_id mediumint 流水号
-    order_id mediumint 被操作的交易号
-    action_user varchar 操作该次的人员
-    order_status tinyint 作何操作.0，未确认；1，已确 认；2，已取消；3，无效；4，退货；
-    shipping_status tinyint 发货状态。0，未发货；1， 已发货；2，已收货；3，备货中
-    pay_status tinyint 支付状态.0,未付款;1,付款中;2, 已付款;
-    action_note varchar 操作备注
-    log_time int 操作时间
-
-ecs_order_goods 订单的商品信息，注：订单的 商品信息基本都是从购物车所对应的
-    rec_id mediumint 订单商品信息自增id
-    order_id mediumint 订单商品信息对应的详细信息id， 取值order_info的order_id
-    goods_id mediumint 商品的的id，取值表ecs_goods 的 goods_id
-    goods_name varchar 商品的名称，取值表ecs_goods
-    goods_sn varchar 商品的唯一货号，取值ecs_goods
-    goods_number smallint 商品的购买数量
-    market_price decimal 商品的市场售价，取值ecs_goods
-    goods_price decimal 商品的本店售价，取值ecs_goods
-    goods_attr text 购买该商品时所选择的属性；
-    send_number smallint 当不是实物时，是否已发货，0 ，否；1，是
-    is_real tinyint 是否是实物，0，否；1，是；取值 ecs_goods
-    extension_code varchar 商品的扩展属性，比如像虚拟卡。取值ecs_goods
-    parent_id mediumint 父商品id，取值于ecs_cart的 parent_id；如果有该值则是值多代表的物品的配件
-    is_gift smallint 是否参加优惠活动，0，否；其他， 取值于ecs_cart 的is_gift，跟其一样，是参加的优惠活动的id
-
-ecs_order_info 订单的配送，贺卡等详细信息
-    order_id mediumint 订单详细信息自增id
-    order_sn varchar 订单号，唯一
-    user_id mediumint 用户id，同ecs_users的user_id
-    order_status tinyint 订单状态。0，未确认；1，已确 认；2，已取消；3，无效；4，退货；
-    shipping_status tinyint 商品配送情况，0，未发货； 1，已发货；2，已收货；3，备货中
-    pay_status tinyint 支付状态；0，未付款；1，付款中 ；2，已付款
-    consignee varchar 收货人的姓名，用户页面填写，默认取值于表 user_address
-    country smallint 收货人的国家，用户页面填写，默认 取值于表user_address，其id对应的值在ecs_region
-    province smallint 收货人的省份，用户页面填写，默 认取值于表user_address，其id对应的值在ecs_region
-    city smallint 收货人的城市，用户页面填写，默认取 值于表user_address，其id对应的值在ecs_region
-    district smallint 收货人的地区，用户页面填写，默 认取值于表user_address，其id对应的值在ecs_region
-    address varchar 收货人的详细地址，用户页面填写，默认取值于表 user_address
-    zipcode varchar 收货人的邮编，用户页面填写，默认取值于表 user_address
-    tel varchar 收货人的电话，用户页面填写，默认取值于表user_address
-    mobile varchar 收货人的手机，用户页面填写，默认取值于表user_address
-    email varchar 收货人的手机，用户页面填写，默认取值于表user_address
-    best_time varchar 收货人的最佳送货时间，用户页面填写，默认取值于表 user_address
-    sign_building varchar 收货人的地址的标志性建筑，用户页面填写，默认取 值于表user_address
-    postscript varchar 订单附言，由用户提交订单前填写
-    shipping_id tinyint 用户选择的配送方式id，取值表 ecs_shipping
-    shipping_name varchar 用户选择的配送方式的名称，取值表ecs_shipping
-    pay_id tinyint 用户选择的支付方式的id，取值表ecs_payment
-    pay_name varchar 用户选择的支付方式的名称，取值表ecs_payment
-    how_oos varchar 缺货处理方式，等待所有商品备齐后再发； 取消订单；与 店主协商
-    how_surplus varchar 根据字段猜测应该是余额处理方式，程序未作这部分实 现
-    pack_name varchar 包装名称，取值表ecs_pack
-    card_name varchar 贺卡的名称，取值ecs_card
-    card_message varchar 贺卡内容，由用户提交
-    inv_payee varchar 发票抬头，用户页面填写
-    inv_content varchar 发票内容，用户页面选择，取值ecs_shop_config的 code字段的值为invoice_content的value
-    goods_amount decimal 商品总金额
-    shipping_fee decimal 配送费用
-    insure_fee decimal 保价费用
-    pay_fee decimal 支付费用,跟支付方式的配置相关，取值 表ecs_payment
-    pack_fee decimal 包装费用，取值表取值表ecs_pack
-    card_fee decimal 贺卡费用，取值ecs_card
-    money_paid decimal 已付款金额
-    surplus decimal 该订单使用余额的数量，取用户设定余额 ，用户可用余额，订单金额中最小者
-    integral int 使用的积分的数量，取用户使用积分， 商品可用积分，用户拥有积分中最小者
-    integral_money decimal 使用积分金额
-    bonus decimal 使用红包金额
-    order_amount decimal 应付款金额
-    from_ad smallint 订单由某广告带来的广告id，应该取值于 ecs_ad
-    referer varchar 订单的来源页面
-    add_time int 订单生成时间
-    confirm_time int 订单确认时间
-    pay_time int 订单支付时间
-    shipping_time int 订单配送时间
-    pack_id tinyint 包装id，取值取值表ecs_pack
-    card_id tinyint 贺卡id，用户在页面选择，取值取值 ecs_card
-    bonus_id smallint 红包的id，ecs_user_bonus的 bonus_id
-    invoice_no varchar 发货单号，发货时填写，可在订单查询查看
-    extension_code varchar 通过活动购买的商品的代号；GROUP_BUY是团购； AUCTION，是拍卖；SNATCH，夺宝奇兵；正常普通产品该处为空
-    extension_id mediumint 通过活动购买的物品的id，取 值ecs_goods_activity；如果是正常普通商品，该处为0
-    to_buyer varchar 商家给客户的留言,当该字段有值时可以在订单查询看到
-    pay_note varchar 付款备注，在订单管理里编辑修改
-    agency_id smallint 该笔订单被指派给的办事处的id，根据订单内容 和办事处负责范围自动决定，也可以有管理员修改，取值于表ecs_agency
-    inv_type varchar 发票类型，用户页面选择，取值ecs_shop_config的code字 段的值为invoice_type的value
-    tax decimal 发票税额
-    is_separate tinyint 0，未分成或等待分成；1，已分成；2，取 消分成；
-    parent_id mediumint 能获得推荐分成的用户id，id取 值于表ecs_users
-    discount decimal 折扣金额</code></pre><p><a href="http://www.ecshoptemplate.com/ecshop-mysql.html" target="_blank" rel="noopener">http://www.ecshoptemplate.com/ecshop-mysql.html</a></p>
-<p>###订单业务逻辑</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2016-12-4-opencart/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2016-12-4-opencart/" itemprop="url">opencart架构分析</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-04T00:00:00+08:00">
+                2016-12-04
               </time>
             
 
@@ -960,7 +369,7 @@ ecs_order_info 订单的配送，贺卡等详细信息
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2016-12-29-nginx-rewrite/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/29/2016-11-29-interview/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -979,7 +388,7 @@ ecs_order_info 订单的配送，贺卡等详细信息
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2016-12-29-nginx-rewrite/" itemprop="url">nginx rewrite</a></h1>
+                <a class="post-title-link" href="/2016/11/29/2016-11-29-interview/" itemprop="url">面试</a></h1>
         
 
         <div class="post-meta">
@@ -991,8 +400,8 @@ ecs_order_info 订单的配送，贺卡等详细信息
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-11-29T00:00:00+08:00">
+                2016-11-29
               </time>
             
 
@@ -1031,463 +440,47 @@ ecs_order_info 订单的配送，贺卡等详细信息
       
         
           
-            <p>##nginx rewrite</p>
-<pre><code>一．正则表达式匹配，其中：
-* ~ 为区分大小写匹配
-* ~* 为不区分大小写匹配
-* !~和!~*分别为区分大小写不匹配及不区分大小写不匹配
-
-二．文件及目录匹配，其中：
-* -f和!-f用来判断是否存在文件
-* -d和!-d用来判断是否存在目录
-* -e和!-e用来判断是否存在文件或目录
-* -x和!-x用来判断文件是否可执行
-
-三．rewrite指令的最后一项参数为flag标记，flag标记有：
-1.last    相当于apache里面的[L]标记，表示rewrite。
-2.break本条规则匹配完成后，终止匹配，不再匹配后面的规则。
-3.redirect  返回302临时重定向，浏览器地址会显示跳转后的URL地址。
-4.permanent  返回301永久重定向，浏览器地址会显示跳转后的URL地址。</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2016-12-28-yii2restful/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2016-12-28-yii2restful/" itemprop="url">yii2 restful</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##yii2 restful</p>
-<p>###First, create a controller class </p>
-<p>app\controllers\UserController as follows:</p>
-<pre><code>namespace app\controllers;
-
-use yii\rest\ActiveController;
-
-class UserController extends ActiveController
-{
-    public $modelClass = &apos;app\models\User&apos;;
-}</code></pre><p>###Configuring URL Rules</p>
-<p>Then, modify the configuration of the urlManager component in your application configuration:</p>
-<pre><code>&apos;urlManager&apos; =&gt; [
-    &apos;enablePrettyUrl&apos; =&gt; true,
-    &apos;enableStrictParsing&apos; =&gt; true,
-    &apos;showScriptName&apos; =&gt; false,
-    &apos;rules&apos; =&gt; [
-        [&apos;class&apos; =&gt; &apos;yii\rest\UrlRule&apos;, &apos;controller&apos; =&gt; &apos;user&apos;],
-    ],
-]
-
-
-GET /users: list all users page by page;
-HEAD /users: show the overview information of user listing;
-POST /users: create a new user;
-GET /users/123: return the details of the user 123;
-HEAD /users/123: show the overview information of user 123;
-PATCH /users/123 and PUT /users/123: update the user 123;
-DELETE /users/123: delete the user 123;
-OPTIONS /users: show the supported verbs regarding endpoint /users;
-OPTIONS /users/123: show the supported verbs regarding endpoint /users/123.</code></pre><p>###override action</p>
-<pre><code>public function actions()  
-{  
-    $actions = parent::actions();  
-
-    // 注销系统自带的实现方法  
-    unset($actions[&apos;index&apos;]);  
-
-    //unset($actions[&apos;create&apos;]);  
-    //unset($actions[&apos;update&apos;]);  
-    //unset($actions[&apos;delete&apos;]);  
-
-  return $actions;  
-}  
-
-//覆盖父类的actionIndex方法,并进行重写  
-public function actionIndex()  
-{  
-    //获取用户所有信息  
-    ......  
-}  </code></pre><p>或者修改urlmanger</p>
-<pre><code>&apos;urlManager&apos; =&gt; [
-            &apos;enablePrettyUrl&apos; =&gt; true,
-          //  &apos;enableStrictParsing&apos; =&gt; true,
-            &apos;showScriptName&apos; =&gt; false,
-            &apos;rules&apos; =&gt; [
-                [
-
-                    &apos;class&apos; =&gt; &apos;yii\rest\UrlRule&apos;, 
-                    &apos;controller&apos; =&gt; [&apos;user&apos;],
-                    &apos;extraPatterns&apos; =&gt; [
-                        &apos;POST /adduser&apos; =&gt; &apos;adduser&apos;, // &apos;adduser&apos; refers to &apos;actionAdduser&apos;
-                        &apos;POST /getuser&apos; =&gt; &apos;getuser&apos;,
-
-                    ],
-
-
-                ],
-            ],
-
-        ],</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2016-12-28-vpnapp/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2016-12-28-vpnapp/" itemprop="url">vpn app</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##vpn app </p>
+            <p>##面试准备</p>
+<p>###设计模式<br>    装饰器的作用就是为已经存在的对象添加额外的功能<br>    例如，查看一个函数的执行时间，把函数装饰成有计时功能。<br>        def foo():  </p>
+<pre><code>    print &apos;in foo()&apos;  
+
+
+
+# 定义一个计时器，传入一个，并返回另一个附加了计时功能的方法  
+
+def timeit(func):  
+
+
+
+    # 定义一个内嵌的包装函数，给传入的函数加上计时功能的包装  
+
+    def wrapper():  
+
+        start = time.clock()  
+
+        func()  
+
+        end =time.clock()  
+
+        print &apos;used:&apos;, end - start  
+
+
+
+    # 将包装后的函数返回  
+
+    return wrapper  
+
+
+
+foo = timeit(foo)  
+
+foo()  </code></pre><p>###php</p>
+<p>###docker</p>
+<p>###python</p>
 <p>###ios</p>
-<p>1.上传用户设备号，如果是新用户则注册用户</p>
-<p>2.获取服务器列表</p>
-<p>###后台</p>
-<p>第一版使用的python flask，web应用，感觉不稳定</p>
-<p>第二版使用yii2 restful</p>
-<p>###广告<br>加入谷歌banner广告</p>
-<p>todo：百度banner广告</p>
-<p>###服务器</p>
-<p>日本服务器 vultr<br>纽约服务器 digitalocean<br>阿里云服务器</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2016-12-21-object/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2016-12-21-object/" itemprop="url">面向对象</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>###面向对象</p>
-<p>在面向对象编程中，类（class）是对象（object）的模板，定义了同一组对象（又称”实例”）共有的属性和方法</p>
-<p>####javascript</p>
+<p>熟悉CocoaTouch，CoreData，Runtime，对iOS下的并行开发，网络管理，数据存储，内存管理，GUI开发，消息通讯机制，安全机制有自己的深入体会； </p>
+<pre><code>http://www.swifthumb.com/thread-11284-1-1.html</code></pre><p>###服务端框架<br>    yii</p>
+<p>###javascript</p>
 <p>Javascript是一种基于对象（object-based）的语言，你遇到的所有东西几乎都是对象。但是，它又不是一种真正的面向对象编程（OOP）语言，因为它的语法中没有class</p>
 <p>Javascript语言不支持”类”，但是可以用一些变通的方法，模拟出”类”。<br>一、构造函数法</p>
 <p>它用构造函数模拟”类”，在其内部用this关键字指代实例对象</p>
@@ -1514,7 +507,392 @@ cat1.makeSound(); // 喵喵喵</code></pre><p>三、极简主义法</p>
 　　　　}
 　　};
 　　var cat1 = Cat.createNew();
-　　cat1.makeSound(); // 喵喵喵</code></pre>
+　　cat1.makeSound(); // 喵喵喵
+　
+　</code></pre><p>javascript Prototype</p>
+<pre><code>Javascript规定，每一个构造函数都有一个prototype属性，指向另一个对象。这个对象的所有属性和方法，都会被构造函数的实例继承。
+这意味着，我们可以把那些不变的属性和方法，直接定义在prototype对象上。
+　　function Cat(name,color){
+　　　　this.name = name;
+　　　　this.color = color;
+　　}
+　　Cat.prototype.type = &quot;猫科动物&quot;;
+　　Cat.prototype.eat = function(){alert(&quot;吃老鼠&quot;)};
+然后，生成实例。
+　　var cat1 = new Cat(&quot;大毛&quot;,&quot;黄色&quot;);
+　　var cat2 = new Cat(&quot;二毛&quot;,&quot;黑色&quot;);
+　　alert(cat1.type); // 猫科动物
+　　cat1.eat(); // 吃老鼠</code></pre><p>　　<br>　　　<br>###前端<br>    最近在看哪些前端方面的书？</p>
+<pre><code>js的基本数据类型有哪些？
+
+--字符串、数字、布尔、数组、对象、Null、Undefined
+
+解释下什么是闭包？
+
+--全局变量、局部变量
+--闭包就是能够读取其他函数内部变量的函数
+---http://www.ruanyifeng.com/blog/2009/08/learning_javascript_closures.html
+
+CSS常用的样式有哪些？
+
+了解CSS3么？
+CSS3 用于控制网页的样式和布局
+选择器
+盒模型
+背景和边框
+文字特效
+2D/3D转换
+动画
+多列布局
+用户界面
+
+
+知道哪些HTML5的新特性？
+
+
+1. 新的Doctype 
+尽管使用&lt;!DOCTYPE html&gt;，即使浏览器不懂这句话也会按照标准模式去渲染 
+2. Figure元素 
+用&lt;figure&gt;和&lt;figcaption&gt;来语义化地表示带标题的图片 
+&lt;figure&gt; 
+&lt;img src=”path/to/image” alt=”About image” /&gt; 
+&lt;figcaption&gt; 
+&lt;p&gt;This is an image of something interesting. &lt;/p&gt; 
+&lt;/figcaption&gt; 
+&lt;/figure&gt; 
+3. 重新定义的&lt;small&gt; 
+&lt;small&gt;已经被重新定义了，现在被用来表示小的排版，如网站底部的版权声明 
+4. 去掉link和script标签里面的type属性 
+5. 加/不加 括号 
+HTML5没有严格的要求属性必须加引号，闭合不闭合，但是建议加上引号和闭合标签 
+6. 让你的内容可编辑，只需要加一个contenteditable属性 
+7. Email Inputs 
+如果我们给Input的type设置为email，浏览器就会验证这个输入是否是email类型，当然不能只依赖前端的校验，后端也得有相应的校验 
+8. Placeholders 
+这个input属性的意义就是不必通过javascript来做placeholder的效果了 
+9. Local Storage 
+使用Local Storage可以永久存储大的数据片段在客户端（除非主动删除），目前大部分浏览器已经支持，在使用之前可以检测一下window.localStorage是否存在 
+10. 语义化的header和footer 
+11. 更多的HTML5表单特性 
+12. IE和HTML5 
+默认的，HTML5新元素被以inline的方式渲染，不过可以通过下面这种方式让 
+其以block方式渲染 
+header, footer, article, section, nav, menu, hgroup { 
+display: block; 
+} 
+不幸的是IE会忽略这些样式，可以像下面这样fix: 
+document.createElement(”article”); 
+document.createElement(”footer”); 
+document.createElement(”header”); 
+document.createElement(”hgroup”); 
+document.createElement(”nav”); 
+document.createElement(”menu”); 
+13. hgroup 
+一般在header里面用来将一组标题组合在一起，如 
+&lt;header&gt; 
+&lt;hgroup&gt; 
+&lt;h1&gt; Recall Fan Page &lt;/h1&gt; 
+&lt;h2&gt; Only for people who want the memory of a lifetime. &lt;/h2&gt; 
+&lt;/hgroup&gt; 
+&lt;/header&gt; 
+14. Required属性 
+required属性定义了一个input是否是必须的，你可以像下面这样声明 
+&lt;input type=”text” name=”someInput” required&gt; 
+或者 
+&lt;input type=”text” name=”someInput” required=”required”&gt; 
+15. Autofocus属性 
+正如它的词义，就是聚焦到输入框里面 
+&lt;input type=”text” name=”someInput” placeholder=”Douglas Quaid” required autofocus&gt; 
+16. Audio支持 
+HTML5提供了&lt;audio&gt;标签，你不需要再按照第三方插件来渲染音频，大多数现代浏览器提供了对于HTML5 Audio的支持，不过目前仍旧需要提供一些兼容处理，如 
+&lt;audio autoplay=”autoplay” controls=”controls”&gt; 
+&lt;source src=”file.ogg” /&gt;&lt;!–FF–&gt; 
+&lt;source src=”file.mp3″ /&gt;&lt;!–Webkit–&gt; 
+&lt;a href=”file.mp3″&gt;Download this file.&lt;/a&gt; 
+&lt;/audio&gt; 
+17. Video支持 
+和Audio很像，&lt;video&gt;标签提供了对于video的支持，由于HTML5文档并没有给video指定一个特定的编码，所以浏 览器去决定要支持哪些编码，导致了很多不一致。Safari和IE支持H.264编码的格式，Firefox和Opera支持Theora和Vorbis 编码的格式，当使用HTML5 video的时候，你必须都提供： 
+&lt;video controls preload&gt; 
+&lt;source src=”cohagenPhoneCall.ogv” type=”video/ogg; codecs=’vorbis, theora’” /&gt; 
+&lt;source src=”cohagenPhoneCall.mp4″ type=”video/mp4; ’codecs=’avc1.42E01E, mp4a.40.2′” /&gt; 
+&lt;p&gt; Your browser is old. &lt;a href=”cohagenPhoneCall.mp4″&gt;Download this video instead.&lt;/a&gt; &lt;/p&gt; 
+&lt;/video&gt; 
+18. 预加载视频 
+preload属性就像它的字面意思那么简单，你需要决定是否需要在页面加载的时候去预加载视频 
+&lt;video preload&gt; 
+19. 显示视频控制 
+&lt;video preload controls&gt; 
+20. 正则表达式 
+由于pattern属性，我们可以在你的markup里面直接使用正则表达式了 
+&lt;form action=”&quot; method=”post”&gt; 
+&lt;label for=”username”&gt;Create a Username: &lt;/label&gt; 
+&lt;input type=”text” name=”username” id=”username” placeholder=”4 &lt;&gt; 10″ pattern=”[A-Za-z]{4,10}” autofocus required&gt; 
+&lt;button type=”submit”&gt;Go &lt;/button&gt; 
+&lt;/form&gt; 
+21. 检测属性支持 
+除了Modernizr之外我们还可以通过javascript简单地检测一些属性是否支持，如： 
+&lt;script&gt; 
+if (!’pattern’ in document.createElement(’input’) ) { 
+// do client/server side validation 
+} 
+&lt;/script&gt; 
+22. Mark元素 
+把&lt;mark&gt;元素看做是高亮的作用，当我选择一段文字的时候，javascript对于HTML的markup效果应该是这样的： 
+&lt;h3&gt; Search Results &lt;/h3&gt; 
+&lt;p&gt; They were interrupted, just after Quato said, &lt;mark&gt;”Open your Mind”&lt;/mark&gt;. &lt;/p&gt; 
+23. 什么时候用&lt;div&gt; 
+HTML5已经引入了这么多元素，那么div我们还要用吗？div你可以在没有更好的元素的时候去用。 
+24. 想立即使用HTML5? 
+不要等2022了，现在就可以使用了，just do it. 
+25. 哪些不是HTML5 
+1)SVG 
+2)CSS3 
+3)Geolocation 
+4)Client Storage 
+5)Web Sockets 
+26. Data属性 
+&lt;div id=”myDiv” data-custom-attr=”My Value”&gt; Bla Bla &lt;/div&gt; 
+CSS中使用： 
+&lt;style&gt; 
+h1:hover:after { 
+content: attr(data-hover-response); 
+color: black; 
+position: absolute; 
+left: 0; 
+} 
+&lt;/style&gt; 
+&lt;h1 data-hover-response=”I Said Don’t Touch Me!”&gt; Don’t Touch Me &lt;/h1&gt; 
+27. Output元素 
+&lt;output&gt;元素用来显示计算结果，也有一个和label一样的for属性 
+28. 用Range Input来创建滑块 
+HTML5引用的range类型可以创建滑块，它接受min, max, step和value属性 
+可以使用css的:before和:after来显示min和max的值 
+&lt;input type=”range” name=”range” min=”0″ max=”10″ step=”1″ value=”&quot;&gt; 
+input[type=range]:before { content: attr(min); padding-right: 5px; 
+} 
+input[type=range]:after { content: attr(max); padding-left: 5px;} 
+
+了解AJAX么，如何实现跨域？
+
+浏览器的同源策略：浏览器最基本的安全功能，同源是指，域名，协议，端口相同（所以我写的接口部署端口分别为1122和2211即不是同源，属于跨域）
+
+ajax：是一种技术方案，依赖的是CSS/HTML/Javascript，最核心依赖是浏览器提供的XMLHttpRequest对象，这个对象使得浏览器可以发出HTTP请求与接收HTTP响应。
+
+XMLHttpRequest Level 1主要存在以下缺点:
+
+1.受同源策略的限制，不能发送跨域请求；
+
+2.不能发送二进制文件（如图片、视频、音频等），只能发送纯文本数据；
+
+3.发送和获取数据的过程中，无法实时获取进度信息，只能判断是否完成；
+
+XMLHttpRequest Level 2中新增了以下功能:
+
+1.可以发送跨域请求，在服务端允许的情况下；
+
+2.支持发送和接收二进制数据；
+
+3.新增formData对象，支持发送表单数据；
+
+4.发送和获取数据时，可以获取进度信息；
+
+5.可以设置请求的超时时间；
+
+使用Javascript向服务器提出请求并处理响应而不阻塞用户！核心对象XMLHTTPRequest。通过这个对象，您的 JavaScript 可在不重载页面的情况与Web服务器交换数据，即在不需要刷新页面的情况下，就可以产生局部刷新的效果。
+
+跨域:
+浏览器对于javascript的同源策略的限制,例如a.cn下面的js不能调用b.cn中的js,对象或数据(因为a.cn和b.cn是不同域),所以跨域就出现了.
+
+上面提到的,同域的概念又是什么呢??? 简单的解释就是相同域名,端口相同,协议相同
+
+基于script标签实现跨域
+
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;title&gt;Insert title here&lt;/title&gt;
+
+&lt;script type=&quot;text/javascript&quot;&gt;
+    var message = function(data) {
+        alert(data[1].title);
+    };
+&lt;/script&gt;
+
+&lt;script type=&quot;text/javascript&quot; src=&quot;http://web.cn/js/message.js&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div id=&apos;testdiv&apos;&gt;&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+    message([
+ {&quot;id&quot;:&quot;1&quot;, &quot;title&quot;:&quot;天津新闻联播，雷人搞笑的男主持人&quot;},
+ {&quot;id&quot;:&quot;2&quot;, &quot;title&quot;:&quot;楼市告别富得流油 专家:房价下跌是大概率事件&quot;},
+ {&quot;id&quot;:&quot;3&quot;, &quot;title&quot;:&quot;法国人关注时事 八成年轻人每天阅读新闻&quot;},
+ {&quot;id&quot;:&quot;4&quot;, &quot;title&quot;:&quot;新闻中的历史,历史中的新闻&quot;},
+ {&quot;id&quot;:&quot;5&quot;, &quot;title&quot;:&quot;东阳新闻20140222&quot;},
+ {&quot;id&quot;:&quot;6&quot;, &quot;title&quot;:&quot;23个职能部门要增加新闻发布频次&quot;},
+ {&quot;id&quot;:&quot;7&quot;, &quot;title&quot;:&quot;《贵州新闻联播》 中国美丽乡村&quot;},
+ {&quot;id&quot;:&quot;8&quot;, &quot;title&quot;:&quot;朝韩离散家属团聚首轮活动结束&quot;},
+ {&quot;id&quot;:&quot;9&quot;, &quot;title&quot;:&quot;索契冬奥会一天曝出两例兴奋剂事件&quot;},
+ {&quot;id&quot;:&quot;10&quot;, &quot;title&quot;:&quot;今天中国多地仍将出现中度霾&quot;}</code></pre><p> ]);</p>
+<pre><code>基于jquery跨域
+
+$(document).ready(function(){
+   var url=&apos;http://localhost:8080/WorkGroupManagment/open/getGroupById&quot;
+       +&quot;?id=1&amp;callback=?&apos;;
+   $.ajax({
+     url:url,
+     dataType:&apos;jsonp&apos;,
+     processData: false, 
+     type:&apos;get&apos;,
+     success:function(data){
+       alert(data.name);
+     },
+     error:function(XMLHttpRequest, textStatus, errorThrown) {
+       alert(XMLHttpRequest.status);
+       alert(XMLHttpRequest.readyState);
+       alert(textStatus);
+     }});
+   });    
+
+那么如何用jquery来实现我们的跨域呢???jquery已经把跨域封装到ajax上了,而且封装得非常的好,使用起来也特别方便
+
+通过iframe来跨子域
+基于iframe实现的跨域要求两个域具有aa.xx.com,bb.xx.com 这种特点，
+
+也就是两个页面必须属于一个基础域（例如都是xxx.com)，使用同一协议和同一端口，这样在两个页面中同时添加document.domain，就可以实现父页面调用子页面的函数
+
+要点就是 :通过修改document.domain来跨子域
+
+
+
+对jQuery了解多少？看过源码么？
+javascript 库
+
+在浏览器中输入域名到显示，其背后是怎样的一系列流程？
+
+如何优化页面的显示速度？
+
+了解数据结构么？常用的数据结构有哪些？
+
+用C语言的数组实现一个队列(手撕代码)
+
+简单介绍一下双向循环链表。
+
+介绍一下树的前中后三种遍历方式。
+
+简单说一下最短路径算法。
+
+随便列举出五个状态码。
+
+讲述一下域名到页面的过程。
+
+HTTP方法除了GET和POST还有哪些？
+
+GET请求和POST请求有长度限制么？
+
+头信息中与HTTP缓存有关的信息有哪些？
+
+CSS中的position属性有哪些值？
+
+如何水平垂直居中一个div？
+
+解释闭包。
+
+哪些操作会造成内存泄漏？
+
+前端的安全性问题有哪些？
+
+JS实现继承有哪几种方法？
+
+有涉及后端的项目么？
+
+了解React、Angular、Node么？ 
+
+Canvas画饼状图(个人项目)
+
+js如何实现定时器？简述定时器原理。
+
+左固定右自适应的两列布局(手撕)
+
+了解HTTP协议么?
+
+为什么HTTP协议基于TCP协议？TCP与UDP的区别。
+
+HTTPS和HTTP的端口号各是多少？HTTPS中的S是什么？
+
+了解跨域么？详细讲述一下JSONP的原理。
+
+简单实现一个原型继承(手撕)
+
+实现一个方法，输入为若干个数组，合并、去重、排序并返回(手撕)
+
+写一个快速排序算法(手撕)
+
+前端学习多久了？   
+
+SQL语句(笔试题)
+
+jQuery的选择器有哪些？
+
+了解Angular么？
+
+常用的排序算法有哪些？哪些是稳定的？
+
+项目吹牛
+
+SQL语句(笔试题)
+
+对jQuery熟悉么？
+
+介绍一下Node
+
+项目吹牛
+
+未来个人职业发展
+
+优秀的前端页面是怎样的？
+
+现场看项目提问细节 Canvas如何实现雷达图。
+项目吹牛
+
+display有哪些属性值？
+
+什么是inline-block，inline-block的间隙问题。
+
+行内元素float:left后是否变为块级元素？
+
+如果想隐藏页面中的一段文字，有哪些方法可以实现？
+
+Z-index可以设置为负数么？设为负数有什么用？
+
+调出了笔试时中的一道算法题，讲解思路。
+
+实现一个效果，当鼠标移动，在移动的路径上有从小到大变化后消失的心形动画。简述实现的思路。
+
+了解SVG么？Canvas和SVG有什么区别？
+
+Cookies有什么用？
+
+了解CSS预处理么？
+
+js高级程序设计
+
+
+
+《CSS网站布局实录》——国产CSS2入门书，有些技巧已经淘汰，但仍不失为最好的CSS入门教程。
+《无懈可击的Web设计》——讲CSS应用技巧的书，国内外粉丝别多，说是开创了CSS技巧流派也不为过。
+《DOM JavaScript编程艺术——JavaScript最好的入门书，没有之一，这本书是帮助你了解如何将DOM、CSS和JavaScript连接起来的一本书。严格来说，后端Node根本不算JavaScript，JavaScript是基于ES语法的一门脱水语言，如何实现的胶水？这本书将带你入门。
+《JavaScript高级程序设计》 ——JavaScript必读的一本精典，读完之后对JavaScript的理解和实 
+践会上升非常大的一个台阶。
+《编写高质量代码——Web前端开发修炼之道》 —— 举贤不避亲，这本书是我写的。推荐的原因是，这本书重点讲团队合作的注意事项。虽然一些具体的技巧，在今天已然过时，比如IE6的hack，但在团队合作方面的思考，直到今天我也没看到其他书在讲，这些思想没有其他书可替代。
+《HTML5和CSS3权威指南》——目前为止，我读过的HTML5方面最好的一本原创书。配合实例进行API讲解，非常详细具体。连HTML5都提供了哪些底层的东西都不知道，又该如何去用好它呢？在我看来，是学习HTML5的必读书。
+《响应式Web设计：HTML5和CSS3实战》——作者是《无懈可击的Web设计》忠实粉丝，所以很自然地，这也是本CSS技巧流派的书，侧重点在CSS3的实践技巧上，让人大开眼界。
+《JavaScript设计模式》——JavaScript在实战时的高级技巧。
+
+    未来几年内，前端一定将三分天下：其一，是以Ext为代表js库将传统页面的表现形式发挥到极至;其二，Adobe的flash/flex凭着成熟的技术和丰富的经验，以及不断创新的热情，引领着前端的技术走向；其三，微软的sliverlight凭借着公司强大的技术团队和.net体系协同做战的优势，奋起直追，很有可能追赶上flash/flex．</code></pre>
           
         
       
@@ -1562,7 +940,7 @@ cat1.makeSound(); // 喵喵喵</code></pre><p>三、极简主义法</p>
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2016-12-16-jquery/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/22/2016-11-22-monocmd/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -1581,7 +959,7 @@ cat1.makeSound(); // 喵喵喵</code></pre><p>三、极简主义法</p>
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2016-12-16-jquery/" itemprop="url">jquery</a></h1>
+                <a class="post-title-link" href="/2016/11/22/2016-11-22-monocmd/" itemprop="url">mono cmd</a></h1>
         
 
         <div class="post-meta">
@@ -1593,8 +971,8 @@ cat1.makeSound(); // 喵喵喵</code></pre><p>三、极简主义法</p>
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-11-22T00:00:00+08:00">
+                2016-11-22
               </time>
             
 
@@ -1633,67 +1011,1267 @@ cat1.makeSound(); // 喵喵喵</code></pre><p>三、极简主义法</p>
       
         
           
-            <p>##jquery源码分析</p>
-<p>选择网页元素</p>
-<p>###js基础知识</p>
-<p>匿名函数声明完就立即执行</p>
-<pre><code>!function(a,b)(pa, pb);
-等同于(function(a,b))(pa, pb);</code></pre><p>prototype</p>
-<p>###使用方法<br>jQuery(“ul&gt;li:first”).addClass(“selected”);</p>
-<p>其中jQuery()可替换为快捷方式$()，如果$被其它对象占用，可使用jQuery.noConflict()函数取消快捷方式。</p>
-<p>###$().xxx()</p>
-<p>$()返回一个对象</p>
-<pre><code>分析一：jQuery的无new构建
+            <p>##mono 命令</p>
+<pre><code>$mono_path/bin/xbuild /p:Configuration=&quot;Release Mono&quot; /p:Platform=&quot;Any CPU&quot; /t:clean MediaBrowser.Mono.sln
+$mono_path/bin/xbuild /p:Configuration=&quot;Release Mono&quot; /p:Platform=&quot;Any CPU&quot; /t:build MediaBrowser.Mono.sln
 
-JavaScript是函数式语言，函数可以实现类，类就是面向对象编程中最基本的概念
+xbuild /p:Configuration=Debug  /t:clean AppFrame.sln</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
 
-复制代码
-var aQuery = function(selector, context) {
-        //构造函数
-}
-aQuery.prototype = {
-    //原型
-    name:function(){},
-    age:function(){}
-}
+    
 
-var a = new aQuery();
+    
 
-a.name();
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
 
 
+    
+      
 
-var aQuery = function(selector, context) {
-   return  aQuery.prototype.init();
-}
-aQuery.prototype = {
-    init:function(){
-        return this;
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/09/2016-11-9-css/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/11/09/2016-11-9-css/" itemprop="url">css备忘</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-11-09T00:00:00+08:00">
+                2016-11-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="css"><a href="#css" class="headerlink" title="css"></a>css</h2><p>###基本元素</p>
+<p>Block-level element: 指能够独立存在, 一般的块级元素之间以换行(如一个段落结束后另起一行)分隔. 常用的块级元素包括: p, h1~h6, div, ul等;</p>
+<p>Inline element: 指依附其他块级元素存在, 紧接于被联元素之间显示, 而不换行. 常用的内联元素包括: img, span, li, br等;</p>
+<p>Top-level element: 包括html, body, frameset, 表现如Block-level element, 属于高级块级元素.</p>
+<h3 id="布局"><a href="#布局" class="headerlink" title="布局"></a>布局</h3><h4 id="display属性"><a href="#display属性" class="headerlink" title="display属性"></a>display属性</h4><h4 id="block"><a href="#block" class="headerlink" title="block"></a>block</h4><p>div 是一个标准的块级元素。一个块级元素会新开始一行并且尽可能撑满容器。其他常用的块级元素包括 p 、 form 和HTML5中的新元素： header 、 footer 、 section 等等。</p>
+<h4 id="inline"><a href="#inline" class="headerlink" title="inline"></a>inline</h4><p>span 是一个标准的行内元素。一个行内元素可以在段落中 <span> 像这样 </span> 包裹一些文字而不会打乱段落的布局。 a 元素是最常用的行内元素，它可以被用作链接。</p>
+<h4 id="none"><a href="#none" class="headerlink" title="none"></a>none</h4><p>另一个常用的display值是 none 。一些特殊元素的默认 display 值是它，例如 script 。 display:none 通常被 JavaScript 用来在不删除元素的情况下隐藏或显示元素。</p>
+<p>它和 visibility 属性不一样。把 display 设置成 none 元素不会占据它本来应该显示的空间，但是设置成 visibility: hidden; 还会占据空间。</p>
+<p>其他 display 值</p>
+<p>还有很多的更有意思的 display 值，例如 list-item 和 table 。这里有一份详细的列表。之后我们会讨论到 inline-block 和 flex </p>
+<pre><code>width: 600px;
+ margin: 0 auto;
+ 600px宽度居中</code></pre><p>ref:<a href="http://zh.learnlayout.com/display.html" target="_blank" rel="noopener">http://zh.learnlayout.com/display.html</a></p>
+<h4 id="inline-block"><a href="#inline-block" class="headerlink" title="inline-block"></a>inline-block</h4><p>结合inline和block的特性</p>
+<h4 id="Flex布局"><a href="#Flex布局" class="headerlink" title="Flex布局"></a>Flex布局</h4><pre><code>.box{
+  display: -webkit-flex; /* Safari */
+  display: flex;
+}</code></pre><p>采用Flex布局的元素，称为Flex容器（flex container），简称”容器”。它的所有子元素自动成为容器成员，称为Flex项目（flex item），简称”项目”。</p>
+<pre><code>6个属性
+flex-direction
+flex-wrap
+flex-flow
+justify-content
+align-items
+align-content</code></pre><h3 id="position"><a href="#position" class="headerlink" title="position"></a>position</h3><p>css绝对定位、相对定位和文档流</p>
+<p>默认是什么定位</p>
+<p>position:relative;原位置上偏移，不脱离文档流</p>
+<p>position:absolute是脱离文档流的,相对于他的第一个有position的祖先</p>
+<p>padding</p>
+<p>margin</p>
+<h3 id="jquery获取元素位置"><a href="#jquery获取元素位置" class="headerlink" title="jquery获取元素位置"></a>jquery获取元素位置</h3><pre><code>offset():
+
+获取匹配元素在当前视口的相对偏移。
+
+position():
+
+获取匹配元素相对父元素的偏移。</code></pre><p><a href="http://www.cnblogs.com/tim-li/archive/2012/07/09/2582618.html" target="_blank" rel="noopener">http://www.cnblogs.com/tim-li/archive/2012/07/09/2582618.html</a></p>
+<h3 id="隐藏"><a href="#隐藏" class="headerlink" title="隐藏"></a>隐藏</h3><p>visibility:hidden 占有空间<br>display:none不占有空间</p>
+<h3 id="image按比例缩小"><a href="#image按比例缩小" class="headerlink" title="image按比例缩小"></a>image按比例缩小</h3><h3 id="padding、margin属性的区别"><a href="#padding、margin属性的区别" class="headerlink" title="padding、margin属性的区别"></a>padding、margin属性的区别</h3><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/cssmargin3d.jpg" alt=""> </p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/cssmargin.jpg" alt="">  </p>
+<p>当你想让两个元素的content在垂直方向(vertically)分隔时, 既可以选择padding-top/bottom, 也可以选择margin-top/bottom, 再此Jorux建议你尽量使用padding-top/bottom来达到你的目的, 这是因为css中存在Collapsing margins(折叠的margins)的现象</p>
+<p>为什么会折叠: 造成以上现象的原因是, 我们在css中并没有声明id为ID1的元素div的height(高), 因此它的高便被设为auto(自动)了. 一旦其值被设为auto, 那么浏览器就会认为它的高为子元素ID2的border-top到border-bottom之间的距离, 即Fig. 4中bc的长度, 所以子元素ID2的margin-top/bottom(30px)就伸出到了父元素ID1之外, 出现了Fig. 4中ab与cd之间的空白区域. 因此父元素ID1的margin-top/bottom因子元素的”红杏出墙”而被折叠消失了.</p>
+<p>如何解决折叠问题: 可能大家最初想到的办法就是根据折叠发生的原因—auto, 来解决问题. 但是, 在实际操作中, 某些元素如div, h1, p等, 我们是不可能预先知道它的高是多少的, 因此在css文件中是不能常规通过声明元素的高来解决折叠问题.</p>
+<p>我们需要在css文件中加入如下代码:</p>
+<p>padding-top:1px;<br>padding-bottom:1px;</p>
+<p><a href="http://leepiao.blog.163.com/blog/static/485031302010427113653/" target="_blank" rel="noopener">http://leepiao.blog.163.com/blog/static/485031302010427113653/</a></p>
+<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><h4 id="inherit"><a href="#inherit" class="headerlink" title="inherit"></a>inherit</h4><p>继承父标签样式</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/07/2016-11-7-yii2login/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/11/07/2016-11-7-yii2login/" itemprop="url">yii2登录</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-11-07T00:00:00+08:00">
+                2016-11-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>##yii2架构分析</p>
+<p>yii\base... 如何定位文件</p>
+<pre><code>(new yii\web\Application($config))-&gt;run();
+
+
+public function run()
+{
+    try {
+
+        $this-&gt;state = self::STATE_BEFORE_REQUEST;
+        $this-&gt;trigger(self::EVENT_BEFORE_REQUEST);
+
+        $this-&gt;state = self::STATE_HANDLING_REQUEST;
+        $response = $this-&gt;handleRequest($this-&gt;getRequest());
+
+        $this-&gt;state = self::STATE_AFTER_REQUEST;
+        $this-&gt;trigger(self::EVENT_AFTER_REQUEST);
+
+        $this-&gt;state = self::STATE_SENDING_RESPONSE;
+        $response-&gt;send();
+
+        $this-&gt;state = self::STATE_END;
+
+        return $response-&gt;exitStatus;
+
+    } catch (ExitException $e) {
+
+        $this-&gt;end($e-&gt;statusCode, isset($response) ? $response : null);
+        return $e-&gt;statusCode;
+
     }
-    name:function(){},
-    age:function(){}
+}
+
+
+ public function handleRequest($request)
+{
+    if (empty($this-&gt;catchAll)) {
+        try {
+            list ($route, $params) = $request-&gt;resolve();
+        } catch (UrlNormalizerRedirectException $e) {
+            $url = $e-&gt;url;
+            if (is_array($url)) {
+                if (isset($url[0])) {
+                    // ensure the route is absolute
+                    $url[0] = &apos;/&apos; . ltrim($url[0], &apos;/&apos;);
+                }
+                $url += $request-&gt;getQueryParams();
+            }
+            return $this-&gt;getResponse()-&gt;redirect(Url::to($url, $e-&gt;scheme), $e-&gt;statusCode);
+        }
+    } else {
+        $route = $this-&gt;catchAll[0];
+        $params = $this-&gt;catchAll;
+        unset($params[0]);
+    }
+    try {
+        Yii::trace(&quot;Route requested: &apos;$route&apos;&quot;, __METHOD__);
+        $this-&gt;requestedRoute = $route;
+        $result = $this-&gt;runAction($route, $params);
+        if ($result instanceof Response) {
+            return $result;
+        } else {
+            $response = $this-&gt;getResponse();
+            if ($result !== null) {
+                $response-&gt;data = $result;
+            }
+
+            return $response;
+        }
+    } catch (InvalidRouteException $e) {
+        throw new NotFoundHttpException(Yii::t(&apos;yii&apos;, &apos;Page not found.&apos;), $e-&gt;getCode(), $e);
+    }
 }
 
 
 
-A = n.fn.init = function(a, b) {
-        var c, d;
-        if (!a) return this;
-        if (&quot;string&quot; == typeof a) {
-            if (c = &quot;&lt;&quot; === a[0] &amp;&amp; &quot;&gt;&quot; === a[a.length - 1] &amp;&amp; a.length &gt;= 3 ? [null, a, null] : z.exec(a), !c || !c[1] &amp;&amp; b) return ! b || b.jquery ? (b || y).find(a) : this.constructor(b).find(a);
-            if (c[1]) {
-                if (b = b instanceof n ? b[0] : b, n.merge(this, n.parseHTML(c[1], b &amp;&amp; b.nodeType ? b.ownerDocument || b: l, !0)), v.test(c[1]) &amp;&amp; n.isPlainObject(b)) for (c in b) n.isFunction(this[c]) ? this[c](b[c]) : this.attr(c, b[c]);
-                return this
-            }
-            return d = l.getElementById(c[2]),
-            d &amp;&amp; d.parentNode &amp;&amp; (this.length = 1, this[0] = d),
-            this.context = l,
-            this.selector = a,
-            this
+public function runAction($route, $params = [])
+{
+    $parts = $this-&gt;createController($route);
+    if (is_array($parts)) {
+        /* @var $controller Controller */
+        list($controller, $actionID) = $parts;
+        $oldController = Yii::$app-&gt;controller;
+        Yii::$app-&gt;controller = $controller;
+        $result = $controller-&gt;runAction($actionID, $params);
+        if ($oldController !== null) {
+            Yii::$app-&gt;controller = $oldController;
         }
-        return a.nodeType ? (this.context = this[0] = a, this.length = 1, this) : n.isFunction(a) ? &quot;undefined&quot; != typeof y.ready ? y.ready(a) : a(n) : (void 0 !== a.selector &amp;&amp; (this.selector = a.selector, this.context = a.context), n.makeArray(a, this))
-    };
-A.prototype = n.fn,</code></pre>
+
+        return $result;
+    } else {
+        $id = $this-&gt;getUniqueId();
+        throw new InvalidRouteException(&apos;Unable to resolve the request &quot;&apos; . ($id === &apos;&apos; ? $route : $id . &apos;/&apos; . $route) . &apos;&quot;.&apos;);
+    }
+}</code></pre><p>##yii2登录</p>
+<pre><code>if ($this-&gt;validate()) {
+
+        return Yii::$app-&gt;user-&gt;login($this-&gt;getUser(), $this-&gt;rememberMe ? 3600*24*30 : 0);
+
+根据以下规则验证
+
+public function rules()
+    {
+        return [
+            // username and password are both required
+            [[&apos;username&apos;, &apos;password&apos;], &apos;required&apos;],
+            // rememberMe must be a boolean value
+            [&apos;rememberMe&apos;, &apos;boolean&apos;],
+            // password is validated by validatePassword()
+            [&apos;password&apos;, &apos;validatePassword&apos;],
+        ];</code></pre><p><a href="http://blog.csdn.net/a553181867/article/details/50994388" target="_blank" rel="noopener">http://blog.csdn.net/a553181867/article/details/50994388</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/06/2016-11-6-ioscorner/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/11/06/2016-11-6-ioscorner/" itemprop="url">ios 圆角</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-11-06T00:00:00+08:00">
+                2016-11-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="ios性能优化"><a href="#ios性能优化" class="headerlink" title="ios性能优化"></a>ios性能优化</h2><p>很多 CPU 的操作都会延迟 GPU 开始渲染的时间：</p>
+<p>布局的计算 - 如果你的视图层级太过于复杂，或者视图需要重复多次进行布局，尤其是在使用 Auto Layout 进行自动布局时，对性能影响尤为严重；</p>
+<p>视图的惰性加载 - 在 iOS 中只有当视图控制器的视图显示到屏幕时才会加载；</p>
+<p>解压图片 - iOS 通常会在真正绘制时才会解码图片，对于一个较大的图片，无论是直接或间接使用 UIImageView 或者绘制到 Core Graphics 中，都需要对图片进行解压；</p>
+<p>ASDK 对于绘制过程的优化有三部分：分别是栅格化子视图、绘制图像以及绘制文字。</p>
+<h3 id="查看性能工具"><a href="#查看性能工具" class="headerlink" title="查看性能工具"></a>查看性能工具</h3><p>使用Core Animation工具</p>
+<h3 id="图层混合"><a href="#图层混合" class="headerlink" title="图层混合"></a>图层混合</h3><p>color a值不要设，设置背景色</p>
+<h3 id="慎用离屏渲染"><a href="#慎用离屏渲染" class="headerlink" title="慎用离屏渲染"></a>慎用离屏渲染</h3><h4 id="ios圆角性能优化"><a href="#ios圆角性能优化" class="headerlink" title="ios圆角性能优化"></a>ios圆角性能优化</h4><h3 id="AsyncDisplayKit"><a href="#AsyncDisplayKit" class="headerlink" title="AsyncDisplayKit"></a>AsyncDisplayKit</h3><pre><code>对应表
+UIKit                AsyncDisplayKit
+UIView                ASDisplayNode
+UILabel                ASTextNode
+UIImageView                ASImageNode
+UIButton                    ASButtonNode
+UITableView                ASTableView
+UICollectionView            ASCollectionView
+UITableViewCell            ASCellNode
+UICollectionViewCell    ASCellNode</code></pre><p>masksToBounds离屏渲染带来的性能损耗</p>
+<p><a href="http://www.jianshu.com/p/619cf14640f3" target="_blank" rel="noopener">http://www.jianshu.com/p/619cf14640f3</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/02/2016-11-2-docker/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/11/02/2016-11-2-docker/" itemprop="url">docker</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-11-02T00:00:00+08:00">
+                2016-11-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="docker"><a href="#docker" class="headerlink" title="docker"></a>docker</h2><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/docker.png" alt=""></p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/docker2.png" alt=""></p>
+<p>镜像</p>
+<p>对于 Linux 而言，内核启动后，会挂载 root 文件系统为其提供用户空间支持。而 Docker 镜像（Image），就相当于是一个 root 文件系统</p>
+<p>容器</p>
+<p>镜像（Image）和容器（Container）的关系，就像是面向对象程序设计中的类和实例一样，镜像是静态的定义，容器是镜像运行时的实体。容器可以被创建、启动、停止、删除、暂停等。</p>
+<p>代码是放在主机中，然后通过docker run的-v参数（数据卷）共享给每个需要的容器，编码的时候，只需要在主机本地修改代码就可以。</p>
+<h3 id="安装docker"><a href="#安装docker" class="headerlink" title="安装docker"></a>安装docker</h3><pre><code>使用官方提供的脚本来安装 Docker
+sudo curl -sSL https://get.docker.com/ | sh
+
+可以配置让 Docker 服务在系统启动后自动启动。
+
+sudo chkconfig docker on
+
+sudo service docker start</code></pre><h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><pre><code>1.下面的命令输出一个 “Hello World”，之后终止容器
+sudo docker run ubuntu:14.04 /bin/echo &apos;Hello world&apos;
+
+2.下面的命令则启动一个 bash 终端，允许用户进行交互
+sudo docker run -t -i ubuntu:14.04 /bin/bash
+
+3.当利用 docker run 来创建容器时，Docker 在后台运行的标准操作包括：
+检查本地是否存在指定的镜像，不存在就从公有仓库下载
+利用镜像创建并启动一个容器
+分配一个文件系统，并在只读的镜像层外面挂载一层可读写层
+从宿主主机配置的网桥接口中桥接一个虚拟接口到容器中去
+从地址池配置一个 ip 地址给容器
+执行用户指定的应用程序
+执行完毕后容器被终止
+
+4.快速准确的调度容器--给容器起名字
+root# docker run -t -i -d --name helloubuntu ubuntu:14.04 /bin/sh -c &quot;while true; do echo hello world; sleep 1; done&quot;
+
+5.列出所有正在运行的容器和它们的基本信息
+root# docker ps -a
+
+6.以下管理命令都可以通过传入容器的 ID 或者名字来管理指定的容器：
+stop 停止一个正在运行的容器。
+start 运行一个正在停止的容器。
+restart 重启一个容器。
+rm 删除一个容器。
+
+7.创建image
+
+
+8.安装nginx镜像
+(1)下载镜像，docker pull nginx:1.9
+(2)启动容器，docker run -d -p 8080:80 nginx:1.9，把容器内的nginx的80端口，映射到当前服务器的8080端
+
+9.进入容器
+sudo docker attach 44fc0f0582d9  </code></pre><p><a href="http://www.arkulo.com/2015/04/25/dockerlnmp/" target="_blank" rel="noopener">http://www.arkulo.com/2015/04/25/dockerlnmp/</a></p>
+<pre><code>下载镜像: docker pull memcache
+查看已有镜像: docker images
+查看所有的容器: docker ps
+创建镜像: docker build -t 镜像名字 目录
+查看当前boot2docker的ip地址：boot2docker ip （本文的IP是：192.168.59.103）
+进入一个容器的shell：docker exec -i -t 665b4a1e17b6 bash
+更新一个容器至镜像: docker -m &quot;描述&quot; -a &quot;作者&quot; 665b4a1e17b6 arkulo/php-fpm:v1
+打包镜像（传播）：docker save arkulo/nginx &gt; /tmp/arkulonginx.tar
+导入镜像：docker load &lt; /tmp/arkulonginx.tar
+查看容器内部运行程序：docker top 容器id
+
+
+
+首先需要先注册一个帐号https://hub.docker.com/
+然后添加一个仓库：Add Repository -&gt; Repository
+然后填上你的名字和简介
+然后在你的机器上登录
+
+$sudo docker login
+
+现在我们需要一个镜像
+
+$sudo docker images
+这个可以列出当前系统的docker镜像，刚开始的话试空的
+
+现在我们把这个修改了的容器写到y一个新的Image里面，假设我们刚刚在docker hub 上创建的仓库名叫mymusise/test
+
+sudo docker commit -m &quot;add vim&quot;  191b86560986 mymusise/test
+191... is CONTAINER ID  
+
+sudo docker push mymusise/spider
+
+类似github
+
+run容器，nginx for example
+run一个nginx容器，开放端口，并映射到本地的 8080 端口，html文件夹映射到/some/content
+sudo docker run --name some-nginx -v /some/content:/usr/share/nginx/html:ro -d -p 8088:80 gagatechang/zhulongnginx(REPOSITORY)
+
+进入容器内部
+$ sudo docker exec -it 1801a32aab54 /bin/bash
+查看nginx目录
+cd /etc/nginx/
+
+
+
+php docker
+
+docker run -p 9000:9000 -v ~/opt:/var/www --name phpfpm -it fancive/php
+
+
+pip install docker-compose
+if pkg_resources.DistributionNotFound: backports.ssl-match-hostname&gt;=3.5
+sudo pip install backports.ssl_match_hostname --upgrade
+
+docker-compose.yml 
+web:
+ image: nginx:latest
+ ports:
+  - &quot;8080:80&quot;
+ volumes:
+  - ./ubangwang:/code
+  - ./site.conf:/etc/nginx/conf.d/default.conf
+ links:
+  - php
+php:
+  image: php:7-fpm
+  volumes:
+    - ./ubangwang:/code
+
+
+ docker-compose up -d
+
+
+
+
+
+
+FROM nginx:latest
+
+ADD  nginx.conf      /etc/nginx/nginx.conf
+ADD  sites-enabled/*    /etc/nginx/conf.d/
+RUN  mkdir /opt/htdocs &amp;&amp; mkdir /opt/log &amp;&amp; mkdir /opt/log/nginx
+RUN  chown -R www-data.www-data /opt/htdocs /opt/log
+
+VOLUME [&quot;/opt&quot;]
+
+
+同样构建一下镜像
+docker build -t eva/nginx ./nginx
+
+并运行容器
+docker run -p 80:80 -v ~/opt:/opt -it eva/nginx</code></pre><p>docker for mysql</p>
+<pre><code>docker run -p 3306:3306 -v ~/opt/data/mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 -it eva/mysql
+
+mysql -uroot -pmypass -h127.0.0.1
+
+
+
+移除所有的容器和镜像（大扫除） 用一行命令大扫除：
+
+docker kill $(docker ps -q) ; docker rm $(docker ps -a -q) ; docker rmi $(docker images -q -a) </code></pre><p>docker command</p>
+<pre><code>http://dockerlux.github.io/pdf/cheat-sheet-v2.pdf?spm=5176.100239.blogcont57839.60.kfpwer&amp;file=cheat-sheet-v2.pdf</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/24/2016-10-24-vue/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/10/24/2016-10-24-vue/" itemprop="url">vue</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-24T00:00:00+08:00">
+                2016-10-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="vue"><a href="#vue" class="headerlink" title="vue"></a>vue</h2><h3 id="webpack"><a href="#webpack" class="headerlink" title="webpack"></a>webpack</h3><p>webpack是近期最火的一款模块加载器兼打包工具，它能把各种资源，例如JS（含JSX）、coffee、样式（含less/sass）、图片等都作为模块来使用和处理。</p>
+<h3 id="MVVM"><a href="#MVVM" class="headerlink" title="MVVM"></a>MVVM</h3><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/vue.png" alt="">  </p>
+<pre><code>&lt;!-- 这是我们的 View --&gt;
+&lt;div id=&quot;example-1&quot;&gt;
+  Hello {{ name }}!
+&lt;/div&gt;
+
+// 这是我们的 Model
+var exampleData = {
+  name: &apos;Vue.js&apos;
+}
+
+// 创建一个 Vue 实例或 &quot;ViewModel&quot;
+// 它连接 View 与 Model
+var exampleVM = new Vue({
+  el: &apos;#example-1&apos;,
+  data: exampleData
+})</code></pre><h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><pre><code>安装淘宝镜像
+
+npm install -g cnpm --registry=https://registry.npm.taobao.org
+安装webpack
+
+cnpm install webpack -g
+安装vue脚手架
+
+npm install vue-cli -g
+
+vue init webpack-simple 工程名字&lt;工程名字不能用中文&gt;
+
+npm install</code></pre><h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><p>v-bind 属性与数据绑定</p>
+<p>v-if </p>
+<p>v-for</p>
+<p>v-on</p>
+<p>监听事件</p>
+<p>v-model</p>
+<h3 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h3><h3 id="run"><a href="#run" class="headerlink" title="run"></a>run</h3><p>这一行命令代表着它会去找到package.json的scripts对象，执行node bulid/dev-server.js。在这文件里，配置了Webpack，会让它去编译项目文件，并且运行服务器，我们在localhost:8080即可查看我们的应用</p>
+<h3 id="引入jquery"><a href="#引入jquery" class="headerlink" title="引入jquery"></a>引入jquery</h3><p>修改build文件夹下面的webpack.base.conf.js文件，</p>
+<pre><code>var webpack = require(&apos;webpack&apos;)
+
+加入
+plugins: [
+  new webpack.ProvidePlugin({
+    $: &quot;jquery&quot;,
+    jQuery: &quot;jquery&quot;,
+    &quot;windows.jQuery&quot;: &quot;jquery&quot;
+  })
+],
+
+
+alias: {
+  &apos;jquery&apos;: path.resolve(__dirname, &apos;../src/assets/scripts/jquery.min&apos;)
+}</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/22/2016-10-22-nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/10/22/2016-10-22-nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" itemprop="url">网站加速</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-22T00:00:00+08:00">
+                2016-10-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>##nginx负载均衡</p>
+<pre><code>upstream支持的负载均衡分配方式
+
+1.轮询（默认）
+每个请求按时间顺序逐一分配到不同的后端服务器，如果后端服务器down掉，会自动剔除。
+2.weight
+指定轮询机率，weight和访问比率成正比，用于后端服务器性能不均的情况
+3.ip_hash
+每个请求按访问的ip做ip_hash计算定位到同一台服务器，以解决session共享的问题。
+当负载调度算法为ip_hash时，后端服务器在负载均衡调度中的状态不能是weight和backup。
+4.fair（第三方）
+按后端服务器的响应时间来分配请求，响应时间短的优先分配。Nginx本身不支持fair，如果要使用此种算法需下载Nginx的upstream_fair模块。
+5.url_hash（第三方）
+按访问url的hash结果来分配请求，使每个url定向到同一个后端服务器，后端服务器为缓存时比较有效果。
+Ningx本身不支持url_hash，如果要使用这种算法，要下载安装hash软件包。
+
+weight=NUMBER：设置服务器的权重，权重越高，被分配到的客户端请求数越多，如无设置权重值 ，则默认为权重为1。
+max_fails＝NUMBER：指定的时间内对后端服务器请求失败的次数，如果检测到后端服务器无法连接及发生服务器错误（404除外），则标记为失改。哪果没有设置，则为默认值1，设为0表示关闭检查项。
+fail_timeout=TIME：mqx_fails次失败后，暂停的时间。
+down：标记服务器永久离线状态，用于ip_hash中。
+backup：仅仅在非backup服务器全部宕机或繁忙时才启用。
+
+http
+{
+upstream test {
+server 192.168.110.11:80 weight=3;
+server 192.168.110.22:8080 max_fails=3 fail_timeout=30s;
+server 192.168.110.33 backup;
+}
+server
+{
+    listen 80;
+    server_name  www.linux78.com;
+    index index.html index.php;
+    root /www/web;
+
+location / {
+        proxy_pass   http://test;
+        proxy_next_upstream  http_500 http_502 _ http_503 error timeout invalid_header;
+        include   /usr/local/nginx/conf/proxy.conf;
+        }
+  }
+}</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/20/2016-10-20-webspeed/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/10/20/2016-10-20-webspeed/" itemprop="url">网站加速</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-20T00:00:00+08:00">
+                2016-10-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>##网站加速</p>
+<p>浏览器缓存</p>
+<p>多服务器，负载均衡</p>
+
           
         
       
@@ -1778,7 +2356,7 @@ A.prototype = n.fn,</code></pre>
               
                 <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">273</span>
+                  <span class="site-state-item-count">271</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

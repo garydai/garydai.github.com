@@ -229,7 +229,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2014-4-2-fingerprint/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/07/25/2014-7-25-decode/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -248,7 +248,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2014-4-2-fingerprint/" itemprop="url">finger print</a></h1>
+                <a class="post-title-link" href="/2014/07/25/2014-7-25-decode/" itemprop="url">python 编码</a></h1>
         
 
         <div class="post-meta">
@@ -260,8 +260,765 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-07-25T00:00:00+08:00">
+                2014-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>##python 编码</p>
+<p>python内部用unicode保存字符</p>
+<p>###decode</p>
+<p>把其他编码解码成unicode</p>
+<p>###encode</p>
+<p>把unicode编码编码成其他</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/07/03/2014-7-3-lpnm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2014/07/03/2014-7-3-lpnm/" itemprop="url">linux+php+nginx+mysql+wordpress</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-07-03T00:00:00+08:00">
+                2014-07-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>##centos安装linux+php+nginx+mysql+wordpress</p>
+<p>###pcre<br>    wget <a href="http://sourceforge.net/projects/pcre/files/pcre/8.35/pcre-8.35.tar.gz" target="_blank" rel="noopener">http://sourceforge.net/projects/pcre/files/pcre/8.35/pcre-8.35.tar.gz</a></p>
+<pre><code>tar -xf pcre-8.35.tar.gz
+
+cd pcre-8.35
+
+./configure
+
+make
+
+make install</code></pre><p>###zlilb<br>    wget <a href="http://prdownloads.sourceforge.net/libpng/zlib-1.2.8.tar.gz" target="_blank" rel="noopener">http://prdownloads.sourceforge.net/libpng/zlib-1.2.8.tar.gz</a></p>
+<pre><code>tar -xf zlib-1.2.8.tar.gz
+
+./configure
+
+make
+
+sudo make install</code></pre><p>###openssl<br>    支持openssl<br>    sudo yum -y install openssl-devel<br>    make&amp;make install<br>###mysql</p>
+<pre><code>sudo yum install mysql mysql-server mysql-devel(for python mysql module)
+
+sudo /etc/init.d/mysqld restart</code></pre><p>###nginx</p>
+<pre><code>wget http://nginx.org/download/nginx-1.7.3.tar.gz
+
+tar -xf nginx-1.7.3.tar.gz
+
+./configure --prefix=/home/admin/nginx --with-pcre=/home/admin/pcre-8.35 --with-zlib=/home/admin/zlib-1.2.8
+
+make
+
+sudo make install
+
+sudo chown -R admin nginx
+
+sudo chgrp -R admin nginx
+
+vi conf/nginx.conf ----user admin;</code></pre><p>###libpng</p>
+<pre><code>sudo yum install libpng-devel -y</code></pre><p>###php<br>    wget <a href="http://cn2.php.net/get/php-5.5.15.tar.gz/from/this/mirror" target="_blank" rel="noopener">http://cn2.php.net/get/php-5.5.15.tar.gz/from/this/mirror</a> -O php-5.5.15.tar.gz</p>
+<pre><code>tar -xf php-5.5.15.tar.gz
+
+sudo yum install libxml2-devel -y
+
+
+./configure --prefix=/home/admin/php --enable-fpm --with-mysql --with-zlib --with-jpeg-dir=/home/admin/jpeg-9a/  --with-gd --with-openssl --enable-pdo --with-pdo-mysql
+
+
+
+make
+
+sudo make install
+
+sudo chown -R admin php
+
+sudo chgrp -R admin php
+
+cp php.ini-development /home/admin/php/lib/php.ini
+
+vi php.ini ---cgi.fix_pathinfo=0
+
+cp php-fpm.conf.default php-fpm.conf
+
+vi php-fpm.conf ----user=admin; group=admin</code></pre><p>####配置nginx<br>    vi nginx.conf</p>
+<pre><code>location / {
+root   html;
+index  index.php index.html index.htm;
+}
+
+
+location ~ \.php$ {
+    root           html;
+    fastcgi_pass   127.0.0.1:9000;
+    fastcgi_index  index.php;
+    fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+    fastcgi_param  SCRIPT_NAME      $fastcgi_script_name;
+    include        fastcgi_params;
+}
+sudo ./nginx -s reload</code></pre><p>###wordpress<br>    wget <a href="http://wordpress.org/latest.tar.gz" target="_blank" rel="noopener">http://wordpress.org/latest.tar.gz</a></p>
+<pre><code>tar -xf latest.tar.gz
+
+mysql -u root -p
+
+CREATE DATABASE wordpress;
+
+CREATE USER wordpressuser@localhost;
+
+SET PASSWORD FOR wordpressuser@localhost= PASSWORD(&quot;password&quot;);
+
+GRANT ALL PRIVILEGES ON wordpress.* TO wordpressuser@localhost IDENTIFIED BY &apos;password&apos;;
+
+FLUSH PRIVILEGES;
+
+cp ~/wordpress/wp-config-sample.php ~/wordpress/wp-config.php
+
+vi ~/wordpress/wp-config.php
+
+
+define(&apos;DB_NAME&apos;, &apos;wordpress&apos;);
+
+/** MySQL database username */
+define(&apos;DB_USER&apos;, &apos;wordpressuser&apos;);
+
+/** MySQL database password */
+define(&apos;DB_PASSWORD&apos;, &apos;password&apos;);
+
+cp -r ~/wordpress nginx/html/wordpress
+
+vi nginx.conf
+
+root   /html/wordpress;
+
+
+wget http://sourceforge.net/projects/libpng/files/libpng15/older-releases/1.5.9/libpng-1.5.9.tar.xz/download -O libpng-1.5.9.tar.xz
+tar -xf libpng-1.5.9.tar.xz</code></pre><p>###memcached</p>
+<pre><code>下载libevent到windows,拷到linux服务器
+
+./configure --prefix=/home/admin/libevent
+
+make &amp; make install
+
+wget http://memcached.org/files/memcached-1.4.20.tar.gz
+
+tar -xvf memcached-1.4.20.tar.gz
+
+./configure --prefix=/home/admin/memcached --with-libevent=/home/admin/libevent
+
+make&amp;make install
+
+php扩展
+wget http://pecl.php.net/get/memcache-2.2.7.tgz
+
+tar &amp; cd
+
+/home/admin/php/bin/phpize
+
+./configure --enable-memcache --with-php-config=/home/admin/php/bin/php-config
+
+vi php.ini
+extension =memcache.so
+extension_dir = xx
+
+
+php.ini 要在lib下
+
+date.timezone = &quot;PRC&quot;</code></pre><p>###openssl的PHP扩展<br>    同memcache的PHP扩展</p>
+<p>###pdo的PHP扩展</p>
+<p>###pdo mysql的扩展</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/06/17/2014-6-17-speechmusic/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2014/06/17/2014-6-17-speechmusic/" itemprop="url">speech/music classification</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-06-17T00:00:00+08:00">
+                2014-06-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>##speech/music classification</p>
+<p>###speech/music</p>
+<p>###过零率</p>
+<p>###低能量</p>
+<p>###Spectral “Flux” (Delta Spectrum Magnitude)</p>
+<p>###MFCC</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/05/09/2014-5-9-SVM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2014/05/09/2014-5-9-SVM/" itemprop="url">SVM</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-05-09T00:00:00+08:00">
+                2014-05-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>##SVM</p>
+<p>In supervised classification Decision Tree (DT) and Support Vector Machine (SVM) are well known<br>classifier and used widely</p>
+<p>The first thing we can see from this definition, is that a SVM needs training data. Which means it is a supervised learning algorithm.</p>
+<p>有训练数据，所以是受监督的学习算法，主要用于分类</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/05/09/2014-5-9-fastDFS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2014/05/09/2014-5-9-fastDFS/" itemprop="url">fastDFS分布式文件系统</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-05-09T00:00:00+08:00">
+                2014-05-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>##fastDFS分布式文件系统</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/04/02/2014-4-2-fingerprint/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2014/04/02/2014-4-2-fingerprint/" itemprop="url">finger print</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-04-02T00:00:00+08:00">
+                2014-04-02
               </time>
             
 
@@ -375,7 +1132,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2014-3-5-hannuota/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/03/05/2014-3-5-gtest/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -394,7 +1151,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2014-3-5-hannuota/" itemprop="url">汉诺塔</a></h1>
+                <a class="post-title-link" href="/2014/03/05/2014-3-5-gtest/" itemprop="url">gtest框架</a></h1>
         
 
         <div class="post-meta">
@@ -406,8 +1163,128 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-03-05T00:00:00+08:00">
+                2014-03-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>##gtest框架</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/03/05/2014-3-5-hannuota/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2014/03/05/2014-3-5-hannuota/" itemprop="url">汉诺塔</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-03-05T00:00:00+08:00">
+                2014-03-05
               </time>
             
 
@@ -513,7 +1390,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2014-3-5-gtest/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/02/25/2014-2-25-makefile/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -532,7 +1409,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2014-3-5-gtest/" itemprop="url">gtest框架</a></h1>
+                <a class="post-title-link" href="/2014/02/25/2014-2-25-makefile/" itemprop="url">Makefile</a></h1>
         
 
         <div class="post-meta">
@@ -544,128 +1421,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##gtest框架</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2014-2-25-makefile/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2014-2-25-makefile/" itemprop="url">Makefile</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-02-25T00:00:00+08:00">
+                2014-02-25
               </time>
             
 
@@ -755,7 +1512,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2014-2-19-spectrogram/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/02/19/2014-2-19-spectrogram/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -774,7 +1531,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2014-2-19-spectrogram/" itemprop="url">声音信号处理</a></h1>
+                <a class="post-title-link" href="/2014/02/19/2014-2-19-spectrogram/" itemprop="url">声音信号处理</a></h1>
         
 
         <div class="post-meta">
@@ -786,8 +1543,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-02-19T00:00:00+08:00">
+                2014-02-19
               </time>
             
 
@@ -833,912 +1590,6 @@
 <p>Mel频率</p>
 <p>对频谱进行Mel变换，使之符合人耳对声音的感知。过滤人耳不敏感的部分。</p>
 <p>ref<br><a href="http://blog.csdn.net/zouxy09/article/details/9156785" target="_blank" rel="noopener">http://blog.csdn.net/zouxy09/article/details/9156785</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2014-12-5-gearman/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2014-12-5-gearman/" itemprop="url">gearman</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##gearman<br>任务分发系统</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2014-11-25-yii/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2014-11-25-yii/" itemprop="url">yii</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="yii架构分析"><a href="#yii架构分析" class="headerlink" title="yii架构分析"></a>yii架构分析</h2><p>yii是由php编写的web后端框架</p>
-<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>1.请求url进入到yii的入口</p>
-<p>2.如何解析url</p>
-<p>3.MVC之间的接口</p>
-<p>4.yii一直在监听的主程序</p>
-<p>5.祖先类</p>
-<p>6.结果怎么传给客户端</p>
-<p>7.yii 事件机制</p>
-<p>8.nginx yii参数传递</p>
-<p>9.view 和layout关系</p>
-<p>###分析</p>
-<p>4.框架加载（when）</p>
-<p>index.php </p>
-<pre><code>&lt;?php
-
-// change the following paths if necessary
-$yii=dirname(__FILE__).&apos;/../../framework/yii.php&apos;;
-$config=dirname(__FILE__).&apos;/protected/config/main.php&apos;;
-
-// remove the following line when in production mode
-// defined(&apos;YII_DEBUG&apos;) or define(&apos;YII_DEBUG&apos;,true);
-
-require_once($yii);
-Yii::createWebApplication($config)-&gt;run();</code></pre><p>abstract class CApplication extends CModule</p>
-<pre><code>public function __construct($config=null)
-{
-    Yii::setApplication($this);
-
-    // set basePath at early as possible to avoid trouble
-    if(is_string($config))
-        $config=require($config);
-    if(isset($config[&apos;basePath&apos;]))
-    {
-        $this-&gt;setBasePath($config[&apos;basePath&apos;]);
-        unset($config[&apos;basePath&apos;]);
-    }
-    else
-        $this-&gt;setBasePath(&apos;protected&apos;);
-    Yii::setPathOfAlias(&apos;application&apos;,$this-&gt;getBasePath());
-    Yii::setPathOfAlias(&apos;webroot&apos;,dirname($_SERVER[&apos;SCRIPT_FILENAME&apos;]));
-    if(isset($config[&apos;extensionPath&apos;]))
-    {
-        $this-&gt;setExtensionPath($config[&apos;extensionPath&apos;]);
-        unset($config[&apos;extensionPath&apos;]);
-    }
-    else
-        Yii::setPathOfAlias(&apos;ext&apos;,$this-&gt;getBasePath().DIRECTORY_SEPARATOR.&apos;extensions&apos;);
-    if(isset($config[&apos;aliases&apos;]))
-    {
-        $this-&gt;setAliases($config[&apos;aliases&apos;]);
-        unset($config[&apos;aliases&apos;]);
-    }
-
-    $this-&gt;preinit();
-
-    $this-&gt;initSystemHandlers();
-    $this-&gt;registerCoreComponents();
-
-    $this-&gt;configure($config);
-    $this-&gt;attachBehaviors($this-&gt;behaviors);
-    $this-&gt;preloadComponents();
-
-    $this-&gt;init();
-}</code></pre><p>CModule.php</p>
-<pre><code>public function configure($config)
-{
-    if(is_array($config))
-    {
-        foreach($config as $key=&gt;$value)
-            $this-&gt;$key=$value;
-    }
-}</code></pre><p>CWebApplication.run</p>
-<pre><code>if($this-&gt;hasEventHandler(&apos;onBeginRequest&apos;))
-    $this-&gt;onBeginRequest(new CEvent($this));
-register_shutdown_function(array($this,&apos;end&apos;),0,false);
-$this-&gt;processRequest();
-if($this-&gt;hasEventHandler(&apos;onEndRequest&apos;))
-    $this-&gt;onEndRequest(new CEvent($this));</code></pre><p>CComponent.php</p>
-<pre><code>public function raiseEvent($name,$event)
-{
-    $name=strtolower($name);
-    if(isset($this-&gt;_e[$name]))
-    {
-        foreach($this-&gt;_e[$name] as $handler)
-        {
-            if(is_string($handler))
-                call_user_func($handler,$event);
-            elseif(is_callable($handler,true))
-            {
-                if(is_array($handler))
-                {
-                    // an array: 0 - object, 1 - method name
-                    list($object,$method)=$handler;
-                    if(is_string($object))    // static method call
-                        call_user_func($handler,$event);
-                    elseif(method_exists($object,$method))
-                        $object-&gt;$method($event);
-                    else
-                        throw new CException(Yii::t(&apos;yii&apos;,&apos;Event &quot;{class}.{event}&quot; is attached with an invalid handler &quot;{handler}&quot;.&apos;,
-                            array(&apos;{class}&apos;=&gt;get_class($this), &apos;{event}&apos;=&gt;$name, &apos;{handler}&apos;=&gt;$handler[1])));
-                }
-                else // PHP 5.3: anonymous function
-                    call_user_func($handler,$event);
-            }
-            else
-                throw new CException(Yii::t(&apos;yii&apos;,&apos;Event &quot;{class}.{event}&quot; is attached with an invalid handler &quot;{handler}&quot;.&apos;,
-                    array(&apos;{class}&apos;=&gt;get_class($this), &apos;{event}&apos;=&gt;$name, &apos;{handler}&apos;=&gt;gettype($handler))));
-            // stop further handling if param.handled is set true
-            if(($event instanceof CEvent) &amp;&amp; $event-&gt;handled)
-                return;
-        }
-    }
-    elseif(YII_DEBUG &amp;&amp; !$this-&gt;hasEvent($name))
-        throw new CException(Yii::t(&apos;yii&apos;,&apos;Event &quot;{class}.{event}&quot; is not defined.&apos;,
-            array(&apos;{class}&apos;=&gt;get_class($this), &apos;{event}&apos;=&gt;$name)));
-}</code></pre><p>CWebApplication.php</p>
-<pre><code>    /**
- * Processes the current request.
- * It first resolves the request into controller and action,
- * and then creates the controller to perform the action.
- */
-public function processRequest()
-{
-    if(is_array($this-&gt;catchAllRequest) &amp;&amp; isset($this-&gt;catchAllRequest[0]))
-    {
-        $route=$this-&gt;catchAllRequest[0];
-        foreach(array_splice($this-&gt;catchAllRequest,1) as $name=&gt;$value)
-            $_GET[$name]=$value;
-    }
-    else
-        $route=$this-&gt;getUrlManager()-&gt;parseUrl($this-&gt;getRequest());
-    $this-&gt;runController($route);
-}
-
-
-
-
-
-public function runController($route)
-{
-    if(($ca=$this-&gt;createController($route))!==null)
-    {
-        list($controller,$actionID)=$ca;
-        $oldController=$this-&gt;_controller;
-        $this-&gt;_controller=$controller;
-        $controller-&gt;init();
-        $controller-&gt;run($actionID);
-        $this-&gt;_controller=$oldController;
-    }
-    else
-        throw new CHttpException(404,Yii::t(&apos;yii&apos;,&apos;Unable to resolve the request &quot;{route}&quot;.&apos;,
-            array(&apos;{route}&apos;=&gt;$route===&apos;&apos;?$this-&gt;defaultController:$route)));
-}</code></pre><p>CController.php</p>
-<pre><code>public function run($actionID)
-{
-    if(($action=$this-&gt;createAction($actionID))!==null)
-    {
-        if(($parent=$this-&gt;getModule())===null)
-            $parent=Yii::app();
-        if($parent-&gt;beforeControllerAction($this,$action))
-        {
-            $this-&gt;runActionWithFilters($action,$this-&gt;filters());
-            $parent-&gt;afterControllerAction($this,$action);
-        }
-    }
-    else
-        $this-&gt;missingAction($actionID);
-}
-
-
-
-public function runActionWithFilters($action,$filters)
-{
-    if(empty($filters))
-        $this-&gt;runAction($action);
-    else
-    {
-        $priorAction=$this-&gt;_action;
-        $this-&gt;_action=$action;
-        CFilterChain::create($this,$action,$filters)-&gt;run();
-        $this-&gt;_action=$priorAction;
-    }
-}
-
-
-public function runAction($action)
-{
-    $priorAction=$this-&gt;_action;
-    $this-&gt;_action=$action;
-    if($this-&gt;beforeAction($action))
-    {
-        if($action-&gt;runWithParams($this-&gt;getActionParams())===false)
-            $this-&gt;invalidActionParams($action);
-        else
-            $this-&gt;afterAction($action);
-    }
-    $this-&gt;_action=$priorAction;
-}</code></pre><p>CAction.php</p>
-<pre><code>public function runWithParams($params)
-{
-    $method=new ReflectionMethod($this, &apos;run&apos;);
-    if($method-&gt;getNumberOfParameters()&gt;0)
-        return $this-&gt;runWithParamsInternal($this, $method, $params);
-    else
-        return $this-&gt;run();
-}
-
-
-protected function runWithParamsInternal($object, $method, $params)
-{
-    $ps=array();
-    foreach($method-&gt;getParameters() as $i=&gt;$param)
-    {
-        $name=$param-&gt;getName();
-        if(isset($params[$name]))
-        {
-            if($param-&gt;isArray())
-                $ps[]=is_array($params[$name]) ? $params[$name] : array($params[$name]);
-            elseif(!is_array($params[$name]))
-                $ps[]=$params[$name];
-            else
-                return false;
-        }
-        elseif($param-&gt;isDefaultValueAvailable())
-            $ps[]=$param-&gt;getDefaultValue();
-        else
-            return false;
-    }
-    $method-&gt;invokeArgs($object,$ps);
-    return true;
-}</code></pre><p>CViewAction.php</p>
-<pre><code>public function run()
-{
-    $this-&gt;resolveView($this-&gt;getRequestedView());
-    $controller=$this-&gt;getController();
-    if($this-&gt;layout!==null)
-    {
-        $layout=$controller-&gt;layout;
-        $controller-&gt;layout=$this-&gt;layout;
-    }
-
-    $this-&gt;onBeforeRender($event=new CEvent($this));
-    if(!$event-&gt;handled)
-    {
-        if($this-&gt;renderAsText)
-        {
-            $text=file_get_contents($controller-&gt;getViewFile($this-&gt;view));
-            $controller-&gt;renderText($text);
-        }
-        else
-            $controller-&gt;render($this-&gt;view);
-        $this-&gt;onAfterRender(new CEvent($this));
-    }
-
-    if($this-&gt;layout!==null)
-        $controller-&gt;layout=$layout;
-}</code></pre><p>CController.php</p>
-<pre><code>public function renderText($text,$return=false)
-{
-    if(($layoutFile=$this-&gt;getLayoutFile($this-&gt;layout))!==false)
-        $text=$this-&gt;renderFile($layoutFile,array(&apos;content&apos;=&gt;$text),true);
-
-    $text=$this-&gt;processOutput($text);
-
-    if($return)
-        return $text;
-    else
-        echo $text;
-}
-
-public function render($view,$data=null,$return=false)
-{
-    if($this-&gt;beforeRender($view))
-    {
-        $output=$this-&gt;renderPartial($view,$data,true);
-        if(($layoutFile=$this-&gt;getLayoutFile($this-&gt;layout))!==false)
-            $output=$this-&gt;renderFile($layoutFile,array(&apos;content&apos;=&gt;$output),true);
-
-        $this-&gt;afterRender($view,$output);
-
-        $output=$this-&gt;processOutput($output);
-
-        if($return)
-            return $output;
-        else
-            echo $output;
-    }
-}</code></pre><p>5.祖先类</p>
-<p>CComponent</p>
-<p>6.结果怎么传给客户端</p>
-<p>php echo HTML 给web服务器，web服务器会打包成HTTP reponse给浏览器</p>
-<p>###流程</p>
-<p>请求url-&gt;解析url-&gt;controller-&gt;view</p>
-<p>###模块</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2014-12-22-sentiment/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2014-12-22-sentiment/" itemprop="url">sentiment</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##sentiment<br>情感分析</p>
-<p>precision = tp/(tp+fp)</p>
-<p>tp:true positive A被分类到到A</p>
-<p>fp:false positive 其他类被分类到A</p>
-<p>fn:false negative 其他类被分类到其他类</p>
-<p>precision = tp/(tp+fn)</p>
-<p>1.字典法</p>
-<p>构造情绪字典</p>
-<p>2.机器学习法</p>
-<p>训练已分类的语料库，学习出类别的特征</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2014-11-25-work/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2014-11-25-work/" itemprop="url">work</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##个人作品</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2013-9-19-python_vm/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2013-9-19-python_vm/" itemprop="url">python框架</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##python框架</p>
-<p>1.py文件先被虚拟机编译成字节码，保存在pyc文件里。</p>
-<p>2.虚拟机会一步一步执行pyc里的字节码。</p>
-<p>虚拟机是用C语言实现的，即用C语言实现的虚拟机解释python语言。</p>
-<p>python.exe主要调用pythonxx.dll，来解释python程序。</p>
 
           
         
@@ -1824,7 +1675,7 @@ public function render($view,$data=null,$return=false)
               
                 <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">273</span>
+                  <span class="site-state-item-count">271</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="垃圾回收哪些垃圾可以回收引用计数循环引用的垃圾无法回收。 根搜索算法（可达性分析）GC roots可以是虚拟机栈、方法区中静态属性引用的对象、方法区常量引用的对象、native方法引用的对象，已启动且未停止的 Java 线程  Java 方法栈桢中的局部变量； 已加载类的静态变量； JNI handles； 已启动且未停止的 Java 线程。  缺点在多线程环境下，其他线程可能会更新已经访问过的对">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GC垃圾回收">
+<meta property="og:url" content="http://yoursite.com/2013/08/23/2013-8-23-gc/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="垃圾回收哪些垃圾可以回收引用计数循环引用的垃圾无法回收。 根搜索算法（可达性分析）GC roots可以是虚拟机栈、方法区中静态属性引用的对象、方法区常量引用的对象、native方法引用的对象，已启动且未停止的 Java 线程  Java 方法栈桢中的局部变量； 已加载类的静态变量； JNI handles； 已启动且未停止的 Java 线程。  缺点在多线程环境下，其他线程可能会更新已经访问过的对">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://yoursite.com/Users/daitechang/Documents/garydai.github.com/_posts/pic/image-20191102102702213.png">
+<meta property="article:published_time" content="2013-08-22T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-01-06T07:17:32.452Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/Users/daitechang/Documents/garydai.github.com/_posts/pic/image-20191102102702213.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2013/08/23/2013-8-23-gc/"/>
+
+
+
+
+
+  <title>GC垃圾回收 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/08/23/2013-8-23-gc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">GC垃圾回收</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-08-23T00:00:00+08:00">
+                2013-08-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="垃圾回收"><a href="#垃圾回收" class="headerlink" title="垃圾回收"></a>垃圾回收</h2><h5 id="哪些垃圾可以回收"><a href="#哪些垃圾可以回收" class="headerlink" title="哪些垃圾可以回收"></a>哪些垃圾可以回收</h5><h4 id="引用计数"><a href="#引用计数" class="headerlink" title="引用计数"></a>引用计数</h4><p>循环引用的垃圾无法回收。</p>
+<h4 id="根搜索算法（可达性分析）"><a href="#根搜索算法（可达性分析）" class="headerlink" title="根搜索算法（可达性分析）"></a>根搜索算法（可达性分析）</h4><p>GC roots可以是虚拟机栈、方法区中静态属性引用的对象、方法区常量引用的对象、native方法引用的对象，已启动且未停止的 Java 线程</p>
+<ol>
+<li>Java 方法栈桢中的局部变量；</li>
+<li>已加载类的静态变量；</li>
+<li>JNI handles；</li>
+<li>已启动且未停止的 Java 线程。</li>
+</ol>
+<h5 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h5><p>在多线程环境下，其他线程可能会更新已经访问过的对象中的引用，从而造成误报（将引用设置为 null）或者漏报（将引用设置为未被访问过的对象）</p>
+<h5 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h5><p><strong>Stop-the-world 以及安全点</strong></p>
+<p>停止其他非垃圾回收线程的工作，直到完成垃圾回收。这也就造成了垃圾回收所谓的暂停时间（GC pause）</p>
+<p>Java 虚拟机中的 Stop-the-world 是通过安全点（safepoint）机制来实现的。当 Java 虚拟机收到 Stop-the-world 请求，它便会等待所有的线程都到达安全点，才允许请求 Stop-the-world 的线程进行独占的工作。</p>
+<ol>
+<li>对于解释执行来说，字节码与字节码之间皆可作为安全点。Java 虚拟机采取的做法是，当有安全点请求时，执行一条字节码便进行一次安全点检测。</li>
+<li>即时编译器需要插入安全点检测，以避免机器码长时间没有安全点检测的情况。HotSpot 虚拟机的做法便是在生成代码的方法出口以及非计数循环的循环回边（back-edge）处插入安全点检测</li>
+</ol>
+<h5 id="安全点检测"><a href="#安全点检测" class="headerlink" title="安全点检测"></a>安全点检测</h5><ol>
+<li>HotSpot 虚拟机已经将机器码中安全点检测简化为一个内存访问操作，在有安全点请求的情况下，Java 虚拟机会将安全点检测访问的内存所在的页设置为不可读，并且定义一个 segfault 处理器，来截获因访问该不可读内存而触发 segfault 的线程，并将它们挂起</li>
+<li>即时编译器生成的机器码打乱了原本栈桢上的对象分布状况。在进入安全点时，机器码还需提供一些额外的信息，来表明哪些寄存器，或者当前栈帧上的哪些内存空间存放着指向对象的引用，以便垃圾回收器能够枚举 GC Roots</li>
+</ol>
+<h3 id="垃圾收集"><a href="#垃圾收集" class="headerlink" title="垃圾收集"></a>垃圾收集</h3><p>基于根搜索算法，</p>
+<ol>
+<li>标记-删除(造成内存碎片)</li>
+<li>复制(堆使用效率较低)</li>
+</ol>
+<p><img src="/Users/daitechang/Documents/garydai.github.com/_posts/pic/image-20191102102702213.png" alt="image-20191102102702213"></p>
+<ol start="2">
+<li><p>标记-整理(性能开销较大)</p>
+</li>
+<li><p>分代收集算法来回收垃圾。</p>
+</li>
+</ol>
+<p><strong>实验表明大部分的 Java 对象只存活一小段时间，而存活下来的小部分 Java 对象则会存活很长一段时间，所以引入分代回收垃圾思想</strong></p>
+<p>新生代用来存储新建的对象。当对象存活时间够长时，则将其移动到老年代，给不同代使用不同的回收算法</p>
+<p>其中分代搜集算法利用前三种算法收集不同类型的垃圾。</p>
+<p>分代收集：对于新生代采用复制算法，对于老年代采用标记-整理或标记-清除</p>
+<p>python:采用引用计数和分代搜集算法</p>
+<h3 id="java分代收集"><a href="#java分代收集" class="headerlink" title="java分代收集"></a>java分代收集</h3><p>主要是CMS收集器（concurrent mark sweep）</p>
+<p>G1收集器（整体是标记整理，局部是复制）</p>
+<p>java server模式下，默认使用Parallel Scavenge + Serial Old收集器组合进行回收</p>
+<h3 id="java内存分配"><a href="#java内存分配" class="headerlink" title="java内存分配"></a>java内存分配</h3><p>多线程同时申请内存存在并发问题，解决方案是每个线程可以向 Java 虚拟机申请一段连续的内存，比如 2048 字节，作为线程私有的 TLAB（Thread Local Allocation Buffer）。</p>
+<p>对象优先在Eden和一个survivor0分配；</p>
+<ol>
+<li>再次分配时，如果内存不够，则垃圾收集，把eden和suvivor0存活的对象放到另一个survivor1，同时对象年纪+1；如果survivor1内存不够，且老年代内存足够，则放到老年代，如果对象年纪到达老年代也直接放到老年代；如果老年代内存也不够，则需要进行老年代内存回收即full gc</li>
+<li>然后清除eden和survivor0；</li>
+<li>survivor0和survivor1互换，原survivor1区成为下次的survivor0区</li>
+</ol>
+<p>针对新生代的垃圾回收器共有三个：Serial，Parallel Scavenge 和 Parallel New。这三个采用的都是标记 - 复制算法。其中，Serial 是一个单线程的，Parallel New 可以看成 Serial 的多线程版本。Parallel Scavenge 和 Parallel New 类似，但更加注重吞吐率。此外，Parallel Scavenge 不能与 CMS 一起使用</p>
+<p>针对老年代的垃圾回收器也有三个：刚刚提到的 Serial Old 和 Parallel Old，以及 CMS。Serial Old 和 Parallel Old 都是标记 - 压缩算法。同样，前者是单线程的，而后者可以看成前者的多线程版本</p>
+<h3 id="减少minor-gc时间"><a href="#减少minor-gc时间" class="headerlink" title="减少minor gc时间"></a>减少minor gc时间</h3><p>复制对象的成本要远高于扫描成本，所以，单次<strong>Minor GC时间更多取决于GC后存活对象的数量，而非Eden区的大小</strong>。因此如果堆中短期对象很多，那么扩容新生代，单次Minor GC时间不会显著增加</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2013/07/22/2013-7-22-virtual_memory/" rel="next" title="虚拟内存">
+                <i class="fa fa-chevron-left"></i> 虚拟内存
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2013/09/13/2013-9-13-heap/" rel="prev" title="编程珠玑-堆">
+                编程珠玑-堆 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">271</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#垃圾回收"><span class="nav-number">1.</span> <span class="nav-text">垃圾回收</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#哪些垃圾可以回收"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">哪些垃圾可以回收</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#引用计数"><span class="nav-number">1.0.1.</span> <span class="nav-text">引用计数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#根搜索算法（可达性分析）"><span class="nav-number">1.0.2.</span> <span class="nav-text">根搜索算法（可达性分析）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#缺点"><span class="nav-number">1.0.2.1.</span> <span class="nav-text">缺点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#解决方法"><span class="nav-number">1.0.2.2.</span> <span class="nav-text">解决方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#安全点检测"><span class="nav-number">1.0.2.3.</span> <span class="nav-text">安全点检测</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#垃圾收集"><span class="nav-number">1.1.</span> <span class="nav-text">垃圾收集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java分代收集"><span class="nav-number">1.2.</span> <span class="nav-text">java分代收集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java内存分配"><span class="nav-number">1.3.</span> <span class="nav-text">java内存分配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#减少minor-gc时间"><span class="nav-number">1.4.</span> <span class="nav-text">减少minor gc时间</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

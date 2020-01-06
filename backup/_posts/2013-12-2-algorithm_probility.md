@@ -1,4 +1,5 @@
 ---
+date: 2013-12-2
 layout: default
 title: 算法题-概率
 

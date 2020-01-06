@@ -1,4 +1,5 @@
 ---
+date: 2013-5-17
 layout: default
 title: 初架服务器
 

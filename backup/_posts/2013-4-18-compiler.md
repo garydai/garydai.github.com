@@ -1,4 +1,5 @@
 ---
+date: 2013-4-18
 layout: default
 title: 初学编译原理
 

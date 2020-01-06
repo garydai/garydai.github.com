@@ -1,4 +1,5 @@
 ---
+date: 2015-7-10
 layout: default
 title: ios 消息机制
 

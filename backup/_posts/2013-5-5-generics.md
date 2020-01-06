@@ -1,4 +1,5 @@
 ---
+date: 2013-5-5
 layout: default
 title: 宏与泛型与继承
 

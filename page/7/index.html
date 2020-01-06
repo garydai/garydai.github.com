@@ -229,7 +229,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2019-10-17-seata/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/12/2019-3-12-apigateway/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -248,7 +248,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2019-10-17-seata/" itemprop="url">seata</a></h1>
+                <a class="post-title-link" href="/2019/03/12/2019-3-12-apigateway/" itemprop="url">api gateway</a></h1>
         
 
         <div class="post-meta">
@@ -260,8 +260,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-12T00:00:00+08:00">
+                2019-03-12
               </time>
             
 
@@ -300,8 +300,7 @@
       
         
           
-            <h2 id="seata"><a href="#seata" class="headerlink" title="seata"></a>seata</h2><p>使用两阶段提交模型</p>
-
+            <h2 id="api-gateway"><a href="#api-gateway" class="headerlink" title="api gateway"></a>api gateway</h2><h3 id="kong"><a href="#kong" class="headerlink" title="kong"></a>kong</h3><h3 id="zuul"><a href="#zuul" class="headerlink" title="zuul"></a>zuul</h3><h3 id="spring-cloud-gateway"><a href="#spring-cloud-gateway" class="headerlink" title="spring cloud gateway"></a>spring cloud gateway</h3>
           
         
       
@@ -349,7 +348,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2019-10-16-count/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/13/2019-2-13-uirecorder/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -368,7 +367,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2019-10-16-count/" itemprop="url">mysql count()</a></h1>
+                <a class="post-title-link" href="/2019/02/13/2019-2-13-uirecorder/" itemprop="url">uirecorder录制UI测试用例</a></h1>
         
 
         <div class="post-meta">
@@ -380,8 +379,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-13T00:00:00+08:00">
+                2019-02-13
               </time>
             
 
@@ -420,310 +419,169 @@
       
         
           
-            <h2 id="mysql-count"><a href="#mysql-count" class="headerlink" title="mysql count()"></a>mysql count()</h2><p>count() 是一个聚合函数，对于返回的结果集，一行行地判断，如果 count 函数的参数不是 NULL，累计值就加 1，否则不加。最后返回累计值。</p>
-<p>count(<em>) 是例外，并不会把全部字段取出来，而是专门做了优化，不取值。count(</em>) 肯定不是 null，按行累加。</p>
-<p>MyISAM 引擎把一个表的总行数存在了磁盘上，因此执行 count(*) 的时候会直接返回这个数，效率很高；</p>
-<p>而 InnoDB 引擎就麻烦了，它执行 count(*) 的时候，需要把数据一行一行地从引擎里面读出来，然后累积计数。</p>
-<p>这和 InnoDB 的事务设计有关系，可重复读是它默认的隔离级别，在代码上就是通过多版本并发控制，也就是 MVCC 来实现的。每一行记录都要判断自己是否对这个会话可见，因此对于 count(*) 请求来说，InnoDB 只好把数据一行一行地读出依次判断，可见的行才能够用于计算“基于这个查询”的表的总行数。</p>
-<p>你知道的，InnoDB 是索引组织表，主键索引树的叶子节点是数据，而普通索引树的叶子节点是主键值。所以，普通索引树比主键索引树小很多。对于 count(*) 这样的操作，遍历哪个索引树得到的结果逻辑上都是一样的。因此，MySQL 优化器会找到最小的那棵树来遍历。</p>
-<p>按照效率排序的话，count(字段)&lt;count(主键 id)&lt;count(1)≈count(*)</p>
-<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><p>极客时间-MySQL实战45讲</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2019-10-10-nio/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2019-10-10-nio/" itemprop="url">nio</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="java-nio"><a href="#java-nio" class="headerlink" title="java nio"></a>java nio</h2><h3 id="bytebuffer"><a href="#bytebuffer" class="headerlink" title="bytebuffer"></a>bytebuffer</h3><h3 id="socket-channel"><a href="#socket-channel" class="headerlink" title="socket channel"></a>socket channel</h3><h3 id="selector"><a href="#selector" class="headerlink" title="selector"></a>selector</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 获取数据源 和 目标传输地的输入输出流（此处以数据源 = 文件为例）</span></span><br><span class="line">    FileInputStream fin = <span class="keyword">new</span> FileInputStream(infile);</span><br><span class="line">    FileOutputStream fout = <span class="keyword">new</span> FileOutputStream(outfile);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 获取数据源的输入输出通道</span></span><br><span class="line">    FileChannel fcin = fin.getChannel();</span><br><span class="line">    FileChannel fcout = fout.getChannel();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3. 创建 缓冲区 对象：Buffer（共有2种方法）</span></span><br><span class="line">     <span class="comment">// 方法1：使用allocate()静态方法</span></span><br><span class="line">     ByteBuffer buff = ByteBuffer.allocate(<span class="number">256</span>);</span><br><span class="line">     <span class="comment">// 上述方法创建1个容量为256字节的ByteBuffer</span></span><br><span class="line">     <span class="comment">// 注：若发现创建的缓冲区容量太小，则重新创建一个大小合适的缓冲区</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 方法2：通过包装一个已有的数组来创建</span></span><br><span class="line">     <span class="comment">// 注：通过包装的方法创建的缓冲区保留了被包装数组内保存的数据</span></span><br><span class="line">     ByteBuffer buff = ByteBuffer.wrap(byteArray);</span><br><span class="line"></span><br><span class="line">     <span class="comment">// 额外：若需将1个字符串存入ByteBuffer，则如下</span></span><br><span class="line">     String sendString=<span class="string">"你好,服务器. "</span>;</span><br><span class="line">     ByteBuffer sendBuff = ByteBuffer.wrap(sendString.getBytes(<span class="string">"UTF-16"</span>));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 4. 从通道读取数据 &amp; 写入到缓冲区</span></span><br><span class="line">    <span class="comment">// 注：若 以读取到该通道数据的末尾，则返回-1</span></span><br><span class="line">    fcin.read(buff);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 5. 传出数据准备：将缓存区的写模式 转换-&gt;&gt; 读模式</span></span><br><span class="line">    buff.flip();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 6. 从 Buffer 中读取数据 &amp; 传出数据到通道</span></span><br><span class="line">    fcout.write(buff);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 7. 重置缓冲区</span></span><br><span class="line">    <span class="comment">// 目的：重用现在的缓冲区,即 不必为了每次读写都创建新的缓冲区，在再次读取之前要重置缓冲区</span></span><br><span class="line">    <span class="comment">// 注：不会改变缓冲区的数据，只是重置缓冲区的主要索引值</span></span><br><span class="line">    buff.clear();</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ServerSocketChannelTest</span> </span>&#123;</span><br><span class="line"> <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] data = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">255</span>];</span><br><span class="line"> </span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; data.length; i++) &#123;</span><br><span class="line">   data[i] = (<span class="keyword">byte</span>) i;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//新建NIO通道</span></span><br><span class="line">  ServerSocketChannel server = ServerSocketChannel.open();</span><br><span class="line">  <span class="comment">//使通道为非阻塞</span></span><br><span class="line">  server.configureBlocking(<span class="keyword">false</span>);</span><br><span class="line">  <span class="comment">//创建基于NIO通道的socket连接</span></span><br><span class="line">  ServerSocket ss = server.socket();</span><br><span class="line">  <span class="comment">//新建socket通道的端口</span></span><br><span class="line">  ss.bind(<span class="keyword">new</span> InetSocketAddress(<span class="number">9000</span>));</span><br><span class="line">  <span class="comment">//将NIO通道绑定到选择器</span></span><br><span class="line">  Selector selector = Selector.open();</span><br><span class="line">  server.register(selector, SelectionKey.OP_ACCEPT);</span><br><span class="line"> </span><br><span class="line">  <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">   <span class="comment">//获取通道内是否有选择器的关心事件</span></span><br><span class="line">   <span class="keyword">int</span> num = selector.select();</span><br><span class="line">   <span class="comment">//如果小于1,停止此次循环,进行下一个循环</span></span><br><span class="line">   <span class="keyword">if</span> (num &lt; <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="keyword">continue</span>;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">//获取通道内关心事件的集合</span></span><br><span class="line">   Set selectedKeys = selector.selectedKeys();</span><br><span class="line">   Iterator iterator = selectedKeys.iterator();</span><br><span class="line">   <span class="keyword">while</span> (iterator.hasNext()) &#123;</span><br><span class="line">    SelectionKey key = (SelectionKey) iterator.next();</span><br><span class="line">    <span class="comment">//移走此次事件</span></span><br><span class="line">    iterator.remove();</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (key.isAcceptable()) &#123;</span><br><span class="line">     <span class="comment">//获取对应的SocketChannel</span></span><br><span class="line">     SocketChannel client = server.accept();</span><br><span class="line">     System.out.println(<span class="string">"Accepted connection from "</span> + client);</span><br><span class="line">     <span class="comment">//使此通道为非阻塞</span></span><br><span class="line">     client.configureBlocking(<span class="keyword">false</span>);</span><br><span class="line">     <span class="comment">//将数组data的大小定义为ByteBuffer缓冲区的大小</span></span><br><span class="line">     ByteBuffer source = ByteBuffer.wrap(data);</span><br><span class="line">     </span><br><span class="line">     <span class="comment">//在此通道上注册事件</span></span><br><span class="line">     SelectionKey key2 = client.register(selector,</span><br><span class="line">       SelectionKey.OP_WRITE);</span><br><span class="line">     <span class="comment">//通道执行事件</span></span><br><span class="line">     key2.attach(source);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (key.isWritable()) &#123;</span><br><span class="line">     <span class="comment">//获取此通道的SocketChannel</span></span><br><span class="line">     SocketChannel client = (SocketChannel) key.channel();</span><br><span class="line">     ByteBuffer output = (ByteBuffer) key.attachment();</span><br><span class="line">     <span class="comment">//如果缓存区没了,重置一下</span></span><br><span class="line">     <span class="keyword">if</span> (!output.hasRemaining()) &#123;</span><br><span class="line">      output.rewind();</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="comment">//在此通道内写东西</span></span><br><span class="line">     client.write(output);</span><br><span class="line">    &#125;</span><br><span class="line">    key.channel().close();</span><br><span class="line">   &#125;</span><br><span class="line"> </span><br><span class="line">  &#125;</span><br><span class="line"> </span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SocketChannelTest</span> </span>&#123;</span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">  <span class="comment">//建立到服务端的链接</span></span><br><span class="line">  SocketAddress address = <span class="keyword">new</span> InetSocketAddress(<span class="string">"127.0.0.1"</span>, <span class="number">9000</span>);</span><br><span class="line">  SocketChannel client = SocketChannel.open(address);</span><br><span class="line">  <span class="comment">//创建静态的缓冲区</span></span><br><span class="line">  ByteBuffer buffer = ByteBuffer.allocate(<span class="number">255</span>);</span><br><span class="line"> </span><br><span class="line">  <span class="comment">//读取数据,到buffer中</span></span><br><span class="line">  client.read(buffer);</span><br><span class="line">  <span class="comment">//将position重新置为0</span></span><br><span class="line">  buffer.clear();</span><br><span class="line">  <span class="comment">//输出缓冲区的数据</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; buffer.array().length; i++) &#123;</span><br><span class="line">   System.out.println(buffer.array()[i]);</span><br><span class="line">  &#125;</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="nio-byteBuffer"><a href="#nio-byteBuffer" class="headerlink" title="nio byteBuffer"></a>nio byteBuffer</h4><p>容量（Capacity）：缓冲区能够容纳的数据元素的最大数量。初始设定后不能更改。<br>上界（Limit）：缓冲区中第一个不能被读或者写的元素位置。或者说，缓冲区内现存元素的上界。<br>位置（Position）：缓冲区内下一个将要被读或写的元素位置。在进行读写缓冲区时，位置会自动更新。<br>标记（Mark）：一个备忘位置。初始时为“未定义”，调用mark时mark=positon，调用reset时position=mark。<br>这四个属性总是满足如下关系：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mark&lt;&#x3D;position&lt;&#x3D;limit&lt;&#x3D;capacity</span><br></pre></td></tr></table></figure>
-
-<h3 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h3><p><a href="https://www.jianshu.com/p/d30893c4d6bb" target="_blank" rel="noopener">https://www.jianshu.com/p/d30893c4d6bb</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2019-10-10-jmm/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2019-10-10-jmm/" itemprop="url">jmm</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="java内存模型JMM"><a href="#java内存模型JMM" class="headerlink" title="java内存模型JMM"></a>java内存模型JMM</h2><h3 id="模型的抽象"><a href="#模型的抽象" class="headerlink" title="模型的抽象"></a>模型的抽象</h3><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191030102359219.png" alt="image-20191030102359219"></p>
-<p>jmm通过控制主内存与每个线程的本地内存之间的交互，来为java程序员提供内存可见性保证</p>
-<p>很多处理器内存模型允许读/写重排序，所以jmm展示一个一致的内存模型，在重排序的地方插入内存屏障，禁止处理器重排序。所以称JMM是语言级的内存模型</p>
-<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191030163910667.png" alt="image-20191030163910667"></p>
-<p>只要多线程程序是正确同步的，jmm保证该程序在任意处理器平台上的执行结果，与该程序在顺序一致性内存模型中的执行结果一致</p>
-<p>对会改变程序执行结果的重排序，jmm会要求编译器和处理器禁止这种重排序。</p>
-<p>对于不会改变程序执行结果的重排序，jmm对编译器和处理器不做要求</p>
-<p>屏蔽了各种硬件和操作系统对内存访问的差异性（多线程情况下会有编译器优化和指令优化），从而实现让java程序在各种平台下都能达到一致的并发效果。</p>
-<h3 id="重排序"><a href="#重排序" class="headerlink" title="重排序"></a>重排序</h3><p>三种排序</p>
-<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191030104912982.png" alt="image-20191030104912982"></p>
-<p>1属于编译器重排序，2、3属于处理器重排序，这些重排序会导致多线程程序出现内存可见性问题</p>
-<p>jmm编译器重排序规则禁止特定类型的编译器重排序，处理器重排序规则会要求java编译器生成指令的时候，插入内存屏障指令来禁止处理器重排序。</p>
-<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191030110338501.png" alt="image-20191030110338501"></p>
-<h3 id="happens-before"><a href="#happens-before" class="headerlink" title="happens-before"></a>happens-before</h3><p><strong>如果想要一个操作执行的结果需要对另一个操作可见，那么这两个操作之间必须要存在happens-before关系，否则重排序会导致一个操作对另一个操作不可见</strong>。</p>
-<p><strong><em>程序顺序规则</em></strong>：一个线程中的每个操作，happens-before于该线程中的任意后续操作</p>
-<p><strong><em>监视器锁规则</em></strong>：解锁happens-before对同一个锁的加锁</p>
-<p><strong><em>volatile变量规则</em></strong>：对一个volatile域写，happens-before后续对这个volatile域的读</p>
-<p><strong><em>传递性</em></strong>：a happens-before b，b happens-before c，则a happens-before c</p>
-<p>happens-before仅仅要求前一个操作对后一个操作可见，且前一个操作按顺序排在第二个操作前面，但不一定前一个操作先于后一个操作执行，因为某些情况允许重排</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">补充：</span><br><span class="line"></span><br><span class="line">程序顺序规则：一个线程中的每个操作，happens-before于该线程中的任意后续操作。</span><br><span class="line">监视器锁规则：对一个锁的解锁，happens-before于随后对这个锁的加锁。</span><br><span class="line">volatile变量规则：对一个volatile域的写，happens-before于任意后续对这个volatile域的读。 </span><br><span class="line">传递性：如果A happens-before B，且B happens-before C，那么A happens-before C。</span><br><span class="line">start()规则：如果线程A执行操作ThreadB.start()（启动线程B），那么A线程的ThreadB.start()操作happens-before于线程B中的任意操作。</span><br><span class="line">join()规则：如果线程A执行操作ThreadB.join()并成功返回，那么线程B中的任意操作happens-before于线程A从ThreadB.join()操作成功返回。</span><br><span class="line">程序中断规则：对线程interrupted()方法的调用先行于被中断线程的代码检测到中断时间的发生。 </span><br><span class="line">对象finalize规则：一个对象的初始化完成（构造函数执行结束）先行于发生它的finalize()方法的开始。</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191030164501582.png" alt="image-20191030164501582"></p>
-<h4 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h4><ol>
-<li>写一个volatile变量，jmm会把该线程对应的本地内存中的共享变量值刷新到主内存</li>
-<li>读一个volatile变量，jmm会把该线程对应的本地内存置为无效，从主内存都去共享变量</li>
+            <h2 id="uirecorder录制UI测试用例"><a href="#uirecorder录制UI测试用例" class="headerlink" title="uirecorder录制UI测试用例"></a>uirecorder录制UI测试用例</h2><ol>
+<li>官方介绍<br>UI Recorder is a zero cost UI test case recorder like Selenium IDE.<br>UI Recorder is more powerful than Selenium IDE!<br>UI Recorder is easy to use.<br>测试人员录制之后，用于一些简单的回归测试挺好</li>
+<li>使用教程</li>
+<li>1 pc端</li>
+<li>1.1 搭建环境<br>安装node<br>brew install node</li>
 </ol>
-<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191030172335532.png" alt="image-20191030172335532"></p>
-<p>实现方式：</p>
-<ol>
-<li><p>volatile写之前的操作不会被重排到volatile写之后</p>
+<p>安装selenium<br>brew install selenium-server-standalone</p>
+<p>安装cnpm<br>npm install -g cnpm –registry=<a href="https://registry.npm.taobao.org" target="_blank" rel="noopener">https://registry.npm.taobao.org</a></p>
+<p>安装uirecorder和mocha<br>cnpm install uirecorder mocha -g</p>
+<p>新建文件夹<br>mkdir test</p>
+<p>初始化<br>cd test<br>uirecorder init</p>
+<p>开始录制<br>uirecorder<br>结束录制，便会生成一个测试用例，默认路径sample/test.spec.js<br>运行测试用例<br>npm run server</p>
+<p>source run.sh sample/test.spec.js<br>2.1.2 录制截图</p>
+<p>2.1.3 运行测试用例的结果</p>
+<p>2.2 安卓端（手机连接电脑，开启usb调试）<br>2.2.1 搭建环境<br>安装JDK 1.8 (Java 9 is not supported)</p>
+<p>安装Android SDK<br>brew install android-sdk</p>
+<p>设置ANDROID_HOME环境变量</p>
+<p>brew install gradle</p>
+<p>cnpm i -g macaca-cli</p>
+<p>cnpm i -g macaca-android</p>
+<p>cd /usr/local/lib/node_modules/macaca-android/node_modules/_uiautomatorwd@1.0.61@uiautomatorwd/</p>
+<p>./gradlew assembleDebug assembleDebugAndroidTest</p>
+<p>macaca server –port 4444</p>
+<p>uirecorder init –mobile</p>
+<p>开始录制测试用例<br>uirecorder –mobile sample/test.spec.js</p>
+<p>运行测试用例<br>source run.sh sample/test.spec.js</p>
+<p>！！如果有问题，运行macaca doctor，解决红色报警<br>2.2.2 录制截图</p>
+<p>2.2.3 运行测试用例的结果</p>
+<ol start="3">
+<li>reference<br><a href="https://macacajs.com/environment-setup" target="_blank" rel="noopener">https://macacajs.com/environment-setup</a><br><a href="https://github.com/alibaba/uirecorder" target="_blank" rel="noopener">https://github.com/alibaba/uirecorder</a></li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/13/2019-2-13-postman/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/02/13/2019-2-13-postman/" itemprop="url">postman录制接口测试用例</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-13T00:00:00+08:00">
+                2019-02-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="postman录制接口测试用例"><a href="#postman录制接口测试用例" class="headerlink" title="postman录制接口测试用例"></a>postman录制接口测试用例</h2><ol>
+<li><p>目的<br>用postman录制一个网站里的所有接口，然后为所有接口加上结果验证，最后运行所有测试用例。希望能提高接口测试效率。</p>
 </li>
-<li><p>volatile读之后的操作不会被重排到volatile读之前</p>
-</li>
-<li><p>第一个操作是volatile写，第二个操作是volatile读时，不能重排序</p>
+<li><p>步骤<br>安装postman<br>安装Postman Interceptor谷歌插件<br><a href="https://chrome.google.com/webstore/detail/postman-interceptor/aicmkgpgakddgnaphhhpliifpcfhicfo/" target="_blank" rel="noopener">https://chrome.google.com/webstore/detail/postman-interceptor/aicmkgpgakddgnaphhhpliifpcfhicfo/</a></p>
 </li>
 </ol>
-<p>volatile写前面会插入一个StoreStore屏障，后面会插入StoreLoad屏障</p>
-<p>volatile读后面会插入loadload屏障和loadstore屏障</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">普通读写可以重排在后面，volatile读写不能重排在后面</span><br><span class="line">		|</span><br><span class="line">		|</span><br><span class="line">volatile读</span><br><span class="line">		|		</span><br><span class="line">		|</span><br><span class="line">普通读写不能重排到上面，volatile读写不能重排在上面</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">普通读写不能重排到后面，volatile读写不能重排在后面</span><br><span class="line">		|</span><br><span class="line">		|</span><br><span class="line">volatile写</span><br><span class="line">		|</span><br><span class="line">		|</span><br><span class="line">普通读写可以重排到上面，volatile读写不能重排在上面</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191030175428563.png" alt="image-20191030175428563"></p>
-<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191030175452455.png" alt="image-20191030175452455"></p>
-<h3 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h3><p>利用了volatile来保证解锁happens-before对同一个锁的加锁，锁释放与volatile写有相同语义，锁获取与volatile读有相同的内存语义</p>
-<h3 id="final"><a href="#final" class="headerlink" title="final"></a>final</h3><ol>
-<li><p>在构造函数内对一个final域的写入，与随后把这个被构造对象的引用赋值给一个引用变量，则这两个操作之间不能重排序</p>
-</li>
-<li><p>初次读一个包含final域的对象的引用，与随后初次读这个final域，这两个操作之间不能重排序</p>
-</li>
-</ol>
-<h3 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h3><p><a href="https://www.infoq.cn/article/java_memory_model深入理解java内存模型" target="_blank" rel="noopener">https://www.infoq.cn/article/java_memory_model深入理解java内存模型</a></p>
+<p>filter 请求<br>image.png</p>
+<p>设置postman的Interceptor<br>image.png</p>
+<p>开始录制。在谷歌浏览器中输入<a href="https://api.ecreditpal.cn/lendingmart，则postman开始记录所有的api。" target="_blank" rel="noopener">https://api.ecreditpal.cn/lendingmart，则postman开始记录所有的api。</a></p>
+<p>image.png</p>
+<p>回放api<br>image.png</p>
+<p>把api保存至collections<br>为api添加测试验证<br>image.png</p>
+<p>开始运行测试用例，<br>打开runnerimage.png<br>添加collection，开始运行image.png<br>用命令行运行测试用例<br>安装newman，npm install newman<br>将collection导出<br>运行测试用例，newman run test.postman_collectionimage.png<br>3. reference<br><a href="https://www.jianshu.com/p/615f668d91a6" target="_blank" rel="noopener">https://www.jianshu.com/p/615f668d91a6</a></p>
 
           
         
@@ -772,7 +630,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2019-1-30-linux3/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/11/2019-2-11-k8s/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -791,7 +649,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2019-1-30-linux3/" itemprop="url">linux三剑客</a></h1>
+                <a class="post-title-link" href="/2019/02/11/2019-2-11-k8s/" itemprop="url">kubernetes</a></h1>
         
 
         <div class="post-meta">
@@ -803,8 +661,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-11T00:00:00+08:00">
+                2019-02-11
               </time>
             
 
@@ -843,7 +701,21 @@
       
         
           
-            <h2 id="linux三剑客"><a href="#linux三剑客" class="headerlink" title="linux三剑客"></a>linux三剑客</h2><h3 id="awk"><a href="#awk" class="headerlink" title="awk"></a>awk</h3>
+            <h2 id="kubernetes"><a href="#kubernetes" class="headerlink" title="kubernetes"></a>kubernetes</h2><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191105094455257.png" alt="image-20191105094455257"></p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">1. 设置主机名</span><br><span class="line">hostnamectl set-hostname kube-master</span><br><span class="line"></span><br><span class="line">编辑 &#x2F;etc&#x2F;hosts文件，加入以下内容</span><br><span class="line">192.168.1.10 kube-master</span><br><span class="line"></span><br><span class="line">2. 安装kubelet kubeadm kubectl</span><br><span class="line">cat &lt;&lt;EOF &gt; &#x2F;etc&#x2F;yum.repos.d&#x2F;kubernetes.repo</span><br><span class="line">[kubernetes]</span><br><span class="line">name&#x3D;Kubernetes</span><br><span class="line">baseurl&#x3D;https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;kubernetes&#x2F;yum&#x2F;repos&#x2F;kubernetes-el7-x86_64&#x2F;</span><br><span class="line">enabled&#x3D;1</span><br><span class="line">gpgcheck&#x3D;1</span><br><span class="line">repo_gpgcheck&#x3D;1</span><br><span class="line">gpgkey&#x3D;https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;kubernetes&#x2F;yum&#x2F;doc&#x2F;yum-key.gpg https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;kubernetes&#x2F;yum&#x2F;doc&#x2F;rpm-package-key.gpg</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">yum install -y kubelet kubeadm kubectl</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">3. 获取镜像</span><br><span class="line">docker pull mirrorgooglecontainers&#x2F;kube-apiserver:v1.13.1</span><br><span class="line">docker pull mirrorgooglecontainers&#x2F;kube-controller-manager:v1.13.1</span><br><span class="line">docker pull mirrorgooglecontainers&#x2F;kube-scheduler:v1.13.1</span><br><span class="line">docker pull mirrorgooglecontainers&#x2F;kube-proxy:v1.13.1</span><br><span class="line">docker pull mirrorgooglecontainers&#x2F;pause:3.1</span><br><span class="line">docker pull mirrorgooglecontainers&#x2F;etcd:3.2.24</span><br><span class="line">docker pull coredns&#x2F;coredns:1.2.6</span><br><span class="line">docker pull registry.cn-shenzhen.aliyuncs.com&#x2F;cp_m&#x2F;flannel:v0.10.0-amd64</span><br><span class="line"></span><br><span class="line">docker tag mirrorgooglecontainers&#x2F;kube-apiserver:v1.13.1 k8s.gcr.io&#x2F;kube-apiserver:v1.13.1</span><br><span class="line">docker tag mirrorgooglecontainers&#x2F;kube-controller-manager:v1.13.1 k8s.gcr.io&#x2F;kube-controller-manager:v1.13.1</span><br><span class="line">docker tag mirrorgooglecontainers&#x2F;kube-scheduler:v1.13.1 k8s.gcr.io&#x2F;kube-scheduler:v1.13.1</span><br><span class="line">docker tag mirrorgooglecontainers&#x2F;kube-proxy:v1.13.1 k8s.gcr.io&#x2F;kube-proxy:v1.13.1</span><br><span class="line">docker tag mirrorgooglecontainers&#x2F;pause:3.1 k8s.gcr.io&#x2F;pause:3.1</span><br><span class="line">docker tag mirrorgooglecontainers&#x2F;etcd:3.2.24 k8s.gcr.io&#x2F;etcd:3.2.24</span><br><span class="line">docker tag coredns&#x2F;coredns:1.2.6 k8s.gcr.io&#x2F;coredns:1.2.6</span><br><span class="line">docker tag registry.cn-shenzhen.aliyuncs.com&#x2F;cp_m&#x2F;flannel:v0.10.0-amd64 quay.io&#x2F;coreos&#x2F;flannel:v0.10.0-amd64</span><br><span class="line"></span><br><span class="line">docker rmi mirrorgooglecontainers&#x2F;kube-apiserver:v1.13.1           </span><br><span class="line">docker rmi mirrorgooglecontainers&#x2F;kube-controller-manager:v1.13.1  </span><br><span class="line">docker rmi mirrorgooglecontainers&#x2F;kube-scheduler:v1.13.1           </span><br><span class="line">docker rmi mirrorgooglecontainers&#x2F;kube-proxy:v1.13.1               </span><br><span class="line">docker rmi mirrorgooglecontainers&#x2F;pause:3.1                        </span><br><span class="line">docker rmi mirrorgooglecontainers&#x2F;etcd:3.2.24                      </span><br><span class="line">docker rmi coredns&#x2F;coredns:1.2.6</span><br><span class="line">docker rmi registry.cn-shenzhen.aliyuncs.com&#x2F;cp_m&#x2F;flannel:v0.10.0-amd64</span><br><span class="line"></span><br><span class="line">4. </span><br><span class="line">sysctl net.bridge.bridge-nf-call-iptables&#x3D;1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">5. 初始化集群</span><br><span class="line">kubeadm init --kubernetes-version&#x3D;v1.13.1 --apiserver-advertise-address 192.168.1.9--pod-network-cidr&#x3D;10.244.0.0&#x2F;16</span><br><span class="line"></span><br><span class="line">按照提示</span><br><span class="line">mkdir -p $HOME&#x2F;.kube</span><br><span class="line">sudo cp -i &#x2F;etc&#x2F;kubernetes&#x2F;admin.conf $HOME&#x2F;.kube&#x2F;config</span><br><span class="line">sudo chown $(id -u):$(id -g) $HOME&#x2F;.kube&#x2F;config</span><br><span class="line">提示里还有节点加入集群的命令</span><br><span class="line">kubeadm join 192.168.1.9:6443 --token zeahie.t9g130gj74rdm43s --discovery-token-ca-cert-hash sha256:a618a7d2a2af25e084150125d457e4a4a207522e1b086d67ef8eb4da6940a885</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">6. 安装Pod网络插件，使Pod可以相互通信</span><br><span class="line">kubectl apply -f https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;coreos&#x2F;flannel&#x2F;master&#x2F;Documentation&#x2F;kube-flannel.yml</span><br><span class="line"></span><br><span class="line">7. 在node节点上</span><br><span class="line">执行1-4</span><br><span class="line">初始化节点</span><br><span class="line"></span><br><span class="line">8. 回到master</span><br><span class="line">master执行：watch kubectl get nodes，直到状态变为Ready</span><br><span class="line"></span><br><span class="line">9. master参与工作负载(可选)：</span><br><span class="line">kubectl taint nodes node1 node-role.kubernetes.io&#x2F;master-</span><br><span class="line"></span><br><span class="line">kubectl get pods --all-namespaces -o wide</span><br><span class="line">NAMESPACE     NAME                                  READY   STATUS    RESTARTS   AGE   IP             NODE          NOMINATED NODE   READINESS GATES</span><br><span class="line">kube-system   coredns-86c58d9df4-6rqvj              1&#x2F;1     Running   0          8h    10.244.0.2     kube-master   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-system   coredns-86c58d9df4-qkzvn              1&#x2F;1     Running   0          8h    10.244.0.3     kube-master   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-system   etcd-kube-master                      1&#x2F;1     Running   0          8h    192.168.1.10   kube-master   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-system   kube-apiserver-kube-master            1&#x2F;1     Running   0          8h    192.168.1.10   kube-master   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-system   kube-controller-manager-kube-master   1&#x2F;1     Running   0          8h    192.168.1.10   kube-master   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-system   kube-flannel-ds-amd64-79mpb           1&#x2F;1     Running   0          8h    192.168.1.9    kube-node1    &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-system   kube-flannel-ds-amd64-sx5zf           1&#x2F;1     Running   0          8h    192.168.1.10   kube-master   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-system   kube-proxy-6wkbj                      1&#x2F;1     Running   0          8h    192.168.1.10   kube-master   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-system   kube-proxy-p46cr                      1&#x2F;1     Running   0          8h    192.168.1.9    kube-node1    &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-system   kube-scheduler-kube-master            1&#x2F;1     Running   0          8h    192.168.1.10   kube-master   &lt;none&gt;           &lt;none&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl create -f nginx.yaml --record</span><br><span class="line">kubectl create -f nginx-srv.yaml --record</span><br></pre></td></tr></table></figure>
+
+<h3 id="docker-私有库"><a href="#docker-私有库" class="headerlink" title="docker 私有库"></a>docker 私有库</h3><p>不同机器的本地镜像tag不同，部署不同机器会失败，需要建立镜像私有库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">不添加ssl认证的仓库</span><br><span class="line">mkdir &#x2F;mnt&#x2F;registry</span><br><span class="line"></span><br><span class="line">docker run -d \</span><br><span class="line">  -p 5000:5000 \</span><br><span class="line">  --restart&#x3D;always \</span><br><span class="line">  --name registry \</span><br><span class="line">  -v &#x2F;mnt&#x2F;registry:&#x2F;var&#x2F;lib&#x2F;registry \</span><br><span class="line">  registry:2.6.2</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">vim &#x2F;etc&#x2F;sysconfig&#x2F;docker</span><br><span class="line"></span><br><span class="line"># 在OPTIONS下添加--insecure-registry&#x3D;&lt;host-ip&gt;:5000</span><br><span class="line">OPTIONS&#x3D;&#39;--selinux-enabled --log-driver&#x3D;json-file --signature-verification&#x3D;false --insecure-registry&#x3D;10.34.31.13:5000&#39;</span><br><span class="line"></span><br><span class="line"># 重启docker</span><br><span class="line">systemctl restart docker</span><br><span class="line"></span><br><span class="line">docker tag  mybatis&#x2F;springboothelloworld registry:5000&#x2F;springboothelloworld</span><br><span class="line"></span><br><span class="line">docker push registry:5000&#x2F;springboothelloworld</span><br><span class="line"></span><br><span class="line">curl -XGET http:&#x2F;&#x2F;registry:5000&#x2F;v2&#x2F;_catalog</span><br><span class="line">curl -XGET http:&#x2F;&#x2F;registry:5000&#x2F;v2&#x2F;image_name&#x2F;tags&#x2F;list</span><br></pre></td></tr></table></figure>
+<h3 id="sample"><a href="#sample" class="headerlink" title="sample"></a>sample</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: apps&#x2F;v1</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  name: $project_name</span><br><span class="line">  labels:</span><br><span class="line">    app: $project_name</span><br><span class="line">spec:</span><br><span class="line">  replicas: 2   #副本数</span><br><span class="line">  selector:</span><br><span class="line">    matchLabels:</span><br><span class="line">      app: $project_name</span><br><span class="line">  strategy:</span><br><span class="line">      type: RollingUpdate</span><br><span class="line">      rollingUpdate:</span><br><span class="line">        maxSurge: 1 #滚动升级时会先启动1个pod</span><br><span class="line">        maxUnavailable: 1 #滚动升级时允许的最大Unavailable的pod个数</span><br><span class="line">  minReadySeconds: 120 #滚动升级时120s后认为该pod就绪</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        app: $project_name</span><br><span class="line">    spec:</span><br><span class="line">      terminationGracePeriodSeconds: 60 #k8s将会给应用发送SIGTERM信号，可以用来正确、优雅地关闭应用,默认为30秒</span><br><span class="line">      containers:</span><br><span class="line">        - name: $project_name</span><br><span class="line">          image: 192.168.1.10:5000&#x2F;pailie_wallet_gateway:IMAGE_TAG</span><br><span class="line">          env:</span><br><span class="line">            - name: spring.profiles.active</span><br><span class="line">              value: SPRING_PROFILES_ACTIVE</span><br><span class="line">          imagePullPolicy: IfNotPresent</span><br><span class="line">          ports:</span><br><span class="line">            - containerPort: 8888</span><br><span class="line">          volumeMounts:</span><br><span class="line">            - name: sdb</span><br><span class="line">              mountPath: &#x2F;var&#x2F;log&#x2F;pailie_wallet_gateway</span><br><span class="line">          readinessProbe:</span><br><span class="line">            httpGet:</span><br><span class="line">              path: &#x2F;actuator&#x2F;health</span><br><span class="line">              port: 8888</span><br><span class="line">            initialDelaySeconds: 30</span><br><span class="line">            periodSeconds: 10</span><br><span class="line">            successThreshold: 1</span><br><span class="line">            failureThreshold: 1</span><br><span class="line">          livenessProbe:</span><br><span class="line">            httpGet:</span><br><span class="line">              path: &#x2F;actuator&#x2F;health</span><br><span class="line">              port: 8888</span><br><span class="line">            initialDelaySeconds: 40</span><br><span class="line">            periodSeconds: 20</span><br><span class="line">            successThreshold: 1</span><br><span class="line">            failureThreshold: 3</span><br><span class="line">      volumes:</span><br><span class="line">        - name: sdb</span><br><span class="line">          hostPath:</span><br><span class="line">            path: &#x2F;home&#x2F;dev&#x2F;log&#x2F;pailie_wallet_gateway</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  name: $project_name</span><br><span class="line">  labels:</span><br><span class="line">    app: $project_name</span><br><span class="line">spec:</span><br><span class="line">  selector:</span><br><span class="line">    app: $project_name</span><br><span class="line">  ports:</span><br><span class="line">    - port: SPRING_PORT</span><br><span class="line">      targetPort: 8888</span><br></pre></td></tr></table></figure>
+<h3 id="Kubernetes集群监控"><a href="#Kubernetes集群监控" class="headerlink" title="Kubernetes集群监控"></a>Kubernetes集群监控</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">安装node-exporer</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  annotations:</span><br><span class="line">    prometheus.io&#x2F;scrape: &#39;true&#39;</span><br><span class="line">  labels:</span><br><span class="line">    app: node-exporter</span><br><span class="line">    name: node-exporter</span><br><span class="line">  name: node-exporter</span><br><span class="line">spec:</span><br><span class="line">  clusterIP: None</span><br><span class="line">  ports:</span><br><span class="line">  - name: scrape</span><br><span class="line">    port: 9100</span><br><span class="line">    protocol: TCP</span><br><span class="line">  selector:</span><br><span class="line">    app: node-exporter</span><br><span class="line">  type: ClusterIP</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">apiVersion: extensions&#x2F;v1beta1</span><br><span class="line">kind: DaemonSet</span><br><span class="line">metadata:</span><br><span class="line">  name: node-exporter</span><br><span class="line">spec:</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        app: node-exporter</span><br><span class="line">      name: node-exporter</span><br><span class="line">    spec:</span><br><span class="line">      containers:</span><br><span class="line">      - image: registry.cn-hangzhou.aliyuncs.com&#x2F;tryk8s&#x2F;node-exporter:latest</span><br><span class="line">        name: node-exporter</span><br><span class="line">        ports:</span><br><span class="line">        - containerPort: 9100</span><br><span class="line">          hostPort: 9100</span><br><span class="line">          name: scrape</span><br><span class="line">      hostNetwork: true</span><br><span class="line">      hostPID: true</span><br><span class="line"></span><br><span class="line">curl 127.0.0.1:9100</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建dashboard"><a href="#创建dashboard" class="headerlink" title="创建dashboard"></a>创建dashboard</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">curl -O https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;kubernetes&#x2F;dashboard&#x2F;master&#x2F;aio&#x2F;deploy&#x2F;recommended&#x2F;kubernetes-dashboard.yaml</span><br><span class="line"></span><br><span class="line">docker pull gcrxio&#x2F;kubernetes-dashboard-amd64:v1.10.1</span><br><span class="line"></span><br><span class="line">docker tag gcrxio&#x2F;kubernetes-dashboard-amd64:v1.10.1 k8s.gcr.io&#x2F;kubernetes-dashboard-amd64:v1.10.1</span><br><span class="line"></span><br><span class="line">vi kubernetes-dashboard.yaml</span><br><span class="line"></span><br><span class="line">增加 imagePullPolicy: IfNotPresent</span><br><span class="line"></span><br><span class="line">kubectl create -f kubernetes-dashboard.yaml</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">创建一个cluster-admin角色的service account , 和一个clusterrolebinding, 以便访问所有的k8s资源</span><br><span class="line">kubectl create serviceaccount cluster-admin-dashboard-sa</span><br><span class="line"> </span><br><span class="line">kubectl create clusterrolebinding cluster-admin-dashboard-sa \</span><br><span class="line">  --clusterrole&#x3D;cluster-admin \</span><br><span class="line">  --serviceaccount&#x3D;default:cluster-admin-dashboard-sa</span><br></pre></td></tr></table></figure>
+
+<h3 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h3><p><a href="https://my.oschina.net/u/1013857/blog/2991314" target="_blank" rel="noopener">https://my.oschina.net/u/1013857/blog/2991314</a></p>
+<p><a href="https://segmentfault.com/a/1190000017530416" target="_blank" rel="noopener">https://segmentfault.com/a/1190000017530416</a></p>
+
           
         
       
@@ -891,7 +763,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2019-01-30-bl/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/02/2019-2-2-filebeat/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -910,7 +782,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2019-01-30-bl/" itemprop="url">负载均衡架构</a></h1>
+                <a class="post-title-link" href="/2019/02/02/2019-2-2-filebeat/" itemprop="url">filefeat+logstash+es+kibana</a></h1>
         
 
         <div class="post-meta">
@@ -922,8 +794,253 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-02T00:00:00+08:00">
+                2019-02-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="filefeat-logstash-es-kibana"><a href="#filefeat-logstash-es-kibana" class="headerlink" title="filefeat+logstash+es+kibana"></a>filefeat+logstash+es+kibana</h2><h3 id="filefeat"><a href="#filefeat" class="headerlink" title="filefeat"></a>filefeat</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;downloads&#x2F;beats&#x2F;filebeat&#x2F;filebeat-6.6.0-linux-x86_64.tar.gz</span><br><span class="line"></span><br><span class="line">.&#x2F;filebeat -e -c filebeat.yml -d &quot;Publish&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="es"><a href="#es" class="headerlink" title="es"></a>es</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">docker pull docker.elastic.co&#x2F;elasticsearch&#x2F;elasticsearch:5.6.9</span><br><span class="line"></span><br><span class="line">sudo docker run -d -p 9200:9200 -p 9300:9300 -e &quot;xpack.security.enabled&#x3D;false&quot; -e ES_JAVA_OPTS&#x3D;&quot;-Xms512m -Xmx512m&quot; -e &quot;discovery.type&#x3D;single-node&quot; docker.elastic.co&#x2F;elasticsearch&#x2F;elasticsearch:5.6.9</span><br><span class="line"></span><br><span class="line">或者</span><br><span class="line"></span><br><span class="line">wget https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;downloads&#x2F;elasticsearch&#x2F;elasticsearch-6.6.0.tar.gz</span><br><span class="line">bin&#x2F;elasticsearch</span><br></pre></td></tr></table></figure>
+<h3 id="logstash"><a href="#logstash" class="headerlink" title="logstash"></a>logstash</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">wget https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;downloads&#x2F;logstash&#x2F;logstash-6.6.0.tar.gz</span><br><span class="line">bin&#x2F;logstash -f logstash.conf</span><br><span class="line"></span><br><span class="line">logstash.con</span><br><span class="line">input &#123;</span><br><span class="line">  beats &#123;</span><br><span class="line">    port &#x3D;&gt; 5044</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">filter &#123;</span><br><span class="line">     grok &#123;</span><br><span class="line">        # 筛选过滤</span><br><span class="line">        match &#x3D;&gt; &#123;</span><br><span class="line">          &quot;message&quot; &#x3D;&gt; &quot;(?&lt;date&gt;\d&#123;4&#125;-\d&#123;2&#125;-\d&#123;2&#125;\s\d&#123;2&#125;:\d&#123;2&#125;:\d&#123;2&#125;.\d&#123;3&#125;) \[(?&lt;thread&gt;[A-Za-z0-9&#x2F;- ]&#123;4,90&#125;)\] (?&lt;level&gt;[A-Z]&#123;4,5&#125;)\s+(?&lt;class&gt;[A-Za-z0-9&#x2F;.]&#123;4,50&#125;) - (?&lt;msg&gt;.*)&quot;</span><br><span class="line">        &#125;</span><br><span class="line">        remove_field &#x3D;&gt; [&quot;message&quot;]</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br><span class="line">output &#123;</span><br><span class="line">  elasticsearch &#123;</span><br><span class="line">    hosts &#x3D;&gt; [&quot;http:&#x2F;&#x2F;127.0.0.1:9200&quot;]</span><br><span class="line">    index &#x3D;&gt; &quot;%&#123;[@metadata][beat]&#125;-2-%&#123;[@metadata][version]&#125;-%&#123;+YYYY.MM.dd&#125;&quot;</span><br><span class="line">    #user &#x3D;&gt; &quot;elastic&quot;</span><br><span class="line">    #password &#x3D;&gt; &quot;changeme&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="kibana"><a href="#kibana" class="headerlink" title="kibana"></a>kibana</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;downloads&#x2F;kibana&#x2F;kibana-6.6.0-linux-x86_64.tar.gz</span><br><span class="line">Set elasticsearch.url to point at your Elasticsearch instance</span><br><span class="line">bin&#x2F;kibana</span><br></pre></td></tr></table></figure>
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/01/2019-2-1-ab/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/02/01/2019-2-1-ab/" itemprop="url">nginx ab部署</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-01T00:00:00+08:00">
+                2019-02-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="nginx-ab部署"><a href="#nginx-ab部署" class="headerlink" title="nginx ab部署"></a>nginx ab部署</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">local ck &#x3D; require(&quot;cookie&quot;)</span><br><span class="line">local cookie &#x3D; ck:new()</span><br><span class="line">local abtest &#x3D; cookie:get(&quot;rocket&quot;)</span><br><span class="line">if abtest &#x3D;&#x3D; nil then</span><br><span class="line">  math.randomseed(tostring(os.time()):reverse():sub(1, 6))</span><br><span class="line">  r &#x3D; math.floor(math.random()*10)</span><br><span class="line">  if r &#x3D;&#x3D; 1 then</span><br><span class="line">    if ngx.req.get_headers()[&quot;Cookie&quot;] then</span><br><span class="line">      ngx.header[&quot;Set-Cookie&quot;]&#x3D;&quot;rocket&#x3D;1; path&#x3D;&#x2F;;&quot;..ngx.req.get_headers()[&quot;Cookie&quot;]</span><br><span class="line">    else</span><br><span class="line">      ngx.header[&quot;Set-Cookie&quot;]&#x3D;&quot;rocket&#x3D;1; path&#x3D;&#x2F;;&quot;</span><br><span class="line">    end</span><br><span class="line">    ngx.log(ngx.NOTICE, &quot;set abtest&#x3D;1 go to webv2&quot;)</span><br><span class="line">    return 1</span><br><span class="line">  else</span><br><span class="line">    if ngx.req.get_headers()[&quot;Cookie&quot;] then</span><br><span class="line">      ngx.header[&quot;Set-Cookie&quot;]&#x3D;&quot;rocket&#x3D;0; path&#x3D;&#x2F;;&quot;..ngx.req.get_headers()[&quot;Cookie&quot;]</span><br><span class="line">    else</span><br><span class="line">      ngx.header[&quot;Set-Cookie&quot;]&#x3D;&quot;rocket&#x3D;0; path&#x3D;&#x2F;;&quot;</span><br><span class="line">    end</span><br><span class="line">    ngx.log(ngx.NOTICE, &quot;set abtest&#x3D;0 go to webv1&quot;)</span><br><span class="line">    return 0</span><br><span class="line">  end</span><br><span class="line">else</span><br><span class="line">  if abtest &#x3D;&#x3D; &quot;1&quot; then</span><br><span class="line">    ngx.log(ngx.NOTICE, &quot;abtest&#x3D;1 go to webv2&quot;)</span><br><span class="line">    return 1</span><br><span class="line">  else</span><br><span class="line">    ngx.log(ngx.NOTICE, &quot;abtest&#x3D;0 go to webv1&quot;)</span><br><span class="line">    return 0</span><br><span class="line">  end</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/30/2019-01-30-bl/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/30/2019-01-30-bl/" itemprop="url">负载均衡架构</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-30T00:00:00+08:00">
+                2019-01-30
               </time>
             
 
@@ -1017,7 +1134,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2019-01-29-fabric/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/30/2019-1-30-linux3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -1036,7 +1153,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2019-01-29-fabric/" itemprop="url">fabric</a></h1>
+                <a class="post-title-link" href="/2019/01/30/2019-1-30-linux3/" itemprop="url">linux三剑客</a></h1>
         
 
         <div class="post-meta">
@@ -1048,8 +1165,127 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-30T00:00:00+08:00">
+                2019-01-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="linux三剑客"><a href="#linux三剑客" class="headerlink" title="linux三剑客"></a>linux三剑客</h2><h3 id="awk"><a href="#awk" class="headerlink" title="awk"></a>awk</h3>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/29/2019-01-29-fabric/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/29/2019-01-29-fabric/" itemprop="url">fabric</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-29T00:00:00+08:00">
+                2019-01-29
               </time>
             
 
@@ -1142,7 +1378,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2019-01-25-nginx-lua/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/25/2019-01-25-nginx-lua/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -1161,7 +1397,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/01/06/2019-01-25-nginx-lua/" itemprop="url">nginx-lua</a></h1>
+                <a class="post-title-link" href="/2019/01/25/2019-01-25-nginx-lua/" itemprop="url">nginx-lua</a></h1>
         
 
         <div class="post-meta">
@@ -1173,8 +1409,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-25T00:00:00+08:00">
+                2019-01-25
               </time>
             
 
@@ -1272,253 +1508,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2019-01-25-docker-java/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2019-01-25-docker-java/" itemprop="url">docker-java</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="docker-java"><a href="#docker-java" class="headerlink" title="docker-java"></a>docker-java</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install -y yum-utils device-mapper-persistent-data lvm2</span><br><span class="line">sudo yum-config-manager --add-repo http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;docker-ce&#x2F;linux&#x2F;centos&#x2F;docker-ce.repo</span><br><span class="line">sudo yum makecache fast</span><br><span class="line">安装docker </span><br><span class="line">sudo yum -y install docker-ce</span><br><span class="line">安装pip</span><br><span class="line">sudo yum install python-pip -y</span><br><span class="line">安装docker-compose</span><br><span class="line">sudo pip install docker-compose</span><br><span class="line">启动</span><br><span class="line">sudo systemctl start docker</span><br></pre></td></tr></table></figure>
-
-<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>dockerfile</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">FROM java:8</span><br><span class="line"></span><br><span class="line">ENV TZ Asia&#x2F;Shanghai</span><br><span class="line"></span><br><span class="line">COPY pailie_wallet-*-SNAPSHOT.jar &#x2F;opt&#x2F;pailie_wallet_api&#x2F;lib&#x2F;pailie_wallet.jar</span><br><span class="line">COPY conf &#x2F;opt&#x2F;pailie_wallet_api&#x2F;conf</span><br><span class="line"></span><br><span class="line">WORKDIR &#x2F;opt&#x2F;pailie_wallet_api&#x2F;lib</span><br><span class="line"></span><br><span class="line">RUN ln -snf &#x2F;usr&#x2F;share&#x2F;zoneinfo&#x2F;$TZ &#x2F;etc&#x2F;localtime &amp;&amp; echo $TZ &gt; &#x2F;etc&#x2F;timezone</span><br><span class="line"></span><br><span class="line">ENTRYPOINT [&quot;java&quot;,&quot;-Djava.security.egd&#x3D;file:&#x2F;dev&#x2F;.&#x2F;urandom -Dlogging.config&#x3D;&#x2F;opt&#x2F;pailie_wallet_api&#x2F;conf&#x2F;logback.xml \</span><br><span class="line">-Dspring.profiles.active&#x3D;$&#123;SPRING_PROFILES_ACTIVE&#125; -Xms1024m -Xmx1024m&quot;, &quot;-jar&quot;, &quot;pailie_wallet.jar&quot;]</span><br></pre></td></tr></table></figure>
-
-<p>docker-compose.yml</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">version: &#39;3&#39;</span><br><span class="line">services:</span><br><span class="line">  app-api:</span><br><span class="line">    image: pailie_wallet:IMAGE_TAG</span><br><span class="line">    volumes:</span><br><span class="line">      - ~&#x2F;Documents&#x2F;pailie&#x2F;pailie_wallet&#x2F;log:&#x2F;var&#x2F;log&#x2F;pailie_wallet_api</span><br><span class="line">    ports:</span><br><span class="line">      - SPRING_PORT:8091</span><br><span class="line">    environment:</span><br><span class="line">      - SPRING_PROFILES_ACTIVE&#x3D;docker-staging</span><br></pre></td></tr></table></figure>
-
-<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>docker images -a会显示所有repostory和tag都为空的中间镜像</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2019-01-23-openresty/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/2019-01-23-openresty/" itemprop="url">openresty</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="openresty"><a href="#openresty" class="headerlink" title="openresty"></a>openresty</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install yum-utils</span><br><span class="line"></span><br><span class="line">sudo yum-config-manager --add-repo https:&#x2F;&#x2F;openresty.org&#x2F;package&#x2F;centos&#x2F;openresty.repo</span><br><span class="line"></span><br><span class="line">sudo yum install openresty -y</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1569,7 +1558,7 @@
               
                 <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">273</span>
+                  <span class="site-state-item-count">271</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
