@@ -116,6 +116,44 @@ xbuild /p:Configuration=Debug  /t:clean AppFrame.sln</code></pre><p>mono exe文�
 
 
   
+    <article id="default-2015-10-2-ios-python反射" class="article article-type-default" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/10/02/2015-10-2-ios-python%E5%8F%8D%E5%B0%84/" class="article-date">
+  <time datetime="2015-10-01T16:00:00.000Z" itemprop="datePublished">2015-10-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/10/02/2015-10-2-ios-python%E5%8F%8D%E5%B0%84/">python 反射</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>##python-反射</p>
+<p>###思想</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/10/02/2015-10-2-ios-python%E5%8F%8D%E5%B0%84/" data-id="ck521h10m001zlc7khhwraci2" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="default-2015-10-2-ios-python@符号" class="article article-type-default" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/10/02/2015-10-2-ios-python@%E7%AC%A6%E5%8F%B7/" class="article-date">
@@ -190,44 +228,6 @@ foo()
     </div>
     <footer class="article-footer">
       <a data-url="http://yoursite.com/2015/10/02/2015-10-2-ios-python@%E7%AC%A6%E5%8F%B7/" data-id="ck521h10l001ylc7k1pxidkp8" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="default-2015-10-2-ios-python反射" class="article article-type-default" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/10/02/2015-10-2-ios-python%E5%8F%8D%E5%B0%84/" class="article-date">
-  <time datetime="2015-10-01T16:00:00.000Z" itemprop="datePublished">2015-10-02</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/10/02/2015-10-2-ios-python%E5%8F%8D%E5%B0%84/">python 反射</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>##python-反射</p>
-<p>###思想</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/02/2015-10-2-ios-python%E5%8F%8D%E5%B0%84/" data-id="ck521h10m001zlc7khhwraci2" class="article-share-link">Share</a>
       
       
     </footer>
@@ -524,9 +524,9 @@ git push origin test:master         // 提交本地test分支作为远程的mast
 
 
   
-    <article id="default-2015-7-2-oc_note" class="article article-type-default" itemscope itemprop="blogPost">
+    <article id="default-2015-7-2-newsfeed" class="article article-type-default" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2015/07/02/2015-7-2-oc_note/" class="article-date">
+    <a href="/2015/07/02/2015-7-2-newsfeed/" class="article-date">
   <time datetime="2015-07-01T16:00:00.000Z" itemprop="datePublished">2015-07-02</time>
 </a>
     
@@ -538,7 +538,7 @@ git push origin test:master         // 提交本地test分支作为远程的mast
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/07/02/2015-7-2-oc_note/">object c备忘</a>
+      <a class="article-title" href="/2015/07/02/2015-7-2-newsfeed/">社交网络的feed系统</a>
     </h1>
   
 
@@ -546,24 +546,13 @@ git push origin test:master         // 提交本地test分支作为远程的mast
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>##object c</p>
-<ol>
-<li>@property内存管理策略的选择</li>
-</ol>
-<p>1.1非ARC</p>
-<p>1.1.1 copy : 只用于NSString、block；</p>
-<p>1.1.2 retain : 除NSString、block以外的OC对象；指针复制</p>
-<p>1.1.3 assign : 基本数据类型、枚举、结构体（非OC对象），当2个对象相互引用，一端用retain，一端用assign</p>
-<p>1.2.ARC</p>
-<p>1.2.1 copy : 只用于NSString、block；</p>
-<p>1.2.2 strong : 除NSString、block以外的OC对象；</p>
-<p>1.2.3 weak : 当2个对象相互引用，一端用strong，一端用weak；</p>
-<p>1.2.4 assgin : 基本数据类型、枚举、结构体（非OC对象）</p>
+        <p>##newsfeed</p>
+<p><a href="https://github.com/tschellenbach/Stream-Framework" target="_blank" rel="noopener">https://github.com/tschellenbach/Stream-Framework</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/07/02/2015-7-2-oc_note/" data-id="ck521h113002ilc7k3n6v4c81" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/07/02/2015-7-2-newsfeed/" data-id="ck521h112002hlc7k8jb8bey9" class="article-share-link">Share</a>
       
       
     </footer>
@@ -609,10 +598,6 @@ git push origin test:master         // 提交本地test分支作为远程的mast
       <ul>
         
           <li>
-            <a href="/2020/01/06/2018-6-3-%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/">2018-6-3-代码规范</a>
-          </li>
-        
-          <li>
             <a href="/2020/01/05/2020-1-5-datax/">离线同步工具DataX</a>
           </li>
         
@@ -626,6 +611,10 @@ git push origin test:master         // 提交本地test分支作为远程的mast
         
           <li>
             <a href="/2019/12/26/2019-12-26-lambda/">lambda</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/26/2019-12-26-listener/">观察者模式</a>
           </li>
         
       </ul>

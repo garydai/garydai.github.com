@@ -64,72 +64,6 @@
       <div class="outer">
         <section id="main">
   
-    <article id="default-2019-10-28-synchronized" class="article article-type-default" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/10/28/2019-10-28-synchronized/" class="article-date">
-  <time datetime="2019-10-27T16:00:00.000Z" itemprop="datePublished">2019-10-28</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/28/2019-10-28-synchronized/">synchronized</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h2><p>当执行 monitorenter 时，如果目标锁对象的计数器为 0，那么说明它没有被其他线程所持有。在这个情况下，Java 虚拟机会将该锁对象的持有线程设置为当前线程，并且将其计数器加 1。</p>
-<p>对象头中的标记字段（mark word）。它的最后两位便被用来表示该对象的锁状态。其中，00 代表轻量级锁，01 代表无锁（或偏向锁），10 代表重量级锁，11 则跟垃圾回收算法的标记有关</p>
-<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191029102506877.png" alt="image-20191029102506877"></p>
-<p>当对象状态为偏向锁（biasable）时，<code>mark word</code>存储的是偏向的线程ID；当状态为轻量级锁（lightweight locked）时，<code>mark word</code>存储的是指向线程栈中<code>Lock Record</code>的指针；当状态为重量级锁（inflated）时，为指向堆中的monitor对象的指针。</p>
-<h3 id="重量级锁"><a href="#重量级锁" class="headerlink" title="重量级锁"></a>重量级锁</h3><p>加锁阻塞，解锁唤醒，涉及到系统调用，性能不好</p>
-<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191029112625089.png" alt="image-20191029112625089"></p>
-<p>当一个线程尝试获得锁时，如果该锁已经被占用，则会将该线程封装成一个ObjectWaiter对象插入到cxq的队列尾部，然后暂停当前线程。当持有锁的线程释放锁前，会将cxq中的所有元素移动到EntryList中去，并唤醒EntryList的队首线程。</p>
-<p>如果一个线程在同步块中调用了<code>Object#wait</code>方法，会将该线程对应的ObjectWaiter从EntryList移除并加入到WaitSet中，然后释放锁。当wait的线程被notify之后，会将对应的ObjectWaiter从WaitSet移动到EntryList中。</p>
-<h3 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h3><p><strong>多个线程在不同的时间段请求同一把锁，也就是说没有锁竞争</strong></p>
-<p>当进行加锁操作时，Java 虚拟机会判断是否已经是重量级锁。如果不是，它会在当前线程的<strong>当前栈桢中划出一块空间，作为该锁的锁记录，并且将锁对象的标记字段复制到该锁记录中</strong></p>
-<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191029094053730.png" alt="image-20191029094053730"></p>
-<h5 id="加锁过程"><a href="#加锁过程" class="headerlink" title="加锁过程"></a>加锁过程</h5><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191029110219278.png" alt="image-20191029110219278"></p>
-<h5 id="解锁过程"><a href="#解锁过程" class="headerlink" title="解锁过程"></a>解锁过程</h5><p>1.遍历线程栈,找到所有obj字段等于当前锁对象的Lock Record。</p>
-<p>2.如果Lock Record的Displaced Mark Word为null，代表这是一次重入，将obj设置为null后continue。</p>
-<p>3.如果Lock Record的Displaced Mark Word不为null，则利用CAS指令将对象头的mark word恢复成为Displaced Mark Word。如果成功，则continue，否则膨胀为重量级锁。</p>
-<h3 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h3><p><strong>假设只有一个线程获取锁</strong></p>
-<p>重量级、轻量级加锁解锁都有一个或多个cas操作</p>
-<p>在JDK1.6中为了<strong>提高一个对象在一段很长的时间内都只被一个线程用做锁对象场景下的性能</strong>，引入了偏向锁，在第一次获得锁时，会有一个CAS操作，之后该线程再获取锁，只会执行几个简单的命令，而不是开销相对较大的CAS命令。</p>
-<p><strong>在线程进行加锁时，如果该锁对象支持偏向锁，那么 Java 虚拟机会通过 CAS 操作，将当前线程的地址记录在锁对象的标记字段之中，并且将标记字段的最后三位设置为 101。</strong></p>
-<p>每当有线程请求这把锁，Java 虚拟机只需判断锁对象标记字段中：最后三位是否为 101，是否包含当前线程的地址，以及 epoch 值是否和锁对象的类的 epoch 值相同。如果都满足，那么当前线程持有该偏向锁，可以直接返回。</p>
-<p>当请求加锁的线程和锁对象标记字段保持的线程地址不匹配时（而且 epoch 值相等，如若不等，那么当前线程可以将该锁重偏向至自己），Java 虚拟机需要撤销该偏向锁。这个撤销过程非常麻烦，它要求持有偏向锁的线程到达安全点，再将偏向锁替换成轻量级锁。</p>
-<h5 id="解锁"><a href="#解锁" class="headerlink" title="解锁"></a>解锁</h5><p>因此偏向锁的解锁很简单，仅仅将栈中的最近一条<code>lock record</code>的<code>obj</code>字段设置为null。需要注意的是，偏向锁的解锁步骤中<strong>并不会修改对象头中的thread id。</strong></p>
-<h3 id="synchronized加锁过程"><a href="#synchronized加锁过程" class="headerlink" title="synchronized加锁过程"></a>synchronized加锁过程</h3><p>先偏向锁，再膨胀成轻量最后到重量级锁</p>
-<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191028132658880.png" alt="image-20191028132658880"></p>
-<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/synchronized10.png" alt="synchronized"></p>
-<h4 id="safepoint"><a href="#safepoint" class="headerlink" title="safepoint"></a>safepoint</h4><p>那么当Java线程运行到safepoint的时候，JVM如何让Java线程挂起呢？这是一个复杂的操作。很多文章里面说了JIT编译模式下，编译器会把很多safepoint检查的操作插入到编译器的指令中</p>
-<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0</span>x01b6d627: call   <span class="number">0</span>x01b2b210         ; OopMap&#123;[<span class="number">60</span>]=Oop off=<span class="number">460</span>&#125;    </span><br><span class="line">                                       ;*invokeinterface size    </span><br><span class="line">                                       ; - Client1::main@<span class="number">113</span> (line <span class="number">23</span>)    </span><br><span class="line">                                       ;   &#123;virtual_call&#125;    </span><br><span class="line"> <span class="number">0</span>x01b6d62c: nop                       ; OopMap&#123;[<span class="number">60</span>]=Oop off=<span class="number">461</span>&#125;    </span><br><span class="line">                                       ;*if_icmplt    </span><br><span class="line">                                       ; - Client1::main@<span class="number">118</span> (line <span class="number">23</span>)    </span><br><span class="line"> <span class="number">0</span>x01b6d62d: test   %eax,<span class="number">0</span>x160100      ;   &#123;poll&#125;    </span><br><span class="line"> <span class="number">0</span>x01b6d633: mov    <span class="number">0</span>x50(%esp),%esi    </span><br><span class="line"> <span class="number">0</span>x01b6d637: cmp    %eax,%esi</span><br></pre></td></tr></table></figure>
-
-<p>test  %eax,0x160100 就是一个safepoint polling page操作。当JVM要停止所有的Java线程时会把一个特定内存页设置为不可读，那么当Java线程读到这个位置的时候就会被挂起</p>
-<h3 id="refrence"><a href="#refrence" class="headerlink" title="refrence"></a>refrence</h3><p><a href="https://blog.51cto.com/14440216/2426781" target="_blank" rel="noopener">https://blog.51cto.com/14440216/2426781</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/10/28/2019-10-28-synchronized/" data-id="ck521h144005ilc7k6sry53l8" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
     <article id="default-2019-10-27-invoke" class="article article-type-default" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/10/27/2019-10-27-invoke/" class="article-date">
@@ -622,6 +556,53 @@
 
 
   
+    <article id="default-2019-9-21-juc" class="article article-type-default" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/21/2019-9-21-juc/" class="article-date">
+  <time datetime="2019-09-20T16:00:00.000Z" itemprop="datePublished">2019-09-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/21/2019-9-21-juc/">juc</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="juc"><a href="#juc" class="headerlink" title="juc"></a>juc</h2><h3 id="aqs"><a href="#aqs" class="headerlink" title="aqs"></a>aqs</h3><p>利用aqs实现ReentrantLock/CountDownLatch/Semphore</p>
+<h3 id="并发队列"><a href="#并发队列" class="headerlink" title="并发队列"></a>并发队列</h3><p>ConcurrentLinkedQueue</p>
+<p>不阻塞，自循环、链表实现</p>
+<p>LinkedBlockingQueue</p>
+<p>阻塞，生产者-消费者模型、链表实现</p>
+<p>ArrayBlockingQueue</p>
+<p>阻塞，生产者-消费者模型、数组实现</p>
+<p>PriorityBlockingQueue</p>
+<p>带优先级的无界阻塞队列、最小堆</p>
+<p>DelayQueue</p>
+<p>利用PriorityBlockingQueue，最快到期的先出</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/09/21/2019-9-21-juc/" data-id="ck521h155006nlc7k8xomgdj1" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
 
 
   <nav id="page-nav">
@@ -658,10 +639,6 @@
       <ul>
         
           <li>
-            <a href="/2020/01/06/2018-6-3-%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/">2018-6-3-代码规范</a>
-          </li>
-        
-          <li>
             <a href="/2020/01/05/2020-1-5-datax/">离线同步工具DataX</a>
           </li>
         
@@ -675,6 +652,10 @@
         
           <li>
             <a href="/2019/12/26/2019-12-26-lambda/">lambda</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/26/2019-12-26-listener/">观察者模式</a>
           </li>
         
       </ul>

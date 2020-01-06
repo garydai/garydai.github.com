@@ -101,43 +101,6 @@
 
 
   
-    <article id="default-2019-4-28-tcp" class="article article-type-default" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/04/28/2019-4-28-tcp/" class="article-date">
-  <time datetime="2019-04-27T16:00:00.000Z" itemprop="datePublished">2019-04-28</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/28/2019-4-28-tcp/">tcp</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="tcp"><a href="#tcp" class="headerlink" title="tcp"></a>tcp</h2><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/tcp1.png" alt=""><br><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/tcp2.png" alt=""><br><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/tcp3.jpg" alt=""></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/04/28/2019-4-28-tcp/" data-id="ck521h14u0069lc7k3qra2npt" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
     <article id="default-2019-4-28-分布式id" class="article article-type-default" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/04/28/2019-4-28-%E5%88%86%E5%B8%83%E5%BC%8Fid/" class="article-date">
@@ -241,84 +204,6 @@
     </div>
     <footer class="article-footer">
       <a data-url="http://yoursite.com/2019/04/03/2019-4-3-encryption/" data-id="ck521h14v006alc7k13yo3vsc" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="default-2019-3-19-监控" class="article article-type-default" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/03/19/2019-3-19-%E7%9B%91%E6%8E%A7/" class="article-date">
-  <time datetime="2019-03-18T16:00:00.000Z" itemprop="datePublished">2019-03-19</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/19/2019-3-19-%E7%9B%91%E6%8E%A7/">监控</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="监控"><a href="#监控" class="headerlink" title="监控"></a>监控</h2><h3 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h3><p>prometheus</p>
-<p>grafana</p>
-<h3 id="添加到springboot"><a href="#添加到springboot" class="headerlink" title="添加到springboot"></a>添加到springboot</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Pom依赖</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;io.micrometer&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;micrometer-registry-prometheus&lt;&#x2F;artifactId&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br><span class="line">项目开启监控</span><br><span class="line">management.endpoint.metrics.enabled&#x3D;true</span><br><span class="line">management.endpoints.web.exposure.include&#x3D;*</span><br><span class="line">management.endpoint.prometheus.enabled&#x3D;true</span><br><span class="line">management.metrics.export.prometheus.enabled&#x3D;true</span><br></pre></td></tr></table></figure>
-<h3 id="安装grafana"><a href="#安装grafana" class="headerlink" title="安装grafana"></a>安装grafana</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 3000:3000 --name&#x3D;grafana -v &#x2F;Users&#x2F;daitechang&#x2F;data&#x2F;grafana:&#x2F;var&#x2F;lib&#x2F;grafana grafana&#x2F;grafana</span><br><span class="line"></span><br><span class="line">http:&#x2F;&#x2F;localhost:3000</span><br><span class="line"></span><br><span class="line">导入现成的模版</span><br><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;percona&#x2F;grafana-dashboards.git</span><br></pre></td></tr></table></figure>
-<h3 id="监控数据库"><a href="#监控数据库" class="headerlink" title="监控数据库"></a>监控数据库</h3><p>安装mysqld_exporter</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">wget https:&#x2F;&#x2F;github.com&#x2F;prometheus&#x2F;mysqld_exporter&#x2F;releases&#x2F;download&#x2F;v0.11.0&#x2F;mysqld_exporter-0.11.0.linux-amd64.tar.gz</span><br><span class="line"></span><br><span class="line">tar -xvf mysqld_exporter-0.11.0.linux-amd64.tar.gz</span><br><span class="line"></span><br><span class="line">数据库设置权限</span><br><span class="line">GRANT REPLICATION CLIENT, PROCESS ON *.* TO &#39;exporter&#39;@&#39;localhost&#39; identified by &#39;123456&#39;;</span><br><span class="line">GRANT SELECT ON performance_schema.* TO &#39;exporter&#39;@&#39;localhost&#39;;</span><br><span class="line">flush privileges;</span><br><span class="line"></span><br><span class="line">Running using an environment variable:</span><br><span class="line"></span><br><span class="line">创建.my.cnf</span><br><span class="line">[client]</span><br><span class="line">user&#x3D;exporter</span><br><span class="line">password&#x3D;123456</span><br><span class="line">hostname&#x3D;</span><br><span class="line">port&#x3D;</span><br><span class="line"></span><br><span class="line">运行</span><br><span class="line">.&#x2F;mysqld_exporter --config.my-cnf&#x3D;&quot;.my.cnf&quot; &amp;</span><br><span class="line"></span><br><span class="line">配置prometheus</span><br><span class="line">- job_name: mysql</span><br><span class="line">    static_configs:</span><br><span class="line">      - targets: [&#39;192.168.1.120:9104&#39;]</span><br><span class="line">        labels:</span><br><span class="line">          instance: db1</span><br></pre></td></tr></table></figure>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/19/2019-3-19-%E7%9B%91%E6%8E%A7/" data-id="ck521h14s0065lc7kh7u2dln3" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="default-2019-3-19-concurrent" class="article article-type-default" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/03/19/2019-3-19-concurrent/" class="article-date">
-  <time datetime="2019-03-18T16:00:00.000Z" itemprop="datePublished">2019-03-19</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/19/2019-3-19-concurrent/">concurrent</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="concurrent"><a href="#concurrent" class="headerlink" title="concurrent"></a>concurrent</h2><p>fork/join模式</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/19/2019-3-19-concurrent/" data-id="ck521h14r0064lc7k02ea0j60" class="article-share-link">Share</a>
       
       
     </footer>
@@ -445,10 +330,10 @@
 
 
   
-    <article id="default-2019-3-15-看板" class="article article-type-default" itemscope itemprop="blogPost">
+    <article id="default-2019-3-19-concurrent" class="article article-type-default" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/03/15/2019-3-15-%E7%9C%8B%E6%9D%BF/" class="article-date">
-  <time datetime="2019-03-14T16:00:00.000Z" itemprop="datePublished">2019-03-15</time>
+    <a href="/2019/03/19/2019-3-19-concurrent/" class="article-date">
+  <time datetime="2019-03-18T16:00:00.000Z" itemprop="datePublished">2019-03-19</time>
 </a>
     
   </div>
@@ -459,7 +344,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/15/2019-3-15-%E7%9C%8B%E6%9D%BF/">看板</a>
+      <a class="article-title" href="/2019/03/19/2019-3-19-concurrent/">concurrent</a>
     </h1>
   
 
@@ -467,16 +352,53 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="看板"><a href="#看板" class="headerlink" title="看板"></a>看板</h2><h3 id="将流程可视化"><a href="#将流程可视化" class="headerlink" title="将流程可视化"></a>将流程可视化</h3><p>把工作拆分成小块，一张卡片写一件任务，再把卡片放到墙上</p>
-<p>把每列都起一个名字，显示每件任务在流程中处于什么位置</p>
-<h3 id="限制在制品"><a href="#限制在制品" class="headerlink" title="限制在制品"></a>限制在制品</h3><p>明确限制流程中每个状态最多任务数</p>
-<h3 id="度量生命周期（完成一件任务的平均时间）"><a href="#度量生命周期（完成一件任务的平均时间）" class="headerlink" title="度量生命周期（完成一件任务的平均时间）"></a>度量生命周期（完成一件任务的平均时间）</h3><p>对流程进行调优，尽可能缩短生产周期，并使其可预测</p>
-<p>想提高做事效率，最有效的方式是让流动平滑起来，按能力限制工作数量，而不是让人或者让人工作得更辛苦。</p>
+        <h2 id="concurrent"><a href="#concurrent" class="headerlink" title="concurrent"></a>concurrent</h2><p>fork/join模式</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/15/2019-3-15-%E7%9C%8B%E6%9D%BF/" data-id="ck521h14q0063lc7k03ck0ts1" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/19/2019-3-19-concurrent/" data-id="ck521h14r0064lc7k02ea0j60" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="default-2019-3-19-监控" class="article article-type-default" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/03/19/2019-3-19-%E7%9B%91%E6%8E%A7/" class="article-date">
+  <time datetime="2019-03-18T16:00:00.000Z" itemprop="datePublished">2019-03-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/19/2019-3-19-%E7%9B%91%E6%8E%A7/">监控</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="监控"><a href="#监控" class="headerlink" title="监控"></a>监控</h2><h3 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h3><p>prometheus</p>
+<p>grafana</p>
+<h3 id="添加到springboot"><a href="#添加到springboot" class="headerlink" title="添加到springboot"></a>添加到springboot</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Pom依赖</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;io.micrometer&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;micrometer-registry-prometheus&lt;&#x2F;artifactId&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br><span class="line">项目开启监控</span><br><span class="line">management.endpoint.metrics.enabled&#x3D;true</span><br><span class="line">management.endpoints.web.exposure.include&#x3D;*</span><br><span class="line">management.endpoint.prometheus.enabled&#x3D;true</span><br><span class="line">management.metrics.export.prometheus.enabled&#x3D;true</span><br></pre></td></tr></table></figure>
+<h3 id="安装grafana"><a href="#安装grafana" class="headerlink" title="安装grafana"></a>安装grafana</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 3000:3000 --name&#x3D;grafana -v &#x2F;Users&#x2F;daitechang&#x2F;data&#x2F;grafana:&#x2F;var&#x2F;lib&#x2F;grafana grafana&#x2F;grafana</span><br><span class="line"></span><br><span class="line">http:&#x2F;&#x2F;localhost:3000</span><br><span class="line"></span><br><span class="line">导入现成的模版</span><br><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;percona&#x2F;grafana-dashboards.git</span><br></pre></td></tr></table></figure>
+<h3 id="监控数据库"><a href="#监控数据库" class="headerlink" title="监控数据库"></a>监控数据库</h3><p>安装mysqld_exporter</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">wget https:&#x2F;&#x2F;github.com&#x2F;prometheus&#x2F;mysqld_exporter&#x2F;releases&#x2F;download&#x2F;v0.11.0&#x2F;mysqld_exporter-0.11.0.linux-amd64.tar.gz</span><br><span class="line"></span><br><span class="line">tar -xvf mysqld_exporter-0.11.0.linux-amd64.tar.gz</span><br><span class="line"></span><br><span class="line">数据库设置权限</span><br><span class="line">GRANT REPLICATION CLIENT, PROCESS ON *.* TO &#39;exporter&#39;@&#39;localhost&#39; identified by &#39;123456&#39;;</span><br><span class="line">GRANT SELECT ON performance_schema.* TO &#39;exporter&#39;@&#39;localhost&#39;;</span><br><span class="line">flush privileges;</span><br><span class="line"></span><br><span class="line">Running using an environment variable:</span><br><span class="line"></span><br><span class="line">创建.my.cnf</span><br><span class="line">[client]</span><br><span class="line">user&#x3D;exporter</span><br><span class="line">password&#x3D;123456</span><br><span class="line">hostname&#x3D;</span><br><span class="line">port&#x3D;</span><br><span class="line"></span><br><span class="line">运行</span><br><span class="line">.&#x2F;mysqld_exporter --config.my-cnf&#x3D;&quot;.my.cnf&quot; &amp;</span><br><span class="line"></span><br><span class="line">配置prometheus</span><br><span class="line">- job_name: mysql</span><br><span class="line">    static_configs:</span><br><span class="line">      - targets: [&#39;192.168.1.120:9104&#39;]</span><br><span class="line">        labels:</span><br><span class="line">          instance: db1</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/03/19/2019-3-19-%E7%9B%91%E6%8E%A7/" data-id="ck521h14s0065lc7kh7u2dln3" class="article-share-link">Share</a>
       
       
     </footer>
@@ -526,6 +448,83 @@
 
 
   
+    <article id="default-2019-3-15-看板" class="article article-type-default" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/03/15/2019-3-15-%E7%9C%8B%E6%9D%BF/" class="article-date">
+  <time datetime="2019-03-14T16:00:00.000Z" itemprop="datePublished">2019-03-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/15/2019-3-15-%E7%9C%8B%E6%9D%BF/">看板</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="看板"><a href="#看板" class="headerlink" title="看板"></a>看板</h2><h3 id="将流程可视化"><a href="#将流程可视化" class="headerlink" title="将流程可视化"></a>将流程可视化</h3><p>把工作拆分成小块，一张卡片写一件任务，再把卡片放到墙上</p>
+<p>把每列都起一个名字，显示每件任务在流程中处于什么位置</p>
+<h3 id="限制在制品"><a href="#限制在制品" class="headerlink" title="限制在制品"></a>限制在制品</h3><p>明确限制流程中每个状态最多任务数</p>
+<h3 id="度量生命周期（完成一件任务的平均时间）"><a href="#度量生命周期（完成一件任务的平均时间）" class="headerlink" title="度量生命周期（完成一件任务的平均时间）"></a>度量生命周期（完成一件任务的平均时间）</h3><p>对流程进行调优，尽可能缩短生产周期，并使其可预测</p>
+<p>想提高做事效率，最有效的方式是让流动平滑起来，按能力限制工作数量，而不是让人或者让人工作得更辛苦。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/03/15/2019-3-15-%E7%9C%8B%E6%9D%BF/" data-id="ck521h14q0063lc7k03ck0ts1" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="default-2019-3-12-apigateway" class="article article-type-default" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/03/12/2019-3-12-apigateway/" class="article-date">
+  <time datetime="2019-03-11T16:00:00.000Z" itemprop="datePublished">2019-03-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/12/2019-3-12-apigateway/">api gateway</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="api-gateway"><a href="#api-gateway" class="headerlink" title="api gateway"></a>api gateway</h2><h3 id="kong"><a href="#kong" class="headerlink" title="kong"></a>kong</h3><h3 id="zuul"><a href="#zuul" class="headerlink" title="zuul"></a>zuul</h3><h3 id="spring-cloud-gateway"><a href="#spring-cloud-gateway" class="headerlink" title="spring cloud gateway"></a>spring cloud gateway</h3>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/03/12/2019-3-12-apigateway/" data-id="ck521h14o0061lc7k7lw56mc9" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
 
 
   <nav id="page-nav">
@@ -562,10 +561,6 @@
       <ul>
         
           <li>
-            <a href="/2020/01/06/2018-6-3-%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/">2018-6-3-代码规范</a>
-          </li>
-        
-          <li>
             <a href="/2020/01/05/2020-1-5-datax/">离线同步工具DataX</a>
           </li>
         
@@ -579,6 +574,10 @@
         
           <li>
             <a href="/2019/12/26/2019-12-26-lambda/">lambda</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/26/2019-12-26-listener/">观察者模式</a>
           </li>
         
       </ul>

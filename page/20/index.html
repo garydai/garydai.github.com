@@ -64,9 +64,9 @@
       <div class="outer">
         <section id="main">
   
-    <article id="default-2015-7-2-newsfeed" class="article article-type-default" itemscope itemprop="blogPost">
+    <article id="default-2015-7-2-oc_note" class="article article-type-default" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2015/07/02/2015-7-2-newsfeed/" class="article-date">
+    <a href="/2015/07/02/2015-7-2-oc_note/" class="article-date">
   <time datetime="2015-07-01T16:00:00.000Z" itemprop="datePublished">2015-07-02</time>
 </a>
     
@@ -78,7 +78,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/07/02/2015-7-2-newsfeed/">社交网络的feed系统</a>
+      <a class="article-title" href="/2015/07/02/2015-7-2-oc_note/">object c备忘</a>
     </h1>
   
 
@@ -86,13 +86,24 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>##newsfeed</p>
-<p><a href="https://github.com/tschellenbach/Stream-Framework" target="_blank" rel="noopener">https://github.com/tschellenbach/Stream-Framework</a></p>
+        <p>##object c</p>
+<ol>
+<li>@property内存管理策略的选择</li>
+</ol>
+<p>1.1非ARC</p>
+<p>1.1.1 copy : 只用于NSString、block；</p>
+<p>1.1.2 retain : 除NSString、block以外的OC对象；指针复制</p>
+<p>1.1.3 assign : 基本数据类型、枚举、结构体（非OC对象），当2个对象相互引用，一端用retain，一端用assign</p>
+<p>1.2.ARC</p>
+<p>1.2.1 copy : 只用于NSString、block；</p>
+<p>1.2.2 strong : 除NSString、block以外的OC对象；</p>
+<p>1.2.3 weak : 当2个对象相互引用，一端用strong，一端用weak；</p>
+<p>1.2.4 assgin : 基本数据类型、枚举、结构体（非OC对象）</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/07/02/2015-7-2-newsfeed/" data-id="ck521h112002hlc7k8jb8bey9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/07/02/2015-7-2-oc_note/" data-id="ck521h113002ilc7k3n6v4c81" class="article-share-link">Share</a>
       
       
     </footer>
@@ -822,339 +833,6 @@ class TerminalExpression extends  AbstractExpression {
     </div>
     <footer class="article-footer">
       <a data-url="http://yoursite.com/2015/03/02/2015-3-2-design_pattern/" data-id="ck521h17i006ulc7k9qvn0y7c" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="default-2015-2-15-scrapy" class="article article-type-default" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/02/15/2015-2-15-scrapy/" class="article-date">
-  <time datetime="2015-02-14T16:00:00.000Z" itemprop="datePublished">2015-02-15</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/15/2015-2-15-scrapy/">scrapy</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>##scrapy</p>
-<p>单进程，基于twisted(利用epoll或其他多路复用)</p>
-<p>流程</p>
-<pre><code>settings = conf.settings
-inproject = inside_project()
-cmds = _get_commands_dict(settings, inproject)
-cmdname = _pop_command_name(argv)
-cmd = cmds[cmdname]
-...
-cmd.crawler_process = CrawlerProcess(settings)
-cmd.run()</code></pre><p>1.读取scrapy.cgf配置文件</p>
-<pre><code>[settings]
-default = m_p.settings
-
-[deploy]
-#url = http://localhost:6800/
-project = m_p</code></pre><p>2.读取setting设置文件</p>
-<pre><code>BOT_NAME = &apos;m_p&apos;
-
-SPIDER_MODULES = [&apos;m_p.spiders&apos;]
-NEWSPIDER_MODULE = &apos;m_p.spiders&apos;
-
-ITEM_PIPELINES = {&apos;m_p.pipelines.mysql_pipeline&apos;:2, &apos;m_p.pipelines.download_image_pipeline&apos;:1 }
-
-SERVER = &quot;localhost&quot;
-PORT = 3306
-DB = &quot;music&quot;
-COLLECTION = &quot;music&quot;
-USER = &apos;root&apos;
-PASSWORD = &apos;&apos;
-CHARSET = &apos;utf8&apos;
-IMAGES_STORE=&apos;/home/admin/nginx/html/yii/demos/music_web/images/cover/&apos;</code></pre><p>3.导入相应的module爬虫模块</p>
-<p>4.解析命令行参数</p>
-<p>5.设置爬虫程序入口</p>
-<p>6.运行cmd</p>
-<pre><code>def run(self, args, opts):
-     if len(args) &lt; 1:
-         raise UsageError()
-     elif len(args) &gt; 1:
-         raise UsageError(&quot;running &apos;scrapy crawl&apos; with more than one spider is no longer supported&quot;)
-     spname = args[0]
-
-     self.crawler_process.crawl(spname, **opts.spargs)
-     self.crawler_process.start()
-
-
-
-
- crawler.py  
-
- class CrawlerRunner(object):
-
- def crawl(self, spidercls, *args, **kwargs):
-     crawler = self._create_crawler(spidercls)
-     self._setup_crawler_logging(crawler)
-     self.crawlers.add(crawler)
-     d = crawler.crawl(*args, **kwargs)
-     self._active.add(d)
-
-     def _done(result):
-         self.crawlers.discard(crawler)
-         self._active.discard(d)
-         return result
-
-     return d.addBoth(_done)
-
-
- class Crawler(object):
-
-
- def crawl(self, *args, **kwargs):
-     assert not self.crawling, &quot;Crawling already taking place&quot;
-     self.crawling = True
-
-     try:
-         self.spider = self._create_spider(*args, **kwargs)
-         self.engine = self._create_engine()
-         start_requests = iter(self.spider.start_requests())
-         yield self.engine.open_spider(self.spider, start_requests)  open engine&apos;s spider
-         yield defer.maybeDeferred(self.engine.start)
-     except Exception:
-         self.crawling = False
-         raise
-
-
- class ExecutionEngine(object):
-
- @defer.inlineCallbacks
- def open_spider(self, spider, start_requests=(), close_if_idle=True):
-     assert self.has_capacity(), &quot;No free spider slot when opening %r&quot; % \
-         spider.name
-     log.msg(&quot;Spider opened&quot;, spider=spider)
-     nextcall = CallLaterOnce(self._next_request, spider)
-     scheduler = self.scheduler_cls.from_crawler(self.crawler)
-     start_requests = yield self.scraper.spidermw.process_start_requests(start_requests, spider)
-     slot = Slot(start_requests, close_if_idle, nextcall, scheduler)
-     self.slot = slot
-     self.spider = spider
-     yield scheduler.open(spider)
-     yield self.scraper.open_spider(spider)
-     self.crawler.stats.open_spider(spider)
-     yield self.signals.send_catch_log_deferred(signals.spider_opened, spider=spider)
-     slot.nextcall.schedule()
-
-
- class CrawlerProcess(CrawlerRunner):
-
- def start(self, stop_after_crawl=True):
-     if stop_after_crawl:
-         d = self.join()
-         # Don&apos;t start the reactor if the deferreds are already fired
-         if d.called:
-             return
-         d.addBoth(lambda _: self._stop_reactor())
-
-     if self.settings.getbool(&apos;DNSCACHE_ENABLED&apos;):
-         reactor.installResolver(CachingThreadedResolver(reactor))
-
-     reactor.addSystemEventTrigger(&apos;before&apos;, &apos;shutdown&apos;, self.stop)
-     reactor.run(installSignalHandlers=False)  # blocking call</code></pre><p>用了Twisted-&gt;reactor</p>
-<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/scrapy.jpg" alt=""></p>
-<p>1.engine从spider获取要爬取的url</p>
-<p>2.engine将url交给调度器</p>
-<p>3.engine从调度器获取要爬取的url</p>
-<p> _next_request_from_scheduler -&gt;slot.scheduler.next_request()</p>
-<pre><code>def _next_request_from_scheduler(self, spider):
-     slot = self.slot
-     request = slot.scheduler.next_request()
-     if not request:
-         return
-     d = self._download(request, spider)
-     d.addBoth(self._handle_downloader_output, request, spider)
-     d.addErrback(log.msg, spider=spider)
-     d.addBoth(lambda _: slot.remove_request(request))
-     d.addErrback(log.msg, spider=spider)
-     d.addBoth(lambda _: slot.nextcall.schedule())
-     d.addErrback(log.msg, spider=spider)
-     return d</code></pre><p>4.engine将url通过下载中间件交给下载器</p>
-<pre><code>slot.add_request(request)
-
-    dwld = self.downloader.fetch(request, spider)
-    dwld.addCallbacks(_on_success)
-    dwld.addBoth(_on_complete)</code></pre><p>5.下载完毕后，下载器将response交给engine</p>
-<p>6.engine将response通过spider中间件交给spider</p>
-<p>7.spider处理response，将item和下一个请求url返回给engine</p>
-<p>8.engine将item交给item pipeline,将url交给调度器</p>
-<p>9.第2步</p>
-<pre><code>class CrawlerProcess(CrawlerRunner):
-    &quot;&quot;&quot;A class to run multiple scrapy crawlers in a process simultaneously&quot;&quot;&quot;
-
-    def __init__(self, settings):
-        super(CrawlerProcess, self).__init__(settings)
-        install_shutdown_handlers(self._signal_shutdown)
-        self.stopping = False
-        self.log_observer = log.start_from_settings(self.settings)
-        log.scrapy_info(settings)
-
-    def _signal_shutdown(self, signum, _):
-        install_shutdown_handlers(self._signal_kill)
-        signame = signal_names[signum]
-        log.msg(format=&quot;Received %(signame)s, shutting down gracefully. Send again to force &quot;,
-                level=log.INFO, signame=signame)
-        reactor.callFromThread(self.stop)
-
-    def _signal_kill(self, signum, _):
-        install_shutdown_handlers(signal.SIG_IGN)
-        signame = signal_names[signum]
-        log.msg(format=&apos;Received %(signame)s twice, forcing unclean shutdown&apos;,
-                level=log.INFO, signame=signame)
-        self._stop_logging()
-        reactor.callFromThread(self._stop_reactor)
-
-    def start(self, stop_after_crawl=True):
-        if stop_after_crawl:
-            d = self.join()
-            # Don&apos;t start the reactor if the deferreds are already fired
-            if d.called:
-                return
-            d.addBoth(lambda _: self._stop_reactor())
-
-        if self.settings.getbool(&apos;DNSCACHE_ENABLED&apos;):
-            reactor.installResolver(CachingThreadedResolver(reactor))
-
-        reactor.addSystemEventTrigger(&apos;before&apos;, &apos;shutdown&apos;, self.stop)
-        reactor.run(installSignalHandlers=False)  # blocking call
-
-    def _stop_logging(self):
-        if self.log_observer:
-            self.log_observer.stop()
-
-    def _stop_reactor(self, _=None):
-        try:
-            reactor.stop()
-        except RuntimeError:  # raised if already stopped or in shutdown stage
-            pass
-
-
-
-class CrawlerRunner(object):
-
-    def __init__(self, settings):
-        self.settings = settings
-        smcls = load_object(settings[&apos;SPIDER_MANAGER_CLASS&apos;])
-        self.spiders = smcls.from_settings(settings.frozencopy())
-        self.crawlers = set()
-        self._active = set()
-
-    def crawl(self, spidercls, *args, **kwargs):
-        crawler = self._create_crawler(spidercls)
-        self._setup_crawler_logging(crawler)
-        self.crawlers.add(crawler)
-        d = crawler.crawl(*args, **kwargs)
-        self._active.add(d)
-
-        def _done(result):
-            self.crawlers.discard(crawler)
-            self._active.discard(d)
-            return result
-
-        return d.addBoth(_done)
-
-    def _create_crawler(self, spidercls):
-        if isinstance(spidercls, six.string_types):
-            spidercls = self.spiders.load(spidercls)
-
-        crawler_settings = self.settings.copy()
-        spidercls.update_settings(crawler_settings)
-        crawler_settings.freeze()
-        return Crawler(spidercls, crawler_settings)
-
-    def _setup_crawler_logging(self, crawler):
-        log_observer = log.start_from_crawler(crawler)
-        if log_observer:
-            crawler.signals.connect(log_observer.stop, signals.engine_stopped)
-
-    def stop(self):
-        return defer.DeferredList([c.stop() for c in list(self.crawlers)])
-
-    @defer.inlineCallbacks
-    def join(self):
-        &quot;&quot;&quot;Wait for all managed crawlers to complete&quot;&quot;&quot;
-        while self._active:
-            yield defer.DeferredList(self._active)</code></pre>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/02/15/2015-2-15-scrapy/" data-id="ck521h17h006tlc7k3jrh3d9g" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="default-2015-2-15-python闭包" class="article article-type-default" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/02/15/2015-2-15-python%E9%97%AD%E5%8C%85/" class="article-date">
-  <time datetime="2015-02-14T16:00:00.000Z" itemprop="datePublished">2015-02-15</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/15/2015-2-15-python%E9%97%AD%E5%8C%85/">闭包</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h2><p>定义在函数内部的函数</p>
-<p>如javascript</p>
-<pre><code>function f1(){
-
-　　　　var n=999;
-
-　　　　function f2(){
-　　　　　　alert(n); 
-　　　　}
-
-　　　　return f2;
-
-　　}
-
-　　var result=f1();
-
-　　result(); // 999
-　　</code></pre><p>如果f2函数被赋值给全局变量，那么函数中的变量会一直保存在内存中</p>
-<p>函数对象中会保存函数里的变量和与该函数对象属于相同作用域的变量（即函数外）</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/02/15/2015-2-15-python%E9%97%AD%E5%8C%85/" data-id="ck521h10x002blc7kg54i5jly" class="article-share-link">Share</a>
       
       
     </footer>
@@ -2174,6 +1852,339 @@ sudo pip install Scrapy --trusted-host pypi.python.org</code></pre>
 
 
   
+    <article id="default-2015-2-15-scrapy" class="article article-type-default" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/02/15/2015-2-15-scrapy/" class="article-date">
+  <time datetime="2015-02-14T16:00:00.000Z" itemprop="datePublished">2015-02-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/02/15/2015-2-15-scrapy/">scrapy</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>##scrapy</p>
+<p>单进程，基于twisted(利用epoll或其他多路复用)</p>
+<p>流程</p>
+<pre><code>settings = conf.settings
+inproject = inside_project()
+cmds = _get_commands_dict(settings, inproject)
+cmdname = _pop_command_name(argv)
+cmd = cmds[cmdname]
+...
+cmd.crawler_process = CrawlerProcess(settings)
+cmd.run()</code></pre><p>1.读取scrapy.cgf配置文件</p>
+<pre><code>[settings]
+default = m_p.settings
+
+[deploy]
+#url = http://localhost:6800/
+project = m_p</code></pre><p>2.读取setting设置文件</p>
+<pre><code>BOT_NAME = &apos;m_p&apos;
+
+SPIDER_MODULES = [&apos;m_p.spiders&apos;]
+NEWSPIDER_MODULE = &apos;m_p.spiders&apos;
+
+ITEM_PIPELINES = {&apos;m_p.pipelines.mysql_pipeline&apos;:2, &apos;m_p.pipelines.download_image_pipeline&apos;:1 }
+
+SERVER = &quot;localhost&quot;
+PORT = 3306
+DB = &quot;music&quot;
+COLLECTION = &quot;music&quot;
+USER = &apos;root&apos;
+PASSWORD = &apos;&apos;
+CHARSET = &apos;utf8&apos;
+IMAGES_STORE=&apos;/home/admin/nginx/html/yii/demos/music_web/images/cover/&apos;</code></pre><p>3.导入相应的module爬虫模块</p>
+<p>4.解析命令行参数</p>
+<p>5.设置爬虫程序入口</p>
+<p>6.运行cmd</p>
+<pre><code>def run(self, args, opts):
+     if len(args) &lt; 1:
+         raise UsageError()
+     elif len(args) &gt; 1:
+         raise UsageError(&quot;running &apos;scrapy crawl&apos; with more than one spider is no longer supported&quot;)
+     spname = args[0]
+
+     self.crawler_process.crawl(spname, **opts.spargs)
+     self.crawler_process.start()
+
+
+
+
+ crawler.py  
+
+ class CrawlerRunner(object):
+
+ def crawl(self, spidercls, *args, **kwargs):
+     crawler = self._create_crawler(spidercls)
+     self._setup_crawler_logging(crawler)
+     self.crawlers.add(crawler)
+     d = crawler.crawl(*args, **kwargs)
+     self._active.add(d)
+
+     def _done(result):
+         self.crawlers.discard(crawler)
+         self._active.discard(d)
+         return result
+
+     return d.addBoth(_done)
+
+
+ class Crawler(object):
+
+
+ def crawl(self, *args, **kwargs):
+     assert not self.crawling, &quot;Crawling already taking place&quot;
+     self.crawling = True
+
+     try:
+         self.spider = self._create_spider(*args, **kwargs)
+         self.engine = self._create_engine()
+         start_requests = iter(self.spider.start_requests())
+         yield self.engine.open_spider(self.spider, start_requests)  open engine&apos;s spider
+         yield defer.maybeDeferred(self.engine.start)
+     except Exception:
+         self.crawling = False
+         raise
+
+
+ class ExecutionEngine(object):
+
+ @defer.inlineCallbacks
+ def open_spider(self, spider, start_requests=(), close_if_idle=True):
+     assert self.has_capacity(), &quot;No free spider slot when opening %r&quot; % \
+         spider.name
+     log.msg(&quot;Spider opened&quot;, spider=spider)
+     nextcall = CallLaterOnce(self._next_request, spider)
+     scheduler = self.scheduler_cls.from_crawler(self.crawler)
+     start_requests = yield self.scraper.spidermw.process_start_requests(start_requests, spider)
+     slot = Slot(start_requests, close_if_idle, nextcall, scheduler)
+     self.slot = slot
+     self.spider = spider
+     yield scheduler.open(spider)
+     yield self.scraper.open_spider(spider)
+     self.crawler.stats.open_spider(spider)
+     yield self.signals.send_catch_log_deferred(signals.spider_opened, spider=spider)
+     slot.nextcall.schedule()
+
+
+ class CrawlerProcess(CrawlerRunner):
+
+ def start(self, stop_after_crawl=True):
+     if stop_after_crawl:
+         d = self.join()
+         # Don&apos;t start the reactor if the deferreds are already fired
+         if d.called:
+             return
+         d.addBoth(lambda _: self._stop_reactor())
+
+     if self.settings.getbool(&apos;DNSCACHE_ENABLED&apos;):
+         reactor.installResolver(CachingThreadedResolver(reactor))
+
+     reactor.addSystemEventTrigger(&apos;before&apos;, &apos;shutdown&apos;, self.stop)
+     reactor.run(installSignalHandlers=False)  # blocking call</code></pre><p>用了Twisted-&gt;reactor</p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/scrapy.jpg" alt=""></p>
+<p>1.engine从spider获取要爬取的url</p>
+<p>2.engine将url交给调度器</p>
+<p>3.engine从调度器获取要爬取的url</p>
+<p> _next_request_from_scheduler -&gt;slot.scheduler.next_request()</p>
+<pre><code>def _next_request_from_scheduler(self, spider):
+     slot = self.slot
+     request = slot.scheduler.next_request()
+     if not request:
+         return
+     d = self._download(request, spider)
+     d.addBoth(self._handle_downloader_output, request, spider)
+     d.addErrback(log.msg, spider=spider)
+     d.addBoth(lambda _: slot.remove_request(request))
+     d.addErrback(log.msg, spider=spider)
+     d.addBoth(lambda _: slot.nextcall.schedule())
+     d.addErrback(log.msg, spider=spider)
+     return d</code></pre><p>4.engine将url通过下载中间件交给下载器</p>
+<pre><code>slot.add_request(request)
+
+    dwld = self.downloader.fetch(request, spider)
+    dwld.addCallbacks(_on_success)
+    dwld.addBoth(_on_complete)</code></pre><p>5.下载完毕后，下载器将response交给engine</p>
+<p>6.engine将response通过spider中间件交给spider</p>
+<p>7.spider处理response，将item和下一个请求url返回给engine</p>
+<p>8.engine将item交给item pipeline,将url交给调度器</p>
+<p>9.第2步</p>
+<pre><code>class CrawlerProcess(CrawlerRunner):
+    &quot;&quot;&quot;A class to run multiple scrapy crawlers in a process simultaneously&quot;&quot;&quot;
+
+    def __init__(self, settings):
+        super(CrawlerProcess, self).__init__(settings)
+        install_shutdown_handlers(self._signal_shutdown)
+        self.stopping = False
+        self.log_observer = log.start_from_settings(self.settings)
+        log.scrapy_info(settings)
+
+    def _signal_shutdown(self, signum, _):
+        install_shutdown_handlers(self._signal_kill)
+        signame = signal_names[signum]
+        log.msg(format=&quot;Received %(signame)s, shutting down gracefully. Send again to force &quot;,
+                level=log.INFO, signame=signame)
+        reactor.callFromThread(self.stop)
+
+    def _signal_kill(self, signum, _):
+        install_shutdown_handlers(signal.SIG_IGN)
+        signame = signal_names[signum]
+        log.msg(format=&apos;Received %(signame)s twice, forcing unclean shutdown&apos;,
+                level=log.INFO, signame=signame)
+        self._stop_logging()
+        reactor.callFromThread(self._stop_reactor)
+
+    def start(self, stop_after_crawl=True):
+        if stop_after_crawl:
+            d = self.join()
+            # Don&apos;t start the reactor if the deferreds are already fired
+            if d.called:
+                return
+            d.addBoth(lambda _: self._stop_reactor())
+
+        if self.settings.getbool(&apos;DNSCACHE_ENABLED&apos;):
+            reactor.installResolver(CachingThreadedResolver(reactor))
+
+        reactor.addSystemEventTrigger(&apos;before&apos;, &apos;shutdown&apos;, self.stop)
+        reactor.run(installSignalHandlers=False)  # blocking call
+
+    def _stop_logging(self):
+        if self.log_observer:
+            self.log_observer.stop()
+
+    def _stop_reactor(self, _=None):
+        try:
+            reactor.stop()
+        except RuntimeError:  # raised if already stopped or in shutdown stage
+            pass
+
+
+
+class CrawlerRunner(object):
+
+    def __init__(self, settings):
+        self.settings = settings
+        smcls = load_object(settings[&apos;SPIDER_MANAGER_CLASS&apos;])
+        self.spiders = smcls.from_settings(settings.frozencopy())
+        self.crawlers = set()
+        self._active = set()
+
+    def crawl(self, spidercls, *args, **kwargs):
+        crawler = self._create_crawler(spidercls)
+        self._setup_crawler_logging(crawler)
+        self.crawlers.add(crawler)
+        d = crawler.crawl(*args, **kwargs)
+        self._active.add(d)
+
+        def _done(result):
+            self.crawlers.discard(crawler)
+            self._active.discard(d)
+            return result
+
+        return d.addBoth(_done)
+
+    def _create_crawler(self, spidercls):
+        if isinstance(spidercls, six.string_types):
+            spidercls = self.spiders.load(spidercls)
+
+        crawler_settings = self.settings.copy()
+        spidercls.update_settings(crawler_settings)
+        crawler_settings.freeze()
+        return Crawler(spidercls, crawler_settings)
+
+    def _setup_crawler_logging(self, crawler):
+        log_observer = log.start_from_crawler(crawler)
+        if log_observer:
+            crawler.signals.connect(log_observer.stop, signals.engine_stopped)
+
+    def stop(self):
+        return defer.DeferredList([c.stop() for c in list(self.crawlers)])
+
+    @defer.inlineCallbacks
+    def join(self):
+        &quot;&quot;&quot;Wait for all managed crawlers to complete&quot;&quot;&quot;
+        while self._active:
+            yield defer.DeferredList(self._active)</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/02/15/2015-2-15-scrapy/" data-id="ck521h17h006tlc7k3jrh3d9g" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="default-2015-2-15-python闭包" class="article article-type-default" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/02/15/2015-2-15-python%E9%97%AD%E5%8C%85/" class="article-date">
+  <time datetime="2015-02-14T16:00:00.000Z" itemprop="datePublished">2015-02-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/02/15/2015-2-15-python%E9%97%AD%E5%8C%85/">闭包</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h2><p>定义在函数内部的函数</p>
+<p>如javascript</p>
+<pre><code>function f1(){
+
+　　　　var n=999;
+
+　　　　function f2(){
+　　　　　　alert(n); 
+　　　　}
+
+　　　　return f2;
+
+　　}
+
+　　var result=f1();
+
+　　result(); // 999
+　　</code></pre><p>如果f2函数被赋值给全局变量，那么函数中的变量会一直保存在内存中</p>
+<p>函数对象中会保存函数里的变量和与该函数对象属于相同作用域的变量（即函数外）</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/02/15/2015-2-15-python%E9%97%AD%E5%8C%85/" data-id="ck521h10x002blc7kg54i5jly" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="default-2015-2-13-tornado" class="article article-type-default" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/02/13/2015-2-13-tornado/" class="article-date">
@@ -2342,10 +2353,6 @@ impl=select.epoll()</code></pre><p>A non-blocking, single-threaded HTTP server</
       <ul>
         
           <li>
-            <a href="/2020/01/06/2018-6-3-%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/">2018-6-3-代码规范</a>
-          </li>
-        
-          <li>
             <a href="/2020/01/05/2020-1-5-datax/">离线同步工具DataX</a>
           </li>
         
@@ -2359,6 +2366,10 @@ impl=select.epoll()</code></pre><p>A non-blocking, single-threaded HTTP server</
         
           <li>
             <a href="/2019/12/26/2019-12-26-lambda/">lambda</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/26/2019-12-26-listener/">观察者模式</a>
           </li>
         
       </ul>

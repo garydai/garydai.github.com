@@ -582,51 +582,6 @@ CheckGlobalDeclaration</code></pre>
 
 
   
-    <article id="default-2013-5-29-dll" class="article article-type-default" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2013/05/29/2013-5-29-dll/" class="article-date">
-  <time datetime="2013-05-28T16:00:00.000Z" itemprop="datePublished">2013-05-29</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2013/05/29/2013-5-29-dll/">windows动态链接库DLL</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="winodws动态链接库dll"><a href="#winodws动态链接库dll" class="headerlink" title="winodws动态链接库dll"></a>winodws动态链接库dll</h2><h3 id="what"><a href="#what" class="headerlink" title="what"></a>what</h3><h3 id="why"><a href="#why" class="headerlink" title="why"></a>why</h3><h3 id="how"><a href="#how" class="headerlink" title="how"></a>how</h3><h3 id="将DLL映射到进程地址空间"><a href="#将DLL映射到进程地址空间" class="headerlink" title="将DLL映射到进程地址空间"></a>将DLL映射到进程地址空间</h3><h4 id="隐式链接"><a href="#隐式链接" class="headerlink" title="隐式链接"></a>隐式链接</h4><p>应用程序的源代码里引用了DLL的符号，加载程序会自动将DLL加载到进程的地址空间中。所以应用程序需要包含模块的头文件。     </p>
-<h4 id="显示链接"><a href="#显示链接" class="headerlink" title="显示链接"></a>显示链接</h4><p>应用程序主动调用LoadLibrary将DLL载入到进程的地址空间中。<br>GetProcAddress引用该dll导出的符号。</p>
-<h4 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h4><p>程序开始运行首先加载DLL，然后执行主线程。<br>在程序运行到LoadLibrary函数的时候加载DLL。    </p>
-<h3 id="创建dll"><a href="#创建dll" class="headerlink" title="创建dll"></a>创建dll</h3><pre><code>__declspec(dllexport)</code></pre><p>1.创建dll时会创建相应.lib文件，保存dll导出的变量和函数的符号。<br>2.dll文件也会有导入段、导出段，保存dll导入导出的变量和函数符号。<br>3.exe可执行文件里的导入段记录需要导入的dll文件和变量函数符号。    </p>
-<h3 id="运行应用程序"><a href="#运行应用程序" class="headerlink" title="运行应用程序"></a>运行应用程序</h3><p>1.启动应用程序时，系统的加载程序会先为进程创建虚拟地址空间，接着把可执行模块映射到进程地址空间，之后检查可执行模块的导入段，把所需的dll定位并映射到进程的地址空间。同时会检查所需dll是否需要dll。<br>2.由于导入段里没有dll在硬盘中的路径，所以加载程序会按一定顺序搜索文件。<br>3.将所以dll模块载入到进程空间后，加载程序检查模块的导入段符号是否存在于相应dll的导出段中，存在则计算符号在进程空间中的地址，并把该地址写入到导入段中。      </p>
-<h3 id="DLL入口点函数DllMain"><a href="#DLL入口点函数DllMain" class="headerlink" title="DLL入口点函数DllMain"></a>DLL入口点函数DllMain</h3><p>1.当系统第一次载入dll或LoadLibrary，映射到进程的地址空间，进程主线程会调用该入口点函数并传入DLL_PROCESS_ATTACH，执行相关操作例如创建一个进程堆，当映射完成调用C/C++运行时的启动代码，然后调用可执行模块的入口点函数_tmain。<br>2.当系统将dll的映射撤销出地址空间，例如ExitProcess或FreeLibrary，调用dllMain并传入DLL_PROCESS_DETACH参数。<br>3.创建线程时，线程执行进程中的所有DLL入口点函数，并传入DLL_THREAD_ATTACH参数。<br>4.ExitThread终止线程时，调用各个dll入口点函数。   </p>
-<h3 id="延迟载入DLL"><a href="#延迟载入DLL" class="headerlink" title="延迟载入DLL"></a>延迟载入DLL</h3><p>对于隐式链接，只有当我们的代码引用DLL里的符号时，系统才会载入该DLL。        </p>
-<h3 id="模块基地址"><a href="#模块基地址" class="headerlink" title="模块基地址"></a>模块基地址</h3><p>可执行文件和DLL模块都有一个在进程地址空间中的首选基地址，如果该地址已被其他模块占用，则加载程序需要修改模块代码，对该模块中任何地址操作进行重定位。应选择合适的dll基地址，防止重定位。         </p>
-<h3 id="模块绑定"><a href="#模块绑定" class="headerlink" title="模块绑定"></a>模块绑定</h3><p>绑定一个模块即修改他导入表中的符号在进程空间中的实际地址。           </p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2013/05/29/2013-5-29-dll/" data-id="ck521h0zb000llc7kf4z9cgaq" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
     <article id="default-2013-5-29-sync_thread" class="article article-type-default" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2013/05/29/2013-5-29-sync_thread/" class="article-date">
@@ -688,6 +643,113 @@ CheckGlobalDeclaration</code></pre>
     </div>
     <footer class="article-footer">
       <a data-url="http://yoursite.com/2013/05/29/2013-5-29-sync_thread/" data-id="ck521h0zc000mlc7k194g0rpr" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="default-2013-5-29-dll" class="article article-type-default" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/05/29/2013-5-29-dll/" class="article-date">
+  <time datetime="2013-05-28T16:00:00.000Z" itemprop="datePublished">2013-05-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2013/05/29/2013-5-29-dll/">windows动态链接库DLL</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="winodws动态链接库dll"><a href="#winodws动态链接库dll" class="headerlink" title="winodws动态链接库dll"></a>winodws动态链接库dll</h2><h3 id="what"><a href="#what" class="headerlink" title="what"></a>what</h3><h3 id="why"><a href="#why" class="headerlink" title="why"></a>why</h3><h3 id="how"><a href="#how" class="headerlink" title="how"></a>how</h3><h3 id="将DLL映射到进程地址空间"><a href="#将DLL映射到进程地址空间" class="headerlink" title="将DLL映射到进程地址空间"></a>将DLL映射到进程地址空间</h3><h4 id="隐式链接"><a href="#隐式链接" class="headerlink" title="隐式链接"></a>隐式链接</h4><p>应用程序的源代码里引用了DLL的符号，加载程序会自动将DLL加载到进程的地址空间中。所以应用程序需要包含模块的头文件。     </p>
+<h4 id="显示链接"><a href="#显示链接" class="headerlink" title="显示链接"></a>显示链接</h4><p>应用程序主动调用LoadLibrary将DLL载入到进程的地址空间中。<br>GetProcAddress引用该dll导出的符号。</p>
+<h4 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h4><p>程序开始运行首先加载DLL，然后执行主线程。<br>在程序运行到LoadLibrary函数的时候加载DLL。    </p>
+<h3 id="创建dll"><a href="#创建dll" class="headerlink" title="创建dll"></a>创建dll</h3><pre><code>__declspec(dllexport)</code></pre><p>1.创建dll时会创建相应.lib文件，保存dll导出的变量和函数的符号。<br>2.dll文件也会有导入段、导出段，保存dll导入导出的变量和函数符号。<br>3.exe可执行文件里的导入段记录需要导入的dll文件和变量函数符号。    </p>
+<h3 id="运行应用程序"><a href="#运行应用程序" class="headerlink" title="运行应用程序"></a>运行应用程序</h3><p>1.启动应用程序时，系统的加载程序会先为进程创建虚拟地址空间，接着把可执行模块映射到进程地址空间，之后检查可执行模块的导入段，把所需的dll定位并映射到进程的地址空间。同时会检查所需dll是否需要dll。<br>2.由于导入段里没有dll在硬盘中的路径，所以加载程序会按一定顺序搜索文件。<br>3.将所以dll模块载入到进程空间后，加载程序检查模块的导入段符号是否存在于相应dll的导出段中，存在则计算符号在进程空间中的地址，并把该地址写入到导入段中。      </p>
+<h3 id="DLL入口点函数DllMain"><a href="#DLL入口点函数DllMain" class="headerlink" title="DLL入口点函数DllMain"></a>DLL入口点函数DllMain</h3><p>1.当系统第一次载入dll或LoadLibrary，映射到进程的地址空间，进程主线程会调用该入口点函数并传入DLL_PROCESS_ATTACH，执行相关操作例如创建一个进程堆，当映射完成调用C/C++运行时的启动代码，然后调用可执行模块的入口点函数_tmain。<br>2.当系统将dll的映射撤销出地址空间，例如ExitProcess或FreeLibrary，调用dllMain并传入DLL_PROCESS_DETACH参数。<br>3.创建线程时，线程执行进程中的所有DLL入口点函数，并传入DLL_THREAD_ATTACH参数。<br>4.ExitThread终止线程时，调用各个dll入口点函数。   </p>
+<h3 id="延迟载入DLL"><a href="#延迟载入DLL" class="headerlink" title="延迟载入DLL"></a>延迟载入DLL</h3><p>对于隐式链接，只有当我们的代码引用DLL里的符号时，系统才会载入该DLL。        </p>
+<h3 id="模块基地址"><a href="#模块基地址" class="headerlink" title="模块基地址"></a>模块基地址</h3><p>可执行文件和DLL模块都有一个在进程地址空间中的首选基地址，如果该地址已被其他模块占用，则加载程序需要修改模块代码，对该模块中任何地址操作进行重定位。应选择合适的dll基地址，防止重定位。         </p>
+<h3 id="模块绑定"><a href="#模块绑定" class="headerlink" title="模块绑定"></a>模块绑定</h3><p>绑定一个模块即修改他导入表中的符号在进程空间中的实际地址。           </p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2013/05/29/2013-5-29-dll/" data-id="ck521h0zb000llc7kf4z9cgaq" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="default-2013-5-21-interview_code" class="article article-type-default" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/05/21/2013-5-21-interview_code/" class="article-date">
+  <time datetime="2013-05-20T16:00:00.000Z" itemprop="datePublished">2013-05-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2013/05/21/2013-5-21-interview_code/">面试编程题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="面试编程题"><a href="#面试编程题" class="headerlink" title="面试编程题"></a>面试编程题</h2><h3 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h3><p>括号匹配：给定字符串，输出括号是否匹配，例如，”()” yes；”)(“ no；”(abcd(e)” no；”(a)(b)” yes。要求必须用递归写，整个实现不可以出现一个循环语句。</p>
+<h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><p>遇到’(‘,count++，遇到’)’，count–，递归过程中，如果count&lt;0，则括号不匹配</p>
+<h3 id="code"><a href="#code" class="headerlink" title="code"></a>code</h3><pre><code>#coding: utf-8
+def dfs(string, count):
+    if count &lt; 0:
+        return False
+    if len(string) == 1:
+        if string == &apos;(&apos;:
+            return False
+        elif string == &apos;)&apos;:
+            count = count - 1
+
+        if count == 0:
+            return True
+        else:
+            return False
+    else:
+
+        if string[0] == &apos;(&apos;:
+            count = count + 1
+        elif string[0] == &apos;)&apos;:
+            count = count - 1
+        string = string[1:len(string)]
+        return dfs(string, count)
+
+if __name__ == &apos;__main__&apos;:
+    print dfs(&apos;(a)(b))11()(a)(b)1&apos;, 0)</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2013/05/21/2013-5-21-interview_code/" data-id="ck521h0z9000jlc7ked6o4h25" class="article-share-link">Share</a>
       
       
     </footer>
@@ -818,71 +880,9 @@ struct _intblock {
 
 
   
-    <article id="default-2013-5-21-interview_code" class="article article-type-default" itemscope itemprop="blogPost">
+    <article id="default-2013-5-19-knowledge" class="article article-type-default" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2013/05/21/2013-5-21-interview_code/" class="article-date">
-  <time datetime="2013-05-20T16:00:00.000Z" itemprop="datePublished">2013-05-21</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2013/05/21/2013-5-21-interview_code/">面试编程题</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="面试编程题"><a href="#面试编程题" class="headerlink" title="面试编程题"></a>面试编程题</h2><h3 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h3><p>括号匹配：给定字符串，输出括号是否匹配，例如，”()” yes；”)(“ no；”(abcd(e)” no；”(a)(b)” yes。要求必须用递归写，整个实现不可以出现一个循环语句。</p>
-<h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><p>遇到’(‘,count++，遇到’)’，count–，递归过程中，如果count&lt;0，则括号不匹配</p>
-<h3 id="code"><a href="#code" class="headerlink" title="code"></a>code</h3><pre><code>#coding: utf-8
-def dfs(string, count):
-    if count &lt; 0:
-        return False
-    if len(string) == 1:
-        if string == &apos;(&apos;:
-            return False
-        elif string == &apos;)&apos;:
-            count = count - 1
-
-        if count == 0:
-            return True
-        else:
-            return False
-    else:
-
-        if string[0] == &apos;(&apos;:
-            count = count + 1
-        elif string[0] == &apos;)&apos;:
-            count = count - 1
-        string = string[1:len(string)]
-        return dfs(string, count)
-
-if __name__ == &apos;__main__&apos;:
-    print dfs(&apos;(a)(b))11()(a)(b)1&apos;, 0)</code></pre>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2013/05/21/2013-5-21-interview_code/" data-id="ck521h0z9000jlc7ked6o4h25" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="default-2013-5-19-probability" class="article article-type-default" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2013/05/19/2013-5-19-probability/" class="article-date">
+    <a href="/2013/05/19/2013-5-19-knowledge/" class="article-date">
   <time datetime="2013-05-18T16:00:00.000Z" itemprop="datePublished">2013-05-19</time>
 </a>
     
@@ -894,7 +894,7 @@ if __name__ == &apos;__main__&apos;:
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2013/05/19/2013-5-19-probability/">概率题</a>
+      <a class="article-title" href="/2013/05/19/2013-5-19-knowledge/">知识结构</a>
     </h1>
   
 
@@ -902,15 +902,12 @@ if __name__ == &apos;__main__&apos;:
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一道概率题"><a href="#一道概率题" class="headerlink" title="一道概率题"></a>一道概率题</h2><h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>有三扇门,一扇后面有玛莎拉蒂,另外两扇门后面是白纸,你先选择一道门,然后我打开一道后面是白纸的门,然后问你要不要选择换一道门.</p>
-<h3 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h3><p>第一次选择后面是玛莎拉蒂的门的概率是1/3,换门一定是错误选择.<br>第一次选择后面是白纸的门的概率是2/3,换门一定是正确选择.<br>所以选择换门,有2/3的概率选择正确,所以应该要选择换门.  </p>
-<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><p>如果有四道门,分析方法一样,第一次选择白纸的概率是3/4,换门后选对的概率是1/2,所以选择换门有3/8概率选择正确.不换则有1/4概率选择正确.选择换比较正确.<br>如果有5道门,选择换门有4/5*1/3=4/15概率选择正确.不换则有1/5概率选择正确.<br>如果有N道门,换门正确概率为(n-1)/n*1/(n-2) = (n-1)/(n(n-2)),不换正确概率为1/n=(n-2)/(n(n-2))&lt;换门正确概率.  </p>
-<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>无论有几扇门,都应该选择换</p>
+        <p><a href="http://goo.gl/gPDBI" target="_blank" rel="noopener">http://goo.gl/gPDBI</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2013/05/19/2013-5-19-probability/" data-id="ck521h0z7000ilc7k10pbe01j" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2013/05/19/2013-5-19-knowledge/" data-id="ck521h0z6000hlc7khkbw96c8" class="article-share-link">Share</a>
       
       
     </footer>
@@ -956,10 +953,6 @@ if __name__ == &apos;__main__&apos;:
       <ul>
         
           <li>
-            <a href="/2020/01/06/2018-6-3-%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/">2018-6-3-代码规范</a>
-          </li>
-        
-          <li>
             <a href="/2020/01/05/2020-1-5-datax/">离线同步工具DataX</a>
           </li>
         
@@ -973,6 +966,10 @@ if __name__ == &apos;__main__&apos;:
         
           <li>
             <a href="/2019/12/26/2019-12-26-lambda/">lambda</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/26/2019-12-26-listener/">观察者模式</a>
           </li>
         
       </ul>
