@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="java 引用强引用StrongReference垃圾回收的时候，即使内存不足也不会回收 1Object obj &#x3D; new Object();  软引用SoftReferenc1234567891011121314151617181920212223242526package javalearning; import java.lang.ref.SoftReference;&#x2F;* * 虚拟机参数配">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java 引用">
+<meta property="og:url" content="http://yoursite.com/2020/01/06/2019-11-22-java-reference/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="java 引用强引用StrongReference垃圾回收的时候，即使内存不足也不会回收 1Object obj &#x3D; new Object();  软引用SoftReferenc1234567891011121314151617181920212223242526package javalearning; import java.lang.ref.SoftReference;&#x2F;* * 虚拟机参数配">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-01-06T06:03:05.552Z">
+<meta property="article:modified_time" content="2020-01-06T06:03:09.499Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/01/06/2019-11-22-java-reference/"/>
+
+
+
+
+
+  <title>java 引用 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2019-11-22-java-reference/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">java 引用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
+                2020-01-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="java-引用"><a href="#java-引用" class="headerlink" title="java 引用"></a>java 引用</h1><h4 id="强引用StrongReference"><a href="#强引用StrongReference" class="headerlink" title="强引用StrongReference"></a>强引用StrongReference</h4><p>垃圾回收的时候，即使内存不足也不会回收</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Object obj = <span class="keyword">new</span> Object();</span><br></pre></td></tr></table></figure>
+
+<h4 id="软引用SoftReferenc"><a href="#软引用SoftReferenc" class="headerlink" title="软引用SoftReferenc"></a>软引用SoftReferenc</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> javalearning;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> java.lang.ref.SoftReference;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * 虚拟机参数配置</span></span><br><span class="line"><span class="comment"> * -Xms256m</span></span><br><span class="line"><span class="comment"> * -Xmx1024m</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SoftReferenceDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">         </span><br><span class="line">        <span class="comment">/*软引用对象中指向了一个长度为300000000个元素的整形数组*/</span></span><br><span class="line">        SoftReference&lt;<span class="keyword">int</span>[]&gt; softReference = </span><br><span class="line">                <span class="keyword">new</span> SoftReference&lt;<span class="keyword">int</span>[]&gt;(<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">300000000</span>]);</span><br><span class="line">         </span><br><span class="line">        <span class="comment">/*主动调用一次gc,由于此时JVM的内存够用，此时softReference引用的对象未被回收*/</span></span><br><span class="line">        System.gc();</span><br><span class="line">        System.out.println(softReference.get());</span><br><span class="line">         </span><br><span class="line">        <span class="comment">/*消耗内存,会导致一次自动的gc,此时JVM的内存不够用</span></span><br><span class="line"><span class="comment">         *就回收softReference对象中指向的数组对象*/</span></span><br><span class="line">        <span class="keyword">int</span>[] strongReference = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">100000000</span>];</span><br><span class="line">         </span><br><span class="line">        System.out.println(softReference.get());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果内存空间足够，垃圾回收器就不会回收它，如果内存空间不足了，就会回收这些对象的内存</p>
+<p>软引用可用来实现内存敏感的高速缓存</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">MyObject aRef = <span class="keyword">new</span> MyObject();</span><br><span class="line">SoftReference aSoftRef=<span class="keyword">new</span> SoftReference(aRef);</span><br><span class="line">aRef = <span class="keyword">null</span>;</span><br><span class="line"><span class="comment">//现在只有一个软引用指向MyObject的这个对象，</span></span><br><span class="line"><span class="comment">//如果这个对象还没有被回收，可以把他再次变为强引用</span></span><br><span class="line"><span class="keyword">if</span>(aSoftRef.get() != <span class="keyword">null</span>)</span><br><span class="line">  MyObject bRef = aSoftRef.get();</span><br><span class="line"><span class="comment">//这个时候MyObject这个对象又变成强引用</span></span><br></pre></td></tr></table></figure>
+
+<p>除了幻象引用（因为 get 永远返回 null），如果对象还没有被销毁，都可以通过 get 方法获取原有对象。这意味着，利用软引用和弱引用，我们可以将访问到的对象，重新指向强引用</p>
+<p>所以，对于软引用、弱引用之类，垃圾收集器可能会存在二次确认的问题，以保证处于弱引用状态的对象，没有改变为强引用。</p>
+<h4 id="弱引用WeakReferenc"><a href="#弱引用WeakReferenc" class="headerlink" title="弱引用WeakReferenc"></a>弱引用WeakReferenc</h4><p>当JVM进行垃圾回收时，无论内存是否充足，都会回收仅被弱引用关联的对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> javalearning;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> java.lang.ref.WeakReference;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WeakReferenceDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line"> </span><br><span class="line">        <span class="comment">/*若引用对象中指向了一个长度为1000个元素的整形数组*/</span></span><br><span class="line">        WeakReference&lt;String[]&gt; weakReference = </span><br><span class="line">                <span class="keyword">new</span> WeakReference&lt;String[]&gt;(<span class="keyword">new</span> String[<span class="number">1000</span>]);</span><br><span class="line">         </span><br><span class="line">        <span class="comment">/*未执行gc,目前仅被弱引用指向的对象还未被回收，所以结果不是null*/</span>     </span><br><span class="line">        System.out.println(weakReference.get());</span><br><span class="line">         </span><br><span class="line">        <span class="comment">/*执行一次gc,即使目前JVM的内存够用,但还是回收仅被弱引用指向的对象*/</span></span><br><span class="line">        System.gc();</span><br><span class="line">        System.out.println(weakReference.get());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="幻象引用PhantomReference"><a href="#幻象引用PhantomReference" class="headerlink" title="幻象引用PhantomReference"></a>幻象引用PhantomReference</h4><p>如果一个对象仅持有虚引用，那么它就和没有任何引用一样，在任何时候都可能被垃圾回收</p>
+<h4 id="引用队列"><a href="#引用队列" class="headerlink" title="引用队列"></a>引用队列</h4><p>当gc（垃圾回收线程）准备回收一个对象时，如果发现它还仅有软引用(或弱引用，或虚引用)指向它，就会在回收该对象之前，把这个软引用（或弱引用，或虚引用）加入到与之关联的引用队列</p>
+<p>如果一个软引用（或弱引用，或虚引用）<strong>对象本身</strong>在引用队列中，就说明该引用对象所<strong>指向的对象</strong>被回收了</p>
+<p>当软引用（或弱引用，或虚引用）对象所指向的对象被回收了，那么这个引用对象本身就没有价值了，如果程序中存在大量的这类对象（注意，我们创建的软引用、弱引用、虚引用对象本身是个强引用，不会自动被gc回收），就会浪费内存。因此我们这就可以手动回收位于引用队列中的引用对象本身</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> javalearning;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> java.lang.ref.ReferenceQueue;</span><br><span class="line"><span class="keyword">import</span> java.lang.ref.SoftReference;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ReferenceQueneDemo</span> </span>&#123;</span><br><span class="line">     </span><br><span class="line">    <span class="meta">@SuppressWarnings</span>(&#123; <span class="string">"rawtypes"</span>, <span class="string">"unchecked"</span> &#125;)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        <span class="comment">/*创建引用队列*/</span></span><br><span class="line">        ReferenceQueue&lt;SoftReference&lt;<span class="keyword">int</span>[]&gt;&gt; rq = </span><br><span class="line">                <span class="keyword">new</span> ReferenceQueue&lt;SoftReference&lt;<span class="keyword">int</span>[]&gt;&gt;();</span><br><span class="line">         </span><br><span class="line">        <span class="comment">/*创建一个软引用数组，每一个对象都是软引用类型*/</span></span><br><span class="line">        SoftReference&lt;<span class="keyword">int</span>[]&gt;[] srArr = <span class="keyword">new</span> SoftReference[<span class="number">1000</span>];</span><br><span class="line">         </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; srArr.length; i++)&#123;</span><br><span class="line">            srArr[i] = <span class="keyword">new</span> SoftReference(<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">300000</span>], rq);</span><br><span class="line">        &#125;</span><br><span class="line">         </span><br><span class="line">        <span class="comment">/*（可能）在gc前保留下了三个强引用*/</span></span><br><span class="line">        <span class="keyword">int</span>[] arr1 = srArr[<span class="number">30</span>].get();</span><br><span class="line">        <span class="keyword">int</span>[] arr2 = srArr[<span class="number">60</span>].get();</span><br><span class="line">        <span class="keyword">int</span>[] arr3 = srArr[<span class="number">90</span>].get();</span><br><span class="line">         </span><br><span class="line">        <span class="comment">/*占用内存，会导致一次gc，使得只有软引用指向的对象被回收*/</span></span><br><span class="line">        <span class="keyword">int</span>[] strongRef = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">200000000</span>];</span><br><span class="line">         </span><br><span class="line">        Object x;</span><br><span class="line">        <span class="keyword">int</span> n = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>((x = rq.poll()) != <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">int</span> idx = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">while</span>(idx &lt; srArr.length)&#123;</span><br><span class="line">                <span class="keyword">if</span>(x == srArr[idx])&#123;</span><br><span class="line">                    System.out.println(<span class="string">"free "</span> + x);</span><br><span class="line">                    srArr[idx] = <span class="keyword">null</span>; <span class="comment">/*手动释放内存*/</span></span><br><span class="line">                    n++;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                idx++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">         </span><br><span class="line">        <span class="comment">/*当然最简单的方法是通过isEnqueued()判断一个软引用方法是否在</span></span><br><span class="line"><span class="comment">         * 队列中，上面的方法只是举例</span></span><br><span class="line"><span class="comment">         int n = 0;</span></span><br><span class="line"><span class="comment">         for(int i = 0; i &lt; srArr.length; i++)&#123;</span></span><br><span class="line"><span class="comment">            if(srArr[i].isEnqueued())&#123;</span></span><br><span class="line"><span class="comment">                srArr[i] = null;</span></span><br><span class="line"><span class="comment">                n++;</span></span><br><span class="line"><span class="comment">            &#125;</span></span><br><span class="line"><span class="comment">         &#125;  </span></span><br><span class="line"><span class="comment">        */</span>     </span><br><span class="line">        System.out.println(<span class="string">"recycle  "</span> + n + <span class="string">"  SoftReference Object"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h3><p><a href="https://juejin.im/post/5c01427ef265da6175737e14" target="_blank" rel="noopener">https://juejin.im/post/5c01427ef265da6175737e14</a></p>
+<p><a href="https://www.cnblogs.com/nullzx/p/7406151.html" target="_blank" rel="noopener">https://www.cnblogs.com/nullzx/p/7406151.html</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/06/2019-11-21-java-io/" rel="next" title="java io">
+                <i class="fa fa-chevron-left"></i> java io
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/06/2019-11-27-future/" rel="prev" title="future">
+                future <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">273</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#java-引用"><span class="nav-number">1.</span> <span class="nav-text">java 引用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#强引用StrongReference"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">强引用StrongReference</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#软引用SoftReferenc"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">软引用SoftReferenc</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#弱引用WeakReferenc"><span class="nav-number">1.0.0.3.</span> <span class="nav-text">弱引用WeakReferenc</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#幻象引用PhantomReference"><span class="nav-number">1.0.0.4.</span> <span class="nav-text">幻象引用PhantomReference</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#引用队列"><span class="nav-number">1.0.0.5.</span> <span class="nav-text">引用队列</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#reference"><span class="nav-number">1.0.1.</span> <span class="nav-text">reference</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

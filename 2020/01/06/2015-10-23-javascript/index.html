@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="##javascript笔记 简单的脚本语言 ###对象 http:&#x2F;&#x2F;www.cnblogs.com&#x2F;dolphinX&#x2F;p&#x2F;3286177.html JavaScript 是面向对象的语言，但 JavaScript 不使用类。 在 JavaScript 中，不会创建类，也不会通过类来创建对象（就像在其他面向对象的语言中那样）。 JavaScript 基于 prototype，而不是基于类的。 每">
+<meta property="og:type" content="article">
+<meta property="og:title" content="javascript笔记">
+<meta property="og:url" content="http://yoursite.com/2020/01/06/2015-10-23-javascript/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="##javascript笔记 简单的脚本语言 ###对象 http:&#x2F;&#x2F;www.cnblogs.com&#x2F;dolphinX&#x2F;p&#x2F;3286177.html JavaScript 是面向对象的语言，但 JavaScript 不使用类。 在 JavaScript 中，不会创建类，也不会通过类来创建对象（就像在其他面向对象的语言中那样）。 JavaScript 基于 prototype，而不是基于类的。 每">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/javascript-prototype.png">
+<meta property="article:published_time" content="2020-01-06T06:03:05.408Z">
+<meta property="article:modified_time" content="2020-01-06T06:03:09.407Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/javascript-prototype.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/01/06/2015-10-23-javascript/"/>
+
+
+
+
+
+  <title>javascript笔记 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2015-10-23-javascript/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">javascript笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
+                2020-01-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>##javascript笔记</p>
+<p>简单的脚本语言</p>
+<p>###对象</p>
+<p><a href="http://www.cnblogs.com/dolphinX/p/3286177.html" target="_blank" rel="noopener">http://www.cnblogs.com/dolphinX/p/3286177.html</a></p>
+<p>JavaScript 是面向对象的语言，但 JavaScript 不使用类。</p>
+<p>在 JavaScript 中，不会创建类，也不会通过类来创建对象（就像在其他面向对象的语言中那样）。</p>
+<p>JavaScript 基于 prototype，而不是基于类的。</p>
+<p>每个函数都有一个prototype属性，这个属性是指向一个对象的引用，这个对象称为原型对象，原型对象包含函数实例共享的方法和属性，也就是说将函数用作构造函数调用（使用new操作符调用）的时候，新创建的对象会从原型对象上继承属性和方法。</p>
+<p>创建对象</p>
+<pre><code>1.
+创建直接的实例
+这个例子创建了对象的一个新实例，并向其添加了四个属性：
+实例
+person=new Object();
+person.firstname=&quot;Bill&quot;;
+person.lastname=&quot;Gates&quot;;
+person.age=56;
+person.eyecolor=&quot;blue&quot;;
+
+2.
+使用对象构造器
+本例使用函数来构造对象：
+实例
+function person(firstname,lastname,age,eyecolor)
+{
+this.firstname=firstname;
+this.lastname=lastname;
+this.age=age;
+this.eyecolor=eyecolor;
+}
+var myFather=new person(&quot;Bill&quot;,&quot;Gates&quot;,56,&quot;blue&quot;);</code></pre><p>私有变量、函数</p>
+<pre><code>function Obj(){
+                var a=0; //私有变量
+                var fn=function(){ //私有函数
+
+                }
+            }</code></pre><p>静态变量、函数</p>
+<pre><code>function Obj(){
+
+            }
+
+            Obj.a=0; //静态变量
+
+            Obj.fn=function(){ //静态函数
+
+            }</code></pre><p>实例变量、函数</p>
+<pre><code>function Obj(){
+                this.a=[]; //实例变量
+                this.fn=function(){ //实例方法
+
+                }
+            }</code></pre><p>如果函数里有定义函数，不同实例，会有多个相同函数，但多个函数内容都是一样的，应只保留一个函数，引入prototype。prototype维护一个函数列表，函数里有prototype属性指向这个prototype。有点像C++里的虚函数概念，类里面有虚函数指针指向虚函数表，表里都是虚函数地址。</p>
+<p>###prototype</p>
+<p><a href="http://www.cnblogs.com/dolphinX/p/3286177.html" target="_blank" rel="noopener">http://www.cnblogs.com/dolphinX/p/3286177.html</a></p>
+<p>无论什么时候，只要创建了一个新函数，就会根据一组特定的规则为该函数创建一个prototype属性，prototype里有一个构造函数constructor，指向的是该函数。</p>
+<p>如果新建一个实例，实例会生成一个<strong>proto</strong>属性，指向的是函数的prototype.</p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/javascript-prototype.png" alt=""></p>
+<p>###this</p>
+<p>1.作为函数调用，this指全局对象</p>
+<pre><code>var x = 1;
+function test(){
+　　　　alert(this.x);
+　　}
+test(); // 1</code></pre><p>　　</p>
+<p>2.作为对象方法的调用，this指对象</p>
+<pre><code>　function test(){
+　　　　alert(this.x);
+　　}
+　　var o = {};
+　　o.x = 1;
+　　o.m = test;
+　　o.m(); // 1</code></pre><p>　　<br>3.作为构造函数调用</p>
+<pre><code>　　function test(){
+　　　　this.x = 1;
+　　}
+　　var o = new test();
+　　alert(o.x); // 1</code></pre><p>###双向绑定</p>
+<pre><code>双向数据绑定指的是将对象属性变化绑定到UI</code></pre><p>####双向绑定实现<br>#####观察者设计模式</p>
+<p>订阅者在发布者那里注册回调函数，当发布者发生变化，则调用这些函数</p>
+<pre><code>function PubSub(){  
+    var pubSub = {
+        callbacks: {},
+        on: function(msg,callback) {
+            this.callbacks[msg] = this.callbacks[msg] || [];
+            this.callbacks[msg].push(callback);
+        },
+        publish: function(msg) {
+            this.callbacks[msg] = this.callbacks[msg] || [];
+            for (var i = 0,len = this.callbacks[msg].length; i &lt; len; i++) {
+                this.callbacks[msg][i].apply(this,arguments);
+            };
+        }
+      }
+      return pubSub;
+}
+
+var writer = new PubSub();  
+var reader = {  
+    read: function(){alert(&quot;我读了这本新书&quot;)}
+};
+writer.on(&quot;newbook&quot;, function(){reader.read()});  
+writer.publish(&quot;newbook&quot;);  </code></pre><p>#####利用观察者模式实现</p>
+<pre><code>function DataBinder(object_id){
+  // 创建一个简单的pubSub对象
+  var pubSub = {
+    callbacks: {},
+    on: function(msg,callback) {
+      this.callbacks[msg] = this.callbacks[msg] || [];
+      this.callbacks[msg].push(callback);
+    },
+    publish: function(msg) {
+      this.callbacks[msg] = this.callbacks[msg] || [];
+      for (var i = 0,len = this.callbacks[msg].length; i &lt; len; i++) {
+        this.callbacks[msg][i].apply(this,arguments);
+      };
+    }
+  },
+
+      data_attr = &quot;data-bind-&quot; + object_id,
+      message   = object_id + &quot;:change&quot;,
+
+      changeHandler = function(event) {
+        var target    = event.target || event.srcElement, // IE8兼容
+            prop_name = target.getAttribute(data_attr);
+
+        if (prop_name &amp;&amp; prop_name !== &quot;&quot;) {
+          pubSub.publish(message,prop_name,target.value);
+        }
+      };
+
+  // 监听事件变化，并代理到pubSub
+  if (document.addEventListener) {
+    document.addEventListener(&quot;keyup&quot;,changeHandler,false);
+  } else{
+    // IE8使用attachEvent而不是addEventListenter
+    document.attachEvent(&quot;onkeyup&quot;,changeHandler);
+  };
+
+  // pubSub将变化传播到所有绑定元素
+  pubSub.on(message,function(event,prop_name,new_val){
+    var elements = document.querySelectorAll(&quot;[&quot; + data_attr + &quot;=&quot; +prop_name + &quot;]&quot;),
+        tag_name;
+    for (var i = 0,len = elements.length; i &lt; len; i++) {
+      tag_name = elements[i].tagName.toLowerCase();
+      console.log(tag_name);
+      if (tag_name === &quot;input&quot; || tag_name === &quot;textarea&quot; || tag_name === &quot;select&quot;) {
+        elements[i].value = new_val;
+      } else{
+        elements[i].innerHTML = new_val;
+      };
+      console.log(&quot;prop_name:&quot;+new_val);
+    };
+  })
+
+  return pubSub;
+}
+
+function User(uid) {
+  var binder = new DataBinder(uid),
+      user   = {
+        attribute : {},
+
+        // 属性设置器使用数据绑定器pubSub来发布
+        set : function(attr_name,val) {
+          this.attribute[attr_name] = val;
+          binder.publish(uid + &quot;:change&quot;,attr_name,val,this);
+        },
+
+        get : function(attr_name) {
+          return this.attribute[attr_name];
+        },
+
+        _binder : binder
+      };
+
+  binder.on(uid + &quot;:change&quot;,function(event,attr_name,new_val,initiator) {
+    if (initiator !== user) {
+      user.set(attr_name,new_val);
+    }
+  });
+
+  return user;
+}
+var user = new User( 123 );
+user.set( &quot;name&quot;, &quot;lwl&quot; );
+
+
+html:
+
+&lt;input type=&quot;text&quot; data-bind-123=&quot;name&quot; /&gt;
+&lt;p data-bind-123=&quot;name&quot;&gt;&lt;/p&gt;</code></pre><p>ref: <a href="http://codepen.io/anon/pen/mRdLYd?editors=1010" target="_blank" rel="noopener">http://codepen.io/anon/pen/mRdLYd?editors=1010</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/06/2015-10-22-language/" rel="next" title="程序语言">
+                <i class="fa fa-chevron-left"></i> 程序语言
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/06/2015-10-23-iospush/" rel="prev" title="ios推送">
+                ios推送 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">273</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

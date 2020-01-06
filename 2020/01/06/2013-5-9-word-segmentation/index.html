@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="中文分词whathow实现第一版一个句子S由很多不同的分词组合,W01W02W03…W0n,W11W12W13…W1n,Wi1Wi2Win,对于不同的分词结果,取P(Wi1)P(Wi2)P(Wi3)…P(Win)最大为最后的分词结果,比向前向后匹配概率要高(P(Wi1)等于Wi1在词库里的词频) 实现第二版采用HMMS由S1S2S3…Sn,n个字组成,S1隐含的状态是S1是一个词语的开头或中间还是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="中文分词">
+<meta property="og:url" content="http://yoursite.com/2020/01/06/2013-5-9-word-segmentation/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="中文分词whathow实现第一版一个句子S由很多不同的分词组合,W01W02W03…W0n,W11W12W13…W1n,Wi1Wi2Win,对于不同的分词结果,取P(Wi1)P(Wi2)P(Wi3)…P(Win)最大为最后的分词结果,比向前向后匹配概率要高(P(Wi1)等于Wi1在词库里的词频) 实现第二版采用HMMS由S1S2S3…Sn,n个字组成,S1隐含的状态是S1是一个词语的开头或中间还是">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-01-06T06:03:05.362Z">
+<meta property="article:modified_time" content="2020-01-06T06:03:09.377Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/01/06/2013-5-9-word-segmentation/"/>
+
+
+
+
+
+  <title>中文分词 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2013-5-9-word-segmentation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">中文分词</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
+                2020-01-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="中文分词"><a href="#中文分词" class="headerlink" title="中文分词"></a>中文分词</h2><h3 id="what"><a href="#what" class="headerlink" title="what"></a>what</h3><h3 id="how"><a href="#how" class="headerlink" title="how"></a>how</h3><h4 id="实现第一版"><a href="#实现第一版" class="headerlink" title="实现第一版"></a>实现第一版</h4><p>一个句子S由很多不同的分词组合,W01W02W03…W0n,W11W12W13…W1n,Wi1Wi2Win,<br>对于不同的分词结果,取P(Wi1)P(Wi2)P(Wi3)…P(Win)最大为最后的分词结果,比向前向后匹配概率要高<br>(P(Wi1)等于Wi1在词库里的词频)</p>
+<h4 id="实现第二版"><a href="#实现第二版" class="headerlink" title="实现第二版"></a>实现第二版</h4><p>采用HMM<br>S由S1S2S3…Sn,n个字组成,S1隐含的状态是S1是一个词语的开头或中间还是结尾.根据已知求隐含<br>所以P(H1H2H3…Hn|S1S2S3…Sn)=<strong>P(S1S2S3…Sn|H1H2H3…Hn)**</strong>P(H1H2H3…Hn)**/P(S1S2S3…Sn)  </p>
+<p><strong>P(S1S2S3…Sn|H1H2H3…Hn)</strong>=P(S1|H1)P(S2|H2)…P(Sn|Hn)<br>P(S1|H1)=P(H1S1)/P(H1)<br>含义:以H1H2..Hn分法,成为该句子的概率(开头结尾开头中间结尾…该分法组成句子的概率(不等于句子合不合法))</p>
+<p><strong>P(H1H2H3…Hn)</strong>=P(H1)P(H2|H1)P(H3|H1H2)…P(Hn|H1H2H3…)=<strong>P(H1)P(H2|H1)P(H3|H2)…(Hn|Hn-1)</strong>(2-gram)<br>含义:马尔科夫链，Hn只有Hn-1决定。H1H2H3…Hn分法的概率   </p>
+<h5 id="结论公式"><a href="#结论公式" class="headerlink" title="结论公式"></a>结论公式</h5><p><strong>P(H1H2H3…Hn|S1S2S3…Sn)~P(S1|H1)P(H1)P(S2|H2)P(H2|H1)…P(Sn|Hn)(Hn|Hn-1)</strong><br>一个字有四种隐藏状态，s一个词的开头，e一个词的结尾，m一个词的中间，a单个字。<br>状态数目<br>states:{s,e,m,a}<br>s有一定的概率是字X<br>每个状态下可能的观察值<br>observations:{X}<br>初始状态空间的概率分布  </p>
+<p>状态转移<br>transition_probility:{<br>s:{e:x, m:x, a:x}<br>e:{}…<br>}<br>好像错误率挺高，训练不好</p>
+<h4 id="第三版数学之美"><a href="#第三版数学之美" class="headerlink" title="第三版数学之美"></a>第三版数学之美</h4>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/06/2013-5-7-how-google-works/" rel="next" title="How Google Works">
+                <i class="fa fa-chevron-left"></i> How Google Works
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/06/2013-6-1-IO/" rel="prev" title="I/O">
+                I/O <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">273</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#中文分词"><span class="nav-number">1.</span> <span class="nav-text">中文分词</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#what"><span class="nav-number">1.1.</span> <span class="nav-text">what</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#how"><span class="nav-number">1.2.</span> <span class="nav-text">how</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#实现第一版"><span class="nav-number">1.2.1.</span> <span class="nav-text">实现第一版</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现第二版"><span class="nav-number">1.2.2.</span> <span class="nav-text">实现第二版</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#结论公式"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">结论公式</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第三版数学之美"><span class="nav-number">1.2.3.</span> <span class="nav-text">第三版数学之美</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

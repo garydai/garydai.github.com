@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="##链接器和加载器    ###链接器链接各个模块至同一个进程空间。 整合各个模块的段,确定段在地址空间的基地址。 根据重定位表，重定位符号。     主要任务：符号解析、重定位。 ####目标文件可重定位目标文件 可执行目标文件 共享目标文件 #####符号表记录目标文件里的符号名和对应符号在目标文件所属段中的地址     1.定义在本目标文件并能被其他模块引用的全局符号(非静态全局变量、非静态">
+<meta property="og:type" content="article">
+<meta property="og:title" content="链接器和加载器">
+<meta property="og:url" content="http://yoursite.com/2020/01/06/2013-6-13-loader_linker/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="##链接器和加载器    ###链接器链接各个模块至同一个进程空间。 整合各个模块的段,确定段在地址空间的基地址。 根据重定位表，重定位符号。     主要任务：符号解析、重定位。 ####目标文件可重定位目标文件 可执行目标文件 共享目标文件 #####符号表记录目标文件里的符号名和对应符号在目标文件所属段中的地址     1.定义在本目标文件并能被其他模块引用的全局符号(非静态全局变量、非静态">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-01-06T06:03:05.366Z">
+<meta property="article:modified_time" content="2020-01-06T06:03:09.379Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/01/06/2013-6-13-loader_linker/"/>
+
+
+
+
+
+  <title>链接器和加载器 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2013-6-13-loader_linker/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">链接器和加载器</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
+                2020-01-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>##链接器和加载器   </p>
+<p>###链接器<br>链接各个模块至同一个进程空间。</p>
+<p>整合各个模块的段,确定段在地址空间的基地址。</p>
+<p>根据重定位表，重定位符号。    </p>
+<p>主要任务：符号解析、重定位。</p>
+<p>####目标文件<br>可重定位目标文件</p>
+<p>可执行目标文件</p>
+<p>共享目标文件</p>
+<p>#####符号表<br>记录目标文件里的符号名和对应符号在目标文件所属段中的地址    </p>
+<p>1.定义在本目标文件并能被其他模块引用的全局符号(非静态全局变量、非静态函数)    </p>
+<p>2.引用外部目标文件的全局符号</p>
+<p>3.定义引用在本目标文件的本地符号(静态函数、静态变量)</p>
+<p>4.段名(与链接无关)    </p>
+<p>5.静态局部符号(与链接无关)</p>
+<p>6.行号信息(与链接无关)    </p>
+<p>强符号：函数和初始化的全局变量      </p>
+<p>弱符号：未初始化的全局变量 </p>
+<p>unix链接器处理多重定义符号的规则：不允许有多个强符号；如果有强符号和弱符号，选择强符号；对于多个弱符号定义，任意选择一个。</p>
+<p>强引用：</p>
+<p>强符号：</p>
+<p>####静态链接<br>把多个目标文件打包成静态库，链接静态库的时候，载入静态库里被引用的目标文件，而不用载入所有目标文件</p>
+<p>链接目标文件、重定位符号，生成可执行文件。   </p>
+<p>符号重定位在链接时确定。   </p>
+<p>#####符号解析<br>对于引用的符号，绑定到唯一的定义。</p>
+<p>对于引用了但尚未在本地定义的符号，找到相应的目标文件中该符号的定义。</p>
+<p>方法：遍历所有输入目标文件，找到定义符号的目标文件。</p>
+<p>#####重定位<br>合并输入模块，并为所有符号分配运行时地址(进程虚拟地址)</p>
+<p>1.重定位节和符号定义：合并相同的节，并重定位节地址和已经定义的符号地址。</p>
+<p>2.重定位节中的符号引用。该步骤依赖于重定位表。</p>
+<p>######重定位表<br>如果一个段中的符号需要重定位，则会有一个相应的重定位段。例如.text段需要重定位，则产生一个.rel.text重定位段。相对应.data有.rel.data重定位段。</p>
+<p>记录需要重定位的符号在相应段中的偏移，和重定位类型(PC相对地址、绝对地址等)。</p>
+<p>######unix重定位算法<br>遍历所有.rel段中的符号，根据重定位类型，重定位符号地址。</p>
+<p>####动态链接<br>链接、重定位过程推迟到运行加载时。较之静态链接，使用共享模块，可以节省内存，易于维护升级程序。            </p>
+<p>#####共享模块(dll,so)<br>模块内的符号引用采用相对地址。   </p>
+<p>#####地址无关代码<br>代码中引用的符号地址通过查表得到，而不是把符号地址写入代码。</p>
+<p>模块间的符号引用,因为外部符号地址在装载时候才能确定，查询全局偏移表(GOT)得到外部符号地址，令指令代码与地址无关。</p>
+<p>对于引用函数的地址无关，还引入了延迟绑定的技术，通过过程链接表，把函数地址的绑定推迟到第一次调用该函数的时候，第一次调用时，把函数地址填入GOT,第二次调用直接使用GOT里的地址。</p>
+<p>该表存在于数据段，装载时，填入外部符号的地址。一般动态库的代码段只有一份，数据段由每个调用模块各自维护一份。   </p>
+<p>令指令代码地址无关，可以使指令代码保持一份，节省内存；如果代码不是地址无关，则每个进程要维护一份副本，装载时重定位。使用-fPIC(linux)命令编译文件成地址无关共享模块。</p>
+<p>#####动态链接器<br>加载可执行文件后，然后加载动态链接器，运行动态链接器，初始化动态链接的相关工作，最后才运行可执行文件。    </p>
+<p>#####链接步骤<br>1启动动态链接器    </p>
+<p>2装载共享对象           </p>
+<p>3重定位和初始化(初始化执行.init段中的代码)             </p>
+<p>###加载器加载可执行文件<br>操作系统创建进程，加载可执行文件，然后运行。具体做了以下三件事：</p>
+<p>1创建独立虚拟地址空间(创建虚拟地址与内存的映射数据结构)    </p>
+<p>2读取可执行文件程序头，创建虚拟地址与可执行文件的映射数据结构。(可执行或目标文件的段信息有指定对应的虚拟基地址。)     </p>
+<p>3将CPU指令寄存器设置成可执行文件入口，启动运行。   </p>
+<p>###reference<br>链接器和加载器</p>
+<p>程序员的自我修养-链接、装载与库</p>
+<p>深入理解计算机系统</p>
+<p>###question<br>如何知道引用的符号是共享模块还是其他目标文件？   </p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/06/2013-6-11-c++_object_model/" rel="next" title="C++对象模型">
+                <i class="fa fa-chevron-left"></i> C++对象模型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/06/2013-6-14-python_book/" rel="prev" title="25本免费的Python电子书">
+                25本免费的Python电子书 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">273</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

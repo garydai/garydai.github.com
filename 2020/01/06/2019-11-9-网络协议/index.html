@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="网络协议物理层网络跳线 链路层ARP、VLAN、STP 网络层ICMP、IP、OSPF、BGP、IPSec、GRE 传输层UDP、TCP 应用层DHCP、HTTP、HTTPS、RTMP、P2P、DNS、GTP、RPC 怎么找到目标地址的mac地址子网内，用mac定位目标，子网外用ip定位 如果这是一个跨网段的调用，它便不会直接将包发送到网络上，而是企图将包发送到网关  arp知道ip地址求mac地">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络协议">
+<meta property="og:url" content="http://yoursite.com/2020/01/06/2019-11-9-%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="网络协议物理层网络跳线 链路层ARP、VLAN、STP 网络层ICMP、IP、OSPF、BGP、IPSec、GRE 传输层UDP、TCP 应用层DHCP、HTTP、HTTPS、RTMP、P2P、DNS、GTP、RPC 怎么找到目标地址的mac地址子网内，用mac定位目标，子网外用ip定位 如果这是一个跨网段的调用，它便不会直接将包发送到网络上，而是企图将包发送到网关  arp知道ip地址求mac地">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191110092522089.png">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191110095151691.png">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191109120438329.png">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191109120658084.png">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191110105604643.png">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191210163357462.png">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191203091727623.png">
+<meta property="article:published_time" content="2020-01-06T06:03:05.556Z">
+<meta property="article:modified_time" content="2020-01-06T06:03:09.502Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191110092522089.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/01/06/2019-11-9-网络协议/"/>
+
+
+
+
+
+  <title>网络协议 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2019-11-9-%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">网络协议</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
+                2020-01-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="网络协议"><a href="#网络协议" class="headerlink" title="网络协议"></a>网络协议</h1><h3 id="物理层"><a href="#物理层" class="headerlink" title="物理层"></a>物理层</h3><p>网络跳线</p>
+<h3 id="链路层"><a href="#链路层" class="headerlink" title="链路层"></a>链路层</h3><p>ARP、VLAN、STP</p>
+<h3 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h3><p>ICMP、IP、OSPF、BGP、IPSec、GRE</p>
+<h3 id="传输层"><a href="#传输层" class="headerlink" title="传输层"></a>传输层</h3><p>UDP、TCP</p>
+<h3 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h3><p>DHCP、HTTP、HTTPS、RTMP、P2P、DNS、GTP、RPC</p>
+<h5 id="怎么找到目标地址的mac地址"><a href="#怎么找到目标地址的mac地址" class="headerlink" title="怎么找到目标地址的mac地址"></a>怎么找到目标地址的mac地址</h5><p>子网内，用mac定位目标，子网外用ip定位</p>
+<p>如果这是一个跨网段的调用，它便不会直接将包发送到网络上，而是企图将包发送到网关</p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191110092522089.png" alt="image-20191110092522089"></p>
+<h6 id="arp"><a href="#arp" class="headerlink" title="arp"></a>arp</h6><p>知道ip地址求mac地址</p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191110095151691.png" alt="image-20191110095151691"></p>
+<h5 id="ip地址"><a href="#ip地址" class="headerlink" title="ip地址"></a>ip地址</h5><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191109120438329.png" alt="image-20191109120438329"></p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191109120658084.png" alt="image-20191109120658084"></p>
+<p>192.168.0.x 是最常用的私有 IP 地址。你家里有 Wi-Fi，对应就会有一个 IP 地址。一般你家里地上网设备不会超过 256 个，所以 /24 基本就够了。有时候我们也能见到 /16 的 CIDR，这两种是最常见的</p>
+<h5 id="dhcp"><a href="#dhcp" class="headerlink" title="dhcp"></a>dhcp</h5><p>新来的机器使用 IP 地址 0.0.0.0 发送了一个广播包，目的 IP 地址为 255.255.255.255。广播包封装了 UDP，UDP 封装了 BOOTP，DHCP Server分配一个ip给新来的机器，要保证mac地址唯一。</p>
+<h3 id="交换机"><a href="#交换机" class="headerlink" title="交换机"></a>交换机</h3><p>根据mac地址转发网络包，第一次不知道对应的端口，广播所有端口，然后缓存正确的端口</p>
+<ol>
+<li>在划分vlan的前提下可以实现多个广播域，每个接口都是一个单独的冲突域</li>
+<li>通过自我学习的方法可以构建出CAM表，并基于CAM进行转发数据。</li>
+<li>支持生成树算法。可以构建出物理有环，逻辑无环的网络</li>
+</ol>
+<h6 id="VLAN"><a href="#VLAN" class="headerlink" title="VLAN"></a>VLAN</h6><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191110105604643.png" alt="image-20191110105604643"></p>
+<p>相同 VLAN 的包，才会互相转发，不同 VLAN 的包，是看不到的</p>
+<p>交换机之间用Trunk口连接</p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191210163357462.png" alt="image-20191210163357462"></p>
+<p><a href="https://baijiahao.baidu.com/s?id=1628398215665219628&amp;wfr=spider&amp;for=pc" target="_blank" rel="noopener">https://baijiahao.baidu.com/s?id=1628398215665219628&amp;wfr=spider&amp;for=pc</a></p>
+<h3 id="路由器"><a href="#路由器" class="headerlink" title="路由器"></a>路由器</h3><p>网关往往是一个路由器，到某个 IP 地址应该怎么走，这个叫作路由表</p>
+<h3 id="tcp"><a href="#tcp" class="headerlink" title="tcp"></a>tcp</h3><p>可靠连接；如果对方没有回复，会不断重试</p>
+<h5 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h5><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191203091727623.png" alt="image-20191203091727623"></p>
+<p>在内核中，为每个 Socket 维护两个队列。一个是已经建立了连接的队列，这时候连接三次握手已经完毕，处于 established 状态；一个是还没有完全建立连接的队列，这个时候三次握手还没完成，处于 syn_rcvd 的状态。服务端调用 accept 函数，其实是在第一个队列中拿出一个已经完成的连接进行处理。如果还没有完成就阻塞等待</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/06/2019-11-3-ddd/" rel="next" title="ddd">
+                <i class="fa fa-chevron-left"></i> ddd
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/06/2019-12-18-eureka/" rel="prev" title="Eureka">
+                Eureka <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">273</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#网络协议"><span class="nav-number">1.</span> <span class="nav-text">网络协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#物理层"><span class="nav-number">1.0.1.</span> <span class="nav-text">物理层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#链路层"><span class="nav-number">1.0.2.</span> <span class="nav-text">链路层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络层"><span class="nav-number">1.0.3.</span> <span class="nav-text">网络层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#传输层"><span class="nav-number">1.0.4.</span> <span class="nav-text">传输层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用层"><span class="nav-number">1.0.5.</span> <span class="nav-text">应用层</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#怎么找到目标地址的mac地址"><span class="nav-number">1.0.5.0.1.</span> <span class="nav-text">怎么找到目标地址的mac地址</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#arp"><span class="nav-number">1.0.5.0.1.1.</span> <span class="nav-text">arp</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ip地址"><span class="nav-number">1.0.5.0.2.</span> <span class="nav-text">ip地址</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#dhcp"><span class="nav-number">1.0.5.0.3.</span> <span class="nav-text">dhcp</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#交换机"><span class="nav-number">1.0.6.</span> <span class="nav-text">交换机</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#VLAN"><span class="nav-number">1.0.6.0.0.1.</span> <span class="nav-text">VLAN</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#路由器"><span class="nav-number">1.0.7.</span> <span class="nav-text">路由器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tcp"><span class="nav-number">1.0.8.</span> <span class="nav-text">tcp</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#三次握手"><span class="nav-number">1.0.8.0.1.</span> <span class="nav-text">三次握手</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

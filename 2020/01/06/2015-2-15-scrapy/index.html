@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="##scrapy 单进程，基于twisted(利用epoll或其他多路复用) 流程 settings &#x3D; conf.settings inproject &#x3D; inside_project() cmds &#x3D; _get_commands_dict(settings, inproject) cmdname &#x3D; _pop_command_name(argv) cmd &#x3D; cmds[cmdname] ...">
+<meta property="og:type" content="article">
+<meta property="og:title" content="scrapy">
+<meta property="og:url" content="http://yoursite.com/2020/01/06/2015-2-15-scrapy/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="##scrapy 单进程，基于twisted(利用epoll或其他多路复用) 流程 settings &#x3D; conf.settings inproject &#x3D; inside_project() cmds &#x3D; _get_commands_dict(settings, inproject) cmdname &#x3D; _pop_command_name(argv) cmd &#x3D; cmds[cmdname] ...">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/scrapy.jpg">
+<meta property="article:published_time" content="2020-01-06T06:03:05.415Z">
+<meta property="article:modified_time" content="2020-01-06T06:03:09.413Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/scrapy.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/01/06/2015-2-15-scrapy/"/>
+
+
+
+
+
+  <title>scrapy | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2015-2-15-scrapy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">scrapy</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
+                2020-01-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>##scrapy</p>
+<p>单进程，基于twisted(利用epoll或其他多路复用)</p>
+<p>流程</p>
+<pre><code>settings = conf.settings
+inproject = inside_project()
+cmds = _get_commands_dict(settings, inproject)
+cmdname = _pop_command_name(argv)
+cmd = cmds[cmdname]
+...
+cmd.crawler_process = CrawlerProcess(settings)
+cmd.run()</code></pre><p>1.读取scrapy.cgf配置文件</p>
+<pre><code>[settings]
+default = m_p.settings
+
+[deploy]
+#url = http://localhost:6800/
+project = m_p</code></pre><p>2.读取setting设置文件</p>
+<pre><code>BOT_NAME = &apos;m_p&apos;
+
+SPIDER_MODULES = [&apos;m_p.spiders&apos;]
+NEWSPIDER_MODULE = &apos;m_p.spiders&apos;
+
+ITEM_PIPELINES = {&apos;m_p.pipelines.mysql_pipeline&apos;:2, &apos;m_p.pipelines.download_image_pipeline&apos;:1 }
+
+SERVER = &quot;localhost&quot;
+PORT = 3306
+DB = &quot;music&quot;
+COLLECTION = &quot;music&quot;
+USER = &apos;root&apos;
+PASSWORD = &apos;&apos;
+CHARSET = &apos;utf8&apos;
+IMAGES_STORE=&apos;/home/admin/nginx/html/yii/demos/music_web/images/cover/&apos;</code></pre><p>3.导入相应的module爬虫模块</p>
+<p>4.解析命令行参数</p>
+<p>5.设置爬虫程序入口</p>
+<p>6.运行cmd</p>
+<pre><code>def run(self, args, opts):
+     if len(args) &lt; 1:
+         raise UsageError()
+     elif len(args) &gt; 1:
+         raise UsageError(&quot;running &apos;scrapy crawl&apos; with more than one spider is no longer supported&quot;)
+     spname = args[0]
+
+     self.crawler_process.crawl(spname, **opts.spargs)
+     self.crawler_process.start()
+
+
+
+
+ crawler.py  
+
+ class CrawlerRunner(object):
+
+ def crawl(self, spidercls, *args, **kwargs):
+     crawler = self._create_crawler(spidercls)
+     self._setup_crawler_logging(crawler)
+     self.crawlers.add(crawler)
+     d = crawler.crawl(*args, **kwargs)
+     self._active.add(d)
+
+     def _done(result):
+         self.crawlers.discard(crawler)
+         self._active.discard(d)
+         return result
+
+     return d.addBoth(_done)
+
+
+ class Crawler(object):
+
+
+ def crawl(self, *args, **kwargs):
+     assert not self.crawling, &quot;Crawling already taking place&quot;
+     self.crawling = True
+
+     try:
+         self.spider = self._create_spider(*args, **kwargs)
+         self.engine = self._create_engine()
+         start_requests = iter(self.spider.start_requests())
+         yield self.engine.open_spider(self.spider, start_requests)  open engine&apos;s spider
+         yield defer.maybeDeferred(self.engine.start)
+     except Exception:
+         self.crawling = False
+         raise
+
+
+ class ExecutionEngine(object):
+
+ @defer.inlineCallbacks
+ def open_spider(self, spider, start_requests=(), close_if_idle=True):
+     assert self.has_capacity(), &quot;No free spider slot when opening %r&quot; % \
+         spider.name
+     log.msg(&quot;Spider opened&quot;, spider=spider)
+     nextcall = CallLaterOnce(self._next_request, spider)
+     scheduler = self.scheduler_cls.from_crawler(self.crawler)
+     start_requests = yield self.scraper.spidermw.process_start_requests(start_requests, spider)
+     slot = Slot(start_requests, close_if_idle, nextcall, scheduler)
+     self.slot = slot
+     self.spider = spider
+     yield scheduler.open(spider)
+     yield self.scraper.open_spider(spider)
+     self.crawler.stats.open_spider(spider)
+     yield self.signals.send_catch_log_deferred(signals.spider_opened, spider=spider)
+     slot.nextcall.schedule()
+
+
+ class CrawlerProcess(CrawlerRunner):
+
+ def start(self, stop_after_crawl=True):
+     if stop_after_crawl:
+         d = self.join()
+         # Don&apos;t start the reactor if the deferreds are already fired
+         if d.called:
+             return
+         d.addBoth(lambda _: self._stop_reactor())
+
+     if self.settings.getbool(&apos;DNSCACHE_ENABLED&apos;):
+         reactor.installResolver(CachingThreadedResolver(reactor))
+
+     reactor.addSystemEventTrigger(&apos;before&apos;, &apos;shutdown&apos;, self.stop)
+     reactor.run(installSignalHandlers=False)  # blocking call</code></pre><p>用了Twisted-&gt;reactor</p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/scrapy.jpg" alt=""></p>
+<p>1.engine从spider获取要爬取的url</p>
+<p>2.engine将url交给调度器</p>
+<p>3.engine从调度器获取要爬取的url</p>
+<p> _next_request_from_scheduler -&gt;slot.scheduler.next_request()</p>
+<pre><code>def _next_request_from_scheduler(self, spider):
+     slot = self.slot
+     request = slot.scheduler.next_request()
+     if not request:
+         return
+     d = self._download(request, spider)
+     d.addBoth(self._handle_downloader_output, request, spider)
+     d.addErrback(log.msg, spider=spider)
+     d.addBoth(lambda _: slot.remove_request(request))
+     d.addErrback(log.msg, spider=spider)
+     d.addBoth(lambda _: slot.nextcall.schedule())
+     d.addErrback(log.msg, spider=spider)
+     return d</code></pre><p>4.engine将url通过下载中间件交给下载器</p>
+<pre><code>slot.add_request(request)
+
+    dwld = self.downloader.fetch(request, spider)
+    dwld.addCallbacks(_on_success)
+    dwld.addBoth(_on_complete)</code></pre><p>5.下载完毕后，下载器将response交给engine</p>
+<p>6.engine将response通过spider中间件交给spider</p>
+<p>7.spider处理response，将item和下一个请求url返回给engine</p>
+<p>8.engine将item交给item pipeline,将url交给调度器</p>
+<p>9.第2步</p>
+<pre><code>class CrawlerProcess(CrawlerRunner):
+    &quot;&quot;&quot;A class to run multiple scrapy crawlers in a process simultaneously&quot;&quot;&quot;
+
+    def __init__(self, settings):
+        super(CrawlerProcess, self).__init__(settings)
+        install_shutdown_handlers(self._signal_shutdown)
+        self.stopping = False
+        self.log_observer = log.start_from_settings(self.settings)
+        log.scrapy_info(settings)
+
+    def _signal_shutdown(self, signum, _):
+        install_shutdown_handlers(self._signal_kill)
+        signame = signal_names[signum]
+        log.msg(format=&quot;Received %(signame)s, shutting down gracefully. Send again to force &quot;,
+                level=log.INFO, signame=signame)
+        reactor.callFromThread(self.stop)
+
+    def _signal_kill(self, signum, _):
+        install_shutdown_handlers(signal.SIG_IGN)
+        signame = signal_names[signum]
+        log.msg(format=&apos;Received %(signame)s twice, forcing unclean shutdown&apos;,
+                level=log.INFO, signame=signame)
+        self._stop_logging()
+        reactor.callFromThread(self._stop_reactor)
+
+    def start(self, stop_after_crawl=True):
+        if stop_after_crawl:
+            d = self.join()
+            # Don&apos;t start the reactor if the deferreds are already fired
+            if d.called:
+                return
+            d.addBoth(lambda _: self._stop_reactor())
+
+        if self.settings.getbool(&apos;DNSCACHE_ENABLED&apos;):
+            reactor.installResolver(CachingThreadedResolver(reactor))
+
+        reactor.addSystemEventTrigger(&apos;before&apos;, &apos;shutdown&apos;, self.stop)
+        reactor.run(installSignalHandlers=False)  # blocking call
+
+    def _stop_logging(self):
+        if self.log_observer:
+            self.log_observer.stop()
+
+    def _stop_reactor(self, _=None):
+        try:
+            reactor.stop()
+        except RuntimeError:  # raised if already stopped or in shutdown stage
+            pass
+
+
+
+class CrawlerRunner(object):
+
+    def __init__(self, settings):
+        self.settings = settings
+        smcls = load_object(settings[&apos;SPIDER_MANAGER_CLASS&apos;])
+        self.spiders = smcls.from_settings(settings.frozencopy())
+        self.crawlers = set()
+        self._active = set()
+
+    def crawl(self, spidercls, *args, **kwargs):
+        crawler = self._create_crawler(spidercls)
+        self._setup_crawler_logging(crawler)
+        self.crawlers.add(crawler)
+        d = crawler.crawl(*args, **kwargs)
+        self._active.add(d)
+
+        def _done(result):
+            self.crawlers.discard(crawler)
+            self._active.discard(d)
+            return result
+
+        return d.addBoth(_done)
+
+    def _create_crawler(self, spidercls):
+        if isinstance(spidercls, six.string_types):
+            spidercls = self.spiders.load(spidercls)
+
+        crawler_settings = self.settings.copy()
+        spidercls.update_settings(crawler_settings)
+        crawler_settings.freeze()
+        return Crawler(spidercls, crawler_settings)
+
+    def _setup_crawler_logging(self, crawler):
+        log_observer = log.start_from_crawler(crawler)
+        if log_observer:
+            crawler.signals.connect(log_observer.stop, signals.engine_stopped)
+
+    def stop(self):
+        return defer.DeferredList([c.stop() for c in list(self.crawlers)])
+
+    @defer.inlineCallbacks
+    def join(self):
+        &quot;&quot;&quot;Wait for all managed crawlers to complete&quot;&quot;&quot;
+        while self._active:
+            yield defer.DeferredList(self._active)</code></pre>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/06/2015-2-15-python%E9%97%AD%E5%8C%85/" rel="next" title="闭包">
+                <i class="fa fa-chevron-left"></i> 闭包
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/06/2015-3-2-design_pattern/" rel="prev" title="设计模式">
+                设计模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">273</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="spring bootspringDI（依赖注入IOC） AOP（面向切面编程） 把有一些类注解，实例一次，放入ioc容器 通过autowired等注解，从ioc容器里拿实例 spring boot创建一个基于spring的应用简单 自动配置 零xml配置 application.properties是spring boot默认的配置文件，spring boot默认会在以下两个路径搜索并加载这个文">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spring boot">
+<meta property="og:url" content="http://yoursite.com/2020/01/06/2018-1-23-spring%20boot/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="spring bootspringDI（依赖注入IOC） AOP（面向切面编程） 把有一些类注解，实例一次，放入ioc容器 通过autowired等注解，从ioc容器里拿实例 spring boot创建一个基于spring的应用简单 自动配置 零xml配置 application.properties是spring boot默认的配置文件，spring boot默认会在以下两个路径搜索并加载这个文">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191225093322418.png">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191225162114063.png">
+<meta property="article:published_time" content="2020-01-06T06:03:05.497Z">
+<meta property="article:modified_time" content="2020-01-06T06:03:09.461Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191225093322418.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/01/06/2018-1-23-spring boot/"/>
+
+
+
+
+
+  <title>spring boot | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2018-1-23-spring%20boot/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">spring boot</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
+                2020-01-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="spring-boot"><a href="#spring-boot" class="headerlink" title="spring boot"></a>spring boot</h2><h3 id="spring"><a href="#spring" class="headerlink" title="spring"></a>spring</h3><p>DI（依赖注入IOC）</p>
+<p>AOP（面向切面编程）</p>
+<p>把有一些类注解，实例一次，放入ioc容器</p>
+<p>通过autowired等注解，从ioc容器里拿实例</p>
+<h3 id="spring-boot-1"><a href="#spring-boot-1" class="headerlink" title="spring boot"></a>spring boot</h3><p>创建一个基于spring的应用简单</p>
+<p>自动配置</p>
+<p>零xml配置</p>
+<p>application.properties是spring boot默认的配置文件，spring boot默认会在以下两个路径搜索并加载这个文件</p>
+<p>src\main\resources</p>
+<p>src\main\resources\config</p>
+<h2 id="程序开始"><a href="#程序开始" class="headerlink" title="程序开始"></a>程序开始</h2><p>SpringApplication.run（），进行自动配置</p>
+<h3 id="SpringApplication构造函数"><a href="#SpringApplication构造函数" class="headerlink" title="SpringApplication构造函数"></a>SpringApplication构造函数</h3><p>org.springframework.boot.SpringApplication#SpringApplication(org.springframework.core.io.ResourceLoader, java.lang.Class&lt;?&gt;…)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">SpringApplication</span><span class="params">(ResourceLoader resourceLoader, Class&lt;?&gt;... primarySources)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.resourceLoader = resourceLoader;</span><br><span class="line">		Assert.notNull(primarySources, <span class="string">"PrimarySources must not be null"</span>);</span><br><span class="line">		<span class="keyword">this</span>.primarySources = <span class="keyword">new</span> LinkedHashSet&lt;&gt;(Arrays.asList(primarySources));</span><br><span class="line">		<span class="keyword">this</span>.webApplicationType = deduceWebApplicationType();</span><br><span class="line">    <span class="comment">// 从spring.factories找到org.springframework.context.ApplicationContextInitializer实现类并实例化</span></span><br><span class="line">		setInitializers((Collection) getSpringFactoriesInstances(</span><br><span class="line">				ApplicationContextInitializer<span class="class">.<span class="keyword">class</span>))</span>;</span><br><span class="line">    <span class="comment">// 从spring.factories找到org.springframework.context.ApplicationListener实现类并实例化</span></span><br><span class="line">		setListeners((Collection) getSpringFactoriesInstances(ApplicationListener<span class="class">.<span class="keyword">class</span>))</span>;</span><br><span class="line">    <span class="comment">// 根据调用栈，拿到main启动类 new RuntimeException().getStackTrace() </span></span><br><span class="line">		<span class="keyword">this</span>.mainApplicationClass = deduceMainApplicationClass();</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> &lt;T&gt; <span class="function">Collection&lt;T&gt; <span class="title">getSpringFactoriesInstances</span><span class="params">(Class&lt;T&gt; type,</span></span></span><br><span class="line"><span class="function"><span class="params">      Class&lt;?&gt;[] parameterTypes, Object... args)</span> </span>&#123;</span><br><span class="line">   ClassLoader classLoader = Thread.currentThread().getContextClassLoader();</span><br><span class="line">   <span class="comment">// Use names and ensure unique to protect against duplicates</span></span><br><span class="line">   <span class="comment">// 从spring.factories找到type实现类全限定名</span></span><br><span class="line">   Set&lt;String&gt; names = <span class="keyword">new</span> LinkedHashSet&lt;&gt;(</span><br><span class="line">         SpringFactoriesLoader.loadFactoryNames(type, classLoader));</span><br><span class="line">   <span class="comment">// 实例化</span></span><br><span class="line">   List&lt;T&gt; instances = createSpringFactoriesInstances(type, parameterTypes,</span><br><span class="line">         classLoader, args, names);</span><br><span class="line">   AnnotationAwareOrderComparator.sort(instances);</span><br><span class="line">   <span class="keyword">return</span> instances;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> &lt;T&gt; <span class="function">List&lt;T&gt; <span class="title">createSpringFactoriesInstances</span><span class="params">(Class&lt;T&gt; type,</span></span></span><br><span class="line"><span class="function"><span class="params">      Class&lt;?&gt;[] parameterTypes, ClassLoader classLoader, Object[] args,</span></span></span><br><span class="line"><span class="function"><span class="params">      Set&lt;String&gt; names)</span> </span>&#123;</span><br><span class="line">   List&lt;T&gt; instances = <span class="keyword">new</span> ArrayList&lt;&gt;(names.size());</span><br><span class="line">   <span class="keyword">for</span> (String name : names) &#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">         Class&lt;?&gt; instanceClass = ClassUtils.forName(name, classLoader);</span><br><span class="line">         Assert.isAssignable(type, instanceClass);</span><br><span class="line">         Constructor&lt;?&gt; constructor = instanceClass</span><br><span class="line">               .getDeclaredConstructor(parameterTypes);</span><br><span class="line">         <span class="comment">// 实例化</span></span><br><span class="line">         T instance = (T) BeanUtils.instantiateClass(constructor, args);</span><br><span class="line">         instances.add(instance);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">         <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(</span><br><span class="line">               <span class="string">"Cannot instantiate "</span> + type + <span class="string">" : "</span> + name, ex);</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> instances;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">springboot autoconfiguration的meta-inf的spring.factories文件</span><br><span class="line"># Initializers</span><br><span class="line">org.springframework.context.ApplicationContextInitializer=\</span><br><span class="line">org.springframework.boot.autoconfigure.SharedMetadataReaderFactoryContextInitializer,\</span><br><span class="line">org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLoggingListener</span><br><span class="line"></span><br><span class="line"># Application Listeners</span><br><span class="line">org.springframework.context.ApplicationListener=\</span><br><span class="line">org.springframework.boot.autoconfigure.BackgroundPreinitializer</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> <span class="number">0</span> = <span class="string">"org.springframework.boot.context.ConfigurationWarningsApplicationContextInitializer"</span></span><br><span class="line"> <span class="number">1</span> = <span class="string">"org.springframework.boot.context.ContextIdApplicationContextInitializer"</span></span><br><span class="line"> <span class="number">2</span> = <span class="string">"org.springframework.boot.context.config.DelegatingApplicationContextInitializer"</span></span><br><span class="line"> <span class="number">3</span> = <span class="string">"org.springframework.boot.web.context.ServerPortInfoApplicationContextInitializer"</span></span><br><span class="line"> <span class="number">4</span> = <span class="string">"org.springframework.boot.autoconfigure.SharedMetadataReaderFactoryContextInitializer"</span></span><br><span class="line"> <span class="number">5</span> = <span class="string">"org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLoggingListener"</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="run函数"><a href="#run函数" class="headerlink" title="run函数"></a>run函数</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> ConfigurableApplicationContext <span class="title">run</span><span class="params">(String... args)</span> </span>&#123;</span><br><span class="line">   StopWatch stopWatch = <span class="keyword">new</span> StopWatch();</span><br><span class="line">   stopWatch.start();</span><br><span class="line">   ConfigurableApplicationContext context = <span class="keyword">null</span>;</span><br><span class="line">   Collection&lt;SpringBootExceptionReporter&gt; exceptionReporters = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">   configureHeadlessProperty();</span><br><span class="line">   SpringApplicationRunListeners listeners = getRunListeners(args);</span><br><span class="line">   listeners.starting();</span><br><span class="line">   <span class="keyword">try</span> &#123;</span><br><span class="line">      ApplicationArguments applicationArguments = <span class="keyword">new</span> DefaultApplicationArguments(</span><br><span class="line">            args);</span><br><span class="line">      ConfigurableEnvironment environment = prepareEnvironment(listeners,</span><br><span class="line">            applicationArguments);</span><br><span class="line">      configureIgnoreBeanInfo(environment);</span><br><span class="line">      Banner printedBanner = printBanner(environment);</span><br><span class="line">      context = createApplicationContext();</span><br><span class="line">      exceptionReporters = getSpringFactoriesInstances(</span><br><span class="line">            SpringBootExceptionReporter<span class="class">.<span class="keyword">class</span>,</span></span><br><span class="line">            new Class[] &#123; ConfigurableApplicationContext.class &#125;, context);</span><br><span class="line">      prepareContext(context, environment, listeners, applicationArguments,</span><br><span class="line">            printedBanner);</span><br><span class="line">      <span class="comment">// 创建spring容器，和web服务器</span></span><br><span class="line">      refreshContext(context);</span><br><span class="line">      afterRefresh(context, applicationArguments);</span><br><span class="line">      stopWatch.stop();</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.logStartupInfo) &#123;</span><br><span class="line">         <span class="keyword">new</span> StartupInfoLogger(<span class="keyword">this</span>.mainApplicationClass)</span><br><span class="line">               .logStarted(getApplicationLog(), stopWatch);</span><br><span class="line">      &#125;</span><br><span class="line">      listeners.started(context);</span><br><span class="line">      callRunners(context, applicationArguments);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">      handleRunFailure(context, ex, exceptionReporters, listeners);</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(ex);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">try</span> &#123;</span><br><span class="line">      listeners.running(context);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">      handleRunFailure(context, ex, exceptionReporters, <span class="keyword">null</span>);</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(ex);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> context;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>创建spring容器，默认org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext</p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191225093322418.png" alt="image-20191225093322418"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> ConfigurableApplicationContext <span class="title">createApplicationContext</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   Class&lt;?&gt; contextClass = <span class="keyword">this</span>.applicationContextClass;</span><br><span class="line">   <span class="keyword">if</span> (contextClass == <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">         <span class="keyword">switch</span> (<span class="keyword">this</span>.webApplicationType) &#123;</span><br><span class="line">         <span class="keyword">case</span> SERVLET:</span><br><span class="line">            contextClass = Class.forName(DEFAULT_WEB_CONTEXT_CLASS);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">         <span class="keyword">case</span> REACTIVE:</span><br><span class="line">            contextClass = Class.forName(DEFAULT_REACTIVE_WEB_CONTEXT_CLASS);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">         <span class="keyword">default</span>:</span><br><span class="line">            contextClass = Class.forName(DEFAULT_CONTEXT_CLASS);</span><br><span class="line">         &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">catch</span> (ClassNotFoundException ex) &#123;</span><br><span class="line">         <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(</span><br><span class="line">               <span class="string">"Unable create a default ApplicationContext, "</span></span><br><span class="line">                     + <span class="string">"please specify an ApplicationContextClass"</span>,</span><br><span class="line">               ex);</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> (ConfigurableApplicationContext) BeanUtils.instantiateClass(contextClass);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">prepareContext</span><span class="params">(ConfigurableApplicationContext context,</span></span></span><br><span class="line"><span class="function"><span class="params">      ConfigurableEnvironment environment, SpringApplicationRunListeners listeners,</span></span></span><br><span class="line"><span class="function"><span class="params">      ApplicationArguments applicationArguments, Banner printedBanner)</span> </span>&#123;</span><br><span class="line">   context.setEnvironment(environment);</span><br><span class="line">   postProcessApplicationContext(context);</span><br><span class="line">   <span class="comment">// 执行Initializers</span></span><br><span class="line">   applyInitializers(context);</span><br><span class="line">   <span class="comment">// 执行listeners</span></span><br><span class="line">   listeners.contextPrepared(context);</span><br><span class="line">   <span class="keyword">if</span> (<span class="keyword">this</span>.logStartupInfo) &#123;</span><br><span class="line">      logStartupInfo(context.getParent() == <span class="keyword">null</span>);</span><br><span class="line">      logStartupProfileInfo(context);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// Add boot specific singleton beans</span></span><br><span class="line">   context.getBeanFactory().registerSingleton(<span class="string">"springApplicationArguments"</span>,</span><br><span class="line">         applicationArguments);</span><br><span class="line">   <span class="keyword">if</span> (printedBanner != <span class="keyword">null</span>) &#123;</span><br><span class="line">      context.getBeanFactory().registerSingleton(<span class="string">"springBootBanner"</span>, printedBanner);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// Load the sources</span></span><br><span class="line">   Set&lt;Object&gt; sources = getAllSources();</span><br><span class="line">   Assert.notEmpty(sources, <span class="string">"Sources must not be empty"</span>);</span><br><span class="line">   load(context, sources.toArray(<span class="keyword">new</span> Object[<span class="number">0</span>]));</span><br><span class="line">   listeners.contextLoaded(context);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext#onRefresh</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onRefresh</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   <span class="keyword">super</span>.onRefresh();</span><br><span class="line">   <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="comment">// 实例化并启动tomcat服务器</span></span><br><span class="line">      createWebServer();</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> ApplicationContextException(<span class="string">"Unable to start web server"</span>, ex);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">createWebServer</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   WebServer webServer = <span class="keyword">this</span>.webServer;</span><br><span class="line">   ServletContext servletContext = getServletContext();</span><br><span class="line">   <span class="keyword">if</span> (webServer == <span class="keyword">null</span> &amp;&amp; servletContext == <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="comment">// 创建webServer工厂tomcatServletWebServerFactory</span></span><br><span class="line">      ServletWebServerFactory factory = getWebServerFactory();</span><br><span class="line">     	<span class="comment">// 创建webServer</span></span><br><span class="line">      <span class="keyword">this</span>.webServer = factory.getWebServer(getSelfInitializer());</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">else</span> <span class="keyword">if</span> (servletContext != <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">         getSelfInitializer().onStartup(servletContext);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">catch</span> (ServletException ex) &#123;</span><br><span class="line">         <span class="keyword">throw</span> <span class="keyword">new</span> ApplicationContextException(<span class="string">"Cannot initialize servlet context"</span>,</span><br><span class="line">               ex);</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   initPropertySources();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>ServletWebServerFactoryAutoConfiguration</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@AutoConfigureOrder</span>(Ordered.HIGHEST_PRECEDENCE)</span><br><span class="line"><span class="meta">@ConditionalOnClass</span>(ServletRequest<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class">@<span class="title">ConditionalOnWebApplication</span>(<span class="title">type</span> </span>= Type.SERVLET)</span><br><span class="line"><span class="meta">@EnableConfigurationProperties</span>(ServerProperties<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class">// 按顺序加载，所以<span class="title">tomcat</span>优先级最高</span></span><br><span class="line"><span class="class">@<span class="title">Import</span>(</span>&#123; ServletWebServerFactoryAutoConfiguration.BeanPostProcessorsRegistrar<span class="class">.<span class="keyword">class</span>,</span></span><br><span class="line"><span class="class">      <span class="title">ServletWebServerFactoryConfiguration</span>.<span class="title">EmbeddedTomcat</span>.<span class="title">class</span>,</span></span><br><span class="line"><span class="class">      <span class="title">ServletWebServerFactoryConfiguration</span>.<span class="title">EmbeddedJetty</span>.<span class="title">class</span>,</span></span><br><span class="line"><span class="class">      <span class="title">ServletWebServerFactoryConfiguration</span>.<span class="title">EmbeddedUndertow</span>.<span class="title">class</span> &#125;)</span></span><br><span class="line"><span class="class"><span class="title">public</span> <span class="title">class</span> <span class="title">ServletWebServerFactoryAutoConfiguration</span> </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ServletWebServerFactoryConfiguration</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Configuration</span></span><br><span class="line">	<span class="meta">@ConditionalOnClass</span>(&#123; Servlet<span class="class">.<span class="keyword">class</span>, <span class="title">Tomcat</span>.<span class="title">class</span>, <span class="title">UpgradeProtocol</span>.<span class="title">class</span> &#125;)</span></span><br><span class="line"><span class="class">	@<span class="title">ConditionalOnMissingBean</span>(<span class="title">value</span> </span>= ServletWebServerFactory<span class="class">.<span class="keyword">class</span>, <span class="title">search</span> </span>= SearchStrategy.CURRENT)</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">EmbeddedTomcat</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">		<span class="meta">@Bean</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> TomcatServletWebServerFactory <span class="title">tomcatServletWebServerFactory</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="comment">// tomcat工厂类</span></span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">new</span> TomcatServletWebServerFactory();</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> ServletWebServerFactory <span class="title">getWebServerFactory</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   <span class="comment">// Use bean names so that we don't consider the hierarchy</span></span><br><span class="line">   <span class="comment">// 查找tomcatServletWebServerFactory的bean</span></span><br><span class="line">   String[] beanNames = getBeanFactory()</span><br><span class="line">         .getBeanNamesForType(ServletWebServerFactory<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">   <span class="keyword">if</span> (beanNames.length == <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> ApplicationContextException(</span><br><span class="line">            <span class="string">"Unable to start ServletWebServerApplicationContext due to missing "</span></span><br><span class="line">                  + <span class="string">"ServletWebServerFactory bean."</span>);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">if</span> (beanNames.length &gt; <span class="number">1</span>) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> ApplicationContextException(</span><br><span class="line">            <span class="string">"Unable to start ServletWebServerApplicationContext due to multiple "</span></span><br><span class="line">                  + <span class="string">"ServletWebServerFactory beans : "</span></span><br><span class="line">                  + StringUtils.arrayToCommaDelimitedString(beanNames));</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> getBeanFactory().getBean(beanNames[<span class="number">0</span>], ServletWebServerFactory<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ServletContextInitializer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * Configure the given &#123;<span class="doctag">@link</span> ServletContext&#125; with any servlets, filters, listeners</span></span><br><span class="line"><span class="comment">	 * context-params and attributes necessary for initialization.</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> servletContext the &#123;<span class="doctag">@code</span> ServletContext&#125; to initialize</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@throws</span> ServletException if any call against the given &#123;<span class="doctag">@code</span> ServletContext&#125;</span></span><br><span class="line"><span class="comment">	 * throws a &#123;<span class="doctag">@code</span> ServletException&#125;</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">onStartup</span><span class="params">(ServletContext servletContext)</span> <span class="keyword">throws</span> ServletException</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> org.springframework.boot.web.servlet.<span class="function">ServletContextInitializer <span class="title">getSelfInitializer</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   <span class="comment">// 函数接口，调用onStarup的时候调用的是selfInitialize</span></span><br><span class="line">   <span class="keyword">return</span> <span class="keyword">this</span>::selfInitialize;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">selfInitialize</span><span class="params">(ServletContext servletContext)</span> <span class="keyword">throws</span> ServletException </span>&#123;</span><br><span class="line">   prepareWebApplicationContext(servletContext);</span><br><span class="line">   ConfigurableListableBeanFactory beanFactory = getBeanFactory();</span><br><span class="line">   ExistingWebApplicationScopes existingScopes = <span class="keyword">new</span> ExistingWebApplicationScopes(</span><br><span class="line">         beanFactory);</span><br><span class="line">   WebApplicationContextUtils.registerWebApplicationScopes(beanFactory,</span><br><span class="line">         getServletContext());</span><br><span class="line">   existingScopes.restore();</span><br><span class="line">   WebApplicationContextUtils.registerEnvironmentBeans(beanFactory,</span><br><span class="line">         getServletContext());</span><br><span class="line">   <span class="comment">// 从spring容器里获取ServletContextInitializer bean</span></span><br><span class="line">   <span class="keyword">for</span> (ServletContextInitializer beans : getServletContextInitializerBeans()) &#123;</span><br><span class="line">      <span class="comment">// 将tomcat和spring容器关联</span></span><br><span class="line">      beans.onStartup(servletContext);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> Collection&lt;ServletContextInitializer&gt; <span class="title">getServletContextInitializerBeans</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   <span class="keyword">return</span> <span class="keyword">new</span> ServletContextInitializerBeans(getBeanFactory());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">ServletContextInitializerBeans</span><span class="params">(ListableBeanFactory beanFactory)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.initializers = <span class="keyword">new</span> LinkedMultiValueMap&lt;&gt;();</span><br><span class="line">    <span class="comment">// 将ServletContextInitializerBean放入initializers</span></span><br><span class="line">		addServletContextInitializerBeans(beanFactory);</span><br><span class="line">		addAdaptableBeans(beanFactory);</span><br><span class="line">		List&lt;ServletContextInitializer&gt; sortedInitializers = <span class="keyword">this</span>.initializers.values()</span><br><span class="line">				.stream()</span><br><span class="line">				.flatMap((value) -&gt; value.stream()</span><br><span class="line">						.sorted(AnnotationAwareOrderComparator.INSTANCE))</span><br><span class="line">				.collect(Collectors.toList());</span><br><span class="line">		<span class="keyword">this</span>.sortedList = Collections.unmodifiableList(sortedInitializers);</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>实例化并启动tomcat服务器</strong></p>
+<p>org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory#getWebServer</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> WebServer <span class="title">getWebServer</span><span class="params">(ServletContextInitializer... initializers)</span> </span>&#123;</span><br><span class="line">   Tomcat tomcat = <span class="keyword">new</span> Tomcat();</span><br><span class="line">   File baseDir = (<span class="keyword">this</span>.baseDirectory != <span class="keyword">null</span>) ? <span class="keyword">this</span>.baseDirectory</span><br><span class="line">         : createTempDir(<span class="string">"tomcat"</span>);</span><br><span class="line">   tomcat.setBaseDir(baseDir.getAbsolutePath());</span><br><span class="line">   Connector connector = <span class="keyword">new</span> Connector(<span class="keyword">this</span>.protocol);</span><br><span class="line">   tomcat.getService().addConnector(connector);</span><br><span class="line">   customizeConnector(connector);</span><br><span class="line">   tomcat.setConnector(connector);</span><br><span class="line">   tomcat.getHost().setAutoDeploy(<span class="keyword">false</span>);</span><br><span class="line">   configureEngine(tomcat.getEngine());</span><br><span class="line">   <span class="keyword">for</span> (Connector additionalConnector : <span class="keyword">this</span>.additionalTomcatConnectors) &#123;</span><br><span class="line">      tomcat.getService().addConnector(additionalConnector);</span><br><span class="line">   &#125;</span><br><span class="line">   prepareContext(tomcat.getHost(), initializers);</span><br><span class="line">   <span class="comment">// TomcatWebServer包装原生tomcat</span></span><br><span class="line">   <span class="keyword">return</span> getTomcatWebServer(tomcat);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>org.springframework.boot.web.embedded.tomcat.TomcatWebServer#initialize</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">initialize</span><span class="params">()</span> <span class="keyword">throws</span> WebServerException </span>&#123;</span><br><span class="line">   TomcatWebServer.logger</span><br><span class="line">         .info(<span class="string">"Tomcat initialized with port(s): "</span> + getPortsDescription(<span class="keyword">false</span>));</span><br><span class="line">   <span class="keyword">synchronized</span> (<span class="keyword">this</span>.monitor) &#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">         addInstanceIdToEngineName();</span><br><span class="line"></span><br><span class="line">         Context context = findContext();</span><br><span class="line">         context.addLifecycleListener((event) -&gt; &#123;</span><br><span class="line">            <span class="keyword">if</span> (context.equals(event.getSource())</span><br><span class="line">                  &amp;&amp; Lifecycle.START_EVENT.equals(event.getType())) &#123;</span><br><span class="line">               <span class="comment">// Remove service connectors so that protocol binding doesn't</span></span><br><span class="line">               <span class="comment">// happen when the service is started.</span></span><br><span class="line">               removeServiceConnectors();</span><br><span class="line">            &#125;</span><br><span class="line">         &#125;);</span><br><span class="line"></span><br><span class="line">         <span class="comment">// Start the server to trigger initialization listeners</span></span><br><span class="line">         <span class="keyword">this</span>.tomcat.start();</span><br><span class="line"></span><br><span class="line">         <span class="comment">// We can re-throw failure exception directly in the main thread</span></span><br><span class="line">         rethrowDeferredStartupExceptions();</span><br><span class="line"></span><br><span class="line">         <span class="keyword">try</span> &#123;</span><br><span class="line">            ContextBindings.bindClassLoader(context, context.getNamingToken(),</span><br><span class="line">                  getClass().getClassLoader());</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="keyword">catch</span> (NamingException ex) &#123;</span><br><span class="line">            <span class="comment">// Naming is not enabled. Continue</span></span><br><span class="line">         &#125;</span><br><span class="line"></span><br><span class="line">         <span class="comment">// Unlike Jetty, all Tomcat threads are daemon threads. We create a</span></span><br><span class="line">         <span class="comment">// blocking non-daemon to stop immediate shutdown</span></span><br><span class="line">         startDaemonAwaitThread();</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">catch</span> (Exception ex) &#123;</span><br><span class="line">         stopSilently();</span><br><span class="line">         <span class="keyword">throw</span> <span class="keyword">new</span> WebServerException(<span class="string">"Unable to start embedded Tomcat"</span>, ex);</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">prepareContext</span><span class="params">(Host host, ServletContextInitializer[] initializers)</span> </span>&#123;</span><br><span class="line">   File documentRoot = getValidDocumentRoot();</span><br><span class="line">   TomcatEmbeddedContext context = <span class="keyword">new</span> TomcatEmbeddedContext();</span><br><span class="line">   <span class="keyword">if</span> (documentRoot != <span class="keyword">null</span>) &#123;</span><br><span class="line">      context.setResources(<span class="keyword">new</span> LoaderHidingResourceRoot(context));</span><br><span class="line">   &#125;</span><br><span class="line">   context.setName(getContextPath());</span><br><span class="line">   context.setDisplayName(getDisplayName());</span><br><span class="line">   context.setPath(getContextPath());</span><br><span class="line">   File docBase = (documentRoot != <span class="keyword">null</span>) ? documentRoot</span><br><span class="line">         : createTempDir(<span class="string">"tomcat-docbase"</span>);</span><br><span class="line">   context.setDocBase(docBase.getAbsolutePath());</span><br><span class="line">   context.addLifecycleListener(<span class="keyword">new</span> FixContextListener());</span><br><span class="line">   context.setParentClassLoader(</span><br><span class="line">         (<span class="keyword">this</span>.resourceLoader != <span class="keyword">null</span>) ? <span class="keyword">this</span>.resourceLoader.getClassLoader()</span><br><span class="line">               : ClassUtils.getDefaultClassLoader());</span><br><span class="line">   resetDefaultLocaleMapping(context);</span><br><span class="line">   addLocaleMappings(context);</span><br><span class="line">   context.setUseRelativeRedirects(<span class="keyword">false</span>);</span><br><span class="line">   configureTldSkipPatterns(context);</span><br><span class="line">   WebappLoader loader = <span class="keyword">new</span> WebappLoader(context.getParentClassLoader());</span><br><span class="line">   loader.setLoaderClass(TomcatEmbeddedWebappClassLoader<span class="class">.<span class="keyword">class</span>.<span class="title">getName</span>())</span>;</span><br><span class="line">   loader.setDelegate(<span class="keyword">true</span>);</span><br><span class="line">   context.setLoader(loader);</span><br><span class="line">   <span class="keyword">if</span> (isRegisterDefaultServlet()) &#123;</span><br><span class="line">      addDefaultServlet(context);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">if</span> (shouldRegisterJspServlet()) &#123;</span><br><span class="line">      addJspServlet(context);</span><br><span class="line">      addJasperInitializer(context);</span><br><span class="line">   &#125;</span><br><span class="line">   context.addLifecycleListener(<span class="keyword">new</span> StaticResourceConfigurer(context));</span><br><span class="line">   ServletContextInitializer[] initializersToUse = mergeInitializers(initializers);</span><br><span class="line">   host.addChild(context);</span><br><span class="line">   <span class="comment">// 实例化TomcatStarter，org.springframework.boot.web.embedded.tomcat.TomcatStarter#TomcatStarter，并发initilizer放到tomcatStarter</span></span><br><span class="line">   configureContext(context, initializersToUse);</span><br><span class="line">   postProcessContext(context);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>tomcat启动的时候，org.apache.catalina.core.StandardContext#startInternal-&gt;org.springframework.boot.web.embedded.tomcat.TomcatStarter#onStartup，servlet初始化</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onStartup</span><span class="params">(Set&lt;Class&lt;?&gt;&gt; classes, ServletContext servletContext)</span></span></span><br><span class="line"><span class="function">      <span class="keyword">throws</span> ServletException </span>&#123;</span><br><span class="line">   <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="keyword">for</span> (ServletContextInitializer initializer : <span class="keyword">this</span>.initializers) &#123;</span><br><span class="line">         initializer.onStartup(servletContext);</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">catch</span> (Exception ex) &#123;</span><br><span class="line">      <span class="keyword">this</span>.startUpException = ex;</span><br><span class="line">      <span class="comment">// Prevent Tomcat from logging and re-throwing when we know we can</span></span><br><span class="line">      <span class="comment">// deal with it in the main thread, but log for information here.</span></span><br><span class="line">      <span class="keyword">if</span> (logger.isErrorEnabled()) &#123;</span><br><span class="line">         logger.error(<span class="string">"Error starting Tomcat context. Exception: "</span></span><br><span class="line">               + ex.getClass().getName() + <span class="string">". Message: "</span> + ex.getMessage());</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="自动配置"><a href="#自动配置" class="headerlink" title="自动配置"></a>自动配置</h2><p>根据import注解，导入第三方组件到spring容器，第三方组件要有自动配置类</p>
+<p>例如mybatis</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">org.springframework.boot.autoconfigure.EnableAutoConfiguration=\</span><br><span class="line">org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ConditionalOnClass</span>(&#123; SqlSessionFactory<span class="class">.<span class="keyword">class</span>, <span class="title">SqlSessionFactoryBean</span>.<span class="title">class</span> &#125;)</span></span><br><span class="line"><span class="class">@<span class="title">ConditionalOnBean</span>(<span class="title">DataSource</span>.<span class="title">class</span>)</span></span><br><span class="line"><span class="class">@<span class="title">EnableConfigurationProperties</span>(<span class="title">MybatisProperties</span>.<span class="title">class</span>)</span></span><br><span class="line"><span class="class">@<span class="title">AutoConfigureAfter</span>(<span class="title">DataSourceAutoConfiguration</span>.<span class="title">class</span>)</span></span><br><span class="line"><span class="class"><span class="title">public</span> <span class="title">class</span> <span class="title">MybatisAutoConfiguration</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger logger = LoggerFactory.getLogger(MybatisAutoConfiguration<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> MybatisProperties properties;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Interceptor[] interceptors;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> ResourceLoader resourceLoader;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> DatabaseIdProvider databaseIdProvider;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="SpringBoosApplication注解"><a href="#SpringBoosApplication注解" class="headerlink" title="@SpringBoosApplication注解"></a>@SpringBoosApplication注解</h3><p>根据import注解，解析META-INF/spring.factories文件，导入第三方组件的启动类xxxx（<strong>org.springframework.boot.autoconfigure.EnableAutoConfiguration</strong>=xxxx）</p>
+<p>@SpringBootApplication-&gt;@EnableAutoConfiguration-&gt;<strong>@Import(AutoConfigurationImportSelector.class</strong>)</p>
+<p>org.springframework.boot.autoconfigure.AutoConfigurationImportSelector#selectImports</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 返回包里所有的org.springframework.boot.autoconfigure.EnableAutoConfiguration实现类的类名，由spring生成bd和bean	</span></span><br><span class="line"><span class="keyword">public</span> String[] selectImports(AnnotationMetadata annotationMetadata) &#123;</span><br><span class="line">		<span class="keyword">if</span> (!isEnabled(annotationMetadata)) &#123;</span><br><span class="line">			<span class="keyword">return</span> NO_IMPORTS;</span><br><span class="line">		&#125;</span><br><span class="line">		AutoConfigurationMetadata autoConfigurationMetadata = AutoConfigurationMetadataLoader</span><br><span class="line">				.loadMetadata(<span class="keyword">this</span>.beanClassLoader);</span><br><span class="line">		AnnotationAttributes attributes = getAttributes(annotationMetadata);</span><br><span class="line">    <span class="comment">// 解析META-INF/spring.factories文件，找到候选的配置类，key为org.springframework.boot.autoconfigure.EnableAutoConfiguration</span></span><br><span class="line">		List&lt;String&gt; configurations = getCandidateConfigurations(annotationMetadata,</span><br><span class="line">				attributes);</span><br><span class="line">    <span class="comment">// 去重</span></span><br><span class="line">		configurations = removeDuplicates(configurations);</span><br><span class="line">		Set&lt;String&gt; exclusions = getExclusions(annotationMetadata, attributes);</span><br><span class="line">		checkExcludedClasses(configurations, exclusions);</span><br><span class="line">    <span class="comment">// 剔除不需要的类</span></span><br><span class="line">		configurations.removeAll(exclusions);</span><br><span class="line">    <span class="comment">// 过滤类</span></span><br><span class="line">		configurations = filter(configurations, autoConfigurationMetadata);</span><br><span class="line">    <span class="comment">// 先从spring.factories文件中找到监听器org.springframework.boot.autoconfigure.AutoConfigurationImportListener，然后触发该事件</span></span><br><span class="line">		fireAutoConfigurationImportEvents(configurations, exclusions);</span><br><span class="line">		<span class="keyword">return</span> StringUtils.toStringArray(configurations);</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> List&lt;String&gt; <span class="title">getCandidateConfigurations</span><span class="params">(AnnotationMetadata metadata,</span></span></span><br><span class="line"><span class="function"><span class="params">      AnnotationAttributes attributes)</span> </span>&#123;</span><br><span class="line">   List&lt;String&gt; configurations = SpringFactoriesLoader.loadFactoryNames(</span><br><span class="line">         getSpringFactoriesLoaderFactoryClass(), getBeanClassLoader());</span><br><span class="line">   Assert.notEmpty(configurations,</span><br><span class="line">         <span class="string">"No auto configuration classes found in META-INF/spring.factories. If you "</span></span><br><span class="line">               + <span class="string">"are using a custom packaging, make sure that file is correct."</span>);</span><br><span class="line">   <span class="keyword">return</span> configurations;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;String&gt; <span class="title">loadFactoryNames</span><span class="params">(Class&lt;?&gt; factoryClass, @Nullable ClassLoader classLoader)</span> </span>&#123;</span><br><span class="line">   String factoryClassName = factoryClass.getName();</span><br><span class="line">   <span class="keyword">return</span> loadSpringFactories(classLoader).getOrDefault(factoryClassName, Collections.emptyList());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> Map&lt;String, List&lt;String&gt;&gt; loadSpringFactories(<span class="meta">@Nullable</span> ClassLoader classLoader) &#123;</span><br><span class="line">   MultiValueMap&lt;String, String&gt; result = cache.get(classLoader);</span><br><span class="line">   <span class="keyword">if</span> (result != <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> result;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">try</span> &#123;</span><br><span class="line">     <span class="comment">// FACTORIES_RESOURCE_LOCATION=META-INF/spring.factories</span></span><br><span class="line">      Enumeration&lt;URL&gt; urls = (classLoader != <span class="keyword">null</span> ?</span><br><span class="line">            classLoader.getResources(FACTORIES_RESOURCE_LOCATION) :</span><br><span class="line">            ClassLoader.getSystemResources(FACTORIES_RESOURCE_LOCATION));</span><br><span class="line">      result = <span class="keyword">new</span> LinkedMultiValueMap&lt;&gt;();</span><br><span class="line">      <span class="comment">// 扫描所有spring.factories文件，将文件内容放入LinkedMultiValueMap中</span></span><br><span class="line">      <span class="keyword">while</span> (urls.hasMoreElements()) &#123;</span><br><span class="line">         URL url = urls.nextElement();</span><br><span class="line">         UrlResource resource = <span class="keyword">new</span> UrlResource(url);</span><br><span class="line">         Properties properties = PropertiesLoaderUtils.loadProperties(resource);</span><br><span class="line">         <span class="keyword">for</span> (Map.Entry&lt;?, ?&gt; entry : properties.entrySet()) &#123;</span><br><span class="line">            List&lt;String&gt; factoryClassNames = Arrays.asList(</span><br><span class="line">                  StringUtils.commaDelimitedListToStringArray((String) entry.getValue()));</span><br><span class="line">            result.addAll((String) entry.getKey(), factoryClassNames);</span><br><span class="line">         &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      cache.put(classLoader, result);</span><br><span class="line">      <span class="keyword">return</span> result;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">catch</span> (IOException ex) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Unable to load factories from location ["</span> +</span><br><span class="line">            FACTORIES_RESOURCE_LOCATION + <span class="string">"]"</span>, ex);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">fireAutoConfigurationImportEvents</span><span class="params">(List&lt;String&gt; configurations,</span></span></span><br><span class="line"><span class="function"><span class="params">      Set&lt;String&gt; exclusions)</span> </span>&#123;</span><br><span class="line">   List&lt;AutoConfigurationImportListener&gt; listeners = getAutoConfigurationImportListeners();</span><br><span class="line">   <span class="keyword">if</span> (!listeners.isEmpty()) &#123;</span><br><span class="line">      AutoConfigurationImportEvent event = <span class="keyword">new</span> AutoConfigurationImportEvent(<span class="keyword">this</span>,</span><br><span class="line">            configurations, exclusions);</span><br><span class="line">      <span class="keyword">for</span> (AutoConfigurationImportListener listener : listeners) &#123;</span><br><span class="line">         invokeAwareMethods(listener);</span><br><span class="line">         listener.onAutoConfigurationImportEvent(event);</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="自动配置注入dispatcherServlet"><a href="#自动配置注入dispatcherServlet" class="headerlink" title="自动配置注入dispatcherServlet"></a>自动配置注入dispatcherServlet</h2><p><strong>springboot是先把dispatcherServlet bean注入到spring容器，而springmvc不需要</strong></p>
+<p>注入的DispatcherServletRegistrationBean，继承了ServletContextInitializer，能被启动服务器流程调用</p>
+<p>spring.factories</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">org.springframework.boot.autoconfigure.EnableAutoConfiguration=org.springframework.boot.autoconfigure.web.servlet.DispatcherServletAutoConfiguration</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@AutoConfigureOrder</span>(Ordered.HIGHEST_PRECEDENCE)</span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ConditionalOnWebApplication</span>(type = Type.SERVLET)</span><br><span class="line"><span class="meta">@ConditionalOnClass</span>(DispatcherServlet<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class">@<span class="title">AutoConfigureAfter</span>(<span class="title">ServletWebServerFactoryAutoConfiguration</span>.<span class="title">class</span>)</span></span><br><span class="line"><span class="class">@<span class="title">EnableConfigurationProperties</span>(<span class="title">ServerProperties</span>.<span class="title">class</span>)</span></span><br><span class="line"><span class="class"><span class="title">public</span> <span class="title">class</span> <span class="title">DispatcherServletAutoConfiguration</span> </span>&#123;</span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">  <span class="meta">@Configuration</span></span><br><span class="line">	<span class="meta">@Conditional</span>(DispatcherServletRegistrationCondition<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class">	@<span class="title">ConditionalOnClass</span>(<span class="title">ServletRegistration</span>.<span class="title">class</span>)</span></span><br><span class="line"><span class="class">	@<span class="title">EnableConfigurationProperties</span>(<span class="title">WebMvcProperties</span>.<span class="title">class</span>)</span></span><br><span class="line"><span class="class">	@<span class="title">Import</span>(<span class="title">DispatcherServletConfiguration</span>.<span class="title">class</span>)</span></span><br><span class="line"><span class="class">	<span class="title">protected</span> <span class="title">static</span> <span class="title">class</span> <span class="title">DispatcherServletRegistrationConfiguration</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">      <span class="comment">// 注入DispatcherServletRegistrationBean，这个bean继承了</span></span><br><span class="line">      <span class="meta">@Bean</span>(name = DEFAULT_DISPATCHER_SERVLET_REGISTRATION_BEAN_NAME)</span><br><span class="line">      <span class="meta">@ConditionalOnBean</span>(value = DispatcherServlet<span class="class">.<span class="keyword">class</span>, <span class="title">name</span> </span>= DEFAULT_DISPATCHER_SERVLET_BEAN_NAME)</span><br><span class="line">      <span class="function"><span class="keyword">public</span> DispatcherServletRegistrationBean <span class="title">dispatcherServletRegistration</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">          DispatcherServlet dispatcherServlet)</span> </span>&#123;</span><br><span class="line">        DispatcherServletRegistrationBean registration = <span class="keyword">new</span> DispatcherServletRegistrationBean(</span><br><span class="line">            dispatcherServlet, <span class="keyword">this</span>.serverProperties.getServlet().getPath());</span><br><span class="line">        registration.setName(DEFAULT_DISPATCHER_SERVLET_BEAN_NAME);</span><br><span class="line">        registration.setLoadOnStartup(</span><br><span class="line">            <span class="keyword">this</span>.webMvcProperties.getServlet().getLoadOnStartup());</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.multipartConfig != <span class="keyword">null</span>) &#123;</span><br><span class="line">          registration.setMultipartConfig(<span class="keyword">this</span>.multipartConfig);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> registration;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">  <span class="meta">@Configuration</span></span><br><span class="line">	<span class="meta">@Conditional</span>(DefaultDispatcherServletCondition<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class">	@<span class="title">ConditionalOnClass</span>(<span class="title">ServletRegistration</span>.<span class="title">class</span>)</span></span><br><span class="line"><span class="class">	@<span class="title">EnableConfigurationProperties</span>(<span class="title">WebMvcProperties</span>.<span class="title">class</span>)</span></span><br><span class="line"><span class="class">	<span class="title">protected</span> <span class="title">static</span> <span class="title">class</span> <span class="title">DispatcherServletConfiguration</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">private</span> <span class="keyword">final</span> WebMvcProperties webMvcProperties;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="title">DispatcherServletConfiguration</span><span class="params">(WebMvcProperties webMvcProperties)</span> </span>&#123;</span><br><span class="line">			<span class="keyword">this</span>.webMvcProperties = webMvcProperties;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 注入dispatcherServlet bean</span></span><br><span class="line">		<span class="meta">@Bean</span>(name = DEFAULT_DISPATCHER_SERVLET_BEAN_NAME)</span><br><span class="line">		<span class="function"><span class="keyword">public</span> DispatcherServlet <span class="title">dispatcherServlet</span><span class="params">()</span> </span>&#123;</span><br><span class="line">			DispatcherServlet dispatcherServlet = <span class="keyword">new</span> DispatcherServlet();</span><br><span class="line">			dispatcherServlet.setDispatchOptionsRequest(</span><br><span class="line">					<span class="keyword">this</span>.webMvcProperties.isDispatchOptionsRequest());</span><br><span class="line">			dispatcherServlet.setDispatchTraceRequest(</span><br><span class="line">					<span class="keyword">this</span>.webMvcProperties.isDispatchTraceRequest());</span><br><span class="line">			dispatcherServlet.setThrowExceptionIfNoHandlerFound(</span><br><span class="line">					<span class="keyword">this</span>.webMvcProperties.isThrowExceptionIfNoHandlerFound());</span><br><span class="line">			<span class="keyword">return</span> dispatcherServlet;</span><br><span class="line">		&#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191225162114063.png" alt="image-20191225162114063"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">onStartup</span><span class="params">(ServletContext servletContext)</span> <span class="keyword">throws</span> ServletException </span>&#123;</span><br><span class="line">   String description = getDescription();</span><br><span class="line">   <span class="keyword">if</span> (!isEnabled()) &#123;</span><br><span class="line">      logger.info(StringUtils.capitalize(description)</span><br><span class="line">            + <span class="string">" was not registered (disabled)"</span>);</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">   &#125;</span><br><span class="line">   register(description, servletContext);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">register</span><span class="params">(String description, ServletContext servletContext)</span> </span>&#123;</span><br><span class="line">   D registration = addRegistration(description, servletContext);</span><br><span class="line">   <span class="keyword">if</span> (registration == <span class="keyword">null</span>) &#123;</span><br><span class="line">      logger.info(StringUtils.capitalize(description) + <span class="string">" was not registered "</span></span><br><span class="line">            + <span class="string">"(possibly already registered?)"</span>);</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">   &#125;</span><br><span class="line">   configure(registration);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将dispatcherServlet设置到tomcat的context里，作为一个分发请求的servlet</span></span><br><span class="line"><span class="keyword">protected</span> ServletRegistration.<span class="function">Dynamic <span class="title">addRegistration</span><span class="params">(String description,</span></span></span><br><span class="line"><span class="function"><span class="params">                                                      ServletContext servletContext)</span> </span>&#123;</span><br><span class="line">  String name = getServletName();</span><br><span class="line">  logger.info(<span class="string">"Servlet "</span> + name + <span class="string">" mapped to "</span> + <span class="keyword">this</span>.urlMappings);</span><br><span class="line">  <span class="keyword">return</span> servletContext.addServlet(name, <span class="keyword">this</span>.servlet);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(ServletRegistration.Dynamic registration)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">super</span>.configure(registration);</span><br><span class="line">		String[] urlMapping = StringUtils.toStringArray(<span class="keyword">this</span>.urlMappings);</span><br><span class="line">		<span class="keyword">if</span> (urlMapping.length == <span class="number">0</span> &amp;&amp; <span class="keyword">this</span>.alwaysMapUrl) &#123;</span><br><span class="line">			urlMapping = DEFAULT_MAPPINGS;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (!ObjectUtils.isEmpty(urlMapping)) &#123;</span><br><span class="line">			registration.addMapping(urlMapping);</span><br><span class="line">		&#125;</span><br><span class="line">		registration.setLoadOnStartup(<span class="keyword">this</span>.loadOnStartup);</span><br><span class="line">		<span class="keyword">if</span> (<span class="keyword">this</span>.multipartConfig != <span class="keyword">null</span>) &#123;</span><br><span class="line">			registration.setMultipartConfig(<span class="keyword">this</span>.multipartConfig);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<p>dispatcherServlet 实现了ApplicationContextAware接口，在org.springframework.web.servlet.FrameworkServlet#setApplicationContext中设置了spring上下文</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setApplicationContext</span><span class="params">(ApplicationContext applicationContext)</span> </span>&#123;</span><br><span class="line">   <span class="keyword">if</span> (<span class="keyword">this</span>.webApplicationContext == <span class="keyword">null</span> &amp;&amp; applicationContext <span class="keyword">instanceof</span> WebApplicationContext) &#123;</span><br><span class="line">      <span class="keyword">this</span>.webApplicationContext = (WebApplicationContext) applicationContext;</span><br><span class="line">      <span class="keyword">this</span>.webApplicationContextInjected = <span class="keyword">true</span>;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>所以说dispatcherServlet bean要先在spring容器里面，再利用后置处理器设置上下文，而springmvc的dispatcherServlet则不需要再spring容器</p>
+<h2 id="自动配置WebMvcAutoConfiguration"><a href="#自动配置WebMvcAutoConfiguration" class="headerlink" title="自动配置WebMvcAutoConfiguration"></a>自动配置WebMvcAutoConfiguration</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 搜集messageConvertersProvider消息转换器等bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">WebMvcAutoConfigurationAdapter</span><span class="params">(ResourceProperties resourceProperties,</span></span></span><br><span class="line"><span class="function"><span class="params">      WebMvcProperties mvcProperties, ListableBeanFactory beanFactory,</span></span></span><br><span class="line"><span class="function"><span class="params">      ObjectProvider&lt;HttpMessageConverters&gt; messageConvertersProvider,</span></span></span><br><span class="line"><span class="function"><span class="params">      ObjectProvider&lt;ResourceHandlerRegistrationCustomizer&gt; resourceHandlerRegistrationCustomizerProvider)</span> </span>&#123;</span><br><span class="line">   <span class="keyword">this</span>.resourceProperties = resourceProperties;</span><br><span class="line">   <span class="keyword">this</span>.mvcProperties = mvcProperties;</span><br><span class="line">   <span class="keyword">this</span>.beanFactory = beanFactory;</span><br><span class="line">   <span class="keyword">this</span>.messageConvertersProvider = messageConvertersProvider;</span><br><span class="line">   <span class="keyword">this</span>.resourceHandlerRegistrationCustomizer = resourceHandlerRegistrationCustomizerProvider</span><br><span class="line">         .getIfAvailable();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>视图解析器</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="meta">@ConditionalOnBean</span>(ViewResolver<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class">@<span class="title">ConditionalOnMissingBean</span>(<span class="title">name</span> </span>= <span class="string">"viewResolver"</span>, value = ContentNegotiatingViewResolver<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class"><span class="title">public</span> <span class="title">ContentNegotiatingViewResolver</span> <span class="title">viewResolver</span>(<span class="title">BeanFactory</span> <span class="title">beanFactory</span>) </span>&#123;</span><br><span class="line">   ContentNegotiatingViewResolver resolver = <span class="keyword">new</span> ContentNegotiatingViewResolver();</span><br><span class="line">   resolver.setContentNegotiationManager(</span><br><span class="line">         beanFactory.getBean(ContentNegotiationManager<span class="class">.<span class="keyword">class</span>))</span>;</span><br><span class="line">   <span class="comment">// ContentNegotiatingViewResolver uses all the other view resolvers to locate</span></span><br><span class="line">   <span class="comment">// a view so it should have a high precedence</span></span><br><span class="line">   resolver.setOrder(Ordered.HIGHEST_PRECEDENCE);</span><br><span class="line">   <span class="keyword">return</span> resolver;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">initServletContext</span><span class="params">(ServletContext servletContext)</span> </span>&#123;</span><br><span class="line">   Collection&lt;ViewResolver&gt; matchingBeans =</span><br><span class="line">         BeanFactoryUtils.beansOfTypeIncludingAncestors(obtainApplicationContext(), ViewResolver<span class="class">.<span class="keyword">class</span>).<span class="title">values</span>()</span>;</span><br><span class="line">   <span class="keyword">if</span> (<span class="keyword">this</span>.viewResolvers == <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">this</span>.viewResolvers = <span class="keyword">new</span> ArrayList&lt;&gt;(matchingBeans.size());</span><br><span class="line">      <span class="keyword">for</span> (ViewResolver viewResolver : matchingBeans) &#123;</span><br><span class="line">         <span class="keyword">if</span> (<span class="keyword">this</span> != viewResolver) &#123;</span><br><span class="line">            <span class="keyword">this</span>.viewResolvers.add(viewResolver);</span><br><span class="line">         &#125;</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.viewResolvers.size(); i++) &#123;</span><br><span class="line">         ViewResolver vr = <span class="keyword">this</span>.viewResolvers.get(i);</span><br><span class="line">         <span class="keyword">if</span> (matchingBeans.contains(vr)) &#123;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">         &#125;</span><br><span class="line">         String name = vr.getClass().getName() + i;</span><br><span class="line">         obtainApplicationContext().getAutowireCapableBeanFactory().initializeBean(vr, name);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">if</span> (<span class="keyword">this</span>.viewResolvers.isEmpty()) &#123;</span><br><span class="line">      logger.warn(<span class="string">"Did not find any ViewResolvers to delegate to; please configure them using the "</span> +</span><br><span class="line">            <span class="string">"'viewResolvers' property on the ContentNegotiatingViewResolver"</span>);</span><br><span class="line">   &#125;</span><br><span class="line">   AnnotationAwareOrderComparator.sort(<span class="keyword">this</span>.viewResolvers);</span><br><span class="line">   <span class="keyword">this</span>.cnmFactoryBean.setServletContext(servletContext);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/06/2018-1-18-%E5%8C%BA%E5%9D%97%E9%93%BE/" rel="next" title="区块链">
+                <i class="fa fa-chevron-left"></i> 区块链
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/06/2018-1-24-SOLID/" rel="prev" title="面向对象的SOLID原则">
+                面向对象的SOLID原则 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">273</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#spring-boot"><span class="nav-number">1.</span> <span class="nav-text">spring boot</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#spring"><span class="nav-number">1.1.</span> <span class="nav-text">spring</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#spring-boot-1"><span class="nav-number">1.2.</span> <span class="nav-text">spring boot</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#程序开始"><span class="nav-number">2.</span> <span class="nav-text">程序开始</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SpringApplication构造函数"><span class="nav-number">2.1.</span> <span class="nav-text">SpringApplication构造函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#run函数"><span class="nav-number">2.1.1.</span> <span class="nav-text">run函数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自动配置"><span class="nav-number">3.</span> <span class="nav-text">自动配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SpringBoosApplication注解"><span class="nav-number">3.1.</span> <span class="nav-text">@SpringBoosApplication注解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自动配置注入dispatcherServlet"><span class="nav-number">4.</span> <span class="nav-text">自动配置注入dispatcherServlet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自动配置WebMvcAutoConfiguration"><span class="nav-number">5.</span> <span class="nav-text">自动配置WebMvcAutoConfiguration</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

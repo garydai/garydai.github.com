@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="ios web前端mvc mvvm，后端mvc数据和UI通信 iosmvcios中vc之间和mv之间的绑定 1.mc controller -&gt; model  controller直接调用model数据 model -&gt; controller model通过kvo&amp;notification机制与controller通信，观察者模式 kvo kvo(键值观察) kvo是一个典型的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端mvc mvvm">
+<meta property="og:url" content="http://yoursite.com/2020/01/06/2017-2-7-ios-web-mvc-mvvm/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="ios web前端mvc mvvm，后端mvc数据和UI通信 iosmvcios中vc之间和mv之间的绑定 1.mc controller -&gt; model  controller直接调用model数据 model -&gt; controller model通过kvo&amp;notification机制与controller通信，观察者模式 kvo kvo(键值观察) kvo是一个典型的">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/MVCPattern.png">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/MVVM.png">
+<meta property="article:published_time" content="2020-01-06T06:03:05.471Z">
+<meta property="article:modified_time" content="2020-01-06T06:03:09.445Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/MVCPattern.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/01/06/2017-2-7-ios-web-mvc-mvvm/"/>
+
+
+
+
+
+  <title>前端mvc mvvm | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2017-2-7-ios-web-mvc-mvvm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">前端mvc mvvm</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
+                2020-01-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="ios-web前端mvc-mvvm，后端mvc"><a href="#ios-web前端mvc-mvvm，后端mvc" class="headerlink" title="ios web前端mvc mvvm，后端mvc"></a>ios web前端mvc mvvm，后端mvc</h2><p>数据和UI通信</p>
+<h3 id="ios"><a href="#ios" class="headerlink" title="ios"></a>ios</h3><h4 id="mvc"><a href="#mvc" class="headerlink" title="mvc"></a>mvc</h4><p>ios中vc之间和mv之间的绑定</p>
+<p>1.mc</p>
+<p>controller -&gt; model </p>
+<p>controller直接调用model数据</p>
+<p>model -&gt; controller</p>
+<p>model通过kvo&amp;notification机制与controller通信，观察者模式</p>
+<pre><code>kvo
+kvo(键值观察)
+kvo是一个典型的观察者模式，观察者在键值改变时会得到通知。
+
+stockForKVO = [[StockData alloc] init];  
+[stockForKVO setValue:@&quot;searph&quot; forKey:@&quot;stockName&quot;];
+[stockForKVO setValue:@&quot;10.0&quot; forKey:@&quot;price&quot;];        
+[stockForKVO addObserver:self forKeyPath:@&quot;price&quot; options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:NULL];  
+
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context  
+{  
+    if([keyPath isEqualToString:@&quot;price&quot;])  
+    {  
+        myLabel.text = [stockForKVO valueForKey:@&quot;price&quot;];  
+    }  
+}  
+
+
+通知中心
+
+通知中心就是以NSNotificationCenter为中心，观察者往Center中注册对某个主题对象的变化感兴趣，主体对象通过NSNotificationCenter进行变化广播，所有的变化和监听行为都向同一个中心进行注册，所有对象的变化也通过同一个中心对外广播。
+
+NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+//注册成为观察者 观察对象是Observer 
+[notificationCenter addObserver:self selector:@selector(doAction:) name:@&quot;Observer&quot; object:nil];
+
+NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+
+[notificationCenter postNotificationName:@&quot;Observer&quot; object:self userInfo:info];</code></pre><p>2.vc</p>
+<p>controller -&gt; view </p>
+<p>controller通过outlet，直接控制view</p>
+<p>view -&gt; controller</p>
+<p>View通过action和delegate机制向Controller报告事件的发生</p>
+<pre><code>代理机制，协议与代理
+A
+@protocol XDelegate &lt;NSObject&gt;
+- (void)xx;
+@end
+
+@interface X : NSObject
+@property (nonatomic, weak) id &lt;XDelegate&gt; delegate;
+@end
+
+ if ([self.delegate respondsToSelector:@selector(xx)]) {
+    [self.delegate xx];
+}
+
+B
+@interface Y ()&lt;XDelegate&gt;
+
+- (void)xx{
+
+}</code></pre><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/MVCPattern.png" alt=""></p>
+<h4 id="mvvm"><a href="#mvvm" class="headerlink" title="mvvm"></a>mvvm</h4><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/MVVM.png" alt=""></p>
+<p>viewmodel代替MVC中model的位置</p>
+<p>####web前端 mvc模式</p>
+<p>ios view与model之间是通过controller来通信，web前端view与model可以数据绑定，即将对象属性变化绑定到UI。</p>
+<p>双向数据绑定指的是将对象属性变化绑定到UI，或者反之</p>
+<p>双向绑定的实现有三个步骤：</p>
+<p>1.我们需要一个方法来识别哪个UI元素被绑定了相应的属性 </p>
+<p>2.我们需要监视属性和UI元素的变化 </p>
+<p>3.我们需要将所有变化传播到绑定的对象和元素</p>
+<p>可以用发布者-订阅者模式实现。<br>vm绑定<br>客户端根据用户的行为修改客户端Model -&gt; 客户端更新和该Model相关的View -&gt; 客户端Model发送sync请求到服务器，只包含改变了哪些数据 -&gt; 服务器审核数据改动是否合法，只需回复是否修改成功 -&gt; 客户端收到成功，什么都不用做；不成功，则把刚才改的View改回来，然后通知用户。</p>
+<p>####vue.js</p>
+<p>dom与数据绑定，数据改变，dom相应改变。</p>
+<p>###yii2框架mvc模式</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/06/2017-2-25-sqlvsnosql/" rel="next" title="关系型和非关系型数据库">
+                <i class="fa fa-chevron-left"></i> 关系型和非关系型数据库
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/06/2017-3-27-go/" rel="prev" title="go入门">
+                go入门 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">273</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ios-web前端mvc-mvvm，后端mvc"><span class="nav-number">1.</span> <span class="nav-text">ios web前端mvc mvvm，后端mvc</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ios"><span class="nav-number">1.1.</span> <span class="nav-text">ios</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#mvc"><span class="nav-number">1.1.1.</span> <span class="nav-text">mvc</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#mvvm"><span class="nav-number">1.1.2.</span> <span class="nav-text">mvvm</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

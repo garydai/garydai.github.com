@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="innodbacidatomicity事务 consistencyInnoDB doublewrite buffer. InnoDB crash recovery. isolation锁共享锁排他锁意向共享锁意向排他锁加锁原则原则 1：加锁的基本单位是 next-key lock。next-key lock 是前开后闭区间。 原则 2：查找过程中访问到的对象才会加锁。 优化 1：索引上的等值查询，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="innodb">
+<meta property="og:url" content="http://yoursite.com/2020/01/06/2018-8-13-innodb/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="innodbacidatomicity事务 consistencyInnoDB doublewrite buffer. InnoDB crash recovery. isolation锁共享锁排他锁意向共享锁意向排他锁加锁原则原则 1：加锁的基本单位是 next-key lock。next-key lock 是前开后闭区间。 原则 2：查找过程中访问到的对象才会加锁。 优化 1：索引上的等值查询，">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191016170821021.png">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191015215734654.png">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/innodb1.png">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191016103100620.png">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191017153625464.png">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191018112623953.png">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191018112028180.png">
+<meta property="article:published_time" content="2020-01-06T06:03:05.521Z">
+<meta property="article:modified_time" content="2020-01-06T06:03:09.476Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191016170821021.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/01/06/2018-8-13-innodb/"/>
+
+
+
+
+
+  <title>innodb | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2018-8-13-innodb/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">innodb</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
+                2020-01-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="innodb"><a href="#innodb" class="headerlink" title="innodb"></a>innodb</h2><h3 id="acid"><a href="#acid" class="headerlink" title="acid"></a>acid</h3><h4 id="atomicity"><a href="#atomicity" class="headerlink" title="atomicity"></a>atomicity</h4><p>事务</p>
+<h4 id="consistency"><a href="#consistency" class="headerlink" title="consistency"></a>consistency</h4><p>InnoDB doublewrite buffer.</p>
+<p>InnoDB crash recovery.</p>
+<h4 id="isolation"><a href="#isolation" class="headerlink" title="isolation"></a>isolation</h4><h3 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h3><h5 id="共享锁"><a href="#共享锁" class="headerlink" title="共享锁"></a>共享锁</h5><h5 id="排他锁"><a href="#排他锁" class="headerlink" title="排他锁"></a>排他锁</h5><h5 id="意向共享锁"><a href="#意向共享锁" class="headerlink" title="意向共享锁"></a>意向共享锁</h5><h5 id="意向排他锁"><a href="#意向排他锁" class="headerlink" title="意向排他锁"></a>意向排他锁</h5><h4 id="加锁原则"><a href="#加锁原则" class="headerlink" title="加锁原则"></a>加锁原则</h4><p>原则 1：加锁的基本单位是 next-key lock。next-key lock 是前开后闭区间。</p>
+<p>原则 2：查找过程中访问到的对象才会加锁。</p>
+<p>优化 1：索引上的等值查询，给唯一索引加锁的时候，next-key lock 退化为行锁。</p>
+<p>优化 2：索引上的等值查询，向右遍历时且最后一个值不满足等值条件的时候，next-key lock 退化为间隙锁。</p>
+<p>一个 bug：唯一索引上的范围查询会访问到不满足条件的第一个值为止。</p>
+<h3 id="一次执行流程"><a href="#一次执行流程" class="headerlink" title="一次执行流程"></a>一次执行流程</h3><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191016170821021.png" alt="image-20191016170821021"></p>
+<h3 id="删除记录"><a href="#删除记录" class="headerlink" title="删除记录"></a>删除记录</h3><p>假设，我们要删掉 一个记录，InnoDB 引擎只会把这个记录标记为删除。如果之后要再插入新记录时，可能会复用这个位置。但是，磁盘文件的大小并不会缩小。</p>
+<h4 id="怎么看死锁"><a href="#怎么看死锁" class="headerlink" title="怎么看死锁"></a>怎么看死锁</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show engine innodb status</span><br></pre></td></tr></table></figure>
+
+<h3 id="redo"><a href="#redo" class="headerlink" title="redo"></a>redo</h3><p>为什么要有redo日志？</p>
+<p>数据库事务提交后，必须将更新后的数据刷到磁盘上，以保证ACID特性。磁盘随机写性能较低，如果每次都刷盘，会极大影响数据库的吞吐量。</p>
+<p>优化方式是，将修改行为先写到redo日志里（此时变成了顺序写），再定期将数据刷到磁盘上，这样能极大提高性能。</p>
+<p>随机写优化为顺序写</p>
+<h5 id="持久化"><a href="#持久化" class="headerlink" title="持久化"></a>持久化</h5><ol>
+<li><p>InnoDB 有一个后台线程，每隔 1 秒，就会把 redo log buffer 中的日志，调用 write 写到文件系统的 page cache，然后调用 fsync 持久化到磁盘。</p>
+</li>
+<li><p>redo log buffer 占用的空间即将达到 innodb_log_buffer_size 一半的时候，后台线程会主动写盘。注意，由于这个事务并没有提交，所以这个写盘动作只是 write，而没有调用 fsync，也就是只留在了文件系统的 page cache。</p>
+</li>
+<li><p>并行的事务提交的时候，顺带将这个事务的 redo log buffer 持久化到磁盘。</p>
+</li>
+</ol>
+<h3 id="undo"><a href="#undo" class="headerlink" title="undo"></a>undo</h3><p>为什么要有undo日志？</p>
+<p>数据库事务未提交时，会将事务修改数据的镜像（即修改前的旧版本）存放到undo日志里，当事务回滚时，或者数据库奔溃时，可以利用undo日志，即旧版本数据，撤销未提交事务对数据库产生的影响。</p>
+<p>对于insert操作，undo日志记录新数据的PK(ROW_ID)，回滚时直接删除；</p>
+<p>对于delete/update操作，undo日志记录旧数据row，回滚时直接恢复；</p>
+<p>他们分别存放在不同的buffer里。</p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191015215734654.png" alt="image-20191015215734654"></p>
+<p>实际上，图  中的三个虚线箭头，就是 undo log；而 V1、V2、V3 并不是物理上真实存在的，而是每次需要的时候根据当前版本和 undo log 计算出来的。比如，需要 V2 的时候，就是通过 V4 依次执行 U3、U2 算出来。</p>
+<p>在实现上， InnoDB 为每个事务构造了一个数组，用来保存这个事务启动瞬间，当前正在“活跃”的所有事务 ID。“活跃”指的就是，启动了但还没提交。</p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/innodb1.png" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">公式版：</span><br><span class="line">如果落在绿色部分，表示这个版本是已提交的事务或者是当前事务自己生成的，这个数据是可见的；</span><br><span class="line">如果落在红色部分，表示这个版本是由将来启动的事务生成的，是肯定不可见的；</span><br><span class="line">如果落在黄色部分，那就包括两种情况</span><br><span class="line"> a.  若 row trx_id 在数组中，表示这个版本是由还没提交的事务生成的，不可见；</span><br><span class="line"> b.  若 row trx_id 不在数组中，表示这个版本是已经提交了的事务生成的，可见。</span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">口语版：</span><br><span class="line">版本未提交，不可见；</span><br><span class="line">版本已提交，但是是在视图创建后提交的，不可见；</span><br><span class="line">版本已提交，而且是在视图创建前提交的，可见。</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>更新数据都是先读后写的，而这个读，只能读当前的值，称为“当前读”（current read），不是快照\一致性\可重复读。除了 update 语句外，select 语句如果加锁（select lock in share mode;select for update），也是当前读，所以更新数据也会加锁。</strong></p>
+<h3 id="回滚段"><a href="#回滚段" class="headerlink" title="回滚段"></a>回滚段</h3><p>存储undo日志的地方，是回滚段。</p>
+<h3 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h3><p>InnoDB的行锁是实现在索引上的，而不是锁在物理行记录上。潜台词是，如果访问没有命中索引，也无法使用行锁，将要退化为表锁。</p>
+<h4 id="为什么主建，推荐自增整形"><a href="#为什么主建，推荐自增整形" class="headerlink" title="为什么主建，推荐自增整形"></a>为什么主建，推荐自增整形</h4><p>建立聚蔟索引树的时候，插入新的顺序的主建，1.减少节点分裂，2.整形比字符型大小比较更快</p>
+<h3 id="change-buffer"><a href="#change-buffer" class="headerlink" title="change buffer"></a>change buffer</h3><p>插入一条数据过程</p>
+<ol>
+<li>这个记录要更新的目标页在内存中</li>
+</ol>
+<p>​    对于唯一索引来说，找到 3 和 5 之间的位置，判断到没有冲突，插入这个值，语句执行结束；<br>​    对于普通索引来说，找到 3 和 5 之间的位置，插入这个值，语句执行结束。</p>
+<ol start="2">
+<li>这个记录要更新的目标页不在内存中</li>
+</ol>
+<p>​    对于唯一索引来说，需要将数据页读入内存，判断到没有冲突，插入这个值，语句执行结束；</p>
+<p>​    对于普通索引来说，则是将更新记录在 change buffer，语句执行就结束了。</p>
+<p>将数据从磁盘读入内存涉及随机 IO 的访问，是数据库里面成本最高的操作之一。change buffer 因为减少了随机磁盘访问，所以对更新性能的提升是会很明显的。</p>
+<p>Change buffer只适用于普通索引</p>
+<p>对于写多读少的业务来说，页面在写完以后马上被访问到的概率比较小，此时 change buffer 的使用效果最好。这种业务模型常见的就是账单类、日志类的系统。</p>
+<p>反过来，假设一个业务的更新模式是写入之后马上会做查询，那么即使满足了条件，将更新先记录在 change buffer，但之后由于马上要访问这个数据页，会立即触发 merge 过程。这样随机访问 IO 的次数不会减少，反而增加了 change buffer 的维护代价。所以，对于这种业务模式来说，change buffer 反而起到了副作用。</p>
+<p><strong>merge过程</strong>：要读 Page 的时候，需要把Page从磁盘读入内存中，然后应用 change buffer 里面的操作日志，生成一个正确的版本并返回结果。</p>
+<p><strong>普通索引和唯一索引应该怎么选择。其实，这两类索引在查询能力上是没差别的，主要考虑的是对更新性能的影响。所以，建议尽量选择普通索引。</strong></p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191016103100620.png" alt="image-20191016103100620"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Page 1 在内存中，直接更新内存；</span><br><span class="line">Page 2 没有在内存中，就在内存的 change buffer 区域，记录下“我要往 Page 2 插入一行”这个信息</span><br><span class="line">将上述两个动作记入 redo log 中（图中 3 和 4）。</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>redo log 主要节省的是随机写磁盘的 IO 消耗（转成顺序写），而 change buffer 主要节省的则是随机读磁盘的 IO 消耗。</strong></p>
+<h3 id="事务两阶段提交"><a href="#事务两阶段提交" class="headerlink" title="事务两阶段提交"></a>事务两阶段提交</h3><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191017153625464.png" alt="image-20191017153625464"></p>
+<p>两种解释</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">如果在图中时刻 A 的地方，也就是写入 redo log 处于 prepare 阶段之后、写 binlog 之前，发生了崩溃（crash），由于此时 binlog 还没写，redo log 也还没提交，所以崩溃恢复的时候，这个事务会回滚。这时候，binlog 还没写，所以也不会传到备库。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">B处崩溃</span><br><span class="line">如果 redo log 里面的事务是完整的，也就是已经有了 commit 标识，则直接提交；</span><br><span class="line">如果 redo log 里面的事务只有完整的 prepare，则判断对应的事务 binlog 是否存在并完整：</span><br><span class="line">a.  如果是，则提交事务；</span><br><span class="line">b.  否则，回滚事务。</span><br></pre></td></tr></table></figure>
+
+
+
+<p>下面这个解释比较好，崩溃时候的处理合理</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">第一阶段：InnoDB prepare,持有prepare_commit_mutex，并写入到redo log中。将回滚段(undo)设置为Prepared状态，binlog不做任何操作。</span><br><span class="line"></span><br><span class="line">第二阶段：将事务写入Binlog中，将redo log中的对应事务打上commit标记，并释放prepare_commit_mutex。</span><br><span class="line"></span><br><span class="line">MySQL以binlog的写入与否作为事务是否成功的标记，innodb引擎的redo commit标记并不是这个事务成功与否的标记。</span><br><span class="line"> </span><br><span class="line">崩溃时：</span><br><span class="line"></span><br><span class="line">扫描最后一个Binlog文件，提取其中所有的xid。</span><br><span class="line"></span><br><span class="line">InnoDB维持了状态为Prepare的事务链表，将这些事务的xid与刚刚提取的xid做比较，若存在，则提交prepare的事务，若不存在，回滚。</span><br></pre></td></tr></table></figure>
+
+
+
+<p>细化</p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191018112623953.png" alt="image-20191018112623953"></p>
+<h2 id="主备同步"><a href="#主备同步" class="headerlink" title="主备同步"></a>主备同步</h2><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191018112028180.png" alt="image-20191018112028180"></p>
+<p>binlog 格式是 statement有主备不一致的风险</p>
+<p>所以可以用row格式，或者mixed（statement和row混合，因为row格式文件比较大）格式</p>
+<h3 id="自增id"><a href="#自增id" class="headerlink" title="自增id"></a>自增id</h3><p>MyISAM 引擎的自增值保存在数据文件中。</p>
+<p>InnoDB 引擎的自增值，其实是保存在了内存里，并且到了 MySQL 8.0 版本后，才有了“自增值持久化”的能力，也就是才实现了“如果发生重启，表的自增值可以恢复为 MySQL 重启前的值”，具体情况是：</p>
+<ul>
+<li>在 MySQL 5.7 及之前的版本，自增值保存在内存里，并没有持久化。每次重启后，第一次打开表的时候，都会去找自增值的最大值 max(id)，然后将 max(id)+1 作为这个表当前的自增值。﻿<br>
+举例来说，如果一个表当前数据行里最大的 id 是 10，AUTO_INCREMENT=11。这时候，我们删除 id=10 的行，AUTO_INCREMENT 还是 11。但如果马上重启实例，重启后这个表的 AUTO_INCREMENT 就会变成 10。﻿<br>
+也就是说，MySQL 重启可能会修改一个表的 AUTO_INCREMENT 的值。</li>
+<li>在 MySQL 8.0 版本，将自增值的变更记录在了 redo log 中，重启的时候依靠 redo log 恢复重启之前的值。</li>
+</ul>
+
+
+<p>MySQL 5.1.22 版本引入了一个新策略，新增参数 innodb_autoinc_lock_mode，默认值是 1。</p>
+
+<ol>
+<li>
+<p>这个参数的值被设置为 0 时，表示采用之前 MySQL 5.0 版本的策略，即语句执行结束后才释放锁；</p>
+</li>
+<li>
+<p>这个参数的值被设置为 1 时：</p>
+<ul>
+<li>普通 insert 语句，自增锁在申请之后就马上释放；</li>
+<li>类似 insert … select 这样的批量插入数据的语句，自增锁还是要等语句结束后才被释放；</li>
+</ul>
+</li>
+<li>
+<p>这个参数的值被设置为 2 时，所有的申请自增主键的动作都是申请后就释放锁。</p>
+</li>
+</ol>
+
+
+
+<p>表的自增 id 达到上限后，再申请时它的值就不会改变，进而导致继续插入数据时报主键冲突的错误。</p>
+<p>row_id 达到上限后，则会归 0 再重新递增，如果出现相同的 row_id，后写的数据会覆盖之前的数据。</p>
+<p>Xid 只需要不在同一个 binlog 文件中出现重复值即可。虽然理论上会出现重复值，但是概率极小，可以忽略不计。</p>
+<p>InnoDB 的 max_trx_id 递增值每次 MySQL 重启都会被保存起来，所以我们文章中提到的脏读的例子就是一个必现的 bug，好在留给我们的时间还很充裕。</p>
+<p>thread_id 是我们使用中最常见的，而且也是处理得最好的一个自增 id 逻辑了。</p>
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><p>极客时间-MySQL实战45讲</p>
+<h3 id="ppt"><a href="#ppt" class="headerlink" title="ppt"></a>ppt</h3><p><a href="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/innodb.pdf" target="_blank" rel="noopener" title="innodb">ppt</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/06/2018-7-01-%E6%B3%A8%E8%A7%A3/" rel="next" title="java注解">
+                <i class="fa fa-chevron-left"></i> java注解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/06/2018-8-13-restful%E8%A7%84%E8%8C%83/" rel="prev" title="sql">
+                sql <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">273</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#innodb"><span class="nav-number">1.</span> <span class="nav-text">innodb</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#acid"><span class="nav-number">1.1.</span> <span class="nav-text">acid</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#atomicity"><span class="nav-number">1.1.1.</span> <span class="nav-text">atomicity</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#consistency"><span class="nav-number">1.1.2.</span> <span class="nav-text">consistency</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#isolation"><span class="nav-number">1.1.3.</span> <span class="nav-text">isolation</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#锁"><span class="nav-number">1.2.</span> <span class="nav-text">锁</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#共享锁"><span class="nav-number">1.2.0.1.</span> <span class="nav-text">共享锁</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#排他锁"><span class="nav-number">1.2.0.2.</span> <span class="nav-text">排他锁</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#意向共享锁"><span class="nav-number">1.2.0.3.</span> <span class="nav-text">意向共享锁</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#意向排他锁"><span class="nav-number">1.2.0.4.</span> <span class="nav-text">意向排他锁</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#加锁原则"><span class="nav-number">1.2.1.</span> <span class="nav-text">加锁原则</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一次执行流程"><span class="nav-number">1.3.</span> <span class="nav-text">一次执行流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除记录"><span class="nav-number">1.4.</span> <span class="nav-text">删除记录</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#怎么看死锁"><span class="nav-number">1.4.1.</span> <span class="nav-text">怎么看死锁</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redo"><span class="nav-number">1.5.</span> <span class="nav-text">redo</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#持久化"><span class="nav-number">1.5.0.1.</span> <span class="nav-text">持久化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undo"><span class="nav-number">1.6.</span> <span class="nav-text">undo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#回滚段"><span class="nav-number">1.7.</span> <span class="nav-text">回滚段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#索引"><span class="nav-number">1.8.</span> <span class="nav-text">索引</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#为什么主建，推荐自增整形"><span class="nav-number">1.8.1.</span> <span class="nav-text">为什么主建，推荐自增整形</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#change-buffer"><span class="nav-number">1.9.</span> <span class="nav-text">change buffer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事务两阶段提交"><span class="nav-number">1.10.</span> <span class="nav-text">事务两阶段提交</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主备同步"><span class="nav-number">2.</span> <span class="nav-text">主备同步</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自增id"><span class="nav-number">2.1.</span> <span class="nav-text">自增id</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#reference"><span class="nav-number">3.</span> <span class="nav-text">reference</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ppt"><span class="nav-number">3.1.</span> <span class="nav-text">ppt</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

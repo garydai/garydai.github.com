@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="linux线程同步Pthread的同步机制有Mutex Lock、Spin Lock、Reader-Writter Lock、join、Condition Variables、semaphore、Barriers 互斥锁(mutex) pthread_mutex_lock(&amp;mutex); 条件变量 信号量 条件变量有了互斥变量pthread_mutext_t为什么还要引入条件变量pthr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux线程同步">
+<meta property="og:url" content="http://yoursite.com/2020/01/06/2019-10-31-linux-thread/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="linux线程同步Pthread的同步机制有Mutex Lock、Spin Lock、Reader-Writter Lock、join、Condition Variables、semaphore、Barriers 互斥锁(mutex) pthread_mutex_lock(&amp;mutex); 条件变量 信号量 条件变量有了互斥变量pthread_mutext_t为什么还要引入条件变量pthr">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/thread.png">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/thread2.png">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191031152908741.png">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191031163550430.png">
+<meta property="article:published_time" content="2020-01-06T06:03:05.544Z">
+<meta property="article:modified_time" content="2020-01-06T06:03:09.494Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/thread.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/01/06/2019-10-31-linux-thread/"/>
+
+
+
+
+
+  <title>linux线程同步 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2019-10-31-linux-thread/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">linux线程同步</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
+                2020-01-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="linux线程同步"><a href="#linux线程同步" class="headerlink" title="linux线程同步"></a>linux线程同步</h2><p>Pthread的同步机制有Mutex Lock、Spin Lock、Reader-Writter Lock、join、Condition Variables、semaphore、Barriers</p>
+<p>互斥锁(mutex)</p>
+<p>pthread_mutex_lock(&amp;mutex);</p>
+<p>条件变量</p>
+<p>信号量</p>
+<h3 id="条件变量"><a href="#条件变量" class="headerlink" title="条件变量"></a>条件变量</h3><h5 id="有了互斥变量pthread-mutext-t为什么还要引入条件变量pthread-cond-t呢"><a href="#有了互斥变量pthread-mutext-t为什么还要引入条件变量pthread-cond-t呢" class="headerlink" title="有了互斥变量pthread_mutext_t为什么还要引入条件变量pthread_cond_t呢"></a>有了互斥变量pthread_mutext_t为什么还要引入条件变量pthread_cond_t呢</h5><p>条件变量是线程的另外一种同步机制，这些同步对象为线程提供了会合的场所，理解起来就是两个（或者多个）线程需要碰头（或者说进行交互-一个线程给另外的一个或者多个线程发送消息），我们指定在条件变量这个地方发生，一个线程用于修改这个变量使其满足其它线程继续往下执行的条件，其它线程则接收条件已经发生改变的信号。</p>
+<p>条件变量同锁一起使用使得线程可以以一种无竞争的方式等待任意条件的发生。所谓无竞争就是，条件改变这个信号会发送到所有等待这个信号的线程。而不是说一个线程接受到这个消息而其它线程就接收不到了。</p>
+<p>条件变量一共也就pthread_cond_init、pthread_cond_destroy、pthread_cond_wait、pthread_cond_timedwait、pthread_cond_signal、pthread_cond_broadcast这么几个函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br></pre></td><td class="code"><pre><span class="line">推荐用法</span><br><span class="line"></span><br><span class="line">class Condition4 : public ConditionBase</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    Condition4()</span><br><span class="line">        : signal_(false)</span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    void wait()</span><br><span class="line">    &#123;</span><br><span class="line">        pthread_mutex_lock(&amp;mutex_);</span><br><span class="line">        while (!signal_)</span><br><span class="line">        &#123;</span><br><span class="line">            pthread_cond_wait(&amp;cond_, &amp;mutex_);</span><br><span class="line">        &#125;</span><br><span class="line">        signal_ &#x3D; false;</span><br><span class="line">        pthread_mutex_unlock(&amp;mutex_);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    void wakeup()</span><br><span class="line">    &#123;</span><br><span class="line">        pthread_mutex_lock(&amp;mutex_);</span><br><span class="line">        signal_ &#x3D; true;</span><br><span class="line">        pthread_cond_signal(&amp;cond_);</span><br><span class="line">        pthread_mutex_unlock(&amp;mutex_);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">private:</span><br><span class="line">    bool signal_;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">POSIX规范为了简化实现，允许pthread_cond_signal在实现的时候可以唤醒不止一个线程</span><br><span class="line"></span><br><span class="line">java的park，unpark就是采用这个线程同步方式</span><br><span class="line"></span><br><span class="line">notify和notify_all在linux系统就调用pthread_cond_signal、pthread_cond_broadcast，wait调用pthread_cond_wait</span><br><span class="line"></span><br><span class="line">void os::PlatformEvent::park() &#123;       &#x2F;&#x2F; AKA &quot;down()&quot;</span><br><span class="line">  &#x2F;&#x2F; Transitions for _event:</span><br><span class="line">  &#x2F;&#x2F;   -1 &#x3D;&gt; -1 : illegal</span><br><span class="line">  &#x2F;&#x2F;    1 &#x3D;&gt;  0 : pass - return immediately</span><br><span class="line">  &#x2F;&#x2F;    0 &#x3D;&gt; -1 : block; then set _event to 0 before returning</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; Invariant: Only the thread associated with the PlatformEvent</span><br><span class="line">  &#x2F;&#x2F; may call park().</span><br><span class="line">  assert(_nParked &#x3D;&#x3D; 0, &quot;invariant&quot;);</span><br><span class="line"></span><br><span class="line">  int v;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; atomically decrement _event</span><br><span class="line">  for (;;) &#123;</span><br><span class="line">    v &#x3D; _event;</span><br><span class="line">    if (Atomic::cmpxchg(v - 1, &amp;_event, v) &#x3D;&#x3D; v) break;</span><br><span class="line">  &#125;</span><br><span class="line">  guarantee(v &gt;&#x3D; 0, &quot;invariant&quot;);</span><br><span class="line"></span><br><span class="line">  if (v &#x3D;&#x3D; 0) &#123; &#x2F;&#x2F; Do this the hard way by blocking ...</span><br><span class="line">    int status &#x3D; pthread_mutex_lock(_mutex);</span><br><span class="line">    assert_status(status &#x3D;&#x3D; 0, status, &quot;mutex_lock&quot;);</span><br><span class="line">    guarantee(_nParked &#x3D;&#x3D; 0, &quot;invariant&quot;);</span><br><span class="line">    ++_nParked;</span><br><span class="line">    while (_event &lt; 0) &#123;</span><br><span class="line">      &#x2F;&#x2F; OS-level &quot;spurious wakeups&quot; are ignored</span><br><span class="line">      status &#x3D; pthread_cond_wait(_cond, _mutex);</span><br><span class="line">      assert_status(status &#x3D;&#x3D; 0, status, &quot;cond_wait&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    --_nParked;</span><br><span class="line"></span><br><span class="line">    _event &#x3D; 0;</span><br><span class="line">    status &#x3D; pthread_mutex_unlock(_mutex);</span><br><span class="line">    assert_status(status &#x3D;&#x3D; 0, status, &quot;mutex_unlock&quot;);</span><br><span class="line">    &#x2F;&#x2F; Paranoia to ensure our locked and lock-free paths interact</span><br><span class="line">    &#x2F;&#x2F; correctly with each other.</span><br><span class="line">    OrderAccess::fence();</span><br><span class="line">  &#125;</span><br><span class="line">  guarantee(_event &gt;&#x3D; 0, &quot;invariant&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">void os::PlatformEvent::unpark() &#123;</span><br><span class="line">  &#x2F;&#x2F; Transitions for _event:</span><br><span class="line">  &#x2F;&#x2F;    0 &#x3D;&gt; 1 : just return</span><br><span class="line">  &#x2F;&#x2F;    1 &#x3D;&gt; 1 : just return</span><br><span class="line">  &#x2F;&#x2F;   -1 &#x3D;&gt; either 0 or 1; must signal target thread</span><br><span class="line">  &#x2F;&#x2F;         That is, we can safely transition _event from -1 to either</span><br><span class="line">  &#x2F;&#x2F;         0 or 1.</span><br><span class="line">  &#x2F;&#x2F; See also: &quot;Semaphores in Plan 9&quot; by Mullender &amp; Cox</span><br><span class="line">  &#x2F;&#x2F;</span><br><span class="line">  &#x2F;&#x2F; Note: Forcing a transition from &quot;-1&quot; to &quot;1&quot; on an unpark() means</span><br><span class="line">  &#x2F;&#x2F; that it will take two back-to-back park() calls for the owning</span><br><span class="line">  &#x2F;&#x2F; thread to block. This has the benefit of forcing a spurious return</span><br><span class="line">  &#x2F;&#x2F; from the first park() call after an unpark() call which will help</span><br><span class="line">  &#x2F;&#x2F; shake out uses of park() and unpark() without checking state conditions</span><br><span class="line">  &#x2F;&#x2F; properly. This spurious return doesn&#39;t manifest itself in any user code</span><br><span class="line">  &#x2F;&#x2F; but only in the correctly written condition checking loops of ObjectMonitor,</span><br><span class="line">  &#x2F;&#x2F; Mutex&#x2F;Monitor, Thread::muxAcquire and os::sleep</span><br><span class="line"></span><br><span class="line">  if (Atomic::xchg(1, &amp;_event) &gt;&#x3D; 0) return;</span><br><span class="line"></span><br><span class="line">  int status &#x3D; pthread_mutex_lock(_mutex);</span><br><span class="line">  assert_status(status &#x3D;&#x3D; 0, status, &quot;mutex_lock&quot;);</span><br><span class="line">  int anyWaiters &#x3D; _nParked;</span><br><span class="line">  assert(anyWaiters &#x3D;&#x3D; 0 || anyWaiters &#x3D;&#x3D; 1, &quot;invariant&quot;);</span><br><span class="line">  status &#x3D; pthread_mutex_unlock(_mutex);</span><br><span class="line">  assert_status(status &#x3D;&#x3D; 0, status, &quot;mutex_unlock&quot;);</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; Note that we signal() *after* dropping the lock for &quot;immortal&quot; Events.</span><br><span class="line">  &#x2F;&#x2F; This is safe and avoids a common class of futile wakeups.  In rare</span><br><span class="line">  &#x2F;&#x2F; circumstances this can cause a thread to return prematurely from</span><br><span class="line">  &#x2F;&#x2F; cond_&#123;timed&#125;wait() but the spurious wakeup is benign and the victim</span><br><span class="line">  &#x2F;&#x2F; will simply re-test the condition and re-park itself.</span><br><span class="line">  &#x2F;&#x2F; This provides particular benefit if the underlying platform does not</span><br><span class="line">  &#x2F;&#x2F; provide wait morphing.</span><br><span class="line"></span><br><span class="line">  if (anyWaiters !&#x3D; 0) &#123;</span><br><span class="line">    status &#x3D; pthread_cond_signal(_cond);</span><br><span class="line">    assert_status(status &#x3D;&#x3D; 0, status, &quot;cond_signal&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">https:&#x2F;&#x2F;www.cnblogs.com&#x2F;liyuan989&#x2F;p&#x2F;4240271.html</span><br></pre></td></tr></table></figure>
+
+<p>###java 线程</p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/thread.png" alt=""><br><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/thread2.png" alt=""></p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191031152908741.png" alt="image-20191031152908741"></p>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191031163550430.png" alt="image-20191031163550430"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> State &#123;</span><br><span class="line">      <span class="comment">/**</span></span><br><span class="line"><span class="comment">       * Thread state for a thread which has not yet started.</span></span><br><span class="line"><span class="comment">       */</span></span><br><span class="line">      NEW,</span><br><span class="line"></span><br><span class="line">      <span class="comment">/**</span></span><br><span class="line"><span class="comment">       * Thread state for a runnable thread.  A thread in the runnable</span></span><br><span class="line"><span class="comment">       * state is executing in the Java virtual machine but it may</span></span><br><span class="line"><span class="comment">       * be waiting for other resources from the operating system</span></span><br><span class="line"><span class="comment">       * such as processor.</span></span><br><span class="line"><span class="comment">       */</span></span><br><span class="line">      RUNNABLE,</span><br><span class="line"></span><br><span class="line">      <span class="comment">/**</span></span><br><span class="line"><span class="comment">       * Thread state for a thread blocked waiting for a monitor lock.</span></span><br><span class="line"><span class="comment">       * A thread in the blocked state is waiting for a monitor lock</span></span><br><span class="line"><span class="comment">       * to enter a synchronized block/method or</span></span><br><span class="line"><span class="comment">       * reenter a synchronized block/method after calling</span></span><br><span class="line"><span class="comment">       * &#123;<span class="doctag">@link</span> Object#wait() Object.wait&#125;.</span></span><br><span class="line"><span class="comment">       */</span></span><br><span class="line">      BLOCKED,</span><br><span class="line"></span><br><span class="line">      <span class="comment">/**</span></span><br><span class="line"><span class="comment">       * Thread state for a waiting thread.</span></span><br><span class="line"><span class="comment">       * A thread is in the waiting state due to calling one of the</span></span><br><span class="line"><span class="comment">       * following methods:</span></span><br><span class="line"><span class="comment">       * &lt;ul&gt;</span></span><br><span class="line"><span class="comment">       *   &lt;li&gt;&#123;<span class="doctag">@link</span> Object#wait() Object.wait&#125; with no timeout&lt;/li&gt;</span></span><br><span class="line"><span class="comment">       *   &lt;li&gt;&#123;<span class="doctag">@link</span> #join() Thread.join&#125; with no timeout&lt;/li&gt;</span></span><br><span class="line"><span class="comment">       *   &lt;li&gt;&#123;<span class="doctag">@link</span> LockSupport#park() LockSupport.park&#125;&lt;/li&gt;</span></span><br><span class="line"><span class="comment">       * &lt;/ul&gt;</span></span><br><span class="line"><span class="comment">       *</span></span><br><span class="line"><span class="comment">       * &lt;p&gt;A thread in the waiting state is waiting for another thread to</span></span><br><span class="line"><span class="comment">       * perform a particular action.</span></span><br><span class="line"><span class="comment">       *</span></span><br><span class="line"><span class="comment">       * For example, a thread that has called &lt;tt&gt;Object.wait()&lt;/tt&gt;</span></span><br><span class="line"><span class="comment">       * on an object is waiting for another thread to call</span></span><br><span class="line"><span class="comment">       * &lt;tt&gt;Object.notify()&lt;/tt&gt; or &lt;tt&gt;Object.notifyAll()&lt;/tt&gt; on</span></span><br><span class="line"><span class="comment">       * that object. A thread that has called &lt;tt&gt;Thread.join()&lt;/tt&gt;</span></span><br><span class="line"><span class="comment">       * is waiting for a specified thread to terminate.</span></span><br><span class="line"><span class="comment">       */</span></span><br><span class="line">      WAITING,</span><br><span class="line"></span><br><span class="line">      <span class="comment">/**</span></span><br><span class="line"><span class="comment">       * Thread state for a waiting thread with a specified waiting time.</span></span><br><span class="line"><span class="comment">       * A thread is in the timed waiting state due to calling one of</span></span><br><span class="line"><span class="comment">       * the following methods with a specified positive waiting time:</span></span><br><span class="line"><span class="comment">       * &lt;ul&gt;</span></span><br><span class="line"><span class="comment">       *   &lt;li&gt;&#123;<span class="doctag">@link</span> #sleep Thread.sleep&#125;&lt;/li&gt;</span></span><br><span class="line"><span class="comment">       *   &lt;li&gt;&#123;<span class="doctag">@link</span> Object#wait(long) Object.wait&#125; with timeout&lt;/li&gt;</span></span><br><span class="line"><span class="comment">       *   &lt;li&gt;&#123;<span class="doctag">@link</span> #join(long) Thread.join&#125; with timeout&lt;/li&gt;</span></span><br><span class="line"><span class="comment">       *   &lt;li&gt;&#123;<span class="doctag">@link</span> LockSupport#parkNanos LockSupport.parkNanos&#125;&lt;/li&gt;</span></span><br><span class="line"><span class="comment">       *   &lt;li&gt;&#123;<span class="doctag">@link</span> LockSupport#parkUntil LockSupport.parkUntil&#125;&lt;/li&gt;</span></span><br><span class="line"><span class="comment">       * &lt;/ul&gt;</span></span><br><span class="line"><span class="comment">       */</span></span><br><span class="line">      TIMED_WAITING,</span><br><span class="line"></span><br><span class="line">      <span class="comment">/**</span></span><br><span class="line"><span class="comment">       * Thread state for a terminated thread.</span></span><br><span class="line"><span class="comment">       * The thread has completed execution.</span></span><br><span class="line"><span class="comment">       */</span></span><br><span class="line">      TERMINATED;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>#####BLOCKED</p>
+<p>synchronized </p>
+<h5 id="WAITING-TIMED-WAITING"><a href="#WAITING-TIMED-WAITING" class="headerlink" title="WAITING/TIMED_WAITING"></a>WAITING/TIMED_WAITING</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">线程执行如下方法会进入WAITING状态：</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">join</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">wait</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException</span></span><br><span class="line"><span class="function">执行如下方法会进入TIMED_WAITING状态：</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">wait</span><span class="params">(<span class="keyword">long</span> timeout)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">sleep</span><span class="params">(<span class="keyword">long</span> millis)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">join</span><span class="params">(<span class="keyword">long</span> millis)</span> <span class="keyword">throws</span> InterruptedException</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>阻塞：当一个线程试图获取对象锁（非java.util.concurrent库中的锁，即synchronized），而该锁被其他线程持有，则该线程进入阻塞状态。它的特点是<strong>使用简单，由JVM调度器来决定唤醒自己，而不需要由另一个线程来显式唤醒自己，不响应中断</strong>。<br>等待：当一个线程等待另一个线程通知调度器一个条件时，该线程进入等待状态。它的特点是<strong>需要等待另一个线程显式地唤醒自己，实现灵活，语义更丰富，可响应中断</strong>。例如调用：Object.wait()、Thread.join()以及等待Lock或Condition。</p>
+<p>　　需要强调的是虽然synchronized和JUC里的Lock都实现锁的功能，但线程进入的状态是不一样的。<strong>synchronized会让线程进入阻塞态，而JUC里的Lock是用LockSupport.park()/unpark()来实现阻塞/唤醒的，会让线程进入等待态</strong>。但话又说回来，虽然等锁时进入的状态不一样，但被唤醒后又都进入runnable态，从行为效果来看又是一样的。</p>
+<h5 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h5><p>在使用synchronized关键字获取锁的过程中不响应中断请求，这是synchronized的局限性。如果这对程序是一个问题，应该使用显式锁，java中的Lock接口，它支持以响应中断的方式获取锁。对于Lock.lock()，可以改用Lock.lockInterruptibly()，可被中断的加锁操作，它可以抛出中断异常。等同于等待时间无限长的Lock.tryLock(long time, TimeUnit unit)。</p>
+<h5 id="io操作"><a href="#io操作" class="headerlink" title="io操作"></a>io操作</h5><p>如果线程在等待IO操作，尤其是网络IO，则会有一些特殊的处理，我们没有介绍过网络，这里只是简单介绍下。</p>
+<ol>
+<li>实现此InterruptibleChannel接口的通道是可中断的：如果某个线程在可中断通道上因调用某个阻塞的 I/O 操作（常见的操作一般有这些：serverSocketChannel. accept()、socketChannel.connect、socketChannel.open、socketChannel.read、socketChannel.write、fileChannel.read、fileChannel.write）而进入阻塞状态，而另一个线程又调用了该阻塞线程的 interrupt 方法，这将导致该通道被关闭，并且已阻塞线程接将会收到ClosedByInterruptException，并且设置已阻塞线程的中断状态。另外，如果已设置某个线程的中断状态并且它在通道上调用某个阻塞的 I/O 操作，则该通道将关闭并且该线程立即接收到 ClosedByInterruptException；并仍然设置其中断状态。</li>
+<li>如果线程阻塞于Selector调用，则线程的中断标志位会被设置，同时，阻塞的调用会立即返回。</li>
+</ol>
+<p>我们重点介绍另一种情况，<strong>InputStream的read调用</strong>，该操作是不可中断的，如果流中没有数据，read会阻塞 (但线程状态依然是RUNNABLE)，且不响应interrupt()，<strong>与synchronized类似，调用interrupt()只会设置线程的中断标志，而不会真正”中断”它</strong></p>
+<h3 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h3><p><a href="https://zhuanlan.zhihu.com/p/27857336" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/27857336</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/06/2019-10-29-zero-copy/" rel="next" title="zero-copy">
+                <i class="fa fa-chevron-left"></i> zero-copy
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/06/2019-11-1-jvm-invoke/" rel="prev" title="jvm-invoke">
+                jvm-invoke <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">273</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#linux线程同步"><span class="nav-number">1.</span> <span class="nav-text">linux线程同步</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#条件变量"><span class="nav-number">1.1.</span> <span class="nav-text">条件变量</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#有了互斥变量pthread-mutext-t为什么还要引入条件变量pthread-cond-t呢"><span class="nav-number">1.1.0.1.</span> <span class="nav-text">有了互斥变量pthread_mutext_t为什么还要引入条件变量pthread_cond_t呢</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#WAITING-TIMED-WAITING"><span class="nav-number">1.1.0.2.</span> <span class="nav-text">WAITING&#x2F;TIMED_WAITING</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#synchronized"><span class="nav-number">1.1.0.3.</span> <span class="nav-text">synchronized</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#io操作"><span class="nav-number">1.1.0.4.</span> <span class="nav-text">io操作</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#reference"><span class="nav-number">1.2.</span> <span class="nav-text">reference</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

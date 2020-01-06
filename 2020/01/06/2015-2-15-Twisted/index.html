@@ -1,0 +1,1613 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="##Twisted reactor+deferred 没使用reactor的异步客户端  # This is the asynchronous Get Poetry Now! client.  import datetime, errno, optparse, select, socket   def parse_args():     usage &#x3D; &quot;&quot;&quot;usag">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Twisted">
+<meta property="og:url" content="http://yoursite.com/2020/01/06/2015-2-15-Twisted/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="##Twisted reactor+deferred 没使用reactor的异步客户端  # This is the asynchronous Get Poetry Now! client.  import datetime, errno, optparse, select, socket   def parse_args():     usage &#x3D; &quot;&quot;&quot;usag">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/twisted.PNG">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/twisted.PNG">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/twisted2.png">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/twisted3.png">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/twisted4.png">
+<meta property="article:published_time" content="2020-01-06T06:03:05.413Z">
+<meta property="article:modified_time" content="2020-01-06T06:03:09.412Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/twisted.PNG">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/01/06/2015-2-15-Twisted/"/>
+
+
+
+
+
+  <title>Twisted | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/2015-2-15-Twisted/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Twisted</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T14:03:05+08:00">
+                2020-01-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>##Twisted</p>
+<p>reactor+deferred</p>
+<pre><code>没使用reactor的异步客户端
+
+# This is the asynchronous Get Poetry Now! client.
+
+import datetime, errno, optparse, select, socket
+
+
+def parse_args():
+    usage = &quot;&quot;&quot;usage: %prog [options] [hostname]:port ...
+This is the Get Poetry Now! client, asynchronous edition.
+Run it like this:
+  python get-poetry.py port1 port2 port3 ...
+If you are in the base directory of the twisted-intro package,
+you could run it like this:
+  python async-client/get-poetry.py 10001 10002 10003
+to grab poetry from servers on ports 10001, 10002, and 10003.
+Of course, there need to be servers listening on those ports
+for that to work.
+&quot;&quot;&quot;
+
+    parser = optparse.OptionParser(usage)
+
+    _, addresses = parser.parse_args()
+
+    if not addresses:
+        print parser.format_help()
+        parser.exit()
+
+    def parse_address(addr):
+        if &apos;:&apos; not in addr:
+            host = &apos;127.0.0.1&apos;
+            port = addr
+        else:
+            host, port = addr.split(&apos;:&apos;, 1)
+
+        if not port.isdigit():
+            parser.error(&apos;Ports must be integers.&apos;)
+
+        return host, int(port)
+
+    return map(parse_address, addresses)
+
+
+def get_poetry(sockets):
+    &quot;&quot;&quot;Download poety from all the given sockets.&quot;&quot;&quot;
+
+    poems = dict.fromkeys(sockets, &apos;&apos;) # socket -&gt; accumulated poem
+
+    # socket -&gt; task numbers
+    sock2task = dict([(s, i + 1) for i, s in enumerate(sockets)])
+
+    sockets = list(sockets) # make a copy
+
+    # we go around this loop until we&apos;ve gotten all the poetry
+    # from all the sockets. This is the &apos;reactor loop&apos;.
+
+    while sockets:
+        # this select call blocks until one or more of the
+        # sockets is ready for read I/O
+        rlist, _, _ = select.select(sockets, [], [])
+
+        # rlist is the list of sockets with data ready to read
+
+        for sock in rlist:
+            data = &apos;&apos;
+
+            while True:
+                try:
+                    new_data = sock.recv(1024)
+                except socket.error, e:
+                    if e.args[0] == errno.EWOULDBLOCK:
+                        # this error code means we would have
+                        # blocked if the socket was blocking.
+                        # instead we skip to the next socket
+                        break
+                    raise
+                else:
+                    if not new_data:
+                        break
+                    else:
+                        data += new_data
+
+            # Each execution of this inner loop corresponds to
+            # working on one asynchronous task in Figure 3 here:
+            # http://krondo.com/?p=1209#figure3
+
+            task_num = sock2task[sock]
+
+            if not data:
+                sockets.remove(sock)
+                sock.close()
+                print &apos;Task %d finished&apos; % task_num
+            else:
+                addr_fmt = format_address(sock.getpeername())
+                msg = &apos;Task %d: got %d bytes of poetry from %s&apos;
+                print  msg % (task_num, len(data), addr_fmt)
+
+            poems[sock] += data
+
+    return poems
+
+
+def connect(address):
+    &quot;&quot;&quot;Connect to the given server and return a non-blocking socket.&quot;&quot;&quot;
+
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect(address)
+    sock.setblocking(0)
+    return sock
+
+
+def format_address(address):
+    host, port = address
+    return &apos;%s:%s&apos; % (host or &apos;127.0.0.1&apos;, port)
+
+
+def main():
+    addresses = parse_args()
+
+    start = datetime.datetime.now()
+
+    sockets = map(connect, addresses)
+
+    poems = get_poetry(sockets)
+
+    elapsed = datetime.datetime.now() - start
+
+    for i, sock in enumerate(sockets):
+        print &apos;Task %d: %d bytes of poetry&apos; % (i + 1, len(poems[sock]))
+
+    print &apos;Got %d poems in %s&apos; % (len(addresses), elapsed)
+
+
+if __name__ == &apos;__main__&apos;:
+    main()
+
+
+twisted异步客户端
+    # This is the Twisted Get Poetry Now! client, version 1.0.
+
+# NOTE: This should not be used as the basis for production code.
+# It uses low-level Twisted APIs as a learning exercise.
+
+import datetime, errno, optparse, socket
+
+from twisted.internet import main
+
+
+def parse_args():
+    usage = &quot;&quot;&quot;usage: %prog [options] [hostname]:port ...
+This is the Get Poetry Now! client, Twisted version 1.0.
+Run it like this:
+  python get-poetry.py port1 port2 port3 ...
+If you are in the base directory of the twisted-intro package,
+you could run it like this:
+  python twisted-client-1/get-poetry.py 10001 10002 10003
+to grab poetry from servers on ports 10001, 10002, and 10003.
+Of course, there need to be servers listening on those ports
+for that to work.
+&quot;&quot;&quot;
+
+    parser = optparse.OptionParser(usage)
+
+    _, addresses = parser.parse_args()
+
+    if not addresses:
+        print parser.format_help()
+        parser.exit()
+
+    def parse_address(addr):
+        if &apos;:&apos; not in addr:
+            host = &apos;127.0.0.1&apos;
+            port = addr
+        else:
+            host, port = addr.split(&apos;:&apos;, 1)
+
+        if not port.isdigit():
+            parser.error(&apos;Ports must be integers.&apos;)
+
+        return host, int(port)
+
+    return map(parse_address, addresses)
+
+
+class PoetrySocket(object):
+
+    poem = &apos;&apos;
+
+    def __init__(self, task_num, address):
+        self.task_num = task_num
+        self.address = address
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.sock.connect(address)
+        self.sock.setblocking(0)
+
+        # tell the Twisted reactor to monitor this socket for reading
+        from twisted.internet import reactor
+        reactor.addReader(self)
+
+    def fileno(self):
+        try:
+            return self.sock.fileno()
+        except socket.error:
+            return -1
+
+    def connectionLost(self, reason):
+        self.sock.close()
+
+        # stop monitoring this socket
+        from twisted.internet import reactor
+        reactor.removeReader(self)
+
+        # see if there are any poetry sockets left
+        for reader in reactor.getReaders():
+            if isinstance(reader, PoetrySocket):
+                return
+
+        reactor.stop() # no more poetry
+
+    def doRead(self):
+        bytes = &apos;&apos;
+
+        while True:
+            try:
+                bytesread = self.sock.recv(1024)
+                if not bytesread:
+                    break
+                else:
+                    bytes += bytesread
+            except socket.error, e:
+                if e.args[0] == errno.EWOULDBLOCK:
+                    break
+                return main.CONNECTION_LOST
+
+        if not bytes:
+            print &apos;Task %d finished&apos; % self.task_num
+            return main.CONNECTION_DONE
+        else:
+            msg = &apos;Task %d: got %d bytes of poetry from %s&apos;
+            print  msg % (self.task_num, len(bytes), self.format_addr())
+
+        self.poem += bytes
+
+    def logPrefix(self):
+        return &apos;poetry&apos;
+
+    def format_addr(self):
+        host, port = self.address
+        return &apos;%s:%s&apos; % (host or &apos;127.0.0.1&apos;, port)
+
+
+def poetry_main():
+    addresses = parse_args()
+
+    start = datetime.datetime.now()
+
+    sockets = [PoetrySocket(i + 1, addr) for i, addr in enumerate(addresses)]
+
+    from twisted.internet import reactor
+    reactor.run()
+
+    elapsed = datetime.datetime.now() - start
+
+    for i, sock in enumerate(sockets):
+        print &apos;Task %d: %d bytes of poetry&apos; % (i + 1, len(sock.poem))
+
+    print &apos;Got %d poems in %s&apos; % (len(addresses), elapsed)
+
+
+if __name__ == &apos;__main__&apos;:
+    poetry_main()</code></pre><p>IReactorFDSet是一个Twisted的reactor实现的接口</p>
+<p>epollreactor</p>
+<pre><code>def doPoll(self, timeout):
+     &quot;&quot;&quot;
+     Poll the poller for new events.
+     &quot;&quot;&quot;
+     if timeout is None:
+         timeout = -1  # Wait indefinitely.
+
+     try:
+         # Limit the number of events to the number of io objects we&apos;re
+         # currently tracking (because that&apos;s maybe a good heuristic) and
+         # the amount of time we block to the value specified by our
+         # caller.
+         l = self._poller.poll(timeout, len(self._selectables))
+     except IOError as err:
+         if err.errno == errno.EINTR:
+             return
+         # See epoll_wait(2) for documentation on the other conditions
+         # under which this can fail.  They can only be due to a serious
+         # programming error on our part, so let&apos;s just announce them
+         # loudly.
+         raise
+
+     _drdw = self._doReadOrWrite
+     for fd, event in l:
+         try:
+             selectable = self._selectables[fd]
+         except KeyError:
+             pass
+         else:
+             log.callWithLogger(selectable, _drdw, selectable, fd, event)</code></pre><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/twisted.PNG" alt=""></p>
+<p>run</p>
+<p>回调函数的实现，通过传入类，重写基类的函数</p>
+<p>有很多抽象类</p>
+<p>有关socket的操作由Protocol类完成，抽象了底层，提供操作数据流的接口，即实现数据协议</p>
+<pre><code># This is the Twisted Get Poetry Now! client, version 2.0.
+
+# NOTE: This should not be used as the basis for production code.
+
+import datetime, optparse
+
+from twisted.internet.protocol import Protocol, ClientFactory
+
+
+def parse_args():
+    usage = &quot;&quot;&quot;usage: %prog [options] [hostname]:port ...
+This is the Get Poetry Now! client, Twisted version 2.0.
+Run it like this:
+  python get-poetry.py port1 port2 port3 ...
+If you are in the base directory of the twisted-intro package,
+you could run it like this:
+  python twisted-client-2/get-poetry.py 10001 10002 10003
+to grab poetry from servers on ports 10001, 10002, and 10003.
+Of course, there need to be servers listening on those ports
+for that to work.
+&quot;&quot;&quot;
+
+    parser = optparse.OptionParser(usage)
+
+    _, addresses = parser.parse_args()
+
+    if not addresses:
+        print parser.format_help()
+        parser.exit()
+
+    def parse_address(addr):
+        if &apos;:&apos; not in addr:
+            host = &apos;127.0.0.1&apos;
+            port = addr
+        else:
+            host, port = addr.split(&apos;:&apos;, 1)
+
+        if not port.isdigit():
+            parser.error(&apos;Ports must be integers.&apos;)
+
+        return host, int(port)
+
+    return map(parse_address, addresses)
+
+
+class PoetryProtocol(Protocol):
+
+    poem = &apos;&apos;
+    task_num = 0
+
+    def dataReceived(self, data):
+        self.poem += data
+        msg = &apos;Task %d: got %d bytes of poetry from %s&apos;
+        print  msg % (self.task_num, len(data), self.transport.getPeer())
+
+    def connectionLost(self, reason):
+        self.poemReceived(self.poem)
+
+    def poemReceived(self, poem):
+        self.factory.poem_finished(self.task_num, poem)
+
+
+class PoetryClientFactory(ClientFactory):
+
+    task_num = 1
+
+    protocol = PoetryProtocol # tell base class what proto to build
+
+    def __init__(self, poetry_count):
+        self.poetry_count = poetry_count
+        self.poems = {} # task num -&gt; poem
+
+    def buildProtocol(self, address):
+        proto = ClientFactory.buildProtocol(self, address)
+        proto.task_num = self.task_num
+        self.task_num += 1
+        return proto
+
+    def poem_finished(self, task_num=None, poem=None):
+        if task_num is not None:
+            self.poems[task_num] = poem
+
+        self.poetry_count -= 1
+
+        if self.poetry_count == 0:
+            self.report()
+            from twisted.internet import reactor
+            reactor.stop()
+
+    def report(self):
+        for i in self.poems:
+            print &apos;Task %d: %d bytes of poetry&apos; % (i, len(self.poems[i]))
+
+    def clientConnectionFailed(self, connector, reason):
+        print &apos;Failed to connect to:&apos;, connector.getDestination()
+        self.poem_finished()
+
+
+def poetry_main():
+    addresses = parse_args()
+
+    start = datetime.datetime.now()
+
+    factory = PoetryClientFactory(len(addresses))
+
+    from twisted.internet import reactor
+
+    for address in addresses:
+        host, port = address
+        reactor.connectTCP(host, port, factory)
+
+    reactor.run()
+
+    elapsed = datetime.datetime.now() - start
+
+    print &apos;Got %d poems in %s&apos; % (len(addresses), elapsed)
+
+
+if __name__ == &apos;__main__&apos;:
+    poetry_main()
+
+
+ reactor.connectTCP(host, port, factory)-&gt; buildProtocol(self, address):</code></pre><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/twisted.PNG" alt=""></p>
+<p>加入Transports，Protocols</p>
+<pre><code># This is the Twisted Get Poetry Now! client, version 2.0.
+
+# NOTE: This should not be used as the basis for production code.
+
+import datetime, optparse
+
+from twisted.internet.protocol import Protocol, ClientFactory
+
+
+def parse_args():
+    usage = &quot;&quot;&quot;usage: %prog [options] [hostname]:port ...
+This is the Get Poetry Now! client, Twisted version 2.0.
+Run it like this:
+  python get-poetry.py port1 port2 port3 ...
+If you are in the base directory of the twisted-intro package,
+you could run it like this:
+  python twisted-client-2/get-poetry.py 10001 10002 10003
+to grab poetry from servers on ports 10001, 10002, and 10003.
+Of course, there need to be servers listening on those ports
+for that to work.
+&quot;&quot;&quot;
+
+    parser = optparse.OptionParser(usage)
+
+    _, addresses = parser.parse_args()
+
+    if not addresses:
+        print parser.format_help()
+        parser.exit()
+
+    def parse_address(addr):
+        if &apos;:&apos; not in addr:
+            host = &apos;127.0.0.1&apos;
+            port = addr
+        else:
+            host, port = addr.split(&apos;:&apos;, 1)
+
+        if not port.isdigit():
+            parser.error(&apos;Ports must be integers.&apos;)
+
+        return host, int(port)
+
+    return map(parse_address, addresses)
+
+
+class PoetryProtocol(Protocol):处理接收的数据
+
+    poem = &apos;&apos;
+    task_num = 0
+
+    def dataReceived(self, data):
+        self.poem += data
+        msg = &apos;Task %d: got %d bytes of poetry from %s&apos;
+        print  msg % (self.task_num, len(data), self.transport.getPeer())
+
+    def connectionLost(self, reason):
+        self.poemReceived(self.poem)
+
+    def poemReceived(self, poem):
+        self.factory.poem_finished(self.task_num, poem)
+
+
+class PoetryClientFactory(ClientFactory):
+
+    task_num = 1
+
+    protocol = PoetryProtocol # tell base class what proto to build
+
+    def __init__(self, poetry_count):
+        self.poetry_count = poetry_count
+        self.poems = {} # task num -&gt; poem
+
+    def buildProtocol(self, address):
+        proto = ClientFactory.buildProtocol(self, address)
+        proto.task_num = self.task_num
+        self.task_num += 1
+        return proto
+
+    def poem_finished(self, task_num=None, poem=None):
+        if task_num is not None:
+            self.poems[task_num] = poem
+
+        self.poetry_count -= 1
+
+        if self.poetry_count == 0:
+            self.report()
+            from twisted.internet import reactor
+            reactor.stop()
+
+    def report(self):
+        for i in self.poems:
+            print &apos;Task %d: %d bytes of poetry&apos; % (i, len(self.poems[i]))
+
+    def clientConnectionFailed(self, connector, reason):
+        print &apos;Failed to connect to:&apos;, connector.getDestination()
+        self.poem_finished()
+
+
+def poetry_main():
+    addresses = parse_args()
+
+    start = datetime.datetime.now()
+
+    factory = PoetryClientFactory(len(addresses)) 创建factory
+
+    from twisted.internet import reactor
+
+    for address in addresses:
+        host, port = address
+        reactor.connectTCP(host, port, factory) 创建协议
+
+    reactor.run()
+
+    elapsed = datetime.datetime.now() - start
+
+    print &apos;Got %d poems in %s&apos; % (len(addresses), elapsed)
+
+
+if __name__ == &apos;__main__&apos;:
+    poetry_main()</code></pre><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/twisted2.png" alt=""></p>
+<pre><code># This is the Twisted Get Poetry Now! client, version 3.0.
+
+# NOTE: This should not be used as the basis for production code.
+
+import optparse
+
+from twisted.internet.protocol import Protocol, ClientFactory
+
+
+def parse_args():
+    usage = &quot;&quot;&quot;usage: %prog [options] [hostname]:port ...
+This is the Get Poetry Now! client, Twisted version 3.0
+Run it like this:
+  python get-poetry-1.py port1 port2 port3 ...
+If you are in the base directory of the twisted-intro package,
+you could run it like this:
+  python twisted-client-3/get-poetry-1.py 10001 10002 10003
+to grab poetry from servers on ports 10001, 10002, and 10003.
+Of course, there need to be servers listening on those ports
+for that to work.
+&quot;&quot;&quot;
+
+    parser = optparse.OptionParser(usage)
+
+    _, addresses = parser.parse_args()
+
+    if not addresses:
+        print parser.format_help()
+        parser.exit()
+
+    def parse_address(addr):
+        if &apos;:&apos; not in addr:
+            host = &apos;127.0.0.1&apos;
+            port = addr
+        else:
+            host, port = addr.split(&apos;:&apos;, 1)
+
+        if not port.isdigit():
+            parser.error(&apos;Ports must be integers.&apos;)
+
+        return host, int(port)
+
+    return map(parse_address, addresses)
+
+
+class PoetryProtocol(Protocol):
+
+    poem = &apos;&apos;
+
+    def dataReceived(self, data):
+        self.poem += data
+
+    def connectionLost(self, reason):
+        self.poemReceived(self.poem)
+
+    def poemReceived(self, poem):
+        self.factory.poem_finished(poem)
+
+
+class PoetryClientFactory(ClientFactory):
+
+    protocol = PoetryProtocol
+
+    def __init__(self, callback):
+        self.callback = callback
+
+    def poem_finished(self, poem):
+        self.callback(poem)
+
+
+def get_poetry(host, port, callback):
+    &quot;&quot;&quot;
+    Download a poem from the given host and port and invoke
+      callback(poem)
+    when the poem is complete.
+    &quot;&quot;&quot;
+    from twisted.internet import reactor
+    factory = PoetryClientFactory(callback)
+    reactor.connectTCP(host, port, factory)
+
+
+def poetry_main():
+    addresses = parse_args()
+
+    from twisted.internet import reactor
+
+    poems = []
+
+    def got_poem(poem):
+        poems.append(poem)
+        if len(poems) == len(addresses):
+            reactor.stop()
+
+    for address in addresses:
+        host, port = address
+        get_poetry(host, port, got_poem)
+
+    reactor.run()
+
+    for poem in poems:
+        print poem
+
+
+if __name__ == &apos;__main__&apos;:
+    poetry_main()</code></pre><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/twisted3.png" alt=""></p>
+<p>Deferred 管理回调函数</p>
+<p>deferred.callback errback 不能被调用两次<br>    from twisted.internet.defer import Deferred</p>
+<pre><code>def got_poem(res):
+    print &apos;Your poem is served:&apos;
+    print res
+
+def poem_failed(err):
+    print &apos;No poetry for you.&apos;
+
+d = Deferred()
+
+# add a callback/errback pair to the chain
+d.addCallbacks(got_poem, poem_failed)
+
+# fire the chain with a normal result
+d.callback(&apos;This poem is short.&apos;)
+
+print &quot;Finished&quot;
+
+
+from twisted.internet.defer import Deferred
+from twisted.python.failure import Failure
+
+def got_poem(res):
+    print &apos;Your poem is served:&apos;
+    print res
+
+def poem_failed(err):
+    print &apos;No poetry for you.&apos;
+
+d = Deferred()
+
+# add a callback/errback pair to the chain
+d.addCallbacks(got_poem, poem_failed)
+
+# fire the chain with an error result
+d.errback(Failure(Exception(&apos;I have failed.&apos;)))
+
+print &quot;Finished&quot;
+
+
+
+# This is the Twisted Get Poetry Now! client, version 4.0
+
+import optparse, sys
+
+from twisted.internet import defer
+from twisted.internet.protocol import Protocol, ClientFactory
+
+
+def parse_args():
+    usage = &quot;&quot;&quot;usage: %prog [options] [hostname]:port ...
+This is the Get Poetry Now! client, Twisted version 4.0
+Run it like this:
+  python get-poetry.py port1 port2 port3 ...
+If you are in the base directory of the twisted-intro package,
+you could run it like this:
+  python twisted-client-4/get-poetry.py 10001 10002 10003
+to grab poetry from servers on ports 10001, 10002, and 10003.
+Of course, there need to be servers listening on those ports
+for that to work.
+&quot;&quot;&quot;
+
+    parser = optparse.OptionParser(usage)
+
+    _, addresses = parser.parse_args()
+
+    if not addresses:
+        print parser.format_help()
+        parser.exit()
+
+    def parse_address(addr):
+        if &apos;:&apos; not in addr:
+            host = &apos;127.0.0.1&apos;
+            port = addr
+        else:
+            host, port = addr.split(&apos;:&apos;, 1)
+
+        if not port.isdigit():
+            parser.error(&apos;Ports must be integers.&apos;)
+
+        return host, int(port)
+
+    return map(parse_address, addresses)
+
+
+class PoetryProtocol(Protocol):
+
+    poem = &apos;&apos;
+
+    def dataReceived(self, data):
+        self.poem += data
+
+    def connectionLost(self, reason):
+        self.poemReceived(self.poem)
+
+    def poemReceived(self, poem):
+        self.factory.poem_finished(poem)
+
+
+class PoetryClientFactory(ClientFactory):
+
+    protocol = PoetryProtocol
+
+    def __init__(self, deferred):
+        self.deferred = deferred
+
+    def poem_finished(self, poem):
+        if self.deferred is not None:
+            d, self.deferred = self.deferred, None
+            d.callback(poem)
+
+    def clientConnectionFailed(self, connector, reason):
+        if self.deferred is not None:
+            d, self.deferred = self.deferred, None
+            d.errback(reason)
+
+
+def get_poetry(host, port):
+    &quot;&quot;&quot;
+    Download a poem from the given host and port. This function
+    returns a Deferred which will be fired with the complete text of
+    the poem or a Failure if the poem could not be downloaded.
+    &quot;&quot;&quot;
+    d = defer.Deferred()
+    from twisted.internet import reactor
+    factory = PoetryClientFactory(d)
+    reactor.connectTCP(host, port, factory)
+    return d
+
+
+def poetry_main():
+    addresses = parse_args()
+
+    from twisted.internet import reactor
+
+    poems = []
+    errors = []
+
+    def got_poem(poem):
+        poems.append(poem)
+
+    def poem_failed(err):
+        print &gt;&gt;sys.stderr, &apos;Poem failed:&apos;, err
+        errors.append(err)
+
+    def poem_done(_):
+        if len(poems) + len(errors) == len(addresses):
+            reactor.stop()
+
+    for address in addresses:
+        host, port = address
+        d = get_poetry(host, port)
+        d.addCallbacks(got_poem, poem_failed)
+        d.addBoth(poem_done)
+
+    reactor.run()
+
+    for poem in poems:
+        print poem
+
+
+if __name__ == &apos;__main__&apos;:
+    poetry_main()</code></pre><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/twisted4.png" alt=""></p>
+<pre><code>socket.setblocking(flag)
+
+Set blocking or non-blocking mode of the socket: if flag is 0, the socket is set to non-blocking, else to blocking mode. Initially all sockets are in blocking mode. In non-blocking mode, if a recv() call doesn’t find any data, or if a send() call can’t immediately dispose of the data, a error exception is raised; in blocking mode, the calls block until they can proceed. s.setblocking(0) is equivalent to s.settimeout(0.0); s.setblocking(1) is equivalent to s.settimeout(None).
+
+
+
+class ClientFactory(Factory):
+    &quot;&quot;&quot;A Protocol factory for clients.
+
+    This can be used together with the various connectXXX methods in
+    reactors.
+    &quot;&quot;&quot;
+
+    def startedConnecting(self, connector):
+        &quot;&quot;&quot;Called when a connection has been started.
+
+        You can call connector.stopConnecting() to stop the connection attempt.
+
+        @param connector: a Connector object.
+        &quot;&quot;&quot;
+
+    def clientConnectionFailed(self, connector, reason):
+        &quot;&quot;&quot;Called when a connection has failed to connect.
+
+        It may be useful to call connector.connect() - this will reconnect.
+
+        @type reason: L{twisted.python.failure.Failure}
+        &quot;&quot;&quot;
+
+    def clientConnectionLost(self, connector, reason):
+        &quot;&quot;&quot;Called when an established connection is lost.
+
+        It may be useful to call connector.connect() - this will reconnect.
+
+        @type reason: L{twisted.python.failure.Failure}
+        &quot;&quot;&quot;
+
+
+
+
+
+@implementer(interfaces.IProtocolFactory, interfaces.ILoggingContext)
+class Factory:
+    &quot;&quot;&quot;
+    This is a factory which produces protocols.
+
+    By default, buildProtocol will create a protocol of the class given in
+    self.protocol.
+    &quot;&quot;&quot;
+
+    # put a subclass of Protocol here:
+    protocol = None
+
+    numPorts = 0
+    noisy = True
+
+    @classmethod
+    def forProtocol(cls, protocol, *args, **kwargs):
+        &quot;&quot;&quot;
+        Create a factory for the given protocol.
+
+        It sets the C{protocol} attribute and returns the constructed factory
+        instance.
+
+        @param protocol: A L{Protocol} subclass
+
+        @param args: Positional arguments for the factory.
+
+        @param kwargs: Keyword arguments for the factory.
+
+        @return: A L{Factory} instance wired up to C{protocol}.
+        &quot;&quot;&quot;
+        factory = cls(*args, **kwargs)
+        factory.protocol = protocol
+        return factory
+
+
+    def logPrefix(self):
+        &quot;&quot;&quot;
+        Describe this factory for log messages.
+        &quot;&quot;&quot;
+        return self.__class__.__name__
+
+
+    def doStart(self):
+        &quot;&quot;&quot;Make sure startFactory is called.
+
+        Users should not call this function themselves!
+        &quot;&quot;&quot;
+        if not self.numPorts:
+            if self.noisy:
+                log.msg(&quot;Starting factory %r&quot; % self)
+            self.startFactory()
+        self.numPorts = self.numPorts + 1
+
+    def doStop(self):
+        &quot;&quot;&quot;Make sure stopFactory is called.
+
+        Users should not call this function themselves!
+        &quot;&quot;&quot;
+        if self.numPorts == 0:
+            # this shouldn&apos;t happen, but does sometimes and this is better
+            # than blowing up in assert as we did previously.
+            return
+        self.numPorts = self.numPorts - 1
+        if not self.numPorts:
+            if self.noisy:
+                log.msg(&quot;Stopping factory %r&quot; % self)
+            self.stopFactory()
+
+    def startFactory(self):
+        &quot;&quot;&quot;This will be called before I begin listening on a Port or Connector.
+
+        It will only be called once, even if the factory is connected
+        to multiple ports.
+
+        This can be used to perform &apos;unserialization&apos; tasks that
+        are best put off until things are actually running, such
+        as connecting to a database, opening files, etcetera.
+        &quot;&quot;&quot;
+
+    def stopFactory(self):
+        &quot;&quot;&quot;This will be called before I stop listening on all Ports/Connectors.
+
+        This can be overridden to perform &apos;shutdown&apos; tasks such as disconnecting
+        database connections, closing files, etc.
+
+        It will be called, for example, before an application shuts down,
+        if it was connected to a port. User code should not call this function
+        directly.
+        &quot;&quot;&quot;
+
+
+    def buildProtocol(self, addr):
+        &quot;&quot;&quot;
+        Create an instance of a subclass of Protocol.
+
+        The returned instance will handle input on an incoming server
+        connection, and an attribute &quot;factory&quot; pointing to the creating
+        factory.
+
+        Alternatively, C{None} may be returned to immediately close the
+        new connection.
+
+        Override this method to alter how Protocol instances get created.
+
+        @param addr: an object implementing L{twisted.internet.interfaces.IAddress}
+        &quot;&quot;&quot;
+        p = self.protocol()
+        p.factory = self
+        return p</code></pre><p>###安装</p>
+<pre><code>sudo pip install lxml==3.1.2 --trusted-host pypi.python.org
+
+sudo pip install Scrapy --trusted-host pypi.python.org</code></pre>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/06/2015-2-11-django/" rel="next" title="django">
+                <i class="fa fa-chevron-left"></i> django
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/06/2015-2-13-tornado/" rel="prev" title="tornado">
+                tornado <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">273</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
