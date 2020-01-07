@@ -7,17 +7,20 @@
   
   <title>ssh | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="ssh非对称加密概念公钥加密，私钥解密 私钥加密&#x3D;签名，公钥解密&#x3D;验签 密码登录远程主机收到用户的登录请求，把自己的公钥发给用户 用户使用这个公钥，将登录密码加密后，发送回来 远程主机用自己的私钥，解密登录密码，如果密码正确，就同意用户登录 公钥登录用户将自己的公钥储存在远程主机上 登录的时候，远程主机会向用户发送一段随机字符串，用户用自己的私钥加密后，再发回来 远程主机用事先储存的公钥进行解密，">
+  <meta name="description" content="ssh非对称加密概念公钥加密，私钥解密 私钥加密&#x3D;签名，公钥解密&#x3D;验签 密码登录远程主机收到用户的登录请求，把自己的公钥发给用户 用户使用这个公钥，将登录密码加密后，发送回来 远程主机用自己的私钥，解密登录密码，如果密码正确，就同意用户登录 ssh公钥登录  id_rsa：保存私钥 id_rsa.pub：保存公钥 authorized_keys：保存已授权的客户端公钥 known_hosts：保存">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ssh">
 <meta property="og:url" content="http://yoursite.com/2019/05/29/2019-5-29-ssh/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="ssh非对称加密概念公钥加密，私钥解密 私钥加密&#x3D;签名，公钥解密&#x3D;验签 密码登录远程主机收到用户的登录请求，把自己的公钥发给用户 用户使用这个公钥，将登录密码加密后，发送回来 远程主机用自己的私钥，解密登录密码，如果密码正确，就同意用户登录 公钥登录用户将自己的公钥储存在远程主机上 登录的时候，远程主机会向用户发送一段随机字符串，用户用自己的私钥加密后，再发回来 远程主机用事先储存的公钥进行解密，">
+<meta property="og:description" content="ssh非对称加密概念公钥加密，私钥解密 私钥加密&#x3D;签名，公钥解密&#x3D;验签 密码登录远程主机收到用户的登录请求，把自己的公钥发给用户 用户使用这个公钥，将登录密码加密后，发送回来 远程主机用自己的私钥，解密登录密码，如果密码正确，就同意用户登录 ssh公钥登录  id_rsa：保存私钥 id_rsa.pub：保存公钥 authorized_keys：保存已授权的客户端公钥 known_hosts：保存">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200107200957370.png">
+<meta property="og:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200107203306812.png">
 <meta property="article:published_time" content="2019-05-28T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-01-06T07:17:32.738Z">
+<meta property="article:modified_time" content="2020-01-07T13:18:51.524Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200107200957370.png">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -93,10 +96,16 @@
 <h3 id="密码登录"><a href="#密码登录" class="headerlink" title="密码登录"></a>密码登录</h3><p>远程主机收到用户的登录请求，把自己的公钥发给用户</p>
 <p>用户使用这个公钥，将登录密码加密后，发送回来</p>
 <p>远程主机用自己的私钥，解密登录密码，如果密码正确，就同意用户登录</p>
-<h3 id="公钥登录"><a href="#公钥登录" class="headerlink" title="公钥登录"></a>公钥登录</h3><p>用户将自己的公钥储存在远程主机上</p>
-<p>登录的时候，远程主机会向用户发送一段随机字符串，用户用自己的私钥加密后，再发回来</p>
-<p>远程主机用事先储存的公钥进行解密，如果成功，就证明用户是可信的，直接允许登录shell，不再要求密码</p>
+<h3 id="ssh公钥登录"><a href="#ssh公钥登录" class="headerlink" title="ssh公钥登录"></a>ssh公钥登录</h3><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200107200957370.png" alt="image-20200107200957370"></p>
+<ol>
+<li>id_rsa：保存私钥</li>
+<li>id_rsa.pub：保存公钥</li>
+<li>authorized_keys：保存已授权的客户端公钥</li>
+<li>known_hosts：保存已认证的远程主机ID</li>
+</ol>
+<p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200107203306812.png" alt="image-20200107203306812"></p>
 <h3 id="ref"><a href="#ref" class="headerlink" title="ref"></a>ref</h3><p><a href="http://www.ruanyifeng.com/blog/2011/12/ssh_remote_login.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2011/12/ssh_remote_login.html</a></p>
+<p><a href="https://www.jianshu.com/p/33461b619d53" target="_blank" rel="noopener">https://www.jianshu.com/p/33461b619d53</a></p>
 
       
     </div>
