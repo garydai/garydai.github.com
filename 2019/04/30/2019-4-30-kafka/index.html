@@ -1,12 +1,20 @@
 <!DOCTYPE html>
-<html>
+
+
+  <html class="light page-default">
+
+
 <head>
   <meta charset="utf-8">
   
+  <title>kafka | Hexo</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-  <title>kafka | Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="后端、技术、博客、架构、全栈" />
+  
+
   <meta name="description" content="kafka网络通信模型 （1）Acceptor：1个接收线程，负责监听新的连接请求，同时注册OP_ACCEPT 事件，将新的连接按照“round robin”方式交给对应的 Processor 线程处理； （2）Processor：N个处理器线程，其中每个 Processor 都有自己的 selector，它会向 Acceptor 分配的 SocketChannel 注册相应的 OP_READ 事">
 <meta property="og:type" content="article">
 <meta property="og:title" content="kafka">
@@ -38,77 +46,162 @@
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191204220047825.png">
+
   
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+
   
+    <link rel="icon" href="/favicon.ico">
   
-    <link rel="icon" href="/favicon.png">
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
   
+    
+<link rel="stylesheet" href="/css/personal-style.css">
+
   
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+
   
+
   
-<link rel="stylesheet" href="/css/style.css">
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?65e0b4df283d78e15f8c78f238ec9593";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
 <meta name="generator" content="Hexo 4.2.0"></head>
 
 <body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
-      </h1>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
-      <div class="outer">
-        <section id="main"><article id="default-2019-4-30-kafka" class="article article-type-default" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/04/30/2019-4-30-kafka/" class="article-date">
-  <time datetime="2019-04-29T16:00:00.000Z" itemprop="datePublished">2019-04-30</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
+
+
   
-    <h1 class="article-title" itemprop="name">
-      kafka
-    </h1>
+    <span id="toolbox-mobile" class="toolbox-mobile">导航</span>
   
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">导航</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
       
-        <h1 id="kafka"><a href="#kafka" class="headerlink" title="kafka"></a>kafka</h1><h2 id="网络通信模型"><a href="#网络通信模型" class="headerlink" title="网络通信模型"></a>网络通信模型</h2><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191204220047825.png" alt="image-20191204220047825"></p>
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/category/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tag/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">Posts List</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#kafka"><span class="toc-text">kafka</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#网络通信模型"><span class="toc-text">网络通信模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#acceptor"><span class="toc-text">acceptor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#processor"><span class="toc-text">processor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#requestChannel"><span class="toc-text">requestChannel</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#KafkaRequestHandler"><span class="toc-text">KafkaRequestHandler</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#KafkaApis"><span class="toc-text">KafkaApis</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#主题"><span class="toc-text">主题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#增加主题"><span class="toc-text">增加主题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#副本"><span class="toc-text">副本</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#In-sync-Replicas（ISR）"><span class="toc-text">In-sync Replicas（ISR）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#领导者选举"><span class="toc-text">领导者选举</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#生产者"><span class="toc-text">生产者</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#无丢失消息"><span class="toc-text">无丢失消息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#消息重发"><span class="toc-text">消息重发</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#幂等"><span class="toc-text">幂等</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#事务"><span class="toc-text">事务</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#客户端生产者"><span class="toc-text">客户端生产者</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#发送消息"><span class="toc-text">发送消息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sender线程"><span class="toc-text">sender线程</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#消费者"><span class="toc-text">消费者</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#消费组"><span class="toc-text">消费组</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#消费者入组"><span class="toc-text">消费者入组</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#偏移量提交"><span class="toc-text">偏移量提交</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#手动提交"><span class="toc-text">手动提交</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#自动提交"><span class="toc-text">自动提交</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#重平衡"><span class="toc-text">重平衡</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#控制器"><span class="toc-text">控制器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#controller选举"><span class="toc-text">controller选举</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分区leader选举"><span class="toc-text">分区leader选举</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#控制器故障转移（Failover）"><span class="toc-text">控制器故障转移（Failover）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#处理生产者请求的逻辑如下："><span class="toc-text">处理生产者请求的逻辑如下：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#处理-Follower-副本拉取消息的逻辑如下："><span class="toc-text">处理 Follower 副本拉取消息的逻辑如下：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#从-Leader-拉取消息的处理逻辑如下："><span class="toc-text">从 Leader 拉取消息的处理逻辑如下：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#协调器"><span class="toc-text">协调器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#rocketMQ"><span class="toc-text">rocketMQ</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#namesrv-VS-zk"><span class="toc-text">namesrv VS zk</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#消息存储"><span class="toc-text">消息存储</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#reference"><span class="toc-text">reference</span></a></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="default-2019-4-30-kafka" class="article article-type-default" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">kafka</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2019.04.30</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>John Doe</span>
+        </span>
+      
+
+      
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h1 id="kafka"><a href="#kafka" class="headerlink" title="kafka"></a>kafka</h1><h2 id="网络通信模型"><a href="#网络通信模型" class="headerlink" title="网络通信模型"></a>网络通信模型</h2><p><img src="https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191204220047825.png" alt="image-20191204220047825"></p>
 <p>（1）<strong>Acceptor</strong>：1个接收线程，负责监听新的连接请求，同时注册OP_ACCEPT 事件，将新的连接按照<strong>“round robin”</strong>方式交给对应的 Processor 线程处理；<br> （2）<strong>Processor</strong>：N个处理器线程，其中每个 Processor 都有自己的 selector，它会向 Acceptor 分配的 SocketChannel 注册相应的 OP_READ 事件，N 的大小由<strong>“num.networker.threads”</strong>决定；<br> （3）<strong>KafkaRequestHandler</strong>：M个请求处理线程，包含在线程池—KafkaRequestHandlerPool内部，从RequestChannel的全局请求队列—requestQueue中获取请求数据并交给KafkaApis处理，M的大小由<strong>“num.io.threads”</strong>决定；<br> （4）<strong>RequestChannel</strong>：其为Kafka服务端的请求通道，该数据结构中包含了一个全局的请求队列 requestQueue和多个与Processor处理器相对应的响应队列responseQueue，提供给Processor与请求处理线程KafkaRequestHandler和KafkaApis交换数据的地方。<br> （5）<strong>NetworkClient</strong>：其底层是对 Java NIO 进行相应的封装，位于Kafka的网络接口层。Kafka消息生产者对象—KafkaProducer的send方法主要调用NetworkClient完成消息发送；<br> （6）<strong>SocketServer</strong>：其是一个NIO的服务，它同时启动一个Acceptor接收线程和多个Processor处理器线程。提供了一种典型的Reactor多线程模式，将接收客户端请求和处理请求相分离；<br> （7）<strong>KafkaServer</strong>：代表了一个Kafka Broker的实例；其startup方法为实例启动的入口；<br> （8）<strong>KafkaApis</strong>：Kafka的业务逻辑处理Api，负责处理不同类型的请求；比如<strong>“发送消息”</strong>、<strong>“获取消息偏移量—offset”</strong>和<strong>“处理心跳请求”</strong>等；</p>
 <h3 id="acceptor"><a href="#acceptor" class="headerlink" title="acceptor"></a>acceptor</h3><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line">def run() &#123;</span><br><span class="line">  <span class="comment">// 注册accept事件</span></span><br><span class="line">  serverChannel.register(nioSelector, SelectionKey.OP_ACCEPT)</span><br><span class="line">  startupComplete()</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> currentProcessorIndex = <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> (isRunning) &#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">val</span> ready = nioSelector.select(<span class="number">500</span>)</span><br><span class="line">        <span class="keyword">if</span> (ready &gt; <span class="number">0</span>) &#123;</span><br><span class="line">          <span class="keyword">val</span> keys = nioSelector.selectedKeys()</span><br><span class="line">          <span class="keyword">val</span> iter = keys.iterator()</span><br><span class="line">          <span class="keyword">while</span> (iter.hasNext &amp;&amp; isRunning) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">              <span class="keyword">val</span> key = iter.next</span><br><span class="line">              iter.remove()</span><br><span class="line"></span><br><span class="line">              <span class="keyword">if</span> (key.isAcceptable) &#123;</span><br><span class="line">                accept(key).foreach &#123; socketChannel =&gt;</span><br><span class="line"></span><br><span class="line">                  <span class="comment">// Assign the channel to the next processor (using round-robin) to which the</span></span><br><span class="line">                  <span class="comment">// channel can be added without blocking. If newConnections queue is full on</span></span><br><span class="line">                  <span class="comment">// all processors, block until the last one is able to accept a connection.</span></span><br><span class="line">                  <span class="keyword">var</span> retriesLeft = synchronized(processors.length)</span><br><span class="line">                  <span class="keyword">var</span> processor: Processor = <span class="literal">null</span></span><br><span class="line">                  <span class="keyword">do</span> &#123;</span><br><span class="line">                    retriesLeft -= <span class="number">1</span></span><br><span class="line">                    processor = synchronized &#123;</span><br><span class="line">                      <span class="comment">// adjust the index (if necessary) and retrieve the processor atomically for</span></span><br><span class="line">                      <span class="comment">// correct behaviour in case the number of processors is reduced dynamically						</span></span><br><span class="line">                      <span class="comment">// round robin算法找到处理线程</span></span><br><span class="line">                      currentProcessorIndex = currentProcessorIndex % processors.length</span><br><span class="line">                      processors(currentProcessorIndex)</span><br><span class="line">                    &#125;</span><br><span class="line">                    currentProcessorIndex += <span class="number">1</span></span><br><span class="line">                    <span class="comment">// 处理连接</span></span><br><span class="line">                  &#125; <span class="keyword">while</span> (!assignNewConnection(socketChannel, processor, retriesLeft == <span class="number">0</span>))</span><br><span class="line">                &#125;</span><br><span class="line">              &#125; <span class="keyword">else</span></span><br><span class="line">                <span class="keyword">throw</span> new IllegalStateException(<span class="string">"Unrecognized key state for acceptor thread."</span>)</span><br><span class="line">            &#125; <span class="keyword">catch</span> &#123;</span><br><span class="line">              case e: Throwable =&gt; error(<span class="string">"Error while accepting connection"</span>, e)</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">catch</span> &#123;</span><br><span class="line">        <span class="comment">// We catch all the throwables to prevent the acceptor thread from exiting on exceptions due</span></span><br><span class="line">        <span class="comment">// to a select operation on a specific channel or a bad request. We don't want</span></span><br><span class="line">        <span class="comment">// the broker to stop responding to requests from other clients in these scenarios.</span></span><br><span class="line">        case e: ControlThrowable =&gt; <span class="keyword">throw</span> e</span><br><span class="line">        case e: Throwable =&gt; error(<span class="string">"Error occurred"</span>, e)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    debug(<span class="string">"Closing server socket and selector."</span>)</span><br><span class="line">    CoreUtils.swallow(serverChannel.close(), <span class="keyword">this</span>, Level.ERROR)</span><br><span class="line">    CoreUtils.swallow(nioSelector.close(), <span class="keyword">this</span>, Level.ERROR)</span><br><span class="line">    shutdownComplete()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> def assignNewConnection(socketChannel: SocketChannel, processor: Processor, mayBlock: <span class="built_in">Boolean</span>): <span class="built_in">Boolean</span> = &#123;</span><br><span class="line">  <span class="keyword">if</span> (processor.accept(socketChannel, mayBlock, blockedPercentMeter)) &#123;</span><br><span class="line">    debug(s<span class="string">"Accepted connection from <span class="subst">$&#123;socketChannel.socket.getRemoteSocketAddress&#125;</span> on"</span> +</span><br><span class="line">      s<span class="string">" <span class="subst">$&#123;socketChannel.socket.getLocalSocketAddress&#125;</span> and assigned it to processor <span class="subst">$&#123;processor.id&#125;</span>,"</span> +</span><br><span class="line">      s<span class="string">" sendBufferSize [actual|requested]: [<span class="subst">$&#123;socketChannel.socket.getSendBufferSize&#125;</span>|<span class="variable">$sendBufferSize</span>]"</span> +</span><br><span class="line">      s<span class="string">" recvBufferSize [actual|requested]: [<span class="subst">$&#123;socketChannel.socket.getReceiveBufferSize&#125;</span>|<span class="variable">$recvBufferSize</span>]"</span>)</span><br><span class="line">    <span class="literal">true</span></span><br><span class="line">  &#125; <span class="keyword">else</span></span><br><span class="line">    <span class="literal">false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -371,130 +464,137 @@
 <p><a href="https://matt33.com/2017/07/08/kafka-producer-metadata/" target="_blank" rel="noopener">https://matt33.com/2017/07/08/kafka-producer-metadata/</a></p>
 <p><a href="https://blog.csdn.net/chunlongyu/article/details/52651960" target="_blank" rel="noopener">https://blog.csdn.net/chunlongyu/article/details/52651960</a></p>
 
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/04/30/2019-4-30-kafka/" data-id="ck521h1cb007hlc7kd3qzewhv" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
     
-<nav id="article-nav">
-  
-    <a href="/2019/05/29/2019-5-29-ssh/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          ssh
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2019/04/28/2019-4-28-tcp/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">tcp</div>
-    </a>
-  
-</nav>
+  </div>
 
-  
 </article>
 
-</section>
-        
-          <aside id="sidebar">
-  
-    
 
-  
-    
+   
 
-  
-    
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">October 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">August 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">June 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">May 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">April 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">March 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">February 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">December 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">October 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">September 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">August 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">July 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">June 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">May 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/04/">April 2013</a></li></ul>
-    </div>
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2019/04/28/2019-4-28-redis/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2019/05/29/2019-5-29-ssh/">
+        <i class="icon icon-angle-right"></i>
+    </a>
   </div>
 
 
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">Close</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
         
-          <li>
-            <a href="/2020/01/05/2020-1-5-datax/">离线同步工具DataX</a>
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
           </li>
         
-          <li>
-            <a href="/2019/12/31/2019-12-31-replicate/">分布式系统数据同步</a>
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/category/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
           </li>
         
-          <li>
-            <a href="/2019/12/28/2019-12-28-LCH/">LCH</a>
-          </li>
-        
-          <li>
-            <a href="/2019/12/26/2019-12-26-lambda/">lambda</a>
-          </li>
-        
-          <li>
-            <a href="/2019/12/26/2019-12-26-listener/">观察者模式</a>
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tag/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
           </li>
         
       </ul>
+
     </div>
   </div>
+</div>
+
+
 
   
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2020 John Doe<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
+      <div class="fexo-comments comments-default">
     
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    
 
+    
+    
 
-  
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+    
 
-  
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
+    
+    
 
-
-
-
-<script src="/js/script.js"></script>
-
-
-
+    
 
   </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
 </body>
 </html>
