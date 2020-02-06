@@ -15,15 +15,15 @@
     <meta name="keywords" content="后端、技术、博客、架构、全栈" />
   
 
-  <meta name="description" content="泛型与继承的区别用法泛型的最初动机:建立通用标准容器库\通用算法实现通用标准容器库的几种方法:继承\泛型\宏 用途算法重用,函数重用,无须重载   笔记宏是在预处理阶段进行文本替换,没有类型检查">
+  <meta name="description" content="泛型与继承的区别将类型参数化，解决处理相同逻辑不同类型的需求 用法泛型的最初动机:建立通用标准容器库\通用算法实现通用标准容器库的几种方法:继承\泛型\宏 用途算法重用,函数重用,无须重载   当遇到以下场景时，我们可以考虑使用泛型：  当参数类型不明确，可能会扩展为多种时。 想声明参数类型为 Object，并在使用时用 instanceof 判断时。  123456789101112131415">
 <meta property="og:type" content="article">
 <meta property="og:title" content="宏与泛型与继承">
 <meta property="og:url" content="http://yoursite.com/2013/05/05/2013-5-5-generics/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="泛型与继承的区别用法泛型的最初动机:建立通用标准容器库\通用算法实现通用标准容器库的几种方法:继承\泛型\宏 用途算法重用,函数重用,无须重载   笔记宏是在预处理阶段进行文本替换,没有类型检查">
+<meta property="og:description" content="泛型与继承的区别将类型参数化，解决处理相同逻辑不同类型的需求 用法泛型的最初动机:建立通用标准容器库\通用算法实现通用标准容器库的几种方法:继承\泛型\宏 用途算法重用,函数重用,无须重载   当遇到以下场景时，我们可以考虑使用泛型：  当参数类型不明确，可能会扩展为多种时。 想声明参数类型为 Object，并在使用时用 instanceof 判断时。  123456789101112131415">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2013-05-04T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-01-06T07:17:32.425Z">
+<meta property="article:modified_time" content="2020-02-02T08:02:32.600Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 
@@ -140,7 +140,7 @@
 
   <div id="toc" class="toc-article">
     <strong class="toc-title">Posts List</strong>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#泛型与继承的区别"><span class="toc-text">泛型与继承的区别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#用法"><span class="toc-text">用法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#用途"><span class="toc-text">用途</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#笔记"><span class="toc-text">笔记</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#泛型与继承的区别"><span class="toc-text">泛型与继承的区别</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#用法"><span class="toc-text">用法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#用途"><span class="toc-text">用途</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#笔记"><span class="toc-text">笔记</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用"><span class="toc-text">使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类型擦除"><span class="toc-text">类型擦除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#reference"><span class="toc-text">reference</span></a></li></ol></li></ol>
   </div>
 
 
@@ -181,9 +181,31 @@
 
   <div class="article-content">
     
-      <h2 id="泛型与继承的区别"><a href="#泛型与继承的区别" class="headerlink" title="泛型与继承的区别"></a>泛型与继承的区别</h2><h3 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h3><p>泛型的最初动机:建立通用标准容器库\通用算法<br>实现通用标准容器库的几种方法:继承\泛型\宏</p>
-<h3 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h3><p>算法重用,函数重用,无须重载  </p>
-<h3 id="笔记"><a href="#笔记" class="headerlink" title="笔记"></a>笔记</h3><p>宏是在预处理阶段进行文本替换,没有类型检查</p>
+      <h1 id="泛型与继承的区别"><a href="#泛型与继承的区别" class="headerlink" title="泛型与继承的区别"></a>泛型与继承的区别</h1><p>将类型参数化，解决处理相同逻辑不同类型的需求</p>
+<h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2><p>泛型的最初动机:建立通用标准容器库\通用算法<br>实现通用标准容器库的几种方法:继承\泛型\宏</p>
+<h2 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h2><p>算法重用,函数重用,无须重载  </p>
+<p>当遇到以下场景时，我们可以考虑使用泛型：</p>
+<ul>
+<li>当参数类型不明确，可能会扩展为多种时。</li>
+<li>想声明参数类型为 <code>Object</code>，并在使用时用 <code>instanceof</code> 判断时。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span>  &lt;T extends Comparable&lt;T&gt;&gt; <span class="function"><span class="keyword">void</span> <span class="title">quickSort</span><span class="params">(T[] data, <span class="keyword">int</span> start, <span class="keyword">int</span> end)</span> </span>&#123;</span><br><span class="line">    T key = data[start];</span><br><span class="line">    <span class="keyword">int</span> i = start;</span><br><span class="line">    <span class="keyword">int</span> j = end;</span><br><span class="line">    <span class="keyword">while</span> (i &lt; j) &#123;</span><br><span class="line">        <span class="keyword">while</span> (data[j].compareTo(key) &gt; <span class="number">0</span> &amp;&amp; j &gt; i) &#123;</span><br><span class="line">            j--;</span><br><span class="line">        &#125;</span><br><span class="line">        data[i] = data[j];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (data[i].compareTo(key) &lt; <span class="number">0</span> &amp;&amp; i &lt; j) &#123;</span><br><span class="line">            i++;</span><br><span class="line">        &#125;</span><br><span class="line">        data[j] = data[i];</span><br><span class="line">    &#125;</span><br><span class="line">    data[i] = key;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (i - <span class="number">1</span> &gt; start) &#123;</span><br><span class="line">        quickSort(data, start, i - <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (i + <span class="number">1</span> &lt; end) &#123;</span><br><span class="line">        quickSort(data, i + <span class="number">1</span>, end);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="笔记"><a href="#笔记" class="headerlink" title="笔记"></a>笔记</h2><p>宏是在预处理阶段进行文本替换,没有类型检查</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Generics</span>&lt;<span class="title">T</span>&gt; </span>&#123; <span class="comment">// 在类名后声明引入泛型类型</span></span><br><span class="line">       <span class="keyword">private</span> T field;  <span class="comment">// 引入后可以将字段声明为泛型类型</span></span><br><span class="line"></span><br><span class="line">       <span class="function"><span class="keyword">public</span> T <span class="title">getField</span><span class="params">()</span> </span>&#123; <span class="comment">// 类方法内也可以使用泛型类型</span></span><br><span class="line">           <span class="keyword">return</span> field;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> [<span class="keyword">static</span>] &lt;T&gt; <span class="function"><span class="keyword">void</span> <span class="title">testMethod</span><span class="params">(T arg)</span> </span>&#123; <span class="comment">// 访问限定符[静态方法在 static] 后使用 &lt;占位符&gt; 声明泛型方法后，在参数列表后就可以使用泛型类型了</span></span><br><span class="line">       <span class="comment">// doSomething</span></span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="类型擦除"><a href="#类型擦除" class="headerlink" title="类型擦除"></a>类型擦除</h2><p>严格来说，Java的泛型并不是真正的泛型。Java 的泛型是 JDK1.5 之后添加的特性，为了兼容之前版本的代码，其实现引入了类型擦除的概念。</p>
+<p>类型擦除指的是：Java 的泛型代码在编译时，由编译器进行类型检查，之后会将其泛型类型擦除掉，只保存原生类型，如 <code>Generics</code> 被擦除后是 <code>Generics</code>，我们常用的 <code>List</code> 被擦除后只剩下 <code>List</code>。</p>
+<ol>
+<li>编译期间编译器检查传入的泛型类型与声明的泛型类型是否匹配，不匹配则报出编译器错误；</li>
+<li>编译器执行类型擦除，字节码内只保留其原始类型；</li>
+<li>运行期间，再将 Object 转换为所需要的泛型类型。</li>
+</ol>
+<p><code>Java 的泛型实际上是由编译器实现的，将泛型类型转换为 Object 类型，在运行期间再进行状态转换</code>。</p>
+<p>实现泛型时声明的具体类型必须为 Object 的子类型，这是因为编译器进行类型擦除后会使用 Object 替换泛型类型，并在运行期间进行类型转换，而基础类型和 Object 之间是无法替换和转换的</p>
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><p><a href="https://zhenbianshu.github.io/2018/05/java_senior_featrue_generics.html" target="_blank" rel="noopener">https://zhenbianshu.github.io/2018/05/java_senior_featrue_generics.html</a></p>
 
     
   </div>

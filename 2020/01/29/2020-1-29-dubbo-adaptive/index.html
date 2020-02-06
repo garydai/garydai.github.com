@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-default">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>dubbo-adaptive | Hexo</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="后端、技术、博客、架构、全栈" />
+  
+
+  <meta name="description" content="dubbo-adaptive一个接口有多个实现类，如何在运行时动态决定，注入哪个实现类 dubbo通过生成接口的代理类，然后注入代理类，代理类会通过URL参数，决定使用哪个实现类。 注入一个有多个实现类的接口，由注解adaptive的value值决定，把这个value作为一个参数，从URL里找到对应的参数值，将这个参数值作为key，从容器里找到对应实现类的实例 123456789101112@SP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="dubbo-adaptive">
+<meta property="og:url" content="http://yoursite.com/2020/01/29/2020-1-29-dubbo-adaptive/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="dubbo-adaptive一个接口有多个实现类，如何在运行时动态决定，注入哪个实现类 dubbo通过生成接口的代理类，然后注入代理类，代理类会通过URL参数，决定使用哪个实现类。 注入一个有多个实现类的接口，由注解adaptive的value值决定，把这个value作为一个参数，从URL里找到对应的参数值，将这个参数值作为key，从容器里找到对应实现类的实例 123456789101112@SP">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-01-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-01-29T08:23:33.480Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    
+<link rel="stylesheet" href="/css/personal-style.css">
+
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?65e0b4df283d78e15f8c78f238ec9593";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">导航</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">导航</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/category/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tag/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">Posts List</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#dubbo-adaptive"><span class="toc-text">dubbo-adaptive</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#dubbo"><span class="toc-text">dubbo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#spring"><span class="toc-text">spring</span></a></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="default-2020-1-29-dubbo-adaptive" class="article article-type-default" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">dubbo-adaptive</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2020.01.29</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>John Doe</span>
+        </span>
+      
+
+      
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h1 id="dubbo-adaptive"><a href="#dubbo-adaptive" class="headerlink" title="dubbo-adaptive"></a>dubbo-adaptive</h1><p>一个接口有多个实现类，如何在运行时动态决定，注入哪个实现类</p>
+<h2 id="dubbo"><a href="#dubbo" class="headerlink" title="dubbo"></a>dubbo</h2><p>通过生成接口的代理类，然后注入代理类，代理类会通过URL参数，决定使用哪个实现类。</p>
+<p>注入一个有多个实现类的接口，由注解adaptive的value值决定，把这个value作为一个参数，从URL里找到对应的参数值，将这个参数值作为key，从容器里找到对应实现类的实例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SPI</span>(<span class="string">"impl1"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">SimpleExt</span> </span>&#123;</span><br><span class="line">    <span class="comment">// @Adaptive example, do not specify a explicit key.</span></span><br><span class="line">    <span class="meta">@Adaptive</span></span><br><span class="line">    <span class="function">String <span class="title">echo</span><span class="params">(URL url, String s)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Adaptive</span>(&#123;<span class="string">"key1"</span>, <span class="string">"key2"</span>&#125;)</span><br><span class="line">    <span class="function">String <span class="title">yell</span><span class="params">(URL url, String s)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// no @Adaptive</span></span><br><span class="line">    <span class="function">String <span class="title">bang</span><span class="params">(URL url, <span class="keyword">int</span> i)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test_getAdaptiveExtension_defaultAdaptiveKey</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="comment">//SinpleExt$Adaptive</span></span><br><span class="line">        SimpleExt ext = ExtensionLoader.getExtensionLoader(SimpleExt<span class="class">.<span class="keyword">class</span>).<span class="title">getAdaptiveExtension</span>()</span>;</span><br><span class="line"></span><br><span class="line">        Map&lt;String, String&gt; map = <span class="keyword">new</span> HashMap&lt;String, String&gt;();</span><br><span class="line">        URL url = <span class="keyword">new</span> URL(<span class="string">"p1"</span>, <span class="string">"1.2.3.4"</span>, <span class="number">1010</span>, <span class="string">"path1"</span>, map);</span><br><span class="line"></span><br><span class="line">        String echo = ext.echo(url, <span class="string">"haha"</span>);</span><br><span class="line">        assertEquals(<span class="string">"Ext1Impl1-echo"</span>, echo);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">        SimpleExt ext = ExtensionLoader.getExtensionLoader(SimpleExt<span class="class">.<span class="keyword">class</span>).<span class="title">getAdaptiveExtension</span>()</span>;</span><br><span class="line"></span><br><span class="line">        Map&lt;String, String&gt; map = <span class="keyword">new</span> HashMap&lt;String, String&gt;();</span><br><span class="line">        map.put(<span class="string">"simple.ext"</span>, <span class="string">"impl2"</span>);</span><br><span class="line">        URL url = <span class="keyword">new</span> URL(<span class="string">"p1"</span>, <span class="string">"1.2.3.4"</span>, <span class="number">1010</span>, <span class="string">"path1"</span>, map);</span><br><span class="line"></span><br><span class="line">        String echo = ext.echo(url, <span class="string">"haha"</span>);</span><br><span class="line">        assertEquals(<span class="string">"Ext1Impl2-echo"</span>, echo);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.apache.dubbo.common.extension.ext1;</span><br><span class="line"><span class="keyword">import</span> org.apache.dubbo.common.extension.ExtensionLoader;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleExt</span>$<span class="title">Adaptive</span> <span class="keyword">implements</span> <span class="title">org</span>.<span class="title">apache</span>.<span class="title">dubbo</span>.<span class="title">common</span>.<span class="title">extension</span>.<span class="title">ext1</span>.<span class="title">SimpleExt</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> java.lang.<span class="function">String <span class="title">yell</span><span class="params">(org.apache.dubbo.common.URL arg0, java.lang.String arg1)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (arg0 == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"url == null"</span>);</span><br><span class="line">        org.apache.dubbo.common.URL url = arg0;</span><br><span class="line">        String extName = url.getParameter(<span class="string">"key1"</span>, url.getParameter(<span class="string">"key2"</span>, <span class="string">"impl1"</span>));</span><br><span class="line">        <span class="keyword">if</span> (extName == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Failed to get extension (org.apache.dubbo.common.extension.ext1.SimpleExt) name from url ("</span> + url.toString() + <span class="string">") use keys([key1, key2])"</span>);</span><br><span class="line">        org.apache.dubbo.common.extension.ext1.SimpleExt extension = (org.apache.dubbo.common.extension.ext1.SimpleExt) ExtensionLoader.getExtensionLoader(org.apache.dubbo.common.extension.ext1.SimpleExt<span class="class">.<span class="keyword">class</span>).<span class="title">getExtension</span>(<span class="title">extName</span>)</span>;</span><br><span class="line">        <span class="keyword">return</span> extension.yell(arg0, arg1);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> java.lang.<span class="function">String <span class="title">echo</span><span class="params">(org.apache.dubbo.common.URL arg0, java.lang.String arg1)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (arg0 == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"url == null"</span>);</span><br><span class="line">        org.apache.dubbo.common.URL url = arg0;</span><br><span class="line">        String extName = url.getParameter(<span class="string">"simple.ext"</span>, <span class="string">"impl1"</span>);</span><br><span class="line">        <span class="keyword">if</span> (extName == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Failed to get extension (org.apache.dubbo.common.extension.ext1.SimpleExt) name from url ("</span> + url.toString() + <span class="string">") use keys([simple.ext])"</span>);</span><br><span class="line">        org.apache.dubbo.common.extension.ext1.SimpleExt extension = (org.apache.dubbo.common.extension.ext1.SimpleExt) ExtensionLoader.getExtensionLoader(org.apache.dubbo.common.extension.ext1.SimpleExt<span class="class">.<span class="keyword">class</span>).<span class="title">getExtension</span>(<span class="title">extName</span>)</span>;</span><br><span class="line">        <span class="keyword">return</span> extension.echo(arg0, arg1);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> java.lang.<span class="function">String <span class="title">bang</span><span class="params">(org.apache.dubbo.common.URL arg0, <span class="keyword">int</span> arg1)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> UnsupportedOperationException(<span class="string">"The method public abstract java.lang.String org.apache.dubbo.common.extension.ext1.SimpleExt.bang(org.apache.dubbo.common.URL,int) of interface org.apache.dubbo.common.extension.ext1.SimpleExt is not adaptive method!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="spring"><a href="#spring" class="headerlink" title="spring"></a>spring</h2><p>怎么实现dubbo这种功能？</p>
+
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2020/01/29/2020-1-29-spring-handlers/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2020/02/02/2020-2-2-netty-threadpool/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">Close</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/category/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tag/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-default">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
