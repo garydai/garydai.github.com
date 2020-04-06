@@ -14,7 +14,13 @@ ap集群
 ### ribbon
 客户端负载均衡
 ![](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/ribbon.png)
+
+原理就是：将spring的restTemplate对象添加拦截器，restTemplate.setInterceptors()
+
+loadBalancerInterceptor
+
 ### feign
+
 类似mabtis的dao，代理http请求
 ### hystrix 熔断器
 方法降级、超时监听、服务熔断、服务限流

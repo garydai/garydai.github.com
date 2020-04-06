@@ -179,6 +179,8 @@ public RemotingCommand processRequest(ChannelHandlerContext ctx,
 
 ![image-20200404183456670](/Users/daitechang/Documents/hexo_blog/source/_posts/pic/image-20200404183456670.png)
 
+![image-20200404192001713](/Users/daitechang/Documents/garydai.github.com/_posts/image-20200404192001713.png)
+
 ## broker
 
 ### 接收Producer发送的消息
@@ -337,7 +339,13 @@ this.mappedByteBuffer = this.fileChannel.map(MapMode.READ_WRITE, 0, fileSize);
 
 ## consumer
 
-consumerQueue
+问题1： PullRequest对象在什么时候创建并加入到pullRequestQueue 中以便唤醒 PullM巳ssageService 线程 。
+
+重平衡，doRebalance
+
+问题2：集群内多个消费者是如何负载主题下的多个消费队列，并且如果有新的消费者加入时，消息队列又会如何 重新分布 。
+
+### consumerQueue
 
 RocketMQ 基于主题订阅模式实现消息消费，消费者关心的是 一个主题下的所有消 息，但由于同一主题的消息不连续地存储在 commitlog 文件中，试想一下如果消息消费 者直接从消息存储文件( commitlog)中去遍历查找订阅主题下的消息，效率将极其低下， RocketMQ 为了适应消息消费的检索需求，设计了消息消费队列文件( Consumequeue)，该文件可以看成是 Commitlog 关于消息消费的“索引”文件， 消息主题，第二级目录为主题的消息队列
 
@@ -572,7 +580,9 @@ private void startScheduledTask() {
 
 ### rebalance
 
-默认2秒，进行一次重平衡
+消费端会通过RebalanceService线程，20秒钟做一次基于topic下的所有队列负载
+
+把topic下的queue按照一定的算法（分配的策略包含：平均分配、消费端配置等）平均分配给consumer
 
 org.apache.rocketmq.client.impl.consumer.RebalanceService#run
 
@@ -700,9 +710,11 @@ private void rebalanceByTopic(final String topic, final boolean isOrder) {
     }
 ```
 
+举例来说，如果现在有8个消息消费队列q1，q2，q3，q4，q5，q6，q7，q8，有3个消费者c1，c2，c3，那么根据该负载算法，消息队列分配如下：c1：q1，q2，q3；c2：q4，q5，q6；c3：q7，q8
+
 RocketMQ提供其它的queue分配策略：
 
-- AVG_BY_CIRCLE， 跟AVG类似，只是分到的queue不是连续的。比如一共12个Queue，3个consumer，则第一个consumer接收queue1，4，7，9的消息。
+- AVG_BY_CIRCLE， 跟AVG类似，只是分到的queue不是连续的。c1：q1，q4，q7；c2：q2，q5，q8；c3： q3，q6
 - CONSISTENT_HASH，使用一致性hash算法来分配Queue，用户需自定义虚拟节点的数量
 - MACHINE_ROOM，将queue先按照broker划分几个computer room，不同的consumer只消费某几个broker上的消息
 - CONFIG,用户启动时指定消费哪些Queue的消息
@@ -719,7 +731,9 @@ RocketMQ提供其它的queue分配策略：
 
 
 
-通过上面的策略分配到queue之后，`RebalanceImpl`通过`updateProcessQueueTableInRebalance()`方法来检查新加入queue并提交pull请求。
+通过上面的策略分配到queue之后，`RebalanceImpl`通过`updateProcessQueueTableInRebalance()`方法来检查新加入queue并提交pull请求。一个MessageQueue对应一个ProcessQueue。
+
+主要思路是遍历当前负载队列集合，如果队列不在新分配队列集合中，需要将该队列停止消费并保存消费进度；遍历已分配的队列，如果队列不在队列负载表中(processQueueTable)则需要创建该队列拉取任务PullRequest，然后添加到PullMessageService线程的pullRequestQueue 中，PulIMessageService才会继续拉取任务
 
 ```java
 private boolean updateProcessQueueTableInRebalance(final String topic, final Set<MessageQueue> mqSet,
@@ -827,6 +841,8 @@ org.apache.rocketmq.client.impl.consumer.DefaultMQPushConsumerImpl#pullMessage
 
 在消息返回后，会将消息放入`ProcessQueue`，然后通知`ConsumeMessageService`来异步处理消息，然后再次提交Pull请求。这样对于用户端来说，只有`ConsumeMessageService`回调listener这一步是可见的，其它都是透明的。
 
+![image-20200405205808582](/Users/daitechang/Documents/garydai.github.com/_posts/image-20200405205808582.png)
+
 ### 消息处理`ConsumeMessageService`
 
 消息处理的逻辑比较简单，就是回调Consumer启动时注册的Listener。无论Listener是否处理成功，消息都会从`ProcessQueue`中移除掉。我们看下对于Listener返回结果的处理方法。
@@ -884,11 +900,11 @@ org.apache.rocketmq.client.impl.consumer.DefaultMQPushConsumerImpl#pullMessage
 
 消息处理失败后，consumer会将消息发给broker，broker会根据重试次数来重新投递消息
 
-### 负载均衡（重平衡）
 
-消费端会通过RebalanceService线程，20秒钟做一次基于topic下的所有队列负载
 
-把topic下的queue按照一定的算法（分配的策略包含：平均分配、消费端配置等）平均分配给consumer
+### 消费位移
+
+如果消息消费是集群模式，那么消息进度保存在 Broker 上; 如果是广播模式，那么消息消费进度存储在消费端
 
 ## producer
 
@@ -1089,6 +1105,8 @@ Producer默认采用SYNC方式提交消息，消息提交给broker收到response
     }
 ```
 
+
+
 ### 负载均衡
 
 ![image-20200322141258521](/Users/daitechang/Documents/hexo_blog/source/_posts/pic/image-20200322141258521.png)
@@ -1226,6 +1244,18 @@ Producer默认采用SYNC方式提交消息，消息提交给broker收到response
 2. 总的耗时（包含重试n次的耗时） < sendMsgTimeout（发送消息时传入的参数）
 3. 同时满足上面两个条件后，Producer会选择另外一个队列发送消息
 
+### 选择消息队列
+
+轮询
+
+selectOneMessageQueue
+
+1 ) sendLatencyFaultEnable=false，默认不启用Broker故障延迟机制
+
+2 ) sendLatencyFaultEnable=true，启用Broker故障延迟机制
+
+`RocketMQ` 中将生产者端剔除故障机器的机制称之为 `Broker` 的故障延迟机制，一旦发现发送到某个 `Broker` 机器失败，则暂时将其剔除，优先选择其他 `Broker` 重试
+
 ### 生产成功的标志
 
  brokerRole有两种ASYNC_MASTER || SYNC_MASTER
@@ -1282,8 +1312,8 @@ RocketMQ中增加从节点有如下好处：
 
 ## 问题
 
-1. 如何算消息生产成功
-2. 
+1. 如何算消息生产成功？sync、async
+2. messageQueue分配规则
 
 ## 参考
 
