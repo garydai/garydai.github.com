@@ -19,6 +19,12 @@ ap集群
 
 loadBalancerInterceptor
 
+实现：
+
+1. 通过eureka客户端获取服务信息
+2. 定时刷新服务信息
+3. ping 服务是否存活
+
 ### feign
 
 类似mabtis的dao，代理http请求

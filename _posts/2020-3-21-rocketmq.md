@@ -183,6 +183,10 @@ public RemotingCommand processRequest(ChannelHandlerContext ctx,
 
 ## broker
 
+### 创建主题
+
+如果指定4个messagequeue，则每个broker都会创建4个messagequeue，不像kafka，创建分区的时候是有分配策略的
+
 ### 接收Producer发送的消息
 
 ### 存储消息
@@ -1261,6 +1265,14 @@ selectOneMessageQueue
  brokerRole有两种ASYNC_MASTER || SYNC_MASTER
 
 ![image-20200401145218215](/Users/daitechang/Documents/hexo_blog/source/_posts/pic/image-20200401145218215.png)
+
+### 自动创建主题
+
+![image-20200407164958084](/Users/daitechang/Documents/garydai.github.com/_posts/image-20200407164958084.png)
+
+提示：消息发送者在到默认路由信息时，其队列数量，会选择DefaultMQProducer#defaultTopicQueueNums与Nameserver返回的的队列数8取最小值，DefaultMQProducer#defaultTopicQueueNums默认值为4，故自动创建的主题，其队列数量默认为4。
+
+因为开启了自动创建路由信息，消息发送者根据Topic去NameServer无法得到路由信息，但接下来根据默认Topic从NameServer是能拿到路由信息(在每个Broker中，存在8个队列)，因为两个Broker在启动时都会向NameServer汇报路由信息。此时消息发送者缓存的路由信息是2个Broker，每个Broker默认4个队列
 
 ## 分片
 

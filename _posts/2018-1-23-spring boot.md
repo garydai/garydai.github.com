@@ -1,14 +1,14 @@
 ---
-date: 2018-1-23
+ddate: 2018-1-23
 layout: default
 
 title: spring boot
 
 ---
 
-## spring boot
+# spring boot
 
-### spring
+## spring
 DI（依赖注入IOC）
 
 AOP（面向切面编程）
@@ -17,7 +17,7 @@ AOP（面向切面编程）
 
 通过autowired等注解，从ioc容器里拿实例
 
-### spring boot
+## spring boot
 
 创建一个基于spring的应用简单
 
@@ -853,3 +853,5 @@ protected void initServletContext(ServletContext servletContext) {
    this.cnmFactoryBean.setServletContext(servletContext);
 }
 ```
+
+## starter
