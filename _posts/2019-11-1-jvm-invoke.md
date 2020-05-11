@@ -1,12 +1,10 @@
 ---
 date: 2019-11-1
 layout: default
-
 title: jvm-invoke
-
 ---
 
-## java函数调用
+# java函数调用
 
 因为某个类中的重载方法可能被它的子类所重写，因此Java 编译器会将所有对非私有实例方法的调用编译为需要动态绑定的类型
 
@@ -32,7 +30,7 @@ invokedynamic：用于调用动态方法。
 
 
 
-#### 找出方法
+## 找出方法
 
 对于非接口符号引用，假定该符号引用所指向的类为 C，则 Java 虚拟机会按照如下步骤进行查找。
 
@@ -50,11 +48,11 @@ invokedynamic：用于调用动态方法。
 
 经过上述的解析步骤之后，符号引用会被解析成实际引用。对于可以静态绑定的方法调用而言，实际引用是一个指向方法的指针。对于需要动态绑定的方法调用而言，实际引用则是一个方法表的索引
 
-#### 虚方法调用
+## 虚方法调用
 
 Java 里所有非私有实例方法调用都会被编译成 invokevirtual 指令，而接口方法调用都会被编译成 invokeinterface 指令。这两种指令，均属于 Java 虚拟机中的虚方法调用。
 
-#### 方法表
+## 方法表
 
 类加载的准备阶段，它除了为静态字段分配内存之外，还会构造与该类相关联的方法表
 
@@ -100,7 +98,7 @@ passenger.passThroughImmigration();
 
 内联缓存是一种加快动态绑定的优化技术。它能够缓存虚方法调用中调用者的动态类型，以及该类型所对应的目标方法。在之后的执行过程中，如果碰到已缓存的类型，内联缓存便会直接调用该类型所对应的目标方法。如果没有碰到已缓存的类型，内联缓存则会退化至使用基于方法表的动态绑定
 
-### method invoke
+## method invoke
 
 方法反射Method.invoke源码
 
@@ -138,20 +136,53 @@ public class GeneratedMethodAccessor1 extends ... {
 
 Java 虚拟机设置了一个阈值 15（可以通过 -Dsun.reflect.inflationThreshold= 来调整），当某个反射调用的调用次数在 15 之下时，采用本地实现；当达到 15 时，便开始动态生成字节码，并将委派实现的委派对象切换至动态实现，这个过程我们称之为 Inflation
 
-### invokedynamic
+## invokedynamic
+
+```java
+
+class Horse {
+  public void race() {
+    System.out.println("Horse.race()"); 
+  }
+}
+
+class Deer {
+  public void race() {
+    System.out.println("Deer.race()");
+  }
+}
+
+class Cobra {
+  public void race() {
+    System.out.println("How do you turn this on?");
+  }
+}
+```
+
+如何用同一种方式调用他们的赛跑方法?
 
 Java 7 引入了一条新的指令 invokedynamic。该指令的调用机制抽象出调用点这一个概念，并允许应用程序将调用点链接至任意符合条件的方法上，在第一次执行 invokedynamic 指令时，Java 虚拟机将执行它所对应的启动方法，生成并且绑定一个调用点。之后如果再次执行该指令，Java 虚拟机则直接调用已经绑定了的调用点所链接的方法。
 
-它将调用点（CallSite）抽象成一个 Java 类，并且将原本由 Java 虚拟机控制的方法调用以及方法链接暴露给了应用程序。在运行过程中，每一条 invokedynamic 指令将捆绑一个调用点，并且会调用该调用点所链接的方法句柄
+理想的调用方式
 
-##### 方法句柄
-
-方法句柄是一个强类型的、能够被直接执行的引用。它仅关心所指向方法的参数类型以及返回类型，而不关心方法所在的类以及方法名。方法句柄的权限检查发生在创建过程中，相较于反射调用节省了调用时反复权限检查的开销。
-
-##### 获取方法句柄两种方式
+```java
+public static void startRace(java.lang.Object)
+       0: aload_0                // 加载一个任意对象
+       1: invokedynamic race     // 调用赛跑方法
 
 ```
 
+
+
+它将调用点（CallSite）抽象成一个 Java 类，并且将原本由 Java 虚拟机控制的方法调用以及方法链接暴露给了应用程序。在运行过程中，每一条 invokedynamic 指令将捆绑一个调用点，并且会调用该调用点所链接的方法句柄
+
+### 方法句柄
+
+方法句柄是一个强类型的、能够被直接执行的引用。它仅关心所指向方法的参数类型以及返回类型，而不关心方法所在的类以及方法名。方法句柄的权限检查发生在创建过程中，相较于反射调用节省了调用时反复权限检查的开销。
+
+### 获取方法句柄两种方式
+
+```java
 class Foo {
   private static void bar(Object o) {
     ..
@@ -172,7 +203,7 @@ MethodHandle mh1 = l.findStatic(Foo.class, "bar", t);
 
 在 Java 8 中，Lambda 表达式也是借助 invokedynamic 来实现的
 
-```
+```java
 
 int x = ..
 IntStream.of(1, 2, 3).map(i -> i * 2).map(i -> i * x);
@@ -198,7 +229,7 @@ IntStream.of(1, 2, 3).map(i -> i * 2).map(i -> i * x);
 
 该 invokedynamic 指令对应的启动方法将通过 ASM 生成一个适配器类。
 
-#### reference
+## reference
 
 https://time.geekbang.org/column/article/12098
 
