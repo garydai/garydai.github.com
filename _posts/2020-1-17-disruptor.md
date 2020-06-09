@@ -114,7 +114,7 @@ public void publish(final long sequence)
 
 但是会遇到一个新问题：如何防止读取的时候，读到还未写的元素。Disruptor在多个生产者的情况下，引入了一个与Ring Buffer大小相同的buffer：available Buffer。当某个位置写入成功的时候，便把availble Buffer相应的位置置位，标记为写入成功。读取的时候，会遍历available Buffer，来判断元素是否已经就绪。
 
-### 消费者
+### 消费
 
 生产者多线程写入的情况会复杂很多： 1. 申请读取到序号n； 2. 若writer cursor >= n，这时仍然无法确定连续可读的最大下标。从reader cursor开始读取available Buffer，一直查到第一个不可用的元素，然后返回最大连续可读元素的位置； 3. 消费者读取元素。
 
@@ -362,7 +362,7 @@ public long waitFor(
 }
 ```
 
-### 生产者
+### 生产
 
 多个生产者写入的时候： 1. 申请写入m个元素； 2. 若是有m个元素可以写入，则返回最大的序列号。每个生产者会被分配一段独享的空间； 3. 生产者写入元素，写入元素的同时设置available Buffer里面相应的位置，以标记自己哪些位置是已经写入成功的。
 

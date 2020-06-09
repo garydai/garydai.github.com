@@ -9,7 +9,7 @@ title: rocketmq
 
 ## 整体框架
 
-![image-20200322100408404](/Users/daitechang/Documents/hexo_blog/source/_posts/pic/image-20200322100408404.png)
+![image-20200322100408404](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200322100408404.png)
 
 ## 基本概念
 
@@ -175,9 +175,9 @@ public RemotingCommand processRequest(ChannelHandlerContext ctx,
 
 
 
-![image-20200404183354313](/Users/daitechang/Documents/hexo_blog/source/_posts/pic/image-20200404183354313.png)
+![image-20200404183354313](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200404183354313.png)
 
-![image-20200404183456670](/Users/daitechang/Documents/hexo_blog/source/_posts/pic/image-20200404183456670.png)
+![image-20200404183456670](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200404183456670.png)
 
 ![image-20200404192001713](/Users/daitechang/Documents/garydai.github.com/_posts/image-20200404192001713.png)
 
@@ -339,7 +339,7 @@ this.mappedByteBuffer = this.fileChannel.map(MapMode.READ_WRITE, 0, fileSize);
 
 
 
-![image-20200404115222335](/Users/daitechang/Documents/hexo_blog/source/_posts/pic/image-20200404115222335.png)
+![image-20200404115222335](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200404115222335.png)
 
 ## consumer
 
@@ -353,11 +353,11 @@ this.mappedByteBuffer = this.fileChannel.map(MapMode.READ_WRITE, 0, fileSize);
 
 RocketMQ 基于主题订阅模式实现消息消费，消费者关心的是 一个主题下的所有消 息，但由于同一主题的消息不连续地存储在 commitlog 文件中，试想一下如果消息消费 者直接从消息存储文件( commitlog)中去遍历查找订阅主题下的消息，效率将极其低下， RocketMQ 为了适应消息消费的检索需求，设计了消息消费队列文件( Consumequeue)，该文件可以看成是 Commitlog 关于消息消费的“索引”文件， 消息主题，第二级目录为主题的消息队列
 
-![image-20200404142717270](/Users/daitechang/Documents/hexo_blog/source/_posts/pic/image-20200404142717270.png)
+![image-20200404142717270](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200404142717270.png)
 
 consumerQueue条目
 
-![image-20200404142839490](/Users/daitechang/Documents/hexo_blog/source/_posts/pic/image-20200404142839490.png)
+![image-20200404142839490](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200404142839490.png)
 
 Consumer端每隔一段时间主动向broker发送拉消息请求，broker在收到Pull请求后，如果有消息就立即返回数据，Consumer端收到返回的消息后，再回调消费者设置的Listener方法。如果broker在收到Pull请求时，消息队列里没有数据，broker端会阻塞请求直到有数据传递或超时才返回。
 
@@ -1113,7 +1113,7 @@ Producer默认采用SYNC方式提交消息，消息提交给broker收到response
 
 ### 负载均衡
 
-![image-20200322141258521](/Users/daitechang/Documents/hexo_blog/source/_posts/pic/image-20200322141258521.png)
+![image-20200322141258521](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200322141258521.png)
 
 ```java
     private SendResult sendDefaultImpl(
@@ -1264,7 +1264,7 @@ selectOneMessageQueue
 
  brokerRole有两种ASYNC_MASTER || SYNC_MASTER
 
-![image-20200401145218215](/Users/daitechang/Documents/hexo_blog/source/_posts/pic/image-20200401145218215.png)
+![image-20200401145218215](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200401145218215.png)
 
 ### 自动创建主题
 
@@ -1274,13 +1274,19 @@ selectOneMessageQueue
 
 因为开启了自动创建路由信息，消息发送者根据Topic去NameServer无法得到路由信息，但接下来根据默认Topic从NameServer是能拿到路由信息(在每个Broker中，存在8个队列)，因为两个Broker在启动时都会向NameServer汇报路由信息。此时消息发送者缓存的路由信息是2个Broker，每个Broker默认4个队列
 
+
+
+**rocketmq在发送消息时，会先去获取topic的路由信息，如果topic是第一次发送消息，由于nameserver没有topic的路由信息，所以会再次以“TBW102”这个默认topic获取路由信息，假设broker都开启了自动创建开关，那么此时会获取所有broker的路由信息，消息的发送会根据负载算法选择其中一台Broker发送消息，消息到达broker后，发现本地没有该topic，会在创建该topic的信息塞进本地缓存中，同时会将topic路由信息注册到nameserver中，那么这样就会造成一个后果：以后所有该topic的消息，都将发送到这台broker上，如果该topic消息量非常大，会造成某个broker上负载过大，这样消息的存储就达不到负载均衡的目的了。**
+
+
+
 ## 分片
 
 topic根据broker分片，在同一个broker里分片成多个queue
 
 比kakfa多分了一层
 
-![image-20200322114127511](/Users/daitechang/Documents/hexo_blog/source/_posts/pic/image-20200322114127511.png)
+![image-20200322114127511](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200322114127511.png)
 
 ## 集群
 
@@ -1290,7 +1296,7 @@ rocketmq是通过多个master实现写入容灾，通过主从实现读取容灾
 
 这一组Broker的Master挂了，但是这组中的Slave可以继续提供读的服务，直至把未消费完的消息全部读完；这一组的Master挂了，写的服务会找另一组的Master继续写
 
-![image-20200402095452874](/Users/daitechang/Documents/hexo_blog/source/_posts/pic/image-20200402095452874.png)
+![image-20200402095452874](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200402095452874.png)
 
 其中broker的角色主要有两种：Master和Slave。作为Master的副本，Slave会从Master复制消息，保持同步。在RocketMQ中，消息生产者Producer只会往Master中写入消息。一般情况下，消息消费者Consumer也只会从Master中拉取消息，但当Master不可用或者拉取堆积消息时会转向Slave中进行拉取。
 
@@ -1308,19 +1314,19 @@ RocketMQ中增加从节点有如下好处：
 
 主要表现为可分担Master读的压力，当从Master拉取消息，拉取消息的最大物理偏移与本地存储的最大物理偏移的差值超过一定值（默认是物理内存的40%），会转向Slave(默认brokerId=1)进行读取，减轻了Master压力，提高性能
 
-![image-20200402123417876](/Users/daitechang/Documents/hexo_blog/source/_posts/pic/image-20200402123417876.png)
+![image-20200402123417876](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200402123417876.png)
 
 ### 同步commitlog
 
-![image-20200402124441966](/Users/daitechang/Documents/hexo_blog/source/_posts/pic/image-20200402124441966.png)
+![image-20200402124441966](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200402124441966.png)
 
 ### 主备Broker异步同步流程图
 
-![image-20200402181546459](/Users/daitechang/Documents/hexo_blog/source/_posts/pic/image-20200402181546459.png)
+![image-20200402181546459](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200402181546459.png)
 
 ### 主备Broker同步双写流程图
 
-![image-20200402181604287](/Users/daitechang/Documents/hexo_blog/source/_posts/pic/image-20200402181604287.png)
+![image-20200402181604287](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200402181604287.png)
 
 ## 问题
 

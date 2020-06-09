@@ -83,4 +83,4 @@ private Entry getEntry(ThreadLocal<?> key) {
 
 
 
-![image-20200204114003273](/Users/daitechang/Documents/hexo_blog/source/_posts/pic/image-20200204114003273.png)
+![image-20200204114003273](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200204114003273.png)
