@@ -2,8 +2,6 @@
 date: 2020-5-30
 layout: default
 title: spring-transactional
-
-
 ---
 
 # spring声明式事务
@@ -82,18 +80,16 @@ public interface PlatformTransactionManager extends TransactionManager {
 
 ## @Transactional
 
-属性 含义   propagation 事务传播行为  isolation 事务隔离级别  readOnly 事务的读写性，boolean型  timeout 超时时间，int型，以秒为单位。  rollbackFor 一组异常类，遇到时回滚。（rollbackFor={SQLException.class}）  rollbackForCalssName 一组异常类名，遇到回滚，类型为 string[]  noRollbackFor 一组异常类，遇到不回滚  norollbackForCalssName 一组异常类名，遇到时不回滚。
-
 | 属性                   | 含义                                                         |
 | ---------------------- | ------------------------------------------------------------ |
 | propagation            | 事务传播行为                                                 |
 | isolation              | 事务隔离级别                                                 |
 | readOnly               | 事务的读写性，boolean型                                      |
-| timeout                | 超时时间，int型，以秒为单位。                                |
+| timeout                | 超时时间，int型，以秒为单位                                  |
 | rollbackFor            | 一组异常类，遇到时回滚。（rollbackFor={SQLException.class}） |
 | rollbackForCalssName   | 一组异常类名，遇到回滚，类型为 string[]                      |
 | noRollbackFor          | 一组异常类，遇到不回滚                                       |
-| norollbackForCalssName | 一组异常类名，遇到时不回滚。                                 |
+| norollbackForCalssName | 一组异常类名，遇到时不回滚                                   |
 
 ## 传播类型propagation
 
@@ -123,7 +119,7 @@ public interface PlatformTransactionManager extends TransactionManager {
 
 7. **PROPAGATION_NESTED**
 
-嵌套事务支持，使用PROPAGATION_NESTED指定，如果当前存在事务，则在嵌套事务内执行，如果当前不存在事务，则创建一个新的事务，嵌套事务使用数据库中的保存点来实现，即嵌套事务回滚不影响外部事务，但外部事务回滚将导致嵌套事务回滚
+嵌套事务支持，使用PROPAGATION_NESTED指定，如果当前存在事务，则在嵌套事务内执行，如果当前不存在事务，则创建一个新的事务，嵌套事务使用数据库中的保存点来实现，即**嵌套事务回滚不影响外部事务，但外部事务回滚将导致嵌套事务回滚**
 
 
 
@@ -144,6 +140,7 @@ private TransactionStatus handleExistingTransaction(
       if (debugEnabled) {
          logger.debug("Suspending current transaction");
       }
+      // 暂停当前事务
       Object suspendedResources = suspend(transaction);
       boolean newSynchronization = (getTransactionSynchronization() == SYNCHRONIZATION_ALWAYS);
       return prepareTransactionStatus(
@@ -615,9 +612,11 @@ org.springframework.transaction.interceptor.TransactionAspectSupport#createTrans
 
 org.springframework.transaction.support.AbstractPlatformTransactionManager#getTransaction
 
-org.springframework.transaction.support.AbstractPlatformTransactionManager#startTransaction
+​	org.springframework.jdbc.datasource.DataSourceTransactionManager#doGetTransaction
 
-org.springframework.jdbc.datasource.DataSourceTransactionManager#doBegin
+​	org.springframework.transaction.support.AbstractPlatformTransactionManager#startTransaction
+
+​		org.springframework.jdbc.datasource.DataSourceTransactionManager#doBegin
 
 ```java
 if (con.getAutoCommit()) {
@@ -627,6 +626,11 @@ if (con.getAutoCommit()) {
 				}
   			// jdbc规范，开启手动事务是con.setAutoCommit(false)，JDBC事务默认是开启的，并且是自动提交：
 				con.setAutoCommit(false);
+			}
+
+			// Bind the connection holder to the thread.将connection绑定到当前线程本地变量resources
+			if (txObject.isNewConnectionHolder()) {
+				TransactionSynchronizationManager.bindResource(obtainDataSource(), txObject.getConnectionHolder());
 			}
 ```
 
