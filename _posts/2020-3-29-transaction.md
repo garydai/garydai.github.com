@@ -7,5 +7,5 @@ title: 分布式事务设计
 
 # 分布式事务设计
 
-![image-20200329213304820](/Users/daitechang/Documents/hexo_blog/source/_posts/pic/image-20200329213304820.png)
+![image-20200329213304820](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200329213304820.png)
 

@@ -9,7 +9,7 @@ title: Linux 性能分析工具
 
 
 
-![image-20200501220458159](/Users/daitechang/Documents/garydai.github.com/_posts/pic/image-20200501220458159.png)
+![image-20200501220458159](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200501220458159.png)
 
 vmstat 1 1 上下文切换
 

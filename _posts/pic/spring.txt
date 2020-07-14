@@ -89,8 +89,10 @@ refresh
                                 AbstractAutowireCapableBeanFactory#populateBean
                                     // 属性注入前，修改bean的机会
                                     org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessor#postProcessAfterInstantiation
-                                    // 属性注入前，处理属性，包括注入依赖bean（org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor#postProcessProperties）
+                                    // 属性注入前，处理属性，包括注入依赖bean（@autowired是org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor#postProcessProperties，@resource是CommonAnnotationBeanPostProcessor后置处理器）
                                     org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessor#postProcessProperties
+                                        // 依赖处理
+                                        org.springframework.beans.factory.support.DefaultListableBeanFactory#resolveDependency
                                     // 注入属性
                                     org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory#applyPropertyValues
                                 // bean初始化

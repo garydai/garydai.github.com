@@ -7,13 +7,13 @@ title: spring配置管理
 
 # spring配置管理
 
-![image-20200616103950075](/Users/daitechang/Documents/garydai.github.com/_posts/pic/image-20200616103950075.png)
+![image-20200616103950075](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200616103950075.png)
 
 ## 继承体系
 
-![image-20200616161314523](/Users/daitechang/Documents/garydai.github.com/_posts/pic/image-20200616161314523.png)
+![image-20200616161314523](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200616161314523.png)
 
-![image-20200616135125293](/Users/daitechang/Documents/garydai.github.com/_posts/pic/image-20200616135125293.png)
+![image-20200616135125293](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200616135125293.png)
 
 
 
