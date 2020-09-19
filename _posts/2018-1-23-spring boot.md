@@ -129,14 +129,17 @@ public ConfigurableApplicationContext run(String... args) {
    try {
       ApplicationArguments applicationArguments = new DefaultApplicationArguments(
             args);
+     // 准备环境
       ConfigurableEnvironment environment = prepareEnvironment(listeners,
             applicationArguments);
       configureIgnoreBeanInfo(environment);
       Banner printedBanner = printBanner(environment);
+     
       context = createApplicationContext();
       exceptionReporters = getSpringFactoriesInstances(
             SpringBootExceptionReporter.class,
             new Class[] { ConfigurableApplicationContext.class }, context);
+     
       prepareContext(context, environment, listeners, applicationArguments,
             printedBanner);
       // 创建spring容器，和web服务器
