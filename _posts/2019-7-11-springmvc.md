@@ -244,17 +244,17 @@ protected void configureAndRefreshWebApplicationContext(ConfigurableWebApplicati
 }
 ```
 
-## mvc容器diapatcherServlet的初始化（子上下文）
+### mvc容器diapatcherServlet的初始化（子上下文）
 
-### tomcat端触发
+#### tomcat端触发
 
 org.apache.catalina.core.StandardWrapper#loadServlet
 
-org.apache.catalina.core.StandardWrapper#initServlet
+​	org.apache.catalina.core.StandardWrapper#initServlet
 
-servlet.init(facade);
+​		servlet.init(facade);
 
-### servlet端
+#### servlet端
 
 由ContextLoaderListener首先启动的上下文为根上下文，该上下文是与ServletContext相伴而生的，在根上下文的基础上，Spring MVC对应持有的一个用来管理控制器需要的对象的子上下文
 
@@ -631,7 +631,7 @@ public abstract class AbstractDetectingUrlHandlerMapping extends AbstractUrlHand
 
 ```
 
-#### BeanNameUrlHandlerMapping
+##### BeanNameUrlHandlerMapping
 
 **用于非注解的映射器**
 
@@ -796,7 +796,7 @@ public class ItemController1 implements Controller
 
 
 
-#### RequestMappingHandlerMapping
+##### RequestMappingHandlerMapping
 
 **用于注解的映射器**
 
@@ -1349,7 +1349,7 @@ org.springframework.web.servlet.DispatcherServlet#doDispatch
 	}
 ```
 
-#### 生成ModelAndView
+### 生成ModelAndView
 
 org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter#handleInternal
 
@@ -1545,7 +1545,7 @@ protected Object doInvoke(Object... args) throws Exception {
    }
 ```
 
-#### 处理返回对象
+### 处理返回对象
 
 org.springframework.web.method.support.HandlerMethodReturnValueHandlerComposite#handleReturnValue
 
@@ -1727,11 +1727,11 @@ public void handleReturnValue(@Nullable Object returnValue, MethodParameter retu
 
 org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter#writeInternal
 
-#### 返回mav
+### 返回mav
 
 org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter#getModelAndView
 
-**将返回结果和viewName放入ModelAndViewContainer**
+### **将返回结果和viewName放入ModelAndViewContainer**
 
 ```java
 private ModelAndView getModelAndView(ModelAndViewContainer mavContainer,
@@ -1757,7 +1757,7 @@ private ModelAndView getModelAndView(ModelAndViewContainer mavContainer,
 }
 ```
 
-#### 视图渲染
+### 视图渲染
 
 org.springframework.web.servlet.DispatcherServlet#processDispatchResult
 

@@ -19,6 +19,8 @@ AOP（面向切面编程）
 
 ## spring boot
 
+内置web server
+
 创建一个基于spring的应用简单
 
 自动配置
@@ -786,8 +788,6 @@ org.springframework.boot.autoconfigure.websocket.servlet.WebSocketMessagingAutoC
 org.springframework.boot.autoconfigure.webservices.WebServicesAutoConfiguration,\
 org.springframework.boot.autoconfigure.webservices.client.WebServiceTemplateAutoConfiguration
 ```
-
-
 
 
 
