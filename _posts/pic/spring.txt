@@ -21,7 +21,7 @@ refresh
                     ConfigurationClassPostProcessor#processConfigBeanDefinitions（处理full Configuration（有@Configuration）和lite configuration（@Import\@Component\@ImportResource\@ComponentScan和@bean函数））
                         （lite @Bean mode ：当@Bean方法在没有使用@Configuration注解的类中声明时称之为lite @Bean mode，Full @Configuration：如果@Bean方法在使用@Configuration注解的类中声明时称之为Full @Configuration）
                         ConfigurationClassUtils#checkConfigurationClassCandidate
-                        （@Import\@Component\@ImportResource\@ComponentScan和@bean函数都属于lite Configuration，都会放到configClass）
+                        （@Import\@Component\@ImportResource\@ComponentScan和@Bean函数都属于lite Configuration，都会放到configClass）
                         ConfigurationClassParser#parse（解析@Configuration）
                             ConfigurationClassParser#parse
                                 ConfigurationClassParser#processConfigurationClass
@@ -39,7 +39,7 @@ refresh
                                                     ClassPathBeanDefinitionScanner#registerBeanDefinition
                                         3. 处理@Import注解 
                                         ConfigurationClassParser#processImports
-                                            处理@import注解（实现ImportSelector接口的类，普通类，实现ImportBeanDefinitionRegistrar的类，没有生成bd，只是将所有import的class放入configClasses）    
+                                            处理@import注解（实现ImportSelector接口的类，普通类，实现ImportBeanDefinitionRegistrar的类，没有生成bd，只是将所有import的class放入configurationClasses）    
                                             ImportSelector.class
                                             ImportBeanDefinitionRegistrar.class
                                             normal class

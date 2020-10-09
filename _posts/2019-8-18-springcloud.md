@@ -172,6 +172,8 @@ void restOfInit(IClientConfig clientConfig) {
 }
 ```
 
+### 配置隔离
+
 ## feign
 
 类似mabtis的dao，代理http请求
@@ -184,7 +186,9 @@ void restOfInit(IClientConfig clientConfig) {
 @Import(FeignClientsRegistrar.class)
 ```
 
+beanClass=class org.springframework.cloud.openfeign.FeignClientFactoryBean
 
+### 配置隔离
 
 ## hystrix 熔断器
 
