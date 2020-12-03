@@ -6,6 +6,8 @@ title: java 引用
 
 # java 引用
 
+引用队列里有引用对象，说明引用对象设置为null了，虚引用除外，虚引用的对象需要手动释放内存，但是如果是Cleaner对象（继承虚引用），会自动释放，如directByteBuffer
+
 ## 强引用StrongReference
 
 垃圾回收的时候，即使内存不足也不会回收

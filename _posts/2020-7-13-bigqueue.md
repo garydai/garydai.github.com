@@ -11,11 +11,11 @@ https://github.com/bulldog2011/bigqueue
 
 开源可持久化队列
 
-![image-20200713151500698](/Users/daitechang/Documents/garydai.github.com/_posts/pic/image-20200713151500698.png)
+![image-20200713151500698](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200713151500698.png)
 
-![image-20200713152511421](/Users/daitechang/Documents/garydai.github.com/_posts/pic/image-20200713152511421.png)
+![image-20200713152511421](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200713152511421.png)
 
-
+插入数据步骤：根据header index找到相应的page文件，根据header偏移量插入数据
 
 ```java
 public long append(byte[] data) throws IOException {
@@ -97,7 +97,7 @@ public long append(byte[] data) throws IOException {
 
 
 
-![image-20200713152343768](/Users/daitechang/Documents/garydai.github.com/_posts/pic/image-20200713152343768.png)
+![image-20200713152343768](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200713152343768.png)
 
 ```java
     private static class ThreadLocalByteBuffer extends ThreadLocal<ByteBuffer> {
@@ -113,6 +113,7 @@ public long append(byte[] data) throws IOException {
     	
     	@Override
     	protected synchronized ByteBuffer initialValue() {
+        // 不能线程，底层缓存内容一样，pos、limit、cap等对象成员变量不一样
     		ByteBuffer dup = _src.duplicate();
     		return dup;
     	}

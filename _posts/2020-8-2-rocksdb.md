@@ -12,7 +12,7 @@ title: RocksDB
 
 LSM-Tree 的全称是：The Log-Structured Merge-Tree，是一种非常复杂的复合数据结构，它包含了 WAL（Write Ahead Log）、跳表（SkipList）和一个分层的有序表（SSTable，Sorted String Table）
 
-![image-20200802164041348](/Users/daitechang/Documents/garydai.github.com/_posts/pic/image-20200802164041348.png)
+![image-20200802164041348](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200802164041348.png)
 
 当 LSM-Tree 收到一个写请求，比如说：PUT foo bar，把 Key foo 的值设置为 bar。首先，这条操作命令会被写入到磁盘的 WAL 日志中（图中右侧的 Log），这是一个顺序写磁盘的操作，性能很好。这个日志的唯一作用就是用于故障恢复，一旦系统宕机，可以从日志中把内存中还没有来得及写入磁盘的数据恢复出来。
 
