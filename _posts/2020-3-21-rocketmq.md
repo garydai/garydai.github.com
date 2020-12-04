@@ -330,6 +330,8 @@ public PutMessageResult putMessage(final MessageExtBrokerInner msg) {
 
 ## 消息存储
 
+![image-20201203145609749](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20201203145609749.png)
+
 ```java
 this.fileChannel = new RandomAccessFile(this.file, "rw").getChannel();
 this.mappedByteBuffer = this.fileChannel.map(MapMode.READ_WRITE, 0, fileSize);
@@ -340,6 +342,18 @@ this.mappedByteBuffer = this.fileChannel.map(MapMode.READ_WRITE, 0, fileSize);
 
 
 ![image-20200404115222335](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200404115222335.png)
+
+Kafka 以 Topic 作为文件存储的基本单元，即每个 Topic 有其对应的数据文件和索引文件。当存在大量 Topic 时，消息持久化逐渐变成一种随机写磁盘的行为，此时磁盘 IO 成为影响系统吞吐量的主要因素。针对上述问题，RocketMQ 首先将消息的写入转化为顺序写，即所有 Topic 的消息均写入同一个文件（CommitLog）。同时，由于消息仍需要以 Topic 为维度进行消费，因此 RocketMQ 基于 CommitLog 为每个 Topic 异步构建多个逻辑队列（ConsumeQueue）和索引信息（Index）：ConsumeQueue 记录了消息在 CommitLog 中的位置信息；给定 Topic 和消息 Key，索引文件（Index）提供消息检索的能力，主要在问题排查和数据统计等场景应用。ConsumeQueue 和 Index 的构建依然遵循顺序写。
+
+
+
+### commitlog、MappedFileQueue、MappedFile
+
+![image-20201203165845830](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20201203165845830.png)
+
+### 刷盘
+
+![image-20201204103820718](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20201204103820718.png)
 
 ## consumer
 
@@ -358,6 +372,27 @@ RocketMQ 基于主题订阅模式实现消息消费，消费者关心的是 一�
 consumerQueue条目
 
 ![image-20200404142839490](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200404142839490.png)
+
+
+
+**采用定时任务1ms将消息位移写入consumerQueue和index，异步构建ReputMessageService**
+
+```java
+public void run() {
+    DefaultMessageStore.log.info(this.getServiceName() + " service started");
+
+    while (!this.isStopped()) {
+        try {
+            Thread.sleep(1);
+            this.doReput();
+        } catch (Exception e) {
+            DefaultMessageStore.log.warn(this.getServiceName() + " service has exception. ", e);
+        }
+    }
+
+    DefaultMessageStore.log.info(this.getServiceName() + " service end");
+}
+```
 
 Consumer端每隔一段时间主动向broker发送拉消息请求，broker在收到Pull请求后，如果有消息就立即返回数据，Consumer端收到返回的消息后，再回调消费者设置的Listener方法。如果broker在收到Pull请求时，消息队列里没有数据，broker端会阻塞请求直到有数据传递或超时才返回。
 
@@ -1454,3 +1489,5 @@ https://blog.csdn.net/meilong_whpu/article/details/76922456
 RocketMQ技术内幕
 
 https://www.zhihu.com/question/30195969
+
+https://tinylcy.me/2019/the-design-of-rocketmq-message-storage-system/

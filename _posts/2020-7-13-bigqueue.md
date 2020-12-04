@@ -15,11 +15,23 @@ https://github.com/bulldog2011/bigqueue
 
 ![image-20200713152511421](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200713152511421.png)
 
+## 入队列
+
 插入数据步骤：根据header index找到相应的page文件，根据header偏移量插入数据
+
+```java
+public void enqueue(byte[] data) throws IOException {
+    // bigQueue没开锁
+    this.innerArray.append(data);
+
+    this.completeFutures();
+}
+```
 
 ```java
 public long append(byte[] data) throws IOException {
    try {
+      // bigArray加读锁
       arrayReadLock.lock(); 
       IMappedPage toAppendDataPage = null;
       IMappedPage toAppendIndexPage = null;
@@ -170,12 +182,18 @@ public IMappedPage acquirePage(long index) throws IOException {
 }
 ```
 
-取数
+## 出队列
+
+加锁控制多线程访问
 
 ```java
+ // locks for queue front write management
+final Lock queueFrontWriteLock = new ReentrantLock();
+
 public byte[] dequeue() throws IOException {
     long queueFrontIndex = -1L;
     try {
+        // 加重入锁
         queueFrontWriteLock.lock();
         if (this.isEmpty()) {
             return null;
@@ -229,4 +247,18 @@ public byte[] get(long index) throws IOException {
       arrayReadLock.unlock();
    }
 }
+```
+
+采用读写锁操作bigarray
+
+采用可重入锁操作append数据
+
+```java
+// lock for appending state management
+final Lock appendLock = new ReentrantLock();
+
+// global lock for array read and write management
+final ReadWriteLock arrayReadWritelock = new ReentrantReadWriteLock();
+final Lock arrayReadLock = arrayReadWritelock.readLock();
+final Lock arrayWriteLock = arrayReadWritelock.writeLock(); 
 ```
