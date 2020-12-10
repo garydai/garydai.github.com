@@ -1131,6 +1131,45 @@ public static Connection getConnection(DataSource dataSource) throws CannotGetJd
 
 
 
+## mybatis
+
+MyBatis-spring的sqlSessionTemplate使用spring管理的事务SpringManagedTransaction，获取连接DataSourceUtils.getConnection(this.dataSource);
+
+
+
+org.apache.ibatis.executor.BaseExecutor#getConnection
+
+```java
+protected Connection getConnection(Log statementLog) throws SQLException {
+  Connection connection = transaction.getConnection();
+  if (statementLog.isDebugEnabled()) {
+    return ConnectionLogger.newInstance(connection, statementLog, queryStack);
+  } else {
+    return connection;
+  }
+}
+```
+
+org.mybatis.spring.transaction.SpringManagedTransaction#getConnection
+
+```java
+@Override
+public Connection getConnection() throws SQLException {
+  if (this.connection == null) {
+    openConnection();
+  }
+  return this.connection;
+}
+
+private void openConnection() throws SQLException {
+  this.connection = DataSourceUtils.getConnection(this.dataSource);
+  this.autoCommit = this.connection.getAutoCommit();
+  this.isConnectionTransactional = DataSourceUtils.isConnectionTransactional(this.connection, this.dataSource);
+
+  LOGGER.debug(() -> "JDBC Connection [" + this.connection + "] will"
+      + (this.isConnectionTransactional ? " " : " not ") + "be managed by Spring");
+}
+```
 
 ## 参考
 

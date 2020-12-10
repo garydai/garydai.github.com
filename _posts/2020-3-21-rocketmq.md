@@ -355,6 +355,68 @@ Kafka 以 Topic 作为文件存储的基本单元，即每个 Topic 有其对应
 
 ![image-20201204103820718](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20201204103820718.png)
 
+采用
+
+fileChannel的直接内存buffer、mmap两种方式存文件
+
+```java
+public AppendMessageResult appendMessagesInner(final MessageExt messageExt, final AppendMessageCallback cb) {
+    assert messageExt != null;
+    assert cb != null;
+
+    int currentPos = this.wrotePosition.get();
+
+    if (currentPos < this.fileSize) {
+        // directBytebuffer 或者 mappedByteBuffer
+        ByteBuffer byteBuffer = writeBuffer != null ? writeBuffer.slice() : this.mappedByteBuffer.slice();
+        byteBuffer.position(currentPos);
+        AppendMessageResult result;
+        if (messageExt instanceof MessageExtBrokerInner) {
+            result = cb.doAppend(this.getFileFromOffset(), byteBuffer, this.fileSize - currentPos, (MessageExtBrokerInner) messageExt);
+        } else if (messageExt instanceof MessageExtBatch) {
+            result = cb.doAppend(this.getFileFromOffset(), byteBuffer, this.fileSize - currentPos, (MessageExtBatch) messageExt);
+        } else {
+            return new AppendMessageResult(AppendMessageStatus.UNKNOWN_ERROR);
+        }
+        this.wrotePosition.addAndGet(result.getWroteBytes());
+        this.storeTimestamp = result.getStoreTimestamp();
+        return result;
+    }
+    log.error("MappedFile.appendMessage return null, wrotePosition: {} fileSize: {}", currentPos, this.fileSize);
+    return new AppendMessageResult(AppendMessageStatus.UNKNOWN_ERROR);
+}
+```
+
+```java
+public int flush(final int flushLeastPages) {
+    if (this.isAbleToFlush(flushLeastPages)) {
+        if (this.hold()) {
+            int value = getReadPosition();
+
+            try {
+                //We only append data to fileChannel or mappedByteBuffer, never both.
+                if (writeBuffer != null || this.fileChannel.position() != 0) {
+                    // fileChannel刷盘
+                    this.fileChannel.force(false);
+                } else {
+                    // mmap刷盘
+                    this.mappedByteBuffer.force();
+                }
+            } catch (Throwable e) {
+                log.error("Error occurred when force data to disk.", e);
+            }
+
+            this.flushedPosition.set(value);
+            this.release();
+        } else {
+            log.warn("in flush, hold failed, flush offset = " + this.flushedPosition.get());
+            this.flushedPosition.set(getReadPosition());
+        }
+    }
+    return this.getFlushedPosition();
+}
+```
+
 ## consumer
 
 问题1： PullRequest对象在什么时候创建并加入到pullRequestQueue 中以便唤醒 PullMessageService 线程 。
