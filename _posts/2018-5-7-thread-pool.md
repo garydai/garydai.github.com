@@ -118,6 +118,79 @@ public void rejectedExecution(Runnable r, ThreadPoolExecutor e) {
 
 
 
+## runnable
+
+线程的实例化参数是runnable实例，没有返回值，怎么令线程返回结果呢
+
+继承runnable接口，当线程执行run的时候，调用继承类FutureTask的run方法，即cglib继承代理的思想，不过是手动代理，将结果保存到对象的成员变量中
+
+将任务抽象成runnable和future，runnable执行命令，future获取结果
+
+```java
+public interface RunnableFuture<V> extends Runnable, Future<V> {
+    /**
+     * Sets this Future to the result of its computation
+     * unless it has been cancelled.
+     */
+    void run();
+}
+```
+
+```java
+public class FutureTask<V> implements RunnableFuture<V> {
+  /** The underlying callable; nulled out after running */
+    private Callable<V> callable;
+    /** The result to return or exception to throw from get() */
+    private Object outcome; // non-volatile, protected by state reads/writes
+  
+    public void run() {
+        if (state != NEW ||
+            !UNSAFE.compareAndSwapObject(this, runnerOffset,
+                                         null, Thread.currentThread()))
+            return;
+        try {
+            Callable<V> c = callable;
+            if (c != null && state == NEW) {
+                V result;
+                boolean ran;
+                try {
+                    result = c.call();
+                    ran = true;
+                } catch (Throwable ex) {
+                    result = null;
+                    ran = false;
+                    setException(ex);
+                }
+                if (ran)
+                    set(result);
+            }
+        } finally {
+            // runner must be non-null until state is settled to
+            // prevent concurrent calls to run()
+            runner = null;
+            // state must be re-read after nulling runner to prevent
+            // leaked interrupts
+            int s = state;
+            if (s >= INTERRUPTING)
+                handlePossibleCancellationInterrupt(s);
+        }
+    }
+}
+```
+
+java.util.concurrent.AbstractExecutorService#submit(java.util.concurrent.Callable<T>)
+
+```java
+public <T> Future<T> submit(Callable<T> task) {
+    if (task == null) throw new NullPointerException();
+    RunnableFuture<T> ftask = newTaskFor(task);
+    // 将FutureTask送入线程池
+    execute(ftask);
+    return ftask;
+}
+```
+
 ## 任务队列
+
 ## 线程列表
 
