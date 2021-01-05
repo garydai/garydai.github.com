@@ -521,7 +521,9 @@ public void onStartup(Set<Class<?>> classes, ServletContext servletContext)
 }
 ```
 
+## 扫描路径
 
+![image-20210105121139767](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20210105121139767.png)
 
 ## 自动配置
 
