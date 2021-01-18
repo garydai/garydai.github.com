@@ -31,6 +31,54 @@ title: synchronized
 ### 加锁流程
 
 ```c++
+void ATTR ObjectMonitor::enter(TRAPS) {
+  Thread * const Self = THREAD ;
+  void * cur ;
+  // 省略部分代码
+  
+  // 通过 CAS 操作尝试把 monitor 的_owner 字段设置为当前线程
+  cur = Atomic::cmpxchg_ptr (Self, &_owner, NULL) ;
+  if (cur == NULL) {
+     assert (_recursions == 0   , "invariant") ;
+     assert (_owner      == Self, "invariant") ;
+     return ;
+  }
+
+ // 线程重入，recursions++
+  if (cur == Self) {
+     _recursions ++ ;
+     return ;
+  }
+
+    // 如果当前线程是第一次进入该 monitor, 设置_recursions 为 1,_owner 为当前线程
+  if (Self->is_lock_owned ((address)cur)) {
+    assert (_recursions == 0, "internal state error");
+    _recursions = 1 ;
+    _owner = Self ;
+    OwnerIsThread = 1 ;
+    return ;
+  }
+
+    for (;;) {
+      jt->set_suspend_equivalent();
+        // 如果获取锁失败，则等待锁的释放；
+      EnterI (THREAD) ;
+
+      if (!ExitSuspendEquivalent(jt)) break ;
+          _recursions = 0 ;
+      _succ = NULL ;
+      exit (false, Self) ;
+
+      jt->java_suspend_self();
+    }
+    Self->set_current_pending_monitor(NULL);
+  }
+}
+```
+
+
+
+```c++
 void ATTR ObjectMonitor::EnterI (TRAPS) {
     Thread * Self = THREAD ;
     ...
@@ -156,6 +204,18 @@ void ATTR ObjectMonitor::EnterI (TRAPS) {
 
 1.如果EntryList的首元素非空，就取出来调用ExitEpilog方法，该方法会唤醒ObjectWaiter对象的线程，然后立即返回； 2.如果EntryList的首元素为空，就将cxq的所有元素放入到EntryList中，然后再从EntryList中取出来队首元素执行ExitEpilog方法，然后立即返回；
 
+### entryList什么作用
+
+> **Contention List**：所有请求锁的线程将被首先放置到该竞争队列
+> **Entry List**：Contention List中那些有资格成为候选人的线程被移到Entry List
+> **Wait Set**：那些调用wait方法被阻塞的线程被放置到Wait Set
+> **OnDeck**：任何时刻最多只能有一个线程正在竞争锁，该线程称为OnDeck
+> **Owner**：获得锁的线程称为Owner
+> **!Owner**：释放锁的线程
+
+EntryList与ContentionList逻辑上同属等待队列，ContentionList会被线程并发访问，为了降低对ContentionList队尾的争用，而建立EntryList。Owner线程在unlock时会从ContentionList中迁移线程到EntryList，并会指定EntryList中的某个线程（一般为Head）为Ready（OnDeck）线程。Owner线程并不是把锁传递给OnDeck线程，只是把竞争锁的权利交给OnDeck，OnDeck线程需要重新竞争锁。这样做虽然牺牲了一定的公平性，但极大的提高了整体吞吐量，在Hotspot中把OnDeck的选择行为称之为“竞争切换”。
+OnDeck线程获得锁后即变为owner线程，无法获得锁则会依然留在EntryList中，考虑到公平性，在EntryList中的位置不发生变化（依然在队头）。如果Owner线程被wait方法阻塞，则转移到WaitSet队列；如果在某个时刻被notify/notifyAll唤醒，则再次转移到EntryList。
+
 
 
 ### synchronized和ReentrantLock的区别
@@ -254,3 +314,7 @@ test  %eax,0x160100 就是一个safepoint polling page操作。当JVM要停止�
 https://blog.51cto.com/14440216/2426781
 
 https://juejin.im/post/5c08fa156fb9a049fb437593
+
+https://www.jianshu.com/p/46a874d52b71
+
+https://xiaomi-info.github.io/2020/03/24/synchronized/
