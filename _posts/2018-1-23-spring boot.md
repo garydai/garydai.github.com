@@ -1000,3 +1000,114 @@ protected void initServletContext(ServletContext servletContext) {
 
 ## 配置文件
 
+## springcloud
+
+```java
+public class BootstrapApplicationListener
+      implements ApplicationListener<ApplicationEnvironmentPreparedEvent>, Ordered 
+```
+
+在springboot发出ApplicationEnvironmentPreparedEvent事件的时候，spring cloud的监听器被激活
+
+org.springframework.cloud.bootstrap.BootstrapApplicationListener#bootstrapServiceContext
+
+```java
+private ConfigurableApplicationContext bootstrapServiceContext(
+      ConfigurableEnvironment environment, final SpringApplication application,
+      String configName) {
+   StandardEnvironment bootstrapEnvironment = new StandardEnvironment();
+   MutablePropertySources bootstrapProperties = bootstrapEnvironment
+         .getPropertySources();
+   for (PropertySource<?> source : bootstrapProperties) {
+      bootstrapProperties.remove(source.getName());
+   }
+   String configLocation = environment
+         .resolvePlaceholders("${spring.cloud.bootstrap.location:}");
+   String configAdditionalLocation = environment
+         .resolvePlaceholders("${spring.cloud.bootstrap.additional-location:}");
+   Map<String, Object> bootstrapMap = new HashMap<>();
+   bootstrapMap.put("spring.config.name", configName);
+   // if an app (or test) uses spring.main.web-application-type=reactive, bootstrap
+   // will fail
+   // force the environment to use none, because if though it is set below in the
+   // builder
+   // the environment overrides it
+   bootstrapMap.put("spring.main.web-application-type", "none");
+   if (StringUtils.hasText(configLocation)) {
+      bootstrapMap.put("spring.config.location", configLocation);
+   }
+   if (StringUtils.hasText(configAdditionalLocation)) {
+      bootstrapMap.put("spring.config.additional-location",
+            configAdditionalLocation);
+   }
+   bootstrapProperties.addFirst(
+         new MapPropertySource(BOOTSTRAP_PROPERTY_SOURCE_NAME, bootstrapMap));
+   for (PropertySource<?> source : environment.getPropertySources()) {
+      if (source instanceof StubPropertySource) {
+         continue;
+      }
+      bootstrapProperties.addLast(source);
+   }
+   // TODO: is it possible or sensible to share a ResourceLoader?
+   SpringApplicationBuilder builder = new SpringApplicationBuilder()
+         .profiles(environment.getActiveProfiles()).bannerMode(Mode.OFF)
+         .environment(bootstrapEnvironment)
+         // Don't use the default properties in this builder
+         .registerShutdownHook(false).logStartupInfo(false)
+         .web(WebApplicationType.NONE);
+   final SpringApplication builderApplication = builder.application();
+   if (builderApplication.getMainApplicationClass() == null) {
+      // gh_425:
+      // SpringApplication cannot deduce the MainApplicationClass here
+      // if it is booted from SpringBootServletInitializer due to the
+      // absense of the "main" method in stackTraces.
+      // But luckily this method's second parameter "application" here
+      // carries the real MainApplicationClass which has been explicitly
+      // set by SpringBootServletInitializer itself already.
+      builder.main(application.getMainApplicationClass());
+   }
+   if (environment.getPropertySources().contains("refreshArgs")) {
+      // If we are doing a context refresh, really we only want to refresh the
+      // Environment, and there are some toxic listeners (like the
+      // LoggingApplicationListener) that affect global static state, so we need a
+      // way to switch those off.
+      builderApplication
+            .setListeners(filterListeners(builderApplication.getListeners()));
+   }
+   builder.sources(BootstrapImportSelectorConfiguration.class);
+   final ConfigurableApplicationContext context = builder.run();
+   // gh-214 using spring.application.name=bootstrap to set the context id via
+   // `ContextIdApplicationContextInitializer` prevents apps from getting the actual
+   // spring.application.name
+   // during the bootstrap phase.
+   context.setId("bootstrap");
+   // Make the bootstrap context a parent of the app context
+   addAncestorInitializer(application, context);
+   // It only has properties in it now that we don't want in the parent so remove
+   // it (and it will be added back later)
+   bootstrapProperties.remove(BOOTSTRAP_PROPERTY_SOURCE_NAME);
+   mergeDefaultProperties(environment.getPropertySources(), bootstrapProperties);
+   return context;
+}
+```
+
+创建父容器，一开始创建的容器为子容器，通过祖先初始化器来实现
+
+```java
+private void addAncestorInitializer(SpringApplication application,
+      ConfigurableApplicationContext context) {
+   boolean installed = false;
+   for (ApplicationContextInitializer<?> initializer : application
+         .getInitializers()) {
+      if (initializer instanceof AncestorInitializer) {
+         installed = true;
+         // New parent
+         ((AncestorInitializer) initializer).setParent(context);
+      }
+   }
+   if (!installed) {
+      application.addInitializers(new AncestorInitializer(context));
+   }
+
+}
+```
