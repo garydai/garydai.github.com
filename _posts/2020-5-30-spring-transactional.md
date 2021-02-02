@@ -643,6 +643,16 @@ if (con.getAutoCommit()) {
 - 事务增强器要用事务注解信息：AnnotationTransactionAttributeSource来解析事务注解
 - 事务拦截器中：transactionInterceptor()，它是一个TransactionInterceptor(保存了事务属性信息和事务管理器)，而TransactionInterceptor是一个MethodInterceptor，在目标方法执行的时候，执行拦截器链，事务拦截器(首先获取事务相关的属性，再获取PlatformTransactionManager，如果没有指定任何transactionManager，最终会从容器中按照类型获取一个PlatformTransactionManager，最后执行目标方法，如果异常，便获取到事务管理器进行回滚，如果正常，同样拿到事务管理器提交事务。
 
+
+
+开启事务: createTransactionIfNecessary
+
+执行方法：processedWithInvocation
+
+如果出错回滚：completeTransactionAfterThrowing
+
+提交事务：commitTransactionAfterReturning
+
 ### 问题
 
 BeanFactoryTransactionAttributeSourceAdvisor怎么插入到aop里？
@@ -1034,7 +1044,95 @@ public class DataSourceTransactionManagerAutoConfiguration {
 
 ### 2.自动开启注解事务的支持
 
+```java
+@Configuration(proxyBeanMethods = false)
+@ConditionalOnClass(PlatformTransactionManager.class)
+@AutoConfigureAfter({ JtaAutoConfiguration.class, HibernateJpaAutoConfiguration.class,
+      DataSourceTransactionManagerAutoConfiguration.class, Neo4jDataAutoConfiguration.class })
+@EnableConfigurationProperties(TransactionProperties.class)
+public class TransactionAutoConfiguration {
 
+   @Bean
+   @ConditionalOnMissingBean
+   public TransactionManagerCustomizers platformTransactionManagerCustomizers(
+         ObjectProvider<PlatformTransactionManagerCustomizer<?>> customizers) {
+      return new TransactionManagerCustomizers(customizers.orderedStream().collect(Collectors.toList()));
+   }
+
+   @Bean
+   @ConditionalOnMissingBean
+   @ConditionalOnSingleCandidate(ReactiveTransactionManager.class)
+   public TransactionalOperator transactionalOperator(ReactiveTransactionManager transactionManager) {
+      return TransactionalOperator.create(transactionManager);
+   }
+
+   @Configuration(proxyBeanMethods = false)
+   @ConditionalOnSingleCandidate(PlatformTransactionManager.class)
+   public static class TransactionTemplateConfiguration {
+
+      @Bean
+      @ConditionalOnMissingBean(TransactionOperations.class)
+      public TransactionTemplate transactionTemplate(PlatformTransactionManager transactionManager) {
+         return new TransactionTemplate(transactionManager);
+      }
+
+   }
+
+   @Configuration(proxyBeanMethods = false)
+   @ConditionalOnBean(TransactionManager.class)
+   @ConditionalOnMissingBean(AbstractTransactionManagementConfiguration.class)
+   public static class EnableTransactionManagementConfiguration {
+
+      @Configuration(proxyBeanMethods = false)
+      @EnableTransactionManagement(proxyTargetClass = false)
+      @ConditionalOnProperty(prefix = "spring.aop", name = "proxy-target-class", havingValue = "false",
+            matchIfMissing = false)
+      public static class JdkDynamicAutoProxyConfiguration {
+
+      }
+
+      @Configuration(proxyBeanMethods = false)
+      // 开启事务管理
+      @EnableTransactionManagement(proxyTargetClass = true)
+      @ConditionalOnProperty(prefix = "spring.aop", name = "proxy-target-class", havingValue = "true",
+            matchIfMissing = true)
+      public static class CglibAutoProxyConfiguration {
+
+      }
+
+   }
+
+}
+```
+
+## aop
+
+```java
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Import(TransactionManagementConfigurationSelector.class)
+public @interface EnableTransactionManagement {
+```
+
+org.springframework.transaction.annotation.TransactionManagementConfigurationSelector
+
+```java
+@Override
+protected String[] selectImports(AdviceMode adviceMode) {
+   switch (adviceMode) {
+      case PROXY:
+       		/										// 注入aop
+         return new String[] {AutoProxyRegistrar.class.getName(),
+                //定义advisor
+               ProxyTransactionManagementConfiguration.class.getName()};
+      case ASPECTJ:
+         return new String[] {determineTransactionAspectClass()};
+      default:
+         return null;
+   }
+}
+```
 
 ## jdbcTemplate获取connection
 
@@ -1131,9 +1229,9 @@ public static Connection getConnection(DataSource dataSource) throws CannotGetJd
 
 
 
-## mybatis
+## mybatis-spring
 
-MyBatis-spring的sqlSessionTemplate使用spring管理的事务SpringManagedTransaction，获取连接DataSourceUtils.getConnection(this.dataSource);
+MyBatis-spring的sqlSessionTemplate使用spring管理的事务SpringManagedTransaction，获取连接DataSourceUtils.getConnection(this.dataSource);与事务管理器结合
 
 
 
@@ -1171,6 +1269,56 @@ private void openConnection() throws SQLException {
 }
 ```
 
+org.springframework.jdbc.datasource.DataSourceUtils#getConnection
+
+```java
+public static Connection doGetConnection(DataSource dataSource) throws SQLException {
+   Assert.notNull(dataSource, "No DataSource specified");
+
+   ConnectionHolder conHolder = (ConnectionHolder) TransactionSynchronizationManager.getResource(dataSource);
+   if (conHolder != null && (conHolder.hasConnection() || conHolder.isSynchronizedWithTransaction())) {
+      conHolder.requested();
+      if (!conHolder.hasConnection()) {
+         logger.debug("Fetching resumed JDBC Connection from DataSource");
+         conHolder.setConnection(fetchConnection(dataSource));
+      }
+      return conHolder.getConnection();
+   }
+   // Else we either got no holder or an empty thread-bound holder here.
+
+   logger.debug("Fetching JDBC Connection from DataSource");
+   Connection con = fetchConnection(dataSource);
+
+   if (TransactionSynchronizationManager.isSynchronizationActive()) {
+      try {
+         // Use same Connection for further JDBC actions within the transaction.
+         // Thread-bound object will get removed by synchronization at transaction completion.
+         ConnectionHolder holderToUse = conHolder;
+         if (holderToUse == null) {
+            holderToUse = new ConnectionHolder(con);
+         }
+         else {
+            holderToUse.setConnection(con);
+         }
+         holderToUse.requested();
+         TransactionSynchronizationManager.registerSynchronization(
+               new ConnectionSynchronization(holderToUse, dataSource));
+         holderToUse.setSynchronizedWithTransaction(true);
+         if (holderToUse != conHolder) {
+            TransactionSynchronizationManager.bindResource(dataSource, holderToUse);
+         }
+      }
+      catch (RuntimeException ex) {
+         // Unexpected exception from external delegation call -> close Connection and rethrow.
+         releaseConnection(con, dataSource);
+         throw ex;
+      }
+   }
+
+   return con;
+}
+```
+
 ## 参考
 
 https://segmentfault.com/a/1190000018001752
@@ -1178,3 +1326,5 @@ https://segmentfault.com/a/1190000018001752
 https://liuxi.name/blog/20171111/spring-transaction-proxy.html
 
 https://zhuanlan.zhihu.com/p/54067384
+
+https://juejin.cn/post/6844903921463328776
