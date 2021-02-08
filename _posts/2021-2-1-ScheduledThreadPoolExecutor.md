@@ -95,3 +95,34 @@ public RunnableScheduledFuture<?> take() throws InterruptedException {
 ## 参考
 
 https://blog.csdn.net/goldlevi/article/details/7705180
+
+http://www.ligen.pro/2018/01/15/PriorityQueue及其相关衍生队列源码分析/
+
+
+
+
+
+
+
+
+
+一个生产者多个消费者，futureTask，一个锁、voliatile、park、unpark
+
+一个生产者一个消费者
+
+多个生产者一个消费者 mpsc，队列，notEmpty与notFull
+
+多个生产者多个消费者 mpmc，队列，notEmpty与notFull
+
+
+
+单一锁
+
+锁分离
+
+读写锁
+
+乐观锁
+
+
+

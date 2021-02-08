@@ -1000,6 +1000,30 @@ protected void initServletContext(ServletContext servletContext) {
 
 ## 配置文件
 
+```java
+@Configuration
+public class BeanConfig {
+
+    @Bean
+    @ConfigurationProperties("person")
+    public Person person(){
+        return new Person();
+    }
+
+}
+```
+
+```yaml
+person:
+  name: test
+```
+
+@ConfigurationProperties
+
+@ConfigurationProperties的解析就是通过一个后置处理器：**ConfigurationPropertiesBindingPostProcessor**来实现的
+
+
+
 ## springcloud
 
 ```java
@@ -1111,3 +1135,7 @@ private void addAncestorInitializer(SpringApplication application,
 
 }
 ```
+
+## 参考
+
+http://www.ligen.pro/2018/01/17/@ConfigurationProperties源码解析/
