@@ -18,11 +18,11 @@ refresh
         PostProcessorRegistrationDelegate#invokeBeanFactoryPostProcessors(ConfigurableListableBeanFactory beanFactory, List<BeanFactoryPostProcessor> beanFactoryPostProcessors)
             invokeBeanDefinitionRegistryPostProcessors（BeanDefinitionRegistryPostProcessor继承beanFactoryPostProcessor，ConfigurationClassPostProcessor实现了BeanDefinitionRegistryPostProcessor）（首先递归处理所有的BeanDefinitionRegistryPostProcessor.postProcessBeanDefinitionRegistry，再处理BeanFactoryPostProcessor.postProcessBeanFactory）
                 ConfigurationClassPostProcessor.postProcessBeanDefinitionRegistry
-                    ConfigurationClassPostProcessor#processConfigBeanDefinitions（处理full Configuration（有@Configuration）和lite configuration（@Import\@Component\@ImportResource\@ComponentScan和@bean函数））
+                    ConfigurationClassPostProcessor#processConfigBeanDefinitions（处理full Configuration（有@Configuration）和lite configuration（@Import\@Component\@ImportResource\@ComponentScan和有@bean函数的类））
                         （lite @Bean mode ：当@Bean方法在没有使用@Configuration注解的类中声明时称之为lite @Bean mode，Full @Configuration：如果@Bean方法在使用@Configuration注解的类中声明时称之为Full @Configuration）
                         ConfigurationClassUtils#checkConfigurationClassCandidate
-                        （@Import\@Component\@ImportResource\@ComponentScan和@Bean函数都属于lite Configuration，都会放到configClass）
-                        ConfigurationClassParser#parse（解析@Configuration）
+                        （@Import\@Component\@ImportResource\@ComponentScan和@Bean函数都属于lite Configuration，都会放到configCandidates列表）
+                        ConfigurationClassParser#parse（遍历configCandidates列表）
                             ConfigurationClassParser#parse
                                 ConfigurationClassParser#processConfigurationClass
                                     ConfigurationClassParser#doProcessConfigurationClass
@@ -32,7 +32,7 @@ refresh
                                             扫描出来所有@ComponentScan下的class，如果扫描出来的是@Configuration，则递归解析@Configuration，回到上面解析@Configuration人口）
                                             ClassPathBeanDefinitionScanner#doScan
                                                 ClassPathScanningCandidateComponentProvider#findCandidateComponents
-                                                    asm读取class文件，生成bd
+                                                    asm读取所有@component class文件，生成bd
                                                     ClassPathScanningCandidateComponentProvider#scanCandidateComponents
                                                     ClassPathBeanDefinitionScanner#postProcessBeanDefinition
                                                     AnnotationConfigUtils#processCommonDefinitionAnnotations

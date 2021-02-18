@@ -123,6 +123,15 @@ public interface PlatformTransactionManager extends TransactionManager {
 
 
 
+事务切面对于尝试提交会判断是否到了最外层事务(某个事务边界)。举个例子：有四个事务方法依次调用，传播行为分别是 方法1：REQUIRED, 方法2：REQUIRED, 方法3： REQUIRES_NEW, 方法4： REQUIRED。很显然这其中包含了两个独立的物理事务，当退栈到方法4的事务切面时，会发现没有到事务最外层，所以**不会有真正的物理提交**。而在退栈到了方法3对应的事务切面时会发现是外层事务，此时会发生物理提交。同理，退栈到方法1的事务切面时也会触发物理提交。
+
+那么问题来了，Spring是怎么判断这所谓“最外层事务”的呢。
+答案是TxStatus中有个属性叫newTransaction用于标记是否是新建事务(根据事务传播行为得出，比如加入已有事务则会是false)，以及一个名为transaction的Object用于表示物理事务对象(由具体TxMgr子类负责给出）。Spring会根据每一层事务切面创建的TxStatus内部是否持有transaction对象以及newTransaction标志位判断是否属于外层事务。
+
+类似的，Spring对于回滚事务也是会在最外层事务方法对应的切面中进行物理回滚。而在非最外层事务的时候会由具体txMgr子类给对应的事务打个的标记用于标识这个事务该回滚，这样的话在所有同一物理事务方法退栈过程中在事务切面中都能读取到事务被打了应该回滚的标记。可以说这是同一物理事务方法之间进行通信的机制。
+
+
+
 org.springframework.transaction.support.AbstractPlatformTransactionManager#handleExistingTransaction
 
 ```java
@@ -751,7 +760,7 @@ public interface TransactionSynchronization extends Flushable {
 	int STATUS_ROLLED_BACK = 1;
 	int STATUS_UNKNOWN = 2;
 
-	// 事务赞提suspend的时候调用此方法
+	// 事务暂停suspend的时候调用此方法
 	// 实现这个方法的目的一般是释放掉绑定的resources 
 	// TransactionSynchronizationManager#unbindResource
 	default void suspend() {
@@ -793,6 +802,8 @@ public interface TransactionSynchronization extends Flushable {
 ```
 
 #### 事务同步管理器
+
+执行回调的插入点
 
 通过threadLocal实现不同线程拥有不同的连接资源
 
@@ -1328,3 +1339,5 @@ https://liuxi.name/blog/20171111/spring-transaction-proxy.html
 https://zhuanlan.zhihu.com/p/54067384
 
 https://juejin.cn/post/6844903921463328776
+
+https://www.cnblogs.com/micrari/p/7612962.html

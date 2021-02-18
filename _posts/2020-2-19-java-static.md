@@ -8,6 +8,17 @@ title: java-static
 
 # Java内部类要设计成静态和非静态两种
 
+内部类：就是我是你的一部分，我了解你，我知道你的全部，没有你就没有我。（所以内部类对象是以外部类对象存在为前提的）　　
+
+静态内部类：就是我跟你没关系，自己可以完全独立存在，但是我就借你的壳用一下，来隐藏自己。
+
+内部类是定义在另外一个类中的类，主要原因有：
+
+- 内部类方法可以访问该类定义所在的作用域中的数据，包括私有的数据
+- 内部类可以对同一个包的其他类隐藏
+
+静态内部类和非静态内部类最大的区别是：非静态内部类编译后隐式保存着外部类的引用（就算外部类对象没用了也GC不掉），但是静态内部类没有。
+
 ```java
 class OuterClass {
     ...
@@ -79,3 +90,5 @@ Inner类的实例有Outer的实例的指针（即可以访问Outer的成员）�
 https://www.zhihu.com/question/28197253
 
 https://docs.oracle.com/javase/tutorial/java/javaOO/nested.html
+
+https://www.cnblogs.com/GrimMjx/p/10105626.html

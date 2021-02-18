@@ -112,7 +112,7 @@ Veth Pair 设备的特点是：它被创建出来后，总是以两张虚拟网�
 
 - 
 
-![image-20200511102228168](/Users/daitechang/Documents/garydai.github.com/_posts/pic/image-20200511102228168.png)
+![image-20200511102228168](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200511102228168.png)
 
 我们需要在已有的宿主机网络上，再通过软件构建一个覆盖在已有宿主机网络之上的、可以把所有容器连通在一起的虚拟网络。所以，这种技术就被称为：**Overlay Network（覆盖网络）**
 
@@ -224,7 +224,7 @@ Node 2 的内核网络栈会发现这个数据帧里有 VXLAN Header，并且 VN
 
 Docker Overlay是通过vxlan隧道实现跨主机通信的
 
-![image-20200624104339374](/Users/daitechang/Documents/garydai.github.com/_posts/pic/image-20200624104339374.png)
+![image-20200624104339374](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200624104339374.png)
 
 ## 参考
 
