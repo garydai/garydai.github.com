@@ -7,19 +7,9 @@ title: 设计模式
 
 # 设计模式
 
-## 1.reactor
+## 工厂方法模式
 
-twisted框架有使用该模式
 
-等待事件，处理事件
-
-![](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/reactor.png)
-
-![](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/reactor2.png)
-
-## 2.工厂模式
-
-工厂方法模式
 
 ![](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/factory-method.png)
 
@@ -31,7 +21,7 @@ twisted框架有使用该模式
 
 把产品抽象
 
-## 3.抽象工厂模式
+## 抽象工厂模式
 
 提供一个接口，用于创建相关或依赖对象的家族，而不需要明确指定具体类。
 
@@ -39,81 +29,92 @@ twisted框架有使用该模式
 
 工厂方法模式：创建抽象工厂类，具体工厂类，实例化具体工厂，创建产品
 
-	// abstract factory
-	abstract class Kitchen {
-	  public abstract KitchenMeal getMeal(String preferency);
-	  public abstract KitchenMeal getDessert(String preferency);
-	}
-	
-	// concrete factory
-	class KitchenFactory extends Kitchen {
-	  @Override
-	  public KitchenMeal getMeal(String preferency) {
-	    if (preferency.equals("F.1")) {
-	      return new FastFoodMeal();
-	    } else if (preferency.equals("P.1")) {
-	      return new ProteinMeal();
-	    }
-	    return new VegetarianMeal();
-	  }
-	 
-	  @Override
-	  public KitchenMeal getDessert(String preferency) {
-	    if (preferency.equals("I.1")) {
-	      return new IceCreamMeal();
-	    }
-	    return null;
-	  }
-	}
-	 
-	// abstract product
-	abstract class KitchenMeal {
-	  public abstract String getName();
-	}
-	 
-	// concrete products
-	class ProteinMeal extends KitchenMeal {
-	  @Override
-	  public String getName() {
-	    return "protein meal";
-	  }
-	}
+抽象工厂模式与工厂方法模式最大的区别：抽象工厂中每个工厂可以创建多种类的产品；而工厂方法每个工厂只能创建一类
 
-## 4.单例模式
+```java
+// abstract factory
+abstract class Kitchen {
+  public abstract KitchenMeal getMeal(String preferency);
+  public abstract KitchenMeal getDessert(String preferency);
+}
 
-## 5.建造者模式
+// concrete factory
+class KitchenFactory extends Kitchen {
+  @Override
+  public KitchenMeal getMeal(String preferency) {
+    if (preferency.equals("F.1")) {
+      return new FastFoodMeal();
+    } else if (preferency.equals("P.1")) {
+      return new ProteinMeal();
+    }
+    return new VegetarianMeal();
+  }
+ 
+  @Override
+  public KitchenMeal getDessert(String preferency) {
+    if (preferency.equals("I.1")) {
+      return new IceCreamMeal();
+    }
+    return null;
+  }
+}
+ 
+// abstract product
+abstract class KitchenMeal {
+  public abstract String getName();
+}
+ 
+// concrete products
+class ProteinMeal extends KitchenMeal {
+  @Override
+  public String getName() {
+    return "protein meal";
+  }
+}
+```
+
+## 单例模式
+
+![image-20210223084616404](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20210223084616404.png)
+
+## 建造者模式
 
 工厂模式创建一个产品，建造者模式创建多个产品合为一起
 
-		class Programmer {
-		  private String firstName;
-		  private String lastName;
-		   
-		  private Programmer(String fName, String lName) {
-		    this.firstName = fName;
-		    this.lastName = lName;
-		  }
-		   
-		  public static class ProgrammerBuilder {
-		    private String firstName;
-		    private String lastName;
-		     
-		    public ProgrammerBuilder setFirstName(String firstName) {
-		      this.firstName = firstName;
-		      return this;
-		    }
-		     
-		    public ProgrammerBuilder setLastName(String lastName) {
-		      this.lastName = lastName;
-		      return this;
-		    }	
-	
-			public Programmer build() {
-				return	new Programmer(this.firstName, this.lastName);
-			}	     
-		}
+```java
+	class Programmer {
+	  private String firstName;
+	  private String lastName;
+	   
+	  private Programmer(String fName, String lName) {
+	    this.firstName = fName;
+	    this.lastName = lName;
+	  }
+	   
+	  public static class ProgrammerBuilder {
+	    private String firstName;
+	    private String lastName;
+	     
+	    public ProgrammerBuilder setFirstName(String firstName) {
+	      this.firstName = firstName;
+	      return this;
+	    }
+	     
+	    public ProgrammerBuilder setLastName(String lastName) {
+	      this.lastName = lastName;
+	      return this;
+	    }	
 
-## 6.原型模式
+      public Programmer build() {
+        return	new Programmer(this.firstName, this.lastName);
+      }	     
+	}
+}
+```
+
+## 原型模式
+
+![image-20210223084557664](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20210223084557664.png)
 
 对象拷贝
 
@@ -132,7 +133,7 @@ twisted框架有使用该模式
         }
     }
     //实现原型类
-    class ConcretePrototype extends Prototype{
+    class ConcretePrototype extends Prototype {
         public void show(){
             System.out.println("原型模式实现类");
         }
@@ -151,14 +152,14 @@ twisted框架有使用该模式
 
 
 
-## 7.适配器模式
+## 适配器模式
 
 将一个类通过适配器变成满足另一个接口的类
 
 对象适配器
 ![](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/adapter.png)
 
-springmvc使用handlerAdpter，根据handler类型，使用确定使用哪个适配器来处理请求
+springmvc使用handlerAdpter，根据handler类型，确定使用哪个适配器来处理请求
 
 三种handler类型
 
@@ -174,7 +175,7 @@ org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapt
 
 org.springframework.web.servlet.handler.SimpleServletHandlerAdapter
 
-## 8.代理模式
+## 代理模式
 
 ![](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/proxy.png)
 
@@ -273,23 +274,29 @@ org.springframework.web.servlet.handler.SimpleServletHandlerAdapter
 ​        
 
    	 InvocationHandler test = new Test(new HelloImpl());
-        Hello dynamicProxy = (Hello) Proxy.newProxyInstance(实现类.class.getClassLoader(),
-                        实现类.class.getInterfaces(), InvocationHandler实例);
-        
+   	    Hello dynamicProxy = (Hello) Proxy.newProxyInstance(实现类.class.getClassLoader(),
+   	                    实现类.class.getInterfaces(), InvocationHandler实例);
+
 
         dynamicProxy.say();
 
-## 9.外观模式
+## 外观模式
 
 组合各种类
 
-## 10.桥接模式
+![image-20210222145700502](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20210222145700502.png)
+
+## 桥接模式
+
+![image-20210223092426259](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20210223092426259.png)
 
 使得不同的对象使用自身的方法
 
-## 11.组合模式
+## 组合模式
 
-## 12.享元模式
+![image-20210222150544086](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20210222150544086.png)
+
+## 享元模式
 
 ```java
 
@@ -354,7 +361,9 @@ public class Client {
 
 相同key缓存数据
 
-## 13.策略模式
+用于缓存
+
+## 策略模式
 
 ```java
  interface IStrategy {
@@ -396,11 +405,11 @@ public class Client {
     }
 ```
 
-## 14.模板方法模式
+## 模板方法模式
 
 父类定义逻辑顺序，子类实现具体逻辑
 
-## 15.观察者模式
+## 观察者模式
 
 把观察者放入对象内
 
@@ -490,11 +499,13 @@ public class Client {
 
 ![](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/observer.png)
 
-## 16.迭代子模式
+## 迭代子模式
 
 迭代器iterator
 
-## 17.责任链模式
+## 责任链模式
+
+![image-20210223104615899](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20210223104615899.png)
 
 每个对象持有对下一个对象的引用
 
@@ -514,12 +525,16 @@ for f: filter:
 
 方法之二：
 
+引用下一个对象
+
 ```	
 aprocessor.next = bprocessor
 bprocessor.next = c.processor
 ```
 
-## 18.命令模式
+## 命令模式
+
+![image-20210223105017285](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20210223105017285.png)
 
 把方法调用封装起来
 
@@ -562,9 +577,11 @@ public class client {
 	}
 }
 ```
-## 19.备忘录模式
+## 备忘录模式
 
-## 20.状态模式
+![image-20210223112639914](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20210223112639914.png)
+
+## 状态模式
 
 	public interface State {
 		public void doAction(Context context);
@@ -632,7 +649,9 @@ public class StatePatternDemo {
 
 netty pipeline
 
-## 21.访问者模式
+## 访问者模式
+
+![image-20210223092643912](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20210223092643912.png)
 
 数据和操作解耦
 
@@ -703,9 +722,13 @@ public class Client {
 }  
 ```
 
-## 22.中介者模式
+## 中介者模式
 
-## 23.解释器模式
+![image-20210223104108495](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20210223104108495.png)
+
+## 解释器模式
+
+![image-20210223103159422](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20210223103159422.png)
 
 	abstract class AbstractExpression {
 	       public  abstract void interpret(Context ctx);
@@ -717,7 +740,7 @@ public class Client {
 	   }
 	}
 
-## 24.装饰器模式
+## 装饰器模式
 
 ![](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/decorator.png)
 咖啡是一种饮料，咖啡的本质是咖啡豆+水磨出来的。咖啡店现在要卖各种口味的咖啡，如果不使用装饰模式，那么在销售系统中，各种不一样的咖啡都要产生一个类，如果有4中咖啡豆，5种口味，那么将要产生至少20个类（不包括混合口味），非常麻烦。使用了装饰模式，只需要11个类即可生产任意口味咖啡（包括混合口味
@@ -806,11 +829,70 @@ public class Client {
 
 Java io  	
 
-### 分类
-创建型
+## 分类
+### 创建型
 
-行为型
+工厂方法模式
 
-结构型
-    
-    
+抽象工厂模式
+
+单例模式
+
+建造者模式
+
+原型模式
+
+### 结构型
+
+适配器模式
+
+代理模式
+
+外观模式
+
+桥接模式
+
+组合模式
+
+享元模式（Flyweight轻量级模式）
+
+装饰器模式
+
+### 行为型
+
+策略模式
+
+模版方法模式
+
+观察者模式
+
+迭代器模式
+
+责任链模式
+
+命令模式
+
+备忘录模式
+
+状态模式
+
+访问者模式
+
+中介者模式
+
+解释器模式
+
+
+
+## 参考
+
+大话设计模式
+
+设计模式：可复用面向对象软件的基础
+
+
+
+### 
+
+​    
+​    
