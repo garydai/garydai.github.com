@@ -36,7 +36,7 @@ pthread_mutex_lock(&mutex);
 
 条件变量一共也就pthread_cond_init、pthread_cond_destroy、pthread_cond_wait、pthread_cond_timedwait、pthread_cond_signal、pthread_cond_broadcast这么几个函数
 
-```
+```c++
 推荐用法
 
 class Condition4 : public ConditionBase
@@ -163,6 +163,120 @@ https://www.cnblogs.com/liyuan989/p/4240271.html
 
 ```
 
+
+
+Linux下使用`pthread_cond_signal`的时候，会产生“惊群”问题的，但是Java中是不会存在这个“惊群”问题的，那么Java是如何处理的呢？
+
+
+
+<p>Java在语言层面实现了自己的线程管理机制（阻塞、唤醒、排队等），每个Thread实例都有一个独立的<code>pthread_mutex</code>和<code>pthread_cond</code>（系统层面的/C语言层面），在Java语言层面上对单个线程进行独立唤醒操作。</p>
+
+PlatformParker主要看三个成员变量，_cur_index, _mutex, _cond。其中mutex和cond就是很熟悉的glibc nptl包中符合posix标准的线程同步工具，一个互斥锁一个条件变量。再看thread和Parker的关系，在hotspot的Thread类的NameThread内部类中有一个 Parker成员变量。说明parker是每线程变量，在创建线程的时候就会生成一个parker实例。
+
+
+
+```c++
+void Parker::park(bool isAbsolute, jlong time) {
+  
+  //原子交换，如果_counter > 0,则将_counter置为0，直接返回，否则_counter为0
+  if (Atomic::xchg(0, &_counter) > 0) return;
+  //获取当前线程
+  Thread* thread = Thread::current();
+  assert(thread->is_Java_thread(), "Must be JavaThread");
+  //下转型为java线程
+  JavaThread *jt = (JavaThread *)thread;
+ 
+ 
+  //如果当前线程设置了中断标志，调用park则直接返回，所以如果在park之前调用了
+  //interrupt就会直接返回
+  if (Thread::is_interrupted(thread, false)) {
+    return;
+  }
+ 
+  // 高精度绝对时间变量
+  timespec absTime;
+  //如果time小于0，或者isAbsolute是true并且time等于0则直接返回
+  if (time < 0 || (isAbsolute && time == 0) ) { // don't wait at all
+    return;
+  }
+  //如果time大于0，则根据是否是高精度定时计算定时时间
+  if (time > 0) {
+    unpackTime(&absTime, isAbsolute, time);
+  }
+ 
+ 
+  //进入安全点避免死锁
+  ThreadBlockInVM tbivm(jt);
+ 
+ 
+  //如果当前线程设置了中断标志，或者获取mutex互斥锁失败则直接返回
+  //由于Parker是每个线程都有的，所以_counter cond mutex都是每个线程都有的，
+  //不是所有线程共享的所以加锁失败只有两种情况，第一unpark已经加锁这时只需要返回即可，
+  //第二调用调用pthread_mutex_trylock出错。对于第一种情况就类似是unpark先调用的情况，所以
+  //直接返回。
+  if (Thread::is_interrupted(thread, false) || pthread_mutex_trylock(_mutex) != 0) {
+    return;
+  }
+ 
+  int status ;
+  //如果_counter大于0，说明unpark已经调用完成了将_counter置为了1，
+  //现在只需将_counter置0，解锁，返回
+  if (_counter > 0)  { // no wait needed
+    _counter = 0;
+    status = pthread_mutex_unlock(_mutex);
+    assert (status == 0, "invariant");
+    OrderAccess::fence();
+    return;
+  }
+ 
+ 
+  OSThreadWaitState osts(thread->osthread(), false /* not Object.wait() */);
+  jt->set_suspend_equivalent();
+  // cleared by handle_special_suspend_equivalent_condition() or java_suspend_self()
+ 
+  assert(_cur_index == -1, "invariant");
+  //如果time等于0，说明是相对时间也就是isAbsolute是fasle(否则前面就直接返回了),则直接挂起
+  if (time == 0) {
+    _cur_index = REL_INDEX; // arbitrary choice when not timed
+    status = pthread_cond_wait (&_cond[_cur_index], _mutex) ;
+  } else { //如果time非0
+    //判断isAbsolute是false还是true，false的话使用_cond[0]，否则用_cond[1]
+    _cur_index = isAbsolute ? ABS_INDEX : REL_INDEX;
+    //使用条件变量使得当前线程挂起。
+    status = os::Linux::safe_cond_timedwait (&_cond[_cur_index], _mutex, &absTime) ;
+    //如果挂起失败则销毁当前的条件变量重新初始化。
+    if (status != 0 && WorkAroundNPTLTimedWaitHang) {
+      pthread_cond_destroy (&_cond[_cur_index]) ;
+      pthread_cond_init    (&_cond[_cur_index], isAbsolute ? NULL : os::Linux::condAttr());
+    }
+  }
+ 
+  //如果pthread_cond_wait成功则以下代码都是线程被唤醒后执行的。
+  _cur_index = -1;
+  assert_status(status == 0 || status == EINTR ||
+                status == ETIME || status == ETIMEDOUT,
+                status, "cond_timedwait");
+ 
+#ifdef ASSERT
+  pthread_sigmask(SIG_SETMASK, &oldsigs, NULL);
+#endif
+  //将_counter变量重新置为1
+  _counter = 0 ;
+  //解锁
+  status = pthread_mutex_unlock(_mutex) ;
+  assert_status(status == 0, status, "invariant") ;
+  // 使用内存屏障使_counter对其它线程可见
+  OrderAccess::fence();
+ 
+  // 如果在park线程挂起的时候调用了stop或者suspend则还需要将线程挂起不能返回
+  if (jt->handle_special_suspend_equivalent_condition()) {
+    jt->java_suspend_self();
+  }
+
+```
+
+
+
 ###java 线程
 
 ![](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/thread.png)
@@ -285,3 +399,5 @@ public final synchronized void join(long millis) throws InterruptedException
 ### reference
 
 https://zhuanlan.zhihu.com/p/27857336
+
+https://blog.csdn.net/a7980718/article/details/83661613

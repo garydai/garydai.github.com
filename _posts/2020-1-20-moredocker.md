@@ -6,6 +6,18 @@ title: docker
 
 # docker
 
+![image-20210319122541722](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20210319122541722.png)
+
+1. runC是最常用的 容器低层运行时，不包含镜像管理，它假定容器的文件包已经从镜像里解压出来并存放于文件系统中。runC 创建的容器需要手动配置网络才能与其他容器或者网络节点连通。 ——**镜像并不是运行容器所必须的**。
+2. containerd是最常用的 容器高层运行时，提供镜像下载、解压等功能， 不包含镜像构建、上传等功能
+3. 再往上，Docker 提供了许多 UX 增强功能，比如ps/system prune 这些。 UX 增强的功能并不是 Kubernetes 所必须的
+
+![image-20210319121248469](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20210319121248469.png)
+
+1. dockerd 是docker-containerd 的父进程， docker-containerd 是n个docker-containerd-shim 的父进程。
+2. Containerd 是一个 gRPC 的服务器。它会在接到 docker daemon 的远程请 求之后，新建一个线程去处理这次请求。依靠 runC 去创建容器进程。而在容器启动之后， runC 进程会退出。
+3. runC 命令，是 libcontainer 的一个简单的封装。这个工具可以 用来管理单个容器，比如容器创建，或者容器删除。
+
 ## Cgroup
 
 资源控制
@@ -239,3 +251,5 @@ https://mp.weixin.qq.com/s?__biz=MzU0NDEyODkzMQ==&mid=2247497799&idx=1&sn=4577d6
 http://c.biancheng.net/view/3185.html
 
 https://www.cnblogs.com/sparkdev/p/9198109.html
+
+https://qiankunli.github.io/2020/04/18/docker_intro.html
