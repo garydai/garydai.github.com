@@ -18,6 +18,18 @@ title: docker
 2. Containerd 是一个 gRPC 的服务器。它会在接到 docker daemon 的远程请 求之后，新建一个线程去处理这次请求。依靠 runC 去创建容器进程。而在容器启动之后， runC 进程会退出。
 3. runC 命令，是 libcontainer 的一个简单的封装。这个工具可以 用来管理单个容器，比如容器创建，或者容器删除。
 
+```
+systemd(1)-+-NetworkManager(4700)-+-dhclient(13711)
+           |-dockerd(5934)-+-containerd(5957)-+-containerd-shim(1672)-+-java(1689)-+-{java}(1725)
+           |               |                  |                       |            |-{java}(1732)
+           |               |                  |-containerd-shim(2465)-+-sh(2484)---java(2542)-+-{java}(2551)
+           |               |                  |                       |                       |-{java}(2552)
+           |               |                  |                       |                       |-{java}(2553)
+           |               |                  |                       |                       |-{java}(2554)
+```
+
+
+
 ## Cgroup
 
 资源控制
