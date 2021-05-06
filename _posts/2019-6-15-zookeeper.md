@@ -29,7 +29,7 @@ rmr
 ## 节点
 1. 持久节点
 
-creste 
+create 
 
 2. 临时节点
 
@@ -73,6 +73,10 @@ zab协议
 
 
 ![](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/zookeeper2.png)
+
+![](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20210505155411672.jpg)
+
+
 
 ## 服务端
 
@@ -2711,8 +2715,32 @@ Follower的消息循环处理如下几种来自Leader的消息：
 6 .SYNC消息：返回SYNC结果到客户端，这个消息最初由客户端发起，用来强制得到最新的更新。
  ```
 
+## 使用场景
+
+kafka用来选主
+
+故障转移，同sentinel
+
 ## redis异同点
 
 同：
 
 主从同步，写请求由主节点接受
+
+不同：
+
+sentinel有主观下线和客观下线，故障转移再通知客户端，zk没有故障转移，客户端会做，zk可以作为sentinel，未主从集群做故障转移。
+
+redis集群中：当某个master宕机之后，某个slave感知到他的master变为fail状态了，会将自身的epoch值加一，然后尝试变为master，向集群中的其他master询问自身能不能做新的master，如果超过一半的master同意了，他就会晋升为新的master，超不过一半此过程后重复(期间别的salve也可能会竞争)，一旦被半数认可，会广播告知集群中的其他节点，即使后来master活过来因为spoch值过小，没人听他的，会自动降级为slave；
+
+ 
+
+zookeeper(一致性协议ZAB)集群选举(假设5台)：老的挂掉后，开始新的选举，先判断谁是最新事物id(zxid),如果存在一致，在判断节点id谁打谁做master，之后集群个节点的spoch值加1，这样即使老的活过来epoch值太小没有slave听他的，从而防止脑裂；【首次启动时的选举是在记电启动到刚超过一半第3台时选出节点id最大的为master】
+
+ 
+
+nacos(一致性协议raft)
+
+
+
+### zk相当于redis sentinel

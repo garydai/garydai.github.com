@@ -673,6 +673,11 @@ org.springframework.aop.framework.autoproxy.AbstractAdvisorAutoProxyCreator#getA
 
 
 ```java
+AbstractBeanFactoryPointcutAdvisor extends AbstractPointcutAdvisor
+public abstract class AbstractPointcutAdvisor implements PointcutAdvisor, Ordered, Serializable
+```
+
+```java
 public class BeanFactoryTransactionAttributeSourceAdvisor extends AbstractBeanFactoryPointcutAdvisor {
 
 	@Nullable
