@@ -16,13 +16,13 @@ title: rocketmq
 **Message**
 代表一条消息，使用messageId唯一识别，用户在发送时可以设置messageKey，便于之后查询和跟踪。RocketMQ不对消息的格式做限制，message body是二进制，序列化操作由用户完成。
 **Topic**
-topic用于将消息按主题做划分，producer将消息发往指定的topic，consumer订阅该topic就可以收到这条消息。Topic跟发送方和消费方都没有强关联关系，发送方可以同时往多个topic投放消息，消费方也可以订阅多个topic的消息。在RocketMQ中，topic是一个上逻辑概念。消息存储不会按topic分开。
+topic用于将消息按主题做划分，producer将消息发往指定的topic，consumer订阅该topic就可以收到这条消息。Topic跟发送方和消费方都没有强关联关系，发送方可以同时往多个topic投放消息，消费方也可以订阅多个topic的消息。**在RocketMQ中，topic是一个上逻辑概念。消息存储不会按topic分开**。
 **Queue**
 topic和queue是1对多的关系，一个Topic下可以包含多个Queue，主要用于负载均衡。发送消息时，用户只指定topic，producer会根据topic的路由信息选择具体发到哪个Queue上。consumer订阅消息时，会根据负载均衡策略决定订阅哪些queue的消息。
 **Offset**
 RocketMQ在存储消息时会为每个topic下的每个Queue生成一个消息的索引文件，每个queue都对应一个offset记录当前queue中消息条数。
 
-一个Topic拥有多个消息队列，一个Broker为每一主题默认创建4个读队列4 个写队列 
+**一个Topic拥有多个消息队列，一个Broker为每一主题默认创建4个读队列4 个写队列** 
 
 ## 模块
 
