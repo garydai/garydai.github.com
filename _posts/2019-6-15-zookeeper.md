@@ -2477,6 +2477,8 @@ FinalRequestProcessor：更新内存，返回response
 
 
 
+ack处理
+
 SyncRequestProcessor：持久txn，快照
 
 AckRequestProcessor
@@ -2485,17 +2487,19 @@ AckRequestProcessor
 
 流程：
 
-commitprocessor，阻塞
+1. proposalprocessor
 
-proposalprocessor提议follower处理相同事务
+1.1 commitprocessor，阻塞
 
-持久化processor
+1.2 proposalprocessor提议follower处理相同事务
+
+1.3 持久化processor
 
 处理follower的回复ack，ack达到半数以上
 
 发送commit给follower，唤醒commitprocessor的阻塞
 
-然后到下一个处理起处理
+然后到下一个处理器处理
 
 ### follower
 
