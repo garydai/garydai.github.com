@@ -351,6 +351,43 @@ Kafka 以 Topic 作为文件存储的基本单元，即每个 Topic 有其对应
 
 ![image-20201203165845830](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20201203165845830.png)
 
+### 索引文件
+
+![image-20210630222602413](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20210630222602413.png)
+
+在客户端（生产者和消费者）和admin接口提供了根据key查询消息的实现。为了方便用户查询具体某条消息。但是关键得找到消息的key。
+
+IndexFile的存储内容是什么？
+
+hash槽存储的是节点的索引位置。index条目存储的是key的hash值，物理的offset，与beginTimeStamp的差值、上一个hash冲突的索引位置。
+
+怎么把一条消息放入到IndexFile?
+
+确定hash槽
+
+先是根据key计算hashcode，对500w取模，就可以知道位于哪个hash槽。indexHead占了文件的前面的40字节。然后每个hash槽占4个字节。具体在文件的位置是由公式40 + keyIndex*4计算得到的。
+
+计算index条目位置
+
+一条消息hash槽的位置是根据key决定的，index条目的位置是放入的顺序决定的，这叫顺序写。
+index条目首先要跨过indexHead和500w个hash槽的大小。然后根据当前是第几条index条目，就放入到第几个位置去。
+计算公式是:40个字节的indexHead+500w个 * 4字节的hash槽大小 + 当前index索引的值 * 20字节
+
+怎么查询indexFile？
+
+先是根据key计算hashcode，对500w取模，就可以知道位于哪个hash槽。根据槽值的内容，再通过计算index条目位置，获取到index条目，再依次获取上一个hash冲突节点的index条目。
+
+为什么需要indexFile？
+
+在客户端（生产者和消费者）和admin接口提供了根据key查询消息的实现。为了方便用户查询具体某条消息。但是关键得找到消息的key。
+
+为什么这么设计IndexFile？
+
+使用文件实现，应该是为了轻量级，不依赖其他组件
+indexHead可以根据时间快速定位要查找的key在哪个indexFile。
+使用了hash槽的设计，提供O(1)的时间复杂度即可定位到index条目。
+使用hash槽存index条目位置，index条目顺序写入，提供了写的性能
+
 ### 刷盘
 
 ![image-20201204103820718](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20201204103820718.png)
@@ -1115,6 +1152,26 @@ public void run() {
 
 如果消息消费是集群模式，那么消息进度保存在 Broker 上; 如果是广播模式，那么消息消费进度存储在消费端
 
+### 重平衡
+
+rocketmq 中的实现相对来说简单一些。重平衡可以拆分为三大步：
+
+1. 判断并发起
+2. 计算平衡结果
+3. 执行
+
+
+
+首先是计算平衡结果的算法，可以简单认为就是轮流分配机制。比如一个topic下有10个队列，该topic的消费者组中有3个消费者，那么经过平衡算法的计算，最终会是 3,3,4 的队列分配结果。
+
+然后重平衡的发起方是消费者，因为消费者每隔一段时间会判断是否需要开始重平衡。判断的机制就是消费者定时获取到当前 topic 对应的队列信息和消费者信息，并经过平衡算法，将新分配结果和之前的分配结果进行比较。比如该消费者当前消费的队列是 c1,c2，然而重平衡后是 c1。则会进入执行阶段。
+
+执行阶段就是只拉取最新分配的队列信息。
+
+这样每个消费者都是决策者的思路，简化了重平衡的实现难度。
+
+kafka是由leader消费者分配
+
 ## producer
 
 producer发送消息支持3种方式，同步、异步和Oneway。
@@ -1571,3 +1628,5 @@ RocketMQ技术内幕
 https://www.zhihu.com/question/30195969
 
 https://tinylcy.me/2019/the-design-of-rocketmq-message-storage-system/
+
+https://www.codenong.com/cs106535405/

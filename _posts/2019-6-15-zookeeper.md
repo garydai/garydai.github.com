@@ -972,7 +972,7 @@ public boolean containsQuorum(Set<Long> set){
 
 接受其他服务器的投票，和自己的投票结果做比较，选择最强大的投票结果，并更新自己的投票，最后统计和自己的投票结果一样的票数是否超过一半，超过则选出了leader，没有则继续
 
-![image-20200310084906400](/Users/daitechang/Documents/hexo_blog/source/_posts/pic/image-20200310084906400.png)
+![image-20200310084906400](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20200310084906400.png)
 
 ### IO模型
 
@@ -2618,6 +2618,224 @@ void followLeader() throws InterruptedException {
 }
 ```
 
+### 和Follower建立心跳
+
+在Leader 启动完成之后，leader变周期性的发送心跳数据(LearnerHandler#ping)给follower。如果出现follower 掉线或宕机就会将此follower从 learners 中移出，接下来就不会发送propose或者心跳数据给此follower。
+
+当leader上没有大多数的follower时，会将自己关闭，状态重置为LOOKING，进行下一轮的选举。
+
+1、超时时间判断
+
+```java
+public synchronized boolean check(long time) {
+    if (currentTime == 0) {
+        return true;
+    } else {
+        long msDelay = (time - currentTime) / 1000000;
+        return (msDelay < (leader.self.tickTime * leader.self.syncLimit));
+    }
+}
+leader.self.tickTime * leader.self.syncLimit:超时时间
+```
+
+org.apache.zookeeper.server.quorum.Leader#lead
+
+```java
+ boolean tickSkip = true;
+
+    while (true) {
+        Thread.sleep(self.tickTime / 2);
+        if (!tickSkip) {
+            self.tick.incrementAndGet();
+        }
+        HashSet<Long> syncedSet = new HashSet<Long>();
+
+        // lock on the followers when we use it.
+        syncedSet.add(self.getId());
+
+        for (LearnerHandler f : getLearners()) {
+            // Synced set is used to check we have a supporting quorum, so only
+            // PARTICIPANT, not OBSERVER, learners should be used
+            if (f.synced() && f.getLearnerType() == LearnerType.PARTICIPANT) {
+                syncedSet.add(f.getSid());
+            }
+            f.ping();
+        }
+
+        // check leader running status
+        if (!this.isRunning()) {
+            shutdown("Unexpected internal error");
+            return;
+        }
+
+      // 没有过半的learner，关闭leader，并将状态变成looking
+      if (!tickSkip && !self.getQuorumVerifier().containsQuorum(syncedSet)) {
+        //if (!tickSkip && syncedCount < self.quorumPeers.size() / 2) {
+            // Lost quorum, shutdown
+            shutdown("Not sufficient followers synced, only synced with sids: [ "
+                    + getSidSetString(syncedSet) + " ]");
+            // make sure the order is the same!
+            // the leader goes to looking
+            return;
+      } 
+      tickSkip = !tickSkip;
+    }
+} finally {
+    zk.unregisterJMX(this);
+}
+```
+
+```java
+/**
+ * Close down all the LearnerHandlers
+ */
+void shutdown(String reason) {
+    LOG.info("Shutting down");
+
+    if (isShutdown) {
+        return;
+    }
+    
+    LOG.info("Shutdown called",
+            new Exception("shutdown Leader! reason: " + reason));
+
+    if (cnxAcceptor != null) {
+        cnxAcceptor.halt();
+    }
+    
+    // NIO should not accept conenctions
+    self.cnxnFactory.setZooKeeperServer(null);
+    try {
+        ss.close();
+    } catch (IOException e) {
+        LOG.warn("Ignoring unexpected exception during close",e);
+    }
+    // clear all the connections
+    self.cnxnFactory.closeAll();
+    // shutdown the previous zk
+    if (zk != null) {
+        zk.shutdown();
+    }
+    synchronized (learners) {
+        for (Iterator<LearnerHandler> it = learners.iterator(); it
+                .hasNext();) {
+            LearnerHandler f = it.next();
+            it.remove();
+            f.shutdown();
+        }
+    }
+    isShutdown = true;
+}
+```
+
+org.apache.zookeeper.server.quorum.QuorumPeer#run
+
+```java
+while (running) {
+    switch (getPeerState()) {
+    case LOOKING:
+        LOG.info("LOOKING");
+
+        if (Boolean.getBoolean("readonlymode.enabled")) {
+            LOG.info("Attempting to start ReadOnlyZooKeeperServer");
+
+            // Create read-only server but don't start it immediately
+            final ReadOnlyZooKeeperServer roZk = new ReadOnlyZooKeeperServer(
+                    logFactory, this,
+                    new ZooKeeperServer.BasicDataTreeBuilder(),
+                    this.zkDb);
+
+            // Instead of starting roZk immediately, wait some grace
+            // period before we decide we're partitioned.
+            //
+            // Thread is used here because otherwise it would require
+            // changes in each of election strategy classes which is
+            // unnecessary code coupling.
+            Thread roZkMgr = new Thread() {
+                public void run() {
+                    try {
+                        // lower-bound grace period to 2 secs
+                        sleep(Math.max(2000, tickTime));
+                        if (ServerState.LOOKING.equals(getPeerState())) {
+                            roZk.startup();
+                        }
+                    } catch (InterruptedException e) {
+                        LOG.info("Interrupted while attempting to start ReadOnlyZooKeeperServer, not started");
+                    } catch (Exception e) {
+                        LOG.error("FAILED to start ReadOnlyZooKeeperServer", e);
+                    }
+                }
+            };
+            try {
+                roZkMgr.start();
+                setBCVote(null);
+                setCurrentVote(makeLEStrategy().lookForLeader());
+            } catch (Exception e) {
+                LOG.warn("Unexpected exception",e);
+                setPeerState(ServerState.LOOKING);
+            } finally {
+                // If the thread is in the the grace period, interrupt
+                // to come out of waiting.
+                roZkMgr.interrupt();
+                roZk.shutdown();
+            }
+        } else {
+            try {
+                setBCVote(null);
+                setCurrentVote(makeLEStrategy().lookForLeader());
+            } catch (Exception e) {
+                LOG.warn("Unexpected exception", e);
+                setPeerState(ServerState.LOOKING);
+            }
+        }
+        break;
+    case OBSERVING:
+        try {
+            LOG.info("OBSERVING");
+            setObserver(makeObserver(logFactory));
+            observer.observeLeader();
+        } catch (Exception e) {
+            LOG.warn("Unexpected exception",e );                        
+        } finally {
+            observer.shutdown();
+            setObserver(null);
+            setPeerState(ServerState.LOOKING);
+        }
+        break;
+    case FOLLOWING:
+        try {
+            LOG.info("FOLLOWING");
+            setFollower(makeFollower(logFactory));
+            follower.followLeader();
+        } catch (Exception e) {
+            LOG.warn("Unexpected exception",e);
+        } finally {
+            follower.shutdown();
+            setFollower(null);
+            setPeerState(ServerState.LOOKING);
+        }
+        break;
+    case LEADING:
+        LOG.info("LEADING");
+        try {
+            setLeader(makeLeader(logFactory));
+            leader.lead();
+            setLeader(null);
+        } catch (Exception e) {
+            LOG.warn("Unexpected exception",e);
+        } finally {
+            if (leader != null) {
+                leader.shutdown("Forcing shutdown");
+                setLeader(null);
+            }
+            // 没有过半的learner，将状态改为looking
+            setPeerState(ServerState.LOOKING);
+        }
+        break;
+    }
+}
+```
+
 ## 持久化
 
 syncRequestProcessor
@@ -2697,6 +2915,8 @@ public void run() {
     LOG.info("SyncRequestProcessor exited!");
 }
 ```
+
+
 
 ## server工作状态
 
