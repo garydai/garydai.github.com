@@ -1026,6 +1026,8 @@ person:
 
 ## springcloud
 
+Spring Cloud的BootstrapApplicationListener监听ApplicationEnvironmentPreparedEvent事件，在监听到事件时开启一个新的ApplicationContext容器，我们可以称这个ApplicationContext容器为Spring Cloud的Bootstrap容器。
+
 ```java
 public class BootstrapApplicationListener
       implements ApplicationListener<ApplicationEnvironmentPreparedEvent>, Ordered 
@@ -1135,6 +1137,15 @@ private void addAncestorInitializer(SpringApplication application,
 
 }
 ```
+
+![image-20210806155448364](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20210806155448364.png)
+
+![image-20210806155333014](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20210806155333014.png)
+
+![image-20210806155250556](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20210806155250556.png)
+
+BootStrap Application 容器的作用：
+**提前加载SpringCloud 相关的配置类，比如BootStrap Application会提前加载配置中心相关配置类，优先加读取`bootstrap`配置文件等逻辑。**
 
 ## 参考
 

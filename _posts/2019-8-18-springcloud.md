@@ -21,6 +21,51 @@ loadBalancerInterceptor
 
 
 
+```java
+/**
+ * Annotation to mark a RestTemplate bean to be configured to use a LoadBalancerClient
+ * @author Spencer Gibb
+ */
+@Target({ ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Inherited
+@Qualifier
+public @interface LoadBalanced {
+}
+```
+
+```java
+@Configuration
+@ConditionalOnClass(RestTemplate.class)
+@ConditionalOnBean(LoadBalancerClient.class)
+@EnableConfigurationProperties(LoadBalancerRetryProperties.class)
+public class LoadBalancerAutoConfiguration {
+
+  	// 收集被loadBalanced标记的restTemplate
+   @LoadBalanced 
+   @Autowired(required = false)
+   private List<RestTemplate> restTemplates = Collections.emptyList();
+
+   @Bean
+   public SmartInitializingSingleton loadBalancedRestTemplateInitializer(
+         final List<RestTemplateCustomizer> customizers) {
+      return new SmartInitializingSingleton() {
+         @Override
+         public void afterSingletonsInstantiated() {
+            for (RestTemplate restTemplate : LoadBalancerAutoConfiguration.this.restTemplates) {
+               for (RestTemplateCustomizer customizer : customizers) {
+                  customizer.customize(restTemplate);
+               }
+            }
+         }
+      };
+   }
+}
+```
+
+
+
 流程：
 
 1. 拦截restremplate
@@ -37,7 +82,7 @@ DynamicServerListLoadBalancer
 1. 去eureka客户端缓存获取服务信息
 2. 定时刷新服务信息，30s（com.netflix.loadbalancer.PollingServerListUpdater）
 
-```
+``` java
  scheduledFuture = getRefreshExecutor().scheduleWithFixedDelay(
                     wrapperRunnable,
                     initialDelayMs,
@@ -196,8 +241,10 @@ beanClass=class org.springframework.cloud.openfeign.FeignClientFactoryBean
 ## zuul 网关
 路由、过滤、容错与回退、集群、高可用
 ## config 分布式配置
+
+
+
 ## sleuth 分布式链路跟踪 + zipkin 可视化
 
 ![](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/springcloud.png)
-
 
