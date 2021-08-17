@@ -231,7 +231,365 @@ void restOfInit(IClientConfig clientConfig) {
 @Import(FeignClientsRegistrar.class)
 ```
 
+
+
+org.springframework.cloud.openfeign.FeignClientsRegistrar#registerBeanDefinitions
+
+```java
+	@Override
+	public void registerBeanDefinitions(AnnotationMetadata metadata,
+			BeanDefinitionRegistry registry) {
+		registerDefaultConfiguration(metadata, registry);
+    // 扫描@EnableFeignClients制定的类，并对@feignclient标注的类生成bean definition并注册到ioc容器
+		registerFeignClients(metadata, registry);
+	}
+```
+
+
+
+org.springframework.cloud.openfeign.FeignClientsRegistrar#registerDefaultConfiguration
+
+```java
+private void registerDefaultConfiguration(AnnotationMetadata metadata,BeanDefinitionRegistry registry) {
+   Map<String, Object> defaultAttrs = metadata
+         .getAnnotationAttributes(EnableFeignClients.class.getName(), true);
+
+   if (defaultAttrs != null && defaultAttrs.containsKey("defaultConfiguration")) {
+      String name;
+      if (metadata.hasEnclosingClass()) {
+         name = "default." + metadata.getEnclosingClassName();
+      }
+      else {
+         name = "default." + metadata.getClassName();
+      }
+      registerClientConfiguration(registry, name,
+            defaultAttrs.get("defaultConfiguration"));
+   }
+}
+private void registerClientConfiguration(BeanDefinitionRegistry registry, Object name,Object configuration) {
+	BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(FeignClientSpecification.class);
+	builder.addConstructorArgValue(name);
+	builder.addConstructorArgValue(configuration);
+	registry.registerBeanDefinition(name + "." + FeignClientSpecification.class.getSimpleName(),builder.getBeanDefinition());
+}
+
+
+```
+
+
+
+#### 注册FeignClientSpecification
+
+NamedContextFactory springboot的子容器
+
+```java
+class FeignClientSpecification implements NamedContextFactory.Specification {
+}
+```
+
+
+
 beanClass=class org.springframework.cloud.openfeign.FeignClientFactoryBean
+
+
+
+#### 注册FeignClient
+
+org.springframework.cloud.openfeign.FeignClientsRegistrar#registerFeignClient
+
+```java
+//attributes  @FeignClient中读取的配置信息
+private void registerFeignClient(BeanDefinitionRegistry registry, AnnotationMetadata annotationMetadata, Map<String, Object> attributes) {
+   String className = annotationMetadata.getClassName();
+   //重点！！！BeanDefinition类型为FeignClientFactoryBean
+   BeanDefinitionBuilder definition = BeanDefinitionBuilder.genericBeanDefinition(FeignClientFactoryBean.class);
+   validate(attributes);
+   definition.addPropertyValue("url", getUrl(attributes));
+   definition.addPropertyValue("path", getPath(attributes));
+   String name = getName(attributes);
+   definition.addPropertyValue("name", name);
+   String contextId = getContextId(attributes);
+   definition.addPropertyValue("contextId", contextId);
+   //type 设置的FactoryBean 返回的 类型
+   definition.addPropertyValue("type", className);
+   definition.addPropertyValue("decode404", attributes.get("decode404"));
+   definition.addPropertyValue("fallback", attributes.get("fallback"));
+   definition.addPropertyValue("fallbackFactory", attributes.get("fallbackFactory"));
+   definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
+
+   String alias = contextId + "FeignClient";
+   AbstractBeanDefinition beanDefinition = definition.getBeanDefinition();
+   beanDefinition.setAttribute(FactoryBean.OBJECT_TYPE_ATTRIBUTE, className);
+
+   // has a default, won't be null
+   boolean primary = (Boolean) attributes.get("primary");
+
+   beanDefinition.setPrimary(primary);
+
+   String qualifier = getQualifier(attributes);
+   if (StringUtils.hasText(qualifier)) {
+      alias = qualifier;
+   }
+   BeanDefinitionHolder holder = new BeanDefinitionHolder(beanDefinition, className,
+         new String[] { alias });
+   BeanDefinitionReaderUtils.registerBeanDefinition(holder, registry);
+}
+
+
+```
+
+org.springframework.cloud.openfeign.FeignClientFactoryBean#getObject
+
+```java
+@Override
+public Object getObject() throws Exception {
+   return getTarget();
+}
+
+/**
+ * @param <T> the target type of the Feign client
+ * @return a {@link Feign} client created with the specified data and the context
+ * information
+ */
+<T> T getTarget() {
+   // context 工厂FeignContext extends NamedContextFactory<FeignClientSpecification> 
+   FeignContext context = applicationContext.getBean(FeignContext.class);
+   //每个feignclient创建一个子容器applicationcontext
+   Feign.Builder builder = feign(context);
+
+   if (!StringUtils.hasText(url)) {
+      if (!name.startsWith("http")) {
+         url = "http://" + name;
+      }
+      else {
+         url = name;
+      }
+      url += cleanPath();
+      // 采用负载均衡客户端，由FeignLoadBalancerAutoConfiguration配置
+      return (T) loadBalance(builder, context,
+            new HardCodedTarget<>(type, name, url));
+   }
+   if (StringUtils.hasText(url) && !url.startsWith("http")) {
+      url = "http://" + url;
+   }
+   String url = this.url + cleanPath();
+   Client client = getOptional(context, Client.class);
+   if (client != null) {
+      if (client instanceof LoadBalancerFeignClient) {
+         // not load balancing because we have a url,
+         // but ribbon is on the classpath, so unwrap
+         // 不采用负载均衡
+         client = ((LoadBalancerFeignClient) client).getDelegate();
+      }
+      if (client instanceof FeignBlockingLoadBalancerClient) {
+         // not load balancing because we have a url,
+         // but Spring Cloud LoadBalancer is on the classpath, so unwrap
+        // 不采用负载均衡
+         client = ((FeignBlockingLoadBalancerClient) client).getDelegate();
+      }
+      builder.client(client);
+   }
+   Targeter targeter = get(context, Targeter.class);
+   return (T) targeter.target(this, builder, context,
+         new HardCodedTarget<>(type, name, url));
+}
+```
+
+```java
+@Import({ HttpClientFeignLoadBalancerConfiguration.class,
+      OkHttpFeignLoadBalancerConfiguration.class,
+      DefaultFeignLoadBalancerConfiguration.class })
+public class FeignLoadBalancerAutoConfiguration {
+
+}
+
+```
+
+```java
+
+@Configuration(proxyBeanMethods = false)
+@ConditionalOnClass(OkHttpClient.class)
+@ConditionalOnProperty("feign.okhttp.enabled")
+@ConditionalOnBean(BlockingLoadBalancerClient.class)
+@Import(OkHttpFeignConfiguration.class)
+class OkHttpFeignLoadBalancerConfiguration {
+
+   @Bean
+   @ConditionalOnMissingBean
+   @Conditional(OnRetryNotEnabledCondition.class)
+   public Client feignClient(okhttp3.OkHttpClient okHttpClient,BlockingLoadBalancerClient loadBalancerClient) {
+      OkHttpClient delegate = new OkHttpClient(okHttpClient);
+      //装饰为 FeignBlockingLoadBalancerClient 带有负载均衡功能
+      return new FeignBlockingLoadBalancerClient(delegate, loadBalancerClient);
+   }
+
+   @Bean
+   @ConditionalOnMissingBean
+   @ConditionalOnClass(name = "org.springframework.retry.support.RetryTemplate")
+   @ConditionalOnBean(LoadBalancedRetryFactory.class)
+   @ConditionalOnProperty(value = "spring.cloud.loadbalancer.retry.enabled",
+         havingValue = "true", matchIfMissing = true)
+   public Client feignRetryClient(BlockingLoadBalancerClient loadBalancerClient,
+         okhttp3.OkHttpClient okHttpClient,
+         List<LoadBalancedRetryFactory> loadBalancedRetryFactories) {
+      AnnotationAwareOrderComparator.sort(loadBalancedRetryFactories);
+      OkHttpClient delegate = new OkHttpClient(okHttpClient);
+      return new RetryableFeignBlockingLoadBalancerClient(delegate, loadBalancerClient,
+            loadBalancedRetryFactories.get(0));
+   }
+
+}
+
+
+```
+
+
+
+每个feignclient创建一个AnnotationConfigApplicationContext
+
+```java
+protected AnnotationConfigApplicationContext createContext(String name) {
+   AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+   // 注册@feignclient指定的配置类
+   if (this.configurations.containsKey(name)) {
+      for (Class<?> configuration : this.configurations.get(name)
+            .getConfiguration()) {
+         context.register(configuration);
+      }
+   }
+  
+  // 注册缺省配置default开头的配置类，由@enableFeignclient指定的配置类
+   for (Map.Entry<String, C> entry : this.configurations.entrySet()) {
+      if (entry.getKey().startsWith("default.")) {
+         for (Class<?> configuration : entry.getValue().getConfiguration()) {
+            context.register(configuration);
+         }
+      }
+   }
+  // 注册org.springframework.cloud.openfeign.FeignClientsConfiguration和PropertyPlaceholderAutoConfiguration
+   context.register(PropertyPlaceholderAutoConfiguration.class,
+         this.defaultConfigType);
+  
+   context.getEnvironment().getPropertySources().addFirst(new MapPropertySource(
+         this.propertySourceName,
+         Collections.<String, Object>singletonMap(this.propertyName, name)));
+   if (this.parent != null) {
+      // Uses Environment from parent as well as beans
+      context.setParent(this.parent);
+      // jdk11 issue
+      // https://github.com/spring-cloud/spring-cloud-netflix/issues/3101
+      context.setClassLoader(this.parent.getClassLoader());
+   }
+   context.setDisplayName(generateDisplayName(name));
+   context.refresh();
+   return context;
+}
+```
+
+feign默认使用ribbon负载均衡器
+
+org/springframework/cloud/spring-cloud-openfeign-core/2.2.6.RELEASE/spring-cloud-openfeign-core-2.2.6.RELEASE.jar!/META-INF/spring.factories
+
+```java
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+org.springframework.cloud.openfeign.ribbon.FeignRibbonClientAutoConfiguration,\
+org.springframework.cloud.openfeign.hateoas.FeignHalAutoConfiguration,\
+org.springframework.cloud.openfeign.FeignAutoConfiguration,\
+org.springframework.cloud.openfeign.encoding.FeignAcceptGzipEncodingAutoConfiguration,\
+org.springframework.cloud.openfeign.encoding.FeignContentGzipEncodingAutoConfiguration,\
+org.springframework.cloud.openfeign.loadbalancer.FeignLoadBalancerAutoConfiguration
+```
+
+```java
+@ConditionalOnClass({ ILoadBalancer.class, Feign.class })
+@ConditionalOnProperty(value = "spring.cloud.loadbalancer.ribbon.enabled",
+      matchIfMissing = true)
+@Configuration(proxyBeanMethods = false)
+@AutoConfigureBefore(FeignAutoConfiguration.class)
+@EnableConfigurationProperties({ FeignHttpClientProperties.class })
+// Order is important here, last should be the default, first should be optional
+// see
+// https://github.com/spring-cloud/spring-cloud-netflix/issues/2086#issuecomment-316281653
+// 默认导入HttpClientFeignLoadBalancedConfiguration
+@Import({ HttpClientFeignLoadBalancedConfiguration.class,
+      OkHttpFeignLoadBalancedConfiguration.class,
+      DefaultFeignLoadBalancedConfiguration.class })
+public class FeignRibbonClientAutoConfiguration {
+
+   @Bean
+   @Primary
+   @ConditionalOnMissingBean
+   @ConditionalOnMissingClass("org.springframework.retry.support.RetryTemplate")
+   public CachingSpringLoadBalancerFactory cachingLBClientFactory(
+         SpringClientFactory factory) {
+      return new CachingSpringLoadBalancerFactory(factory);
+   }
+
+   @Bean
+   @Primary
+   @ConditionalOnMissingBean
+   @ConditionalOnClass(name = "org.springframework.retry.support.RetryTemplate")
+   public CachingSpringLoadBalancerFactory retryabeCachingLBClientFactory(
+         SpringClientFactory factory, LoadBalancedRetryFactory retryFactory) {
+      return new CachingSpringLoadBalancerFactory(factory, retryFactory);
+   }
+
+   @Bean
+   @ConditionalOnMissingBean
+   public Request.Options feignRequestOptions() {
+      return LoadBalancerFeignClient.DEFAULT_OPTIONS;
+   }
+
+}
+```
+
+```java
+@Configuration(proxyBeanMethods = false)
+@ConditionalOnClass(ApacheHttpClient.class)
+@ConditionalOnProperty(value = "feign.httpclient.enabled", matchIfMissing = true)
+@Import(HttpClientFeignConfiguration.class)
+class HttpClientFeignLoadBalancedConfiguration {
+
+   @Bean
+   @ConditionalOnMissingBean(Client.class)
+   public Client feignClient(CachingSpringLoadBalancerFactory cachingFactory,
+         SpringClientFactory clientFactory, HttpClient httpClient) {
+      ApacheHttpClient delegate = new ApacheHttpClient(httpClient);
+      return new LoadBalancerFeignClient(delegate, cachingFactory, clientFactory);
+   }
+
+}
+```
+
+org.springframework.cloud.openfeign.ribbon.LoadBalancerFeignClient#execute
+
+```java
+@Override
+public Response execute(Request request, Request.Options options) throws IOException {
+   try {
+      URI asUri = URI.create(request.url());
+      String clientName = asUri.getHost();
+      URI uriWithoutHost = cleanUrl(request.url(), clientName);
+      FeignLoadBalancer.RibbonRequest ribbonRequest = new FeignLoadBalancer.RibbonRequest(
+            this.delegate, request, uriWithoutHost);
+
+      IClientConfig requestConfig = getClientConfig(options, clientName);
+      return lbClient(clientName)
+            .executeWithLoadBalancer(ribbonRequest, requestConfig).toResponse();
+   }
+   catch (ClientException e) {
+      IOException io = findIOException(e);
+      if (io != null) {
+         throw io;
+      }
+      throw new RuntimeException(e);
+   }
+}
+```
+
+
+
+https://juejin.cn/post/6976557085571940366
 
 ### 配置隔离
 
