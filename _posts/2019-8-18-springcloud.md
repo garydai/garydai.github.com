@@ -600,7 +600,11 @@ https://juejin.cn/post/6976557085571940366
 路由、过滤、容错与回退、集群、高可用
 ## config 分布式配置
 
+　1.ConfigServer利用了SpringCloud引导机制，当主程序启动时，通过PropertySourceLocator的方法把相关配置读到当前的Environment中，同时提供了EnvironmentController使外界能够根据不同的请求获取不同格式的配置结果，由于是引导程序是核心，因此务必使用bootstrap.yml(properties)进行配置操作。
 
+　　2.SpringCloud的客户端同样利用引导，通过实现PropertySourceLocator接口在程序启动前利用RestTemplate访问ConfigServer获取到配置并加载到当前Environment中
+
+https://www.cnblogs.com/niechen/p/9068479.html
 
 ## sleuth 分布式链路跟踪 + zipkin 可视化
 
