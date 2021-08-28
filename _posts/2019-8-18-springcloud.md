@@ -7,6 +7,9 @@ title: spring cloud
 ---
 
 # spring cloud
+
+
+
 ## eureka
 服务注册
 
@@ -61,7 +64,44 @@ public class LoadBalancerAutoConfiguration {
          }
       };
    }
+  
+  
+  @Configuration(proxyBeanMethods = false)
+	@ConditionalOnMissingClass("org.springframework.retry.support.RetryTemplate")
+	static class LoadBalancerInterceptorConfig {
+
+		@Bean
+		public LoadBalancerInterceptor ribbonInterceptor(
+				LoadBalancerClient loadBalancerClient,
+				LoadBalancerRequestFactory requestFactory) {
+			return new LoadBalancerInterceptor(loadBalancerClient, requestFactory);
+		}
+
+		@Bean
+		@ConditionalOnMissingBean
+		public RestTemplateCustomizer restTemplateCustomizer(
+				final LoadBalancerInterceptor loadBalancerInterceptor) {
+			return restTemplate -> {
+				List<ClientHttpRequestInterceptor> list = new ArrayList<>(
+						restTemplate.getInterceptors());
+				list.add(loadBalancerInterceptor);
+				restTemplate.setInterceptors(list);
+			};
+		}
+
+	}
+  
 }
+```
+
+org.springframework.cloud.netflix.ribbon.RibbonAutoConfiguration
+
+```java
+	@Bean
+	@ConditionalOnMissingBean(LoadBalancerClient.class)
+	public LoadBalancerClient loadBalancerClient() {
+		return new RibbonLoadBalancerClient(springClientFactory());
+	}
 ```
 
 
@@ -221,6 +261,10 @@ void restOfInit(IClientConfig clientConfig) {
 
 ## feign
 
+![image-20210828100600154](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20210828100600154.png)
+
+
+
 类似mabtis的dao，代理http请求
 
 ```java
@@ -289,13 +333,15 @@ class FeignClientSpecification implements NamedContextFactory.Specification {
 
 
 
-beanClass=class org.springframework.cloud.openfeign.FeignClientFactoryBean
-
 
 
 #### 注册FeignClient
 
 org.springframework.cloud.openfeign.FeignClientsRegistrar#registerFeignClient
+
+beanClass=class org.springframework.cloud.openfeign.FeignClientFactoryBean
+
+
 
 ```java
 //attributes  @FeignClient中读取的配置信息
@@ -596,7 +642,34 @@ https://juejin.cn/post/6976557085571940366
 ## hystrix 熔断器
 
 方法降级、超时监听、服务熔断、服务限流
+
+![image-20210826141613514](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20210826141613514.png)
+
+
+
+org.springframework.cloud.openfeign.FeignClientsConfiguration.HystrixFeignConfiguration
+
+```java
+// FeignClientsConfiguration.java
+@Configuration
+@ConditionalOnClass({ HystrixCommand.class, HystrixFeign.class })
+protected static class HystrixFeignConfiguration {
+   @Bean
+   @Scope("prototype")
+   @ConditionalOnMissingBean
+   @ConditionalOnProperty(name = "feign.hystrix.enabled", matchIfMissing = false)
+   public Feign.Builder feignHystrixBuilder() {
+      return HystrixFeign.builder();
+   }
+}
+```
+
+![image-20210826160841546](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20210826160841546.png)
+
+http://www.saily.top/2020/04/19/springcloud/hystrix05/
+
 ## zuul 网关
+
 路由、过滤、容错与回退、集群、高可用
 ## config 分布式配置
 
