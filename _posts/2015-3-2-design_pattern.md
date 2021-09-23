@@ -884,6 +884,8 @@ Java io
 
 
 
+proxy decoration middleman 解决方案都是一个类代理给另一个类，不同的问题，但是解决方案一样，就是不同的模式
+
 ## 参考
 
 大话设计模式
