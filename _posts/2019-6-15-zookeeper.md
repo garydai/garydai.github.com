@@ -78,6 +78,14 @@ zab协议
 
 
 
+## Zab协议三个阶段：
+
+1）**选举（Fast Leader Election）**
+2）**恢复（Recovery Phase）**
+3）**广播（Broadcast Phase）**
+
+
+
 ## 服务端
 
 ### 入口
@@ -1531,6 +1539,16 @@ leader为follower服务器各自分配一个单独的队列，然后将需要广
 
 follower收到commit之后，完成事务提交
 
+
+
+1）在zookeeper集群中，数据副本的传递策略就是采用消息广播模式。zookeeper中农数据副本的同步方式与二段提交相似，但是却又不同。二段提交要求协调者必须等到所有的参与者全部反馈ACK确认消息后，再发送commit消息。要求所有的参与者要么全部成功，要么全部失败。二段提交会产生严重的阻塞问题。
+
+2）Zab协议中 Leader 等待 Follower 的ACK反馈消息是指“只要半数以上的Follower成功反馈即可，不需要收到全部Follower反馈”
+
+
+
+![image-20211021154237184](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20211021154237184.png)
+
 ## 崩溃恢复
 
 ## 选举策略
@@ -2959,7 +2977,7 @@ redis集群中：当某个master宕机之后，某个slave感知到他的master�
 
  
 
-zookeeper(一致性协议ZAB)集群选举(假设5台)：老的挂掉后，开始新的选举，先判断谁是最新事物id(zxid),如果存在一致，在判断节点id谁打谁做master，之后集群个节点的spoch值加1，这样即使老的活过来epoch值太小没有slave听他的，从而防止脑裂；【首次启动时的选举是在记电启动到刚超过一半第3台时选出节点id最大的为master】
+zookeeper(一致性协议ZAB)集群选举(假设5台)：老的挂掉后，开始新的选举，先判断谁是最新事务id(zxid),如果存在一致，再判断节点id谁打谁做master，之后集群个节点的spoch值加1，这样即使老的活过来epoch值太小没有slave听他的，从而防止脑裂；【首次启动时的选举是在记电启动到刚超过一半第3台时选出节点id最大的为master】
 
  
 
@@ -2968,3 +2986,11 @@ nacos(一致性协议raft)
 
 
 ### zk相当于redis sentinel
+
+
+
+
+
+## 参考
+
+https://www.jianshu.com/p/2bceacd60b8a

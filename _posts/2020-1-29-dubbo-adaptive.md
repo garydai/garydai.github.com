@@ -91,3 +91,5 @@ public class SimpleExt$Adaptive implements org.apache.dubbo.common.extension.ext
 
 怎么实现dubbo这种功能？
 
+用condition注解和配置
+
