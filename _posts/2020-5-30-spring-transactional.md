@@ -1112,6 +1112,23 @@ if (con.getAutoCommit()) {
 			}
 ```
 
+```java
+protected void cleanupTransactionInfo(@Nullable TransactionInfo txInfo) {
+   if (txInfo != null) {
+      txInfo.restoreThreadLocalStatus();
+   }
+}
+```
+
+```java
+private void restoreThreadLocalStatus() {
+   // Use stack to restore old transaction TransactionInfo.
+   // Will be null if none was set.
+   // 还原外层事务
+   transactionInfoHolder.set(this.oldTransactionInfo);
+}
+```
+
 总结：
 
 1. 通过注解@EnableTransactionManagement中的@Import(TransactionManagementConfigurationSelector.class)给容器中导入了两个组件，分别是：AutoProxyRegistrar和ProxyTransactionManagementConfiguration
