@@ -145,6 +145,7 @@ private TransactionStatus handleExistingTransaction(
             "Existing transaction found for transaction marked with propagation 'never'");
    }
 
+   // 即以非事务方式执行，如果当前存在逻辑事务，就把当前事务暂停，以非事务方式执行
    if (definition.getPropagationBehavior() == TransactionDefinition.PROPAGATION_NOT_SUPPORTED) {
       if (debugEnabled) {
          logger.debug("Suspending current transaction");
@@ -157,12 +158,15 @@ private TransactionStatus handleExistingTransaction(
    }
 
    if (definition.getPropagationBehavior() == TransactionDefinition.PROPAGATION_REQUIRES_NEW) {
+     // 创建新的逻辑事务，使用PROPAGATION_REQUIRES_NEW指定，表示每次都创建新的逻辑事务（物理事务也是不同的）
       if (debugEnabled) {
          logger.debug("Suspending current transaction, creating new transaction with name [" +
                definition.getName() + "]");
       }
+      // 暂停
       SuspendedResourcesHolder suspendedResources = suspend(transaction);
       try {
+        	// 开启事务
          return startTransaction(definition, transaction, debugEnabled, suspendedResources);
       }
       catch (RuntimeException | Error beginEx) {
@@ -224,6 +228,166 @@ private TransactionStatus handleExistingTransaction(
    return prepareTransactionStatus(definition, transaction, false, newSynchronization, debugEnabled, null);
 }
 ```
+
+```java
+/**
+ * Start a new transaction.
+ */
+private TransactionStatus startTransaction(TransactionDefinition definition, Object transaction,
+      boolean debugEnabled, @Nullable SuspendedResourcesHolder suspendedResources) {
+
+   boolean newSynchronization = (getTransactionSynchronization() != SYNCHRONIZATION_NEVER);
+   DefaultTransactionStatus status = newTransactionStatus(
+         definition, transaction, true, newSynchronization, debugEnabled, suspendedResources);
+   doBegin(transaction, definition);
+   prepareSynchronization(status, definition);
+   return status;
+}
+```
+
+```java
+/**
+ * Process an actual commit.
+ * Rollback-only flags have already been checked and applied.
+ * @param status object representing the transaction
+ * @throws TransactionException in case of commit failure
+ */
+private void processCommit(DefaultTransactionStatus status) throws TransactionException {
+   try {
+      boolean beforeCompletionInvoked = false;
+
+      try {
+         boolean unexpectedRollback = false;
+         prepareForCommit(status);
+         triggerBeforeCommit(status);
+         triggerBeforeCompletion(status);
+         beforeCompletionInvoked = true;
+
+         if (status.hasSavepoint()) {
+            if (status.isDebug()) {
+               logger.debug("Releasing transaction savepoint");
+            }
+            unexpectedRollback = status.isGlobalRollbackOnly();
+            status.releaseHeldSavepoint();
+         }
+         else if (status.isNewTransaction()) {
+           // 是最外层事务，提交事务
+            if (status.isDebug()) {
+               logger.debug("Initiating transaction commit");
+            }
+            unexpectedRollback = status.isGlobalRollbackOnly();
+            doCommit(status);
+         }
+         else if (isFailEarlyOnGlobalRollbackOnly()) {
+            unexpectedRollback = status.isGlobalRollbackOnly();
+         }
+
+         // Throw UnexpectedRollbackException if we have a global rollback-only
+         // marker but still didn't get a corresponding exception from commit.
+         if (unexpectedRollback) {
+            throw new UnexpectedRollbackException(
+                  "Transaction silently rolled back because it has been marked as rollback-only");
+         }
+      }
+      catch (UnexpectedRollbackException ex) {
+         // can only be caused by doCommit
+         triggerAfterCompletion(status, TransactionSynchronization.STATUS_ROLLED_BACK);
+         throw ex;
+      }
+      catch (TransactionException ex) {
+         // can only be caused by doCommit
+         if (isRollbackOnCommitFailure()) {
+            doRollbackOnCommitException(status, ex);
+         }
+         else {
+            triggerAfterCompletion(status, TransactionSynchronization.STATUS_UNKNOWN);
+         }
+         throw ex;
+      }
+      catch (RuntimeException | Error ex) {
+         if (!beforeCompletionInvoked) {
+            triggerBeforeCompletion(status);
+         }
+         doRollbackOnCommitException(status, ex);
+         throw ex;
+      }
+
+      // Trigger afterCommit callbacks, with an exception thrown there
+      // propagated to callers but the transaction still considered as committed.
+      try {
+         triggerAfterCommit(status);
+      }
+      finally {
+         triggerAfterCompletion(status, TransactionSynchronization.STATUS_COMMITTED);
+      }
+
+   }
+   finally {
+      cleanupAfterCompletion(status);
+   }
+}
+```
+
+```java
+/**
+ * Clean up after completion, clearing synchronization if necessary,
+ * and invoking doCleanupAfterCompletion.
+ * @param status object representing the transaction
+ * @see #doCleanupAfterCompletion
+ */
+private void cleanupAfterCompletion(DefaultTransactionStatus status) {
+   status.setCompleted();
+   if (status.isNewSynchronization()) {
+      TransactionSynchronizationManager.clear();
+   }
+   if (status.isNewTransaction()) {
+      doCleanupAfterCompletion(status.getTransaction());
+   }
+   if (status.getSuspendedResources() != null) {
+      if (status.isDebug()) {
+         logger.debug("Resuming suspended transaction after completion of inner transaction");
+      }
+      Object transaction = (status.hasTransaction() ? status.getTransaction() : null);
+      resume(transaction, (SuspendedResourcesHolder) status.getSuspendedResources());
+   }
+}
+```
+
+```java
+@Override
+protected void doCleanupAfterCompletion(Object transaction) {
+   DataSourceTransactionObject txObject = (DataSourceTransactionObject) transaction;
+
+   // Remove the connection holder from the thread, if exposed.
+   if (txObject.isNewConnectionHolder()) {
+      TransactionSynchronizationManager.unbindResource(obtainDataSource());
+   }
+
+   // Reset connection.
+   Connection con = txObject.getConnectionHolder().getConnection();
+   try {
+      if (txObject.isMustRestoreAutoCommit()) {
+         con.setAutoCommit(true);
+      }
+      DataSourceUtils.resetConnectionAfterTransaction(
+            con, txObject.getPreviousIsolationLevel(), txObject.isReadOnly());
+   }
+   catch (Throwable ex) {
+      logger.debug("Could not reset JDBC Connection after transaction", ex);
+   }
+
+   if (txObject.isNewConnectionHolder()) {
+      if (logger.isDebugEnabled()) {
+         logger.debug("Releasing JDBC Connection [" + con + "] after transaction");
+      }
+      DataSourceUtils.releaseConnection(con, this.dataSource);
+   }
+
+   txObject.getConnectionHolder().clear();
+}
+```
+
+![image-20211031160411601](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20211031160411601.png)
 
 ## isolation
 
@@ -862,7 +1026,71 @@ org.springframework.transaction.interceptor.TransactionAspectSupport#createTrans
 
 org.springframework.transaction.support.AbstractPlatformTransactionManager#getTransaction
 
+```java
+public final TransactionStatus getTransaction(@Nullable TransactionDefinition definition)
+      throws TransactionException {
+
+   // Use defaults if no transaction definition given.
+   TransactionDefinition def = (definition != null ? definition : TransactionDefinition.withDefaults());
+
+   Object transaction = doGetTransaction();
+   boolean debugEnabled = logger.isDebugEnabled();
+
+   if (isExistingTransaction(transaction)) {
+      // Existing transaction found -> check propagation behavior to find out how to behave.
+      return handleExistingTransaction(def, transaction, debugEnabled);
+   }
+
+   // Check definition settings for new transaction.
+   if (def.getTimeout() < TransactionDefinition.TIMEOUT_DEFAULT) {
+      throw new InvalidTimeoutException("Invalid transaction timeout", def.getTimeout());
+   }
+
+   // No existing transaction found -> check propagation behavior to find out how to proceed.
+   if (def.getPropagationBehavior() == TransactionDefinition.PROPAGATION_MANDATORY) {
+      throw new IllegalTransactionStateException(
+            "No existing transaction found for transaction marked with propagation 'mandatory'");
+   }
+   else if (def.getPropagationBehavior() == TransactionDefinition.PROPAGATION_REQUIRED ||
+         def.getPropagationBehavior() == TransactionDefinition.PROPAGATION_REQUIRES_NEW ||
+         def.getPropagationBehavior() == TransactionDefinition.PROPAGATION_NESTED) {
+      SuspendedResourcesHolder suspendedResources = suspend(null);
+      if (debugEnabled) {
+         logger.debug("Creating new transaction with name [" + def.getName() + "]: " + def);
+      }
+      try {
+         return startTransaction(def, transaction, debugEnabled, suspendedResources);
+      }
+      catch (RuntimeException | Error ex) {
+         resume(null, suspendedResources);
+         throw ex;
+      }
+   }
+   else {
+      // Create "empty" transaction: no actual transaction, but potentially synchronization.
+      if (def.getIsolationLevel() != TransactionDefinition.ISOLATION_DEFAULT && logger.isWarnEnabled()) {
+         logger.warn("Custom isolation level specified but no actual transaction initiated; " +
+               "isolation level will effectively be ignored: " + def);
+      }
+      boolean newSynchronization = (getTransactionSynchronization() == SYNCHRONIZATION_ALWAYS);
+      return prepareTransactionStatus(def, null, true, newSynchronization, debugEnabled, null);
+   }
+}
+```
+
 ​	org.springframework.jdbc.datasource.DataSourceTransactionManager#doGetTransaction
+
+```java
+protected Object doGetTransaction() {
+   DataSourceTransactionObject txObject = new DataSourceTransactionObject();
+   txObject.setSavepointAllowed(isNestedTransactionAllowed());
+   // 如果缓存里没有，返回null
+   ConnectionHolder conHolder =
+         (ConnectionHolder) TransactionSynchronizationManager.getResource(obtainDataSource());
+   txObject.setConnectionHolder(conHolder, false);
+   return txObject;
+}
+```
 
 ​	org.springframework.transaction.support.AbstractPlatformTransactionManager#startTransaction
 
@@ -1456,6 +1684,7 @@ public static Connection getConnection(DataSource dataSource) throws CannotGetJd
 					holderToUse.setConnection(con);
 				}
 				holderToUse.requested();
+        // 加入新同步器到当前线程
 				TransactionSynchronizationManager.registerSynchronization(
 						new ConnectionSynchronization(holderToUse, dataSource));
 				holderToUse.setSynchronizedWithTransaction(true);
@@ -1587,3 +1816,4 @@ https://zhuanlan.zhihu.com/p/54067384
 https://juejin.cn/post/6844903921463328776
 
 https://www.cnblogs.com/micrari/p/7612962.html
+
