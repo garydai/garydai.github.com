@@ -1765,6 +1765,7 @@ public Connection getConnection() throws SQLException {
 private void openConnection() throws SQLException {
   this.connection = DataSourceUtils.getConnection(this.dataSource);
   this.autoCommit = this.connection.getAutoCommit();
+  // 是否是被@transactional注解，如果是的话，不会提交事务
   this.isConnectionTransactional = DataSourceUtils.isConnectionTransactional(this.connection, this.dataSource);
 
   LOGGER.debug(() -> "JDBC Connection [" + this.connection + "] will"
@@ -1822,6 +1823,64 @@ public static Connection doGetConnection(DataSource dataSource) throws SQLExcept
 }
 ```
 
+```javascript
+1、TransactionInterceptor拦截m1方法
+2、获取m1方法的事务配置信息：事务管理器bean名称：transactionManager1，事务传播行为：REQUIRED
+3、从spring容器中找到事务管理器transactionManager1，然后问一下transactionManager1，当前上下文中有没有事务，显然现在是没有的
+4、创建一个新的事务
+    //获取事务管理器对应的数据源，即dataSource1
+    DataSource dataSource1 = transactionManager1.getDataSource();
+    //即从dataSource1中获取一个连接
+    Connection conn = transactionManager1.dataSource1.getConnection();
+    //开启事务手动提交
+    conn.setAutoCommit(false);
+    //将dataSource1->conn放入map中
+    map.put(dataSource1,conn);
+ //将map丢到上面的resources ThreadLocal中
+    resources.set(map);
+5、下面来带m1放的第一行代码：this.jdbcTemplate1.update("insert into user1(name) VALUES ('张三')");
+6、jdbctemplate内部需要获取数据连接，获取连接的过程
+    //从resources这个ThreadLocal中获取到map
+    Map map = resources.get();
+    //通过jdbcTemplate1.datasource从map看一下没有可用的连接
+    Connection conn = map.get(jdbcTemplate1.datasource);
+    //如果从map没有找到连接，那么重新从jdbcTemplate1.datasource中获取一个
+    //大家应该可以看出来，jdbcTemplate1和transactionManager1指定的是同一个dataSource，索引这个地方conn是不为null的
+    if(conn==null){
+     conn = jdbcTemplate1.datasource.getConnection();
+    }
+7、通过上面第6步获取的conn执行db操作，插入张三
+8、下面来到m1方法的第2行代码：service2.m2();
+9、m2方法上面也有@Transactional,TransactionInterceptor拦截m2方法
+10、获取m2方法的事务配置信息：事务管理器bean名称：transactionManager1，事务传播行为：REQUIRED
+11、从spring容器中找到事务管理器transactionManager1，然后问一下transactionManager1，当前上下文中有没有事务，显然是是有的，m1开启的事务正在执行中，所以m2方法就直接加入这个事务了
+12、下面来带m2放的第一行代码：this.jdbcTemplate1.update("insert into user1(name) VALUES ('李四')");
+13、jdbctemplate内部需要获取数据连接，获取连接的过程
+    //从resources这个ThreadLocal中获取到map
+    Map map = resources.get();
+    //通过jdbcTemplate1.datasource从map看一下没有可用的连接
+    Connection conn = map.get(jdbcTemplate1.datasource);
+    //如果从map没有找到连接，那么重新从jdbcTemplate1.datasource中获取一个
+    //大家应该可以看出来，jdbcTemplate1和transactionManager1指定的是同一个dataSource，索引这个地方conn是不为null的
+    if(conn==null){
+        conn = jdbcTemplate1.datasource.getConnection();
+    }
+14、通过第13步获取的conn执行db操作，插入李四
+15、最终TransactionInterceptor发现2个方法都执行完毕了，没有异常，执行事务提交操作，如下
+    //获取事务管理器对应的数据源，即dataSource1
+    DataSource dataSource1 = transactionManager1.getDataSource();
+    //从resources这个ThreadLocal中获取到map
+    Map map = resources.get();
+    //通过map拿到事务管理器开启的连接
+    Connection conn = map.get(dataSource1);
+    //通过conn提交事务
+    conn.commit();
+    //管理连接
+    conn.close();
+16、清理ThreadLocal中的连接：通过map.remove(dataSource1)将连接从resource ThreadLocal中移除
+17、清理事务
+```
+
 ## 参考
 
 https://segmentfault.com/a/1190000018001752
@@ -1833,4 +1892,6 @@ https://zhuanlan.zhihu.com/p/54067384
 https://juejin.cn/post/6844903921463328776
 
 https://www.cnblogs.com/micrari/p/7612962.html
+
+https://cloud.tencent.com/developer/article/1708681
 
