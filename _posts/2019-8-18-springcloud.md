@@ -401,7 +401,6 @@ public Object getObject() throws Exception {
    // context 工厂FeignContext extends NamedContextFactory<FeignClientSpecification> 
    FeignContext context = applicationContext.getBean(FeignContext.class);
    //每个feignclient创建一个子容器applicationcontext
-   Feign.Builder builder = feign(context);
 
    if (!StringUtils.hasText(url)) {
       if (!name.startsWith("http")) {
@@ -439,6 +438,36 @@ public Object getObject() throws Exception {
    return (T) targeter.target(this, builder, context,
          new HardCodedTarget<>(type, name, url));
 }
+```
+
+```java
+protected Feign.Builder feign(FeignContext context) {
+   FeignLoggerFactory loggerFactory = get(context, FeignLoggerFactory.class);
+   Logger logger = loggerFactory.create(type);
+
+   // @formatter:off
+   Feign.Builder builder = get(context, Feign.Builder.class)
+         // required values
+         .logger(logger)
+         .encoder(get(context, Encoder.class))
+         .decoder(get(context, Decoder.class))
+         .contract(get(context, Contract.class));
+   // @formatter:on
+
+   configureFeign(context, builder);
+
+   return builder;
+}
+
+protected <T> T get(FeignContext context, Class<T> type) {
+    // 从容器包括父容器里找Feign.Builder.class
+		T instance = context.getInstance(contextId, type);
+		if (instance == null) {
+			throw new IllegalStateException(
+					"No bean found of type " + type + " for " + contextId);
+		}
+		return instance;
+	}
 ```
 
 ```java

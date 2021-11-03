@@ -1,5 +1,5 @@
 ---
-ddate: 2018-1-23
+ ddate: 2018-1-23
 layout: default
 
 title: spring boot
@@ -10,7 +10,7 @@ title: spring boot
 
 SpringBoot 中运用了大量的 Spring 注解，其注解大致分为这几类：
 
-1. 配置注解：@Configuration、@ComponentScan、@Import、@Conditional、Bean
+1. 配置注解：@Configuration、@ComponentScan、@Import、@Conditional、@Bean
 2. 模式注解：@Componnt、@Repository、@Service、@Controller
 3. @Enable 模块注解：@EnableWebMvc、@EnableTransactionManagement、@EnableWebFlux
 
@@ -35,9 +35,7 @@ AOP（面向切面编程）
 
 零xml配置
 
-application.properties是spring boot默认的配置文件，spring boot默认会在以下两个路径搜索并加载这个文件
-
-src\main\resources
+​	src\main\resources
 
 src\main\resources\config
 
