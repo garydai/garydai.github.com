@@ -142,15 +142,16 @@ public ConfigurableApplicationContext run(String... args) {
             applicationArguments);
       configureIgnoreBeanInfo(environment);
       Banner printedBanner = printBanner(environment);
-     
+      // 创建spring容器，和web服务器
       context = createApplicationContext();
+     
       exceptionReporters = getSpringFactoriesInstances(
             SpringBootExceptionReporter.class,
             new Class[] { ConfigurableApplicationContext.class }, context);
      
       prepareContext(context, environment, listeners, applicationArguments,
             printedBanner);
-      // 创建spring容器，和web服务器
+     
       refreshContext(context);
       afterRefresh(context, applicationArguments);
       stopWatch.stop();
@@ -174,6 +175,57 @@ public ConfigurableApplicationContext run(String... args) {
       throw new IllegalStateException(ex);
    }
    return context;
+}
+```
+
+```java
+private ConfigurableEnvironment prepareEnvironment(SpringApplicationRunListeners listeners,
+      ApplicationArguments applicationArguments) {
+   // Create and configure the environment
+   ConfigurableEnvironment environment = getOrCreateEnvironment();
+   configureEnvironment(environment, applicationArguments.getSourceArgs());
+   ConfigurationPropertySources.attach(environment);
+   listeners.environmentPrepared(environment);
+   bindToSpringApplication(environment);
+   if (!this.isCustomEnvironment) {
+      environment = new EnvironmentConverter(getClassLoader()).convertEnvironmentIfNecessary(environment,
+            deduceEnvironmentClass());
+   }
+   ConfigurationPropertySources.attach(environment);
+   return environment;
+}
+```
+
+```java
+private void prepareContext(ConfigurableApplicationContext context, ConfigurableEnvironment environment,
+      SpringApplicationRunListeners listeners, ApplicationArguments applicationArguments, Banner printedBanner) {
+   context.setEnvironment(environment);
+   postProcessApplicationContext(context);
+   // 执行initializers
+   applyInitializers(context);
+   listeners.contextPrepared(context);
+   if (this.logStartupInfo) {
+      logStartupInfo(context.getParent() == null);
+      logStartupProfileInfo(context);
+   }
+   // Add boot specific singleton beans
+   ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
+   beanFactory.registerSingleton("springApplicationArguments", applicationArguments);
+   if (printedBanner != null) {
+      beanFactory.registerSingleton("springBootBanner", printedBanner);
+   }
+   if (beanFactory instanceof DefaultListableBeanFactory) {
+      ((DefaultListableBeanFactory) beanFactory)
+            .setAllowBeanDefinitionOverriding(this.allowBeanDefinitionOverriding);
+   }
+   if (this.lazyInitialization) {
+      context.addBeanFactoryPostProcessor(new LazyInitializationBeanFactoryPostProcessor());
+   }
+   // Load the sources
+   Set<Object> sources = getAllSources();
+   Assert.notEmpty(sources, "Sources must not be empty");
+   load(context, sources.toArray(new Object[0]));
+   listeners.contextLoaded(context);
 }
 ```
 
@@ -1273,7 +1325,72 @@ private void addAncestorInitializer(SpringApplication application,
 
 ![image-20210806155448364](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20210806155448364.png)
 
+
+
+```java
+private void load(PropertySourceLoader loader, String location, Profile profile, DocumentFilter filter,
+      DocumentConsumer consumer) {
+   Resource[] resources = getResources(location);
+   for (Resource resource : resources) {
+      try {
+         if (resource == null || !resource.exists()) {
+            if (this.logger.isTraceEnabled()) {
+               StringBuilder description = getDescription("Skipped missing config ", location, resource,
+                     profile);
+               this.logger.trace(description);
+            }
+            continue;
+         }
+         if (!StringUtils.hasText(StringUtils.getFilenameExtension(resource.getFilename()))) {
+            if (this.logger.isTraceEnabled()) {
+               StringBuilder description = getDescription("Skipped empty config extension ", location,
+                     resource, profile);
+               this.logger.trace(description);
+            }
+            continue;
+         }
+         String name = "applicationConfig: [" + getLocationName(location, resource) + "]";
+         // 加载application.yml配置文件
+         List<Document> documents = loadDocuments(loader, name, resource);
+         if (CollectionUtils.isEmpty(documents)) {
+            if (this.logger.isTraceEnabled()) {
+               StringBuilder description = getDescription("Skipped unloaded config ", location, resource,
+                     profile);
+               this.logger.trace(description);
+            }
+            continue;
+         }
+         List<Document> loaded = new ArrayList<>();
+         for (Document document : documents) {
+            if (filter.match(document)) {
+               // 获取active profile，放入this.profiles，外围会死循环this.profiles
+               addActiveProfiles(document.getActiveProfiles());
+               addIncludedProfiles(document.getIncludeProfiles());
+               loaded.add(document);
+            }
+         }
+         Collections.reverse(loaded);
+         if (!loaded.isEmpty()) {
+            loaded.forEach((document) -> consumer.accept(profile, document));
+            if (this.logger.isDebugEnabled()) {
+               StringBuilder description = getDescription("Loaded config file ", location, resource,
+                     profile);
+               this.logger.debug(description);
+            }
+         }
+      }
+      catch (Exception ex) {
+         StringBuilder description = getDescription("Failed to load property source from ", location,
+               resource, profile);
+         throw new IllegalStateException(description.toString(), ex);
+      }
+   }
+}
+```
+
 ![image-20210806155333014](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20210806155333014.png)
+
+
 
 ![image-20210806155250556](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20210806155250556.png)
 
@@ -1467,6 +1584,60 @@ public class BootstrapImportSelector implements EnvironmentAware, DeferredImport
 		return classNames;
 	}
 	}
+```
+
+org.springframework.cloud.bootstrap.BootstrapApplicationListener#onApplicationEvent
+
+```java
+public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
+   ConfigurableEnvironment environment = event.getEnvironment();
+   if (!environment.getProperty("spring.cloud.bootstrap.enabled", Boolean.class,
+         true)) {
+      return;
+   }
+   // don't listen to events in a bootstrap context
+   if (environment.getPropertySources().contains(BOOTSTRAP_PROPERTY_SOURCE_NAME)) {
+      return;
+   }
+   ConfigurableApplicationContext context = null;
+   String configName = environment
+         .resolvePlaceholders("${spring.cloud.bootstrap.name:bootstrap}");
+   for (ApplicationContextInitializer<?> initializer : event.getSpringApplication()
+         .getInitializers()) {
+      if (initializer instanceof ParentContextApplicationContextInitializer) {
+         context = findBootstrapContext(
+               (ParentContextApplicationContextInitializer) initializer,
+               configName);
+      }
+   }
+   if (context == null) {
+      context = bootstrapServiceContext(environment, event.getSpringApplication(),
+            configName);
+      event.getSpringApplication()
+            .addListeners(new CloseContextOnFailureApplicationListener(context));
+   }
+	 // 从springcloud工厂里拿出ApplicationContextInitializer.class，设置springboot的Initializers里，
+   apply(context, event.getSpringApplication(), environment);
+}
+```
+
+org.springframework.cloud.bootstrap.BootstrapApplicationListener#apply
+
+```java
+private void apply(ConfigurableApplicationContext context,
+      SpringApplication application, ConfigurableEnvironment environment) {
+   if (application.getAllSources().contains(BootstrapMarkerConfiguration.class)) {
+      return;
+   }
+   application.addPrimarySources(Arrays.asList(BootstrapMarkerConfiguration.class));
+   @SuppressWarnings("rawtypes")
+   Set target = new LinkedHashSet<>(application.getInitializers());
+   // 将PropertySourceBootstrapConfiguration放入initializers
+   target.addAll(
+         getOrderedBeansOfType(context, ApplicationContextInitializer.class));
+   application.setInitializers(target);
+   addBootstrapDecryptInitializer(application);
+}
 ```
 
 此类会将springcloud中bootstrap上下文需要加载的组件注入到IOC容器，其spring.factories配置文件中的配置key为org.springframework.cloud.bootstrap.BootstrapConfiguration。
