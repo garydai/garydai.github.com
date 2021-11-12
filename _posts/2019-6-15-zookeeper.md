@@ -81,7 +81,7 @@ zab协议
 ## Zab协议三个阶段：
 
 1）**选举（Fast Leader Election）**
-2）**恢复（Recovery Phase）**
+2）**崩溃恢复（Recovery Phase）**
 3）**广播（Broadcast Phase）**
 
 
@@ -1446,6 +1446,150 @@ protected void pRequest(Request request) throws RequestProcessorException {
 4. 返回结果
 
 
+
+Leader上维护两个字段CommitProcessor和PrepRequestProcessor。建立的Processor处理链如下：
+
+firstProcessor：LeaderRequestProcessor → PrepRequestProcessor(Thread) → ProposalRequestProcessor → CommitProcessor(Thread) → ToBeAppliedRequestProcessor → FinalRequestProcessor
+
+而在ProposalRequestProcessor内部会维护一个SyncRequestProcessor，包含一条新的Processor链：SyncRequestProcessor(Thread) → AckRequestProcessor。这个Processor链并没有与Leader上的链连接起来。
+
+Learner上会维护两个字段CommitProcessor和SyncRequestProcessor。Follower和Observer继承自Learner。
+
+Follower上建立的Processor链如下：
+
+firstProcessor：FollowerRequestProcessor(Thread) → CommitProcessor(Thread) → FinalRequestProcessor
+
+同时Follower上也会有一个额外的Processor链：SyncRequestProcessor(Thread) → SendAckRequestProcessor
+
+Observer上建立的Processor链如下：
+
+firstProcessor：ObserverRequestProcessor(Thread) → CommitProcessor(Thread) → FinalRequestProcessor
+
+Observer上默认开启了落盘机制，也就是会实例化一个SyncRequestProcessor，没有与上述Processor链连接。
+
+
+
+#### Leader上的读请求处理
+
+LeaderServer收到读请求后提交到firstProcessor，即LeaderRequestProcessor处理，各个Processor的处理如下：
+
+- LeaderRequestProcessor：检查是否是本地的请求，是则创建一个虚拟的节点和会话连接，否则直接提交到下一个Processor。
+- PrepRequestProcessor：添加请求到LinkedBlockingQueue中，线程执行一个死循环，从阻塞队列中取出队首的请求处理。检查会话连接，读请求的Hdr和Txn置为null。更新请求的zxid为当前Server的zxid。
+- ProposalRequestProcessor：读请求直接发送到下一个processor处理。
+- CommitProcessor：请求添加到阻塞队列queuedRequests中等待处理（其中的Request暂称为queuedRequest），线程执行一个死循环，等到queuedRequests中有Request时取出。读请求的话，检查request所属的session连接对应的pendingRequests（这是一个LinkedList类型）中是否有数据，如果有，将读请求添加到末尾，否则直接传递到下一个Processor。同时，顺序检查pendingRequests的Request，如果是读请求，依次传递到下一个Processor直到pendingRequest空或者第一个请求是写请求。请求的传递需要通过workpool调度，异步执行下保证每次只传递一个request到下一个request。
+- ToBeAppliedRequestProcessor：读请求直接传递给下一个Processor。
+- FinalRequestProcessor：在ZKDatabase中执行请求，根据Request中的Cnxn回复结果给Client。
+
+#### Follower上的读请求处理
+
+FollowerServer收到读请求后提交到firstProcessor，即FollowerRequestProcessor处理，各个Processor的处理如下：
+
+- FollowerRequestProcessor：检查是否是本地请求，是则创建一个虚拟的节点和会话连接。将request添加到LinkedBlockingQueue队列queuedRequest中。线程执行一个死循环，从queuedRequest中取出request，读请求直接传送到下一个processor。
+- CommitProcessor：处理同Leader。
+- FinalRequestProcessor：处理同Leader。
+
+Observer上的读请求与Follower上的读请求处理流程相同。
+
+可以看出，读请求在Follower和Leader上的步骤是基本类似的，FinalRequestProcessor之前的处理都没有很难的地方，统一在FinalRequestProcessor中执行ZKDatabase的读操作，然后由ServerCnxn回复Client。
+
+#### Leader上的写请求处理
+
+写请求需要同步更新Leader和Learner上的ZkDatabase，所以会存在两者之间的交互。落盘到ZkDataBase的步骤在SyncRequestProcessor中执行。
+
+Leader上接收到写请求，进入Processor处理链的流程如下：
+
+- LeaderRequestProcessor：检查是否是本地的请求，是则创建一个虚拟的节点和会话连接，否则直接提交到下一个Processor。（与读请求相同）
+- PrepRequestProcessor：添加请求到LinkedBlockingQueue中，线程执行一个死循环，从阻塞队列中取出队首的请求处理。检查会话连接，写请求需要初始化Hdr和Txn，Hdr对应TxnHeader，记录了request所属的会话连接、client的ID、Server上的zxid、当前时间、操作类型；Txn根据操作的类型实例化为不同的对象。随后，检查内存中的ZKDatabase是否包含该路径的数据节点，合法则获取父节点及当前节点，将父节点和当前节点分别生成的ChangeRecord添加到ZKDatabase的outstanding队列中。然后添加Request到下一个Processor。
+- ProposalRequestProcessor：直接传递给下一个processor，写请求同时推送给所有的Learner节点，然后添加到另外一条Processor处理链的起始SyncRequestProcessor中。推送时，由Leader调用propose()方法，通过一个QuorumPacket对象（类型为Leader.PROPOSAL）发送。然后，生成一个Proposal对象，包含packet和request，添加到Leader上的outstandingProposals中。
+  - SyncRequestProcessor：添加Request到阻塞队列queuedRequest中，线程执行一个死循环，从queuedRequest中读取Request，然后写入磁盘上的ZKDatabase和log。将处理完的request添加到toFlush中。调用flush()方法一一传递给下一个processor。
+  - AckRequestProcessor：直接调用Leader的processAck()方法，模拟发送一个ACK消息给Leader，告知Leader已经落盘完成。其他的Follower也会在落盘完成后发送Leader.ACK消息给Leader，Leader记录落盘完成的节点。当完成的节点数超过Quorum数量的一半后，从outstandingProposals中取出发送的Proposal，检查Proposal中的Request是否已经被认证commit，否则从outstandingProposal中移除Proposal并添加到toBeApplied队列，同时添加Proposal中的request到CommitProcessor（也就是流程的下一个Processor）中的committedRequest队列中，同时发送一个QuorumPacket对象（类型为Leader.COMMIT)给所有的Learner。
+- CommitProcessor：注意到从ProposalRequestProcessor传过来的Request是添加到queuedRequest队列中，而Leader的processACK()方法是将认证完成的Request添加到committedProcessor中。这时写请求与读请求不同的地方。同样是循环从queuedRequest中读取Request，读请求可以直接处理，但是写请求需要添加到pendingRequests中，每个session对应更有一个pendingRequest的请求队列。当committedProcessor中有Request时，取出相应session的pendingRequest，对比cxid是否相等，相等的话证明可以认证该Request，因此将pendingRequest交付给下一个Processor执行。注意，这里交付的是pendingRequest，也就是从ProposalRequestProcessor传过来的request，而不是committedRequest中的对象。
+- ToBeAppliedRequestProcessor：直接交付给下面的FinalRequestProcessor。写请求的话需要更新toBeApplied队列，表明该写请求已经交付完成。
+- FinalRequestProcessor：在ZKDatabase中执行请求，根据Request中的ServerCnxn回复Client。
+
+可以看出，写请求比较复杂，但是可以通过其中的几个关键队列和数据结构来描述写请求的处理流程：Proposal，是指Leader发送给Learner的一个建议，建议所有节点都更新磁盘数据，初始Proposal位于outstandingProposal中，当半数节点落盘完成后，将proposal移交到toBeApplied中表示需要认证交付的写请求；CommitProcessor最为复杂，负责认证Proposal的数据确实落到磁盘了，待认证的Request首先放在queuedRequest中待处理，处理到写请求时添加到pendingRequest中等待认证，当Leader确认半数落盘完成后提交Request到committedRequest中，由CommitProcessor对比两个队列中的当前request是否相同，相同则表示认证完成可以交付。
+
+Leader上的写请求处理流程如下：
+
+[![image](http://p1.bqimg.com/4851/f7f57673bef052f1.png)](http://p1.bqimg.com/4851/f7f57673bef052f1.png)image
+
+这其中还有一点需要详细描述的是：Leader发送Proposal给Learner后，Learner如何处理该请求。Learner收到QuorumPacket类型的是Leader.PROPOSAL时，调用FollowerZookeeperServer的logRequest()方法。生成一个新的Request，添加到pendingTxns中，然后调用SyncRequestProcessor处理该Request。因此处理的链是额外的那一条Processor链，如下：
+
+- SyncRequestProcessor：处理写请求的方式同Leader上的SyncRequestProcessor。传入下一个Processor。
+- SendAckRequestProcessor：回复一个QuorumPacket对象（类型为Leader.ACK）给Leader。
+
+经过两个Processor的处理，Follower在pendingRequest中维护着刚刚生成的Request，这个Request还需要被认证，因此当它收到Leader发回来的Leader.COMMIT类型的QuorumPacket时，只需要Leader返回的zxid，对比pendingRequest中的zxid，如果相同表示数据是正确的，否则报错，因为Follower上写数据与Leader已经不一致了。移除pendingTxns中的request并交给CommitProcessor处理。从前面的CommitProcessor看出，该Request添加到committedProcessor中，由于这个request的sessionID并没有保存在FollowerZookeeperServer上，所以这个request直接交付给FinalRequestProcessor。FinalRequestProcessor更新完内存数据库后，由于该Request的Cnxn为null，所以无需做response。
+
+Follower上针对Leader上的Proposal的处理必须依赖两个消息Leader.PROPOSAL和Leader.COMMIT，只有它收到这两个消息后才会更新自己的磁盘和内存数据。
+
+#### Follower上的写请求处理
+
+Follower上的处理和Leader上只有些许不同，流程上有一段是重复的。Request的处理流程如下:
+
+- FollowerRequestProcessor：检查是否是本地请求，是则创建一个虚拟的节点和会话连接。将request添加到LinkedBlockingQueue队列queuedRequest中。线程执行一个死循环，从queuedRequest中取出request，读请求直接传送到下一个processor。但是写请求不同，首先添加到pendingSync队列中，然后Follower调用request()方法发送一个QuorumPacket给Leader，类型为Leader.REQUEST。Leader的LearnerHandler接收到该Learner发送的REQUEST消息后，生产一个新的Request，直接交付给PrepRequestProcessor执行，执行方式和Leader上的一样。
+- CommitRequestProcessor：同样，来自于FollowerRequestProcessor的request被添加到queuedRequest中，在循环处理时被添加到pendingRequest中等待认证。当Follower收到Leader.COMMIT消息后，与上文不同的是：这个request会和committedRequest中的request对比一下，然后再提交pendingRequest中的request到FinalRequestProcessor。注意到这里committedRequest中request是一个临时的request，交付的是pendingRequest中的request。
+- FinalRequestProcessor：由于CommitRequestProcessor传过来的request有ServerCnxn，所以更新完内存数据库后，需要response。
+
+Follower上的写请求实际上也就是转交给了Leader，在Leader上转交的写请求是同样的处理方式，只是不需要在Leader上response，而是在follower上response。Follower上会在SyncRequestProcessor到CommitRequestProcessor间生成一个临时的Request，用于认证。并且，request的zxid统一由Leader规划指定，Follower上只记住它最后处理的Request的zxid即可。
+
+
+
+org.apache.zookeeper.server.PrepRequestProcessor#processRequest
+
+```java
+public void processRequest(Request request) {
+    request.prepQueueStartTime = Time.currentElapsedTime();
+    // 将请求放入队列
+    submittedRequests.add(request);
+    ServerMetrics.getMetrics().PREP_PROCESSOR_QUEUED.add(1);
+}
+
+org.apache.zookeeper.server.PrepRequestProcessor#run
+public void run() {
+        LOG.info(String.format("PrepRequestProcessor (sid:%d) started, reconfigEnabled=%s", zks.getServerId(), zks.reconfigEnabled));
+        try {
+            while (true) {
+                ServerMetrics.getMetrics().PREP_PROCESSOR_QUEUE_SIZE.add(submittedRequests.size());
+                Request request = submittedRequests.take();
+                ServerMetrics.getMetrics().PREP_PROCESSOR_QUEUE_TIME
+                    .add(Time.currentElapsedTime() - request.prepQueueStartTime);
+                if (LOG.isTraceEnabled()) {
+                    long traceMask = ZooTrace.CLIENT_REQUEST_TRACE_MASK;
+                    if (request.type == OpCode.ping) {
+                        traceMask = ZooTrace.CLIENT_PING_TRACE_MASK;
+                    }
+                    ZooTrace.logRequest(LOG, traceMask, 'P', request, "");
+                }
+                if (Request.requestOfDeath == request) {
+                    break;
+                }
+
+                request.prepStartTime = Time.currentElapsedTime();
+                pRequest(request);
+            }
+        } catch (Exception e) {
+            handleException(this.getName(), e);
+        }
+        LOG.info("PrepRequestProcessor exited loop!");
+    }
+
+    protected void pRequest(Request request) throws RequestProcessorException {
+        // LOG.info("Prep>>> cxid = " + request.cxid + " type = " +
+        // request.type + " id = 0x" + Long.toHexString(request.sessionId));
+        request.setHdr(null);
+        request.setTxn(null);
+
+        if (!request.isThrottled()) {
+          pRequestHelper(request);
+        }
+
+        request.zxid = zks.getZxid();
+        long timeFinishedPrepare = Time.currentElapsedTime();
+        ServerMetrics.getMetrics().PREP_PROCESS_TIME.add(timeFinishedPrepare - request.prepStartTime);
+        nextProcessor.processRequest(request);
+        ServerMetrics.getMetrics().PROPOSAL_PROCESS_TIME.add(Time.currentElapsedTime() - timeFinishedPrepare);
+    }
+```
 
 ## 客户端
 
@@ -2977,7 +3121,7 @@ redis集群中：当某个master宕机之后，某个slave感知到他的master�
 
  
 
-zookeeper(一致性协议ZAB)集群选举(假设5台)：老的挂掉后，开始新的选举，先判断谁是最新事务id(zxid),如果存在一致，再判断节点id谁打谁做master，之后集群个节点的spoch值加1，这样即使老的活过来epoch值太小没有slave听他的，从而防止脑裂；【首次启动时的选举是在记电启动到刚超过一半第3台时选出节点id最大的为master】
+zookeeper(一致性协议ZAB)集群选举(假设5台)：老的挂掉后，开始新的选举，先判断谁是最新事务id(zxid),如果存在一致，再判断节点id谁打谁做master，之后集群个节点的epoch值加1，这样即使老的活过来epoch值太小没有slave听他的，从而防止脑裂；【首次启动时的选举是在记电启动到刚超过一半第3台时选出节点id最大的为master】
 
  
 
@@ -2994,3 +3138,5 @@ nacos(一致性协议raft)
 ## 参考
 
 https://www.jianshu.com/p/2bceacd60b8a
+
+https://colinxiong.github.io/distributed%20system/2017/01/12/Zookeeper-Server

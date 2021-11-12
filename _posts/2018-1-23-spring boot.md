@@ -1,5 +1,5 @@
 ---
- ddate: 2018-1-23
+date: 2018-1-23
 layout: default
 
 title: spring boot
@@ -1397,7 +1397,62 @@ private void load(PropertySourceLoader loader, String location, Profile profile,
 BootStrap Application 容器的作用：
 **提前加载SpringCloud 相关的配置类，比如BootStrap Application会提前加载配置中心相关配置类，优先加读取`bootstrap`配置文件等逻辑。**
 
+```java
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+org.springframework.cloud.config.client.ConfigClientAutoConfiguration
 
+# Bootstrap components
+org.springframework.cloud.bootstrap.BootstrapConfiguration=\
+org.springframework.cloud.config.client.ConfigServiceBootstrapConfiguration,\
+org.springframework.cloud.config.client.DiscoveryClientConfigServiceBootstrapConfiguration
+```
+
+```java
+@Configuration
+@EnableConfigurationProperties
+public class ConfigServiceBootstrapConfiguration {
+
+	@Autowired
+	private ConfigurableEnvironment environment;
+
+	@Bean
+	public ConfigClientProperties configClientProperties() {
+		ConfigClientProperties client = new ConfigClientProperties(this.environment);
+		return client;
+	}
+
+	@Bean
+	@ConditionalOnMissingBean(ConfigServicePropertySourceLocator.class)
+	@ConditionalOnProperty(value = "spring.cloud.config.enabled", matchIfMissing = true)
+	public ConfigServicePropertySourceLocator configServicePropertySource(ConfigClientProperties properties) {
+		ConfigServicePropertySourceLocator locator = new ConfigServicePropertySourceLocator(
+				properties);
+		return locator;
+	}
+
+	@ConditionalOnProperty(value = "spring.cloud.config.failFast", matchIfMissing=false)
+	@ConditionalOnClass({ Retryable.class, Aspect.class, AopAutoConfiguration.class })
+	@Configuration
+	@EnableRetry(proxyTargetClass = true)
+	@Import(AopAutoConfiguration.class)
+	@EnableConfigurationProperties(RetryProperties.class)
+	protected static class RetryConfiguration {
+
+		@Bean
+		@ConditionalOnMissingBean(name = "configServerRetryInterceptor")
+		public RetryOperationsInterceptor configServerRetryInterceptor(
+				RetryProperties properties) {
+			return RetryInterceptorBuilder
+					.stateless()
+					.backOffOptions(properties.getInitialInterval(),
+							properties.getMultiplier(), properties.getMaxInterval())
+					.maxAttempts(properties.getMaxAttempts()).build();
+		}
+	}
+
+}
+```
 
 org.springframework.boot.SpringApplication#prepareEnvironment
 
@@ -1632,7 +1687,7 @@ private void apply(ConfigurableApplicationContext context,
    application.addPrimarySources(Arrays.asList(BootstrapMarkerConfiguration.class));
    @SuppressWarnings("rawtypes")
    Set target = new LinkedHashSet<>(application.getInitializers());
-   // 将PropertySourceBootstrapConfiguration放入initializers
+   // 从springcloud工厂里拿出ApplicationContextInitializer.class（主要是PropertySourceBootstrapConfiguration）放入initializers
    target.addAll(
          getOrderedBeansOfType(context, ApplicationContextInitializer.class));
    application.setInitializers(target);
@@ -1662,14 +1717,107 @@ public class PropertySourceBootstrapConfiguration implements
    private int order = Ordered.HIGHEST_PRECEDENCE + 10;
 
    @Autowired(required = false)
-  // 注入spring cloud config，例如nacosPropertySourceLocator
+  // 注入PropertySourceLocator，例如spring cloud config，nacosPropertySourceLocator
    private List<PropertySourceLocator> propertySourceLocators = new ArrayList<>();
    
-   
+   	@Override
+	public void initialize(ConfigurableApplicationContext applicationContext) {
+		List<PropertySource<?>> composite = new ArrayList<>();
+		AnnotationAwareOrderComparator.sort(this.propertySourceLocators);
+		boolean empty = true;
+		ConfigurableEnvironment environment = applicationContext.getEnvironment();
+		for (PropertySourceLocator locator : this.propertySourceLocators) {
+			Collection<PropertySource<?>> source = locator.locateCollection(environment);
+			if (source == null || source.size() == 0) {
+				continue;
+			}
+			List<PropertySource<?>> sourceList = new ArrayList<>();
+			for (PropertySource<?> p : source) {
+				if (p instanceof EnumerablePropertySource) {
+					EnumerablePropertySource<?> enumerable = (EnumerablePropertySource<?>) p;
+					sourceList.add(new BootstrapPropertySource<>(enumerable));
+				}
+				else {
+					sourceList.add(new SimpleBootstrapPropertySource(p));
+				}
+			}
+			logger.info("Located property source: " + sourceList);
+			composite.addAll(sourceList);
+			empty = false;
+		}
+		if (!empty) {
+			MutablePropertySources propertySources = environment.getPropertySources();
+			String logConfig = environment.resolvePlaceholders("${logging.config:}");
+			LogFile logFile = LogFile.get(environment);
+			for (PropertySource<?> p : environment.getPropertySources()) {
+				if (p.getName().startsWith(BOOTSTRAP_PROPERTY_SOURCE_NAME)) {
+					propertySources.remove(p.getName());
+				}
+			}
+			insertPropertySources(propertySources, composite);
+			reinitializeLoggingSystem(environment, logConfig, logFile);
+			setLogLevels(applicationContext, environment);
+			handleIncludedProfiles(environment);
+		}
+	}
+  
+	private void insertPropertySources(MutablePropertySources propertySources,
+			List<PropertySource<?>> composite) {
+		MutablePropertySources incoming = new MutablePropertySources();
+		List<PropertySource<?>> reversedComposite = new ArrayList<>(composite);
+		// Reverse the list so that when we call addFirst below we are maintaining the
+		// same order of PropertySources
+		// Wherever we call addLast we can use the order in the List since the first item
+		// will end up before the rest
+		Collections.reverse(reversedComposite);
+		for (PropertySource<?> p : reversedComposite) {
+			incoming.addFirst(p);
+		}
+		PropertySourceBootstrapProperties remoteProperties = new PropertySourceBootstrapProperties();
+		Binder.get(environment(incoming)).bind("spring.cloud.config",
+				Bindable.ofInstance(remoteProperties));
+		if (!remoteProperties.isAllowOverride() || (!remoteProperties.isOverrideNone()
+				&& remoteProperties.isOverrideSystemProperties())) {
+			for (PropertySource<?> p : reversedComposite) {
+				propertySources.addFirst(p);
+			}
+			return;
+		}
+		if (remoteProperties.isOverrideNone()) {
+			for (PropertySource<?> p : composite) {
+				propertySources.addLast(p);
+			}
+			return;
+		}
+		if (propertySources.contains(SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME)) {
+			if (!remoteProperties.isOverrideSystemProperties()) {
+				for (PropertySource<?> p : reversedComposite) {
+					propertySources.addAfter(SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME, p);
+				}
+			}
+			else {
+				for (PropertySource<?> p : composite) {
+					propertySources.addBefore(SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME, p);
+				}
+			}
+		}
+		else {
+			for (PropertySource<?> p : composite) {
+				propertySources.addLast(p);
+			}
+		}
+	}
+  
 }
 ```
 
 ![image-20210807205630396](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20210807205630396.png)
+
+
+
+引入springcloud config：
+
+springboot run->envprepared event->springcloud application run -> configure class BootstrapImportSelectorConfiguration.class ->import PropertySourceBootstrapConfiguration class and set to springboot initializers -> springboot apply initializers -> import spring cloud config
 
 ## 参考
 
