@@ -311,7 +311,19 @@ private void select() {
 }
 ```
 
+```java
+private void handleIO(SelectionKey key) {
+    IOWorkRequest workRequest = new IOWorkRequest(this, key);
+    NIOServerCnxn cnxn = (NIOServerCnxn) key.attachment();
 
+    // Stop selecting this key while processing on its
+    // connection
+    cnxn.disableSelectable();
+    key.interestOps(0);
+    touchCnxn(cnxn);
+    workerPool.schedule(workRequest);
+}
+```
 
 ```java
 public void startup(ZooKeeperServer zks, boolean startServer)
@@ -396,6 +408,10 @@ public void start() {
     }
 }
 ```
+
+当ZookeeperServer执行submitRequest(Request request)时，封装好的Request被提交到ZookeeperServer的处理流程中。而所有的ZookeeperServer都有一个firstProcessor，是submitRequest时第一个处理Request的Processor。所以首先可以联想到的是还会有很多个Processor，确实，有很多实现了RequestProcessor接口的Processor，而且整个执行流程就是由这些Processor组成的。有一些Processor是新的线程，通过生产者消费者模式从队列中取数据处理并传入下一个Processor；有些Processor就是一个普通的对象，处理完成后传入下一个Processor。所谓的传入下一个Processor就是调用Processor的processRequest()方法。
+
+Server内部所有处理器的单线程加FIFO队列处理模式，保证了消息的全局顺序（total order）和因果顺序（causal order）；消息日志的内存化保证了系统的效率。
 
 ### 选举
 
@@ -1445,7 +1461,21 @@ protected void pRequest(Request request) throws RequestProcessorException {
 3. 更新内存，dataTree
 4. 返回结果
 
+![image-20211112201617802](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20211112201617802.png)
 
+ 
+
+ProposalRequestProcessor准备提议，并发送给Followers。 ProposalRequestProcessor会转发所有的请求给CommitRequestProcessor，并且将写请求转发给 SyncRequestProcessor。 SyncRequestProcessor工作原理同单机服务器差不多，持久化事务数据到磁盘， 并以触发AckRequestProcessor就结束， AckRequestProcessor则用于生成确认信息。
+
+ProposalRequestProcessor另一个后续处理器是CommitRequestProcessor， CommitRequestProcessor将提交已经收到足够确认的提议， 而确认信息是在Leader中的processAck()中处理的。 ToBeAppliedRequestProcessor将迁移将被执行的提议(包括已经被法定人数确认和等待被执行的提议，但不对读请求做任何处理)。
+ 
+
+![image-20211112202034015](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20211112202034015.png)
+
+- FollowerRequestProcessor用于接收和处理客户端请求， 并转发请求给CommitRequestProcessor， 此外会将写请求转发给Leader， 将读请求直接转发给FinalRequestProcessor。
+  当Leader收到一个新的写请求时，将生产一个提议，并转发给 Follower， Follower一旦接收到请求，将其记录到磁盘，并转发给SendAckRequestProcessor，SendAckRequestProcessor 确认向Leader确认提议，当Leader接收到足够的确认信息后， 将发送提交信息给Follower(同时发送INFORM信息给Observer) Follower一旦接收到提交信息，将通过CommitRequestProcessor来处理。
+
+- 
 
 Leader上维护两个字段CommitProcessor和PrepRequestProcessor。建立的Processor处理链如下：
 
@@ -1520,7 +1550,7 @@ Leader上的写请求处理流程如下：
 
 经过两个Processor的处理，Follower在pendingRequest中维护着刚刚生成的Request，这个Request还需要被认证，因此当它收到Leader发回来的Leader.COMMIT类型的QuorumPacket时，只需要Leader返回的zxid，对比pendingRequest中的zxid，如果相同表示数据是正确的，否则报错，因为Follower上写数据与Leader已经不一致了。移除pendingTxns中的request并交给CommitProcessor处理。从前面的CommitProcessor看出，该Request添加到committedProcessor中，由于这个request的sessionID并没有保存在FollowerZookeeperServer上，所以这个request直接交付给FinalRequestProcessor。FinalRequestProcessor更新完内存数据库后，由于该Request的Cnxn为null，所以无需做response。
 
-Follower上针对Leader上的Proposal的处理必须依赖两个消息Leader.PROPOSAL和Leader.COMMIT，只有它收到这两个消息后才会更新自己的磁盘和内存数据。
+**Follower上针对Leader上的Proposal的处理必须依赖两个消息Leader.PROPOSAL和Leader.COMMIT，只有它收到这两个消息后才会更新自己的磁盘和内存数据。**
 
 #### Follower上的写请求处理
 
@@ -3140,3 +3170,7 @@ nacos(一致性协议raft)
 https://www.jianshu.com/p/2bceacd60b8a
 
 https://colinxiong.github.io/distributed%20system/2017/01/12/Zookeeper-Server
+
+https://www.cnblogs.com/ZhuChangwu/p/11619270.html
+
+https://t.hao0.me/zookeeper/2015/03/25/zk-admin-internals.html
