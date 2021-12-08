@@ -1540,25 +1540,143 @@ selectOneMessageQueue
 
 **rocketmq在发送消息时，会先去获取topic的路由信息，如果topic是第一次发送消息，由于nameserver没有topic的路由信息，所以会再次以“TBW102”这个默认topic获取路由信息，假设broker都开启了自动创建开关，那么此时会获取所有broker的路由信息，消息的发送会根据负载算法选择其中一台Broker发送消息，消息到达broker后，发现本地没有该topic，会在创建该topic的信息塞进本地缓存中，同时会将topic路由信息注册到nameserver中，那么这样就会造成一个后果：以后所有该topic的消息，都将发送到这台broker上，如果该topic消息量非常大，会造成某个broker上负载过大，这样消息的存储就达不到负载均衡的目的了。**
 
-### 分布式事务
+### 事务消息
 
-![image-20201229100959584](/Users/daitechang/Documents/garydai.github.com/_posts/pic/image-20201229100959584.png)
+![image-20201229100959584](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20201229100959584.png)
 
 1. 发送方向 MQ 服务端发送消息。
-
 2. MQ Server 将消息持久化成功之后，向发送方 ACK 确认消息已经发送成功，此时消息为半消息。
-
 3. 发送方开始执行本地事务逻辑。
-
 4. 发送方根据本地事务执行结果向 MQ Server 提交二次确认（Commit 或是 Rollback），MQ Server 收到 Commit 状态则将半消息标记为可投递，订阅方最终将收到该消息；MQ Server 收到 Rollback 状态则删除半消息，订阅方将不会接受该消息。
-
 5. 在断网或者是应用重启的特殊情况下，上述步骤4提交的二次确认最终未到达 MQ Server，经过固定时间后 MQ Server 将对该消息发起消息回查。
-
 6. 发送方收到消息回查后，需要检查对应消息的本地事务执行的最终结果。
-
 7. 发送方根据检查得到的本地事务的最终状态再次提交二次确认，MQ Server 仍按照步骤4对半消息进行操作。
 
 
+
+发送半事务消息（Half Message）及执行本地事务，示例代码如下。
+
+```java
+package com.alibaba.webx.TryHsf.app1;
+
+import com.aliyun.openservices.ons.api.Message;
+import com.aliyun.openservices.ons.api.PropertyKeyConst;
+import com.aliyun.openservices.ons.api.SendResult;
+import com.aliyun.openservices.ons.api.transaction.LocalTransactionExecuter;
+import com.aliyun.openservices.ons.api.transaction.TransactionProducer;
+import com.aliyun.openservices.ons.api.transaction.TransactionStatus;
+import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+
+public class TransactionProducerClient {
+ private final static Logger log = ClientLogger.getLog(); // 您需要设置自己的日志，便于排查问题。
+
+ public static void main(String[] args) throws InterruptedException {
+     final BusinessService businessService = new BusinessService(); // 本地业务。
+     Properties properties = new Properties();
+        // 您在消息队列RocketMQ版控制台创建的Group ID。注意：事务消息的Group ID不能与其他类型消息的Group ID共用。
+     properties.put(PropertyKeyConst.GROUP_ID,"XXX");
+        // AccessKey ID阿里云身份验证，在阿里云RAM控制台创建。
+     properties.put(PropertyKeyConst.AccessKey,"XXX");
+        // AccessKey Secret阿里云身份验证，在阿里云RAM控制台创建。
+     properties.put(PropertyKeyConst.SecretKey,"XXX");
+        // 设置TCP接入域名，进入消息队列RocketMQ版控制台实例详情页面的接入点区域查看。
+     properties.put(PropertyKeyConst.NAMESRV_ADDR,"XXX");
+
+     TransactionProducer producer = ONSFactory.createTransactionProducer(properties,
+             new LocalTransactionCheckerImpl());
+     producer.start();
+     Message msg = new Message("Topic","TagA","Hello MQ transaction===".getBytes());
+     try {
+             SendResult sendResult = producer.send(msg, new LocalTransactionExecuter() {
+                 @Override
+                 public TransactionStatus execute(Message msg, Object arg) {
+                     // 消息ID（有可能消息体一样，但消息ID不一样，当前消息属于半事务消息，所以消息ID在消息队列RocketMQ版控制台无法查询）。
+                     String msgId = msg.getMsgID();
+                     // 消息体内容进行crc32，也可以使用其它的如MD5。
+                     long crc32Id = HashUtil.crc32Code(msg.getBody());
+                     // 消息ID和crc32id主要是用来防止消息重复。
+                     // 如果业务本身是幂等的，可以忽略，否则需要利用msgId或crc32Id来做幂等。
+                     // 如果要求消息绝对不重复，推荐做法是对消息体使用crc32或MD5来防止重复消息。
+                     Object businessServiceArgs = new Object();
+                     TransactionStatus transactionStatus = TransactionStatus.Unknow;
+                     try {
+                         boolean isCommit =
+                             businessService.execbusinessService(businessServiceArgs);
+                         if (isCommit) {
+                             // 本地事务已成功则提交消息。
+                             transactionStatus = TransactionStatus.CommitTransaction;
+                         } else {
+                             // 本地事务已失败则回滚消息。
+                             transactionStatus = TransactionStatus.RollbackTransaction;
+                         }
+                     } catch (Exception e) {
+                         log.error("Message Id:{}", msgId, e);
+                     }
+                     System.out.println(msg.getMsgID());
+                     log.warn("Message Id:{}transactionStatus:{}", msgId, transactionStatus.name());
+                     return transactionStatus;
+                 }
+             }, null);
+         }
+         catch (Exception e) {
+                // 消息发送失败，需要进行重试处理，可重新发送这条消息或持久化这条数据进行补偿处理。
+             System.out.println(new Date() + " Send mq message failed. Topic is:" + msg.getTopic());
+             e.printStackTrace();
+         }
+     // demo example防止进程退出（实际使用不需要这样）。
+     TimeUnit.MILLISECONDS.sleep(Integer.MAX_VALUE);
+ }
+}                        
+```
+
+提交事务消息状态。 
+
+当本地事务执行完成（执行成功或执行失败），需要通知服务器当前消息的事务状态。通知方式有以下两种：
+
+- 执行本地事务完成后提交。
+- 执行本地事务一直没提交状态，等待服务器回查消息的事务状态。
+
+事务状态有以下三种：
+
+- `TransactionStatus.CommitTransaction`：提交事务，允许订阅方消费该消息。
+- `TransactionStatus.RollbackTransaction`：回滚事务，消息将被丢弃不允许消费。
+- `TransactionStatus.Unknow`：无法判断状态，期待消息队列RocketMQ版的Broker向发送方再次询问该消息对应的本地事务的状态。
+
+```java
+public class LocalTransactionCheckerImpl implements LocalTransactionChecker {
+   private final static Logger log = ClientLogger.getLog();
+   final  BusinessService businessService = new BusinessService();
+
+   @Override
+   public TransactionStatus check(Message msg) {
+       //消息ID（有可能消息体一样，但消息ID不一样，当前消息属于半事务消息，所以消息ID在消息队列RocketMQ版控制台无法查询）。
+       String msgId = msg.getMsgID();
+       //消息体内容进行crc32，也可以使用其它的方法如MD5。
+       long crc32Id = HashUtil.crc32Code(msg.getBody());
+       //消息ID和crc32Id主要是用来防止消息重复。
+       //如果业务本身是幂等的，可以忽略，否则需要利用msgId或crc32Id来做幂等。
+       //如果要求消息绝对不重复，推荐做法是对消息体使用crc32或MD5来防止重复消息。
+       //业务自己的参数对象，这里只是一个示例，需要您根据实际情况来处理。
+       Object businessServiceArgs = new Object();
+       TransactionStatus transactionStatus = TransactionStatus.Unknow;
+       try {
+           boolean isCommit = businessService.checkbusinessService(businessServiceArgs);
+           if (isCommit) {
+               //本地事务已成功则提交消息。
+               transactionStatus = TransactionStatus.CommitTransaction;
+           } else {
+               //本地事务已失败则回滚消息。
+               transactionStatus = TransactionStatus.RollbackTransaction;
+           }
+       } catch (Exception e) {
+           log.error("Message Id:{}", msgId, e);
+       }
+       log.warn("Message Id:{}transactionStatus:{}", msgId, transactionStatus.name());
+       return transactionStatus;
+   }
+ }                        
+```
 
 ## 分片
 

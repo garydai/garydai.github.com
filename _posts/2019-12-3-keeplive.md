@@ -57,6 +57,8 @@ Chrome对于可复用的TCP连接，采用的保活机制是TCP层（传输层�
 
 所以，浏览器在处理HTTP1.1请求所对应的TCP连接的保活时，通过使用TCP Keepalive机制，来避免污染七层（应用层）的传输数据。
 
+
+
 ## reference
 
 https://segmentfault.com/a/1190000012894416

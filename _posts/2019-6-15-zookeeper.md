@@ -1468,7 +1468,7 @@ protected void pRequest(Request request) throws RequestProcessorException {
 ProposalRequestProcessor准备提议，并发送给Followers。 ProposalRequestProcessor会转发所有的请求给CommitRequestProcessor，并且将写请求转发给 SyncRequestProcessor。 SyncRequestProcessor工作原理同单机服务器差不多，持久化事务数据到磁盘， 并以触发AckRequestProcessor就结束， AckRequestProcessor则用于生成确认信息。
 
 ProposalRequestProcessor另一个后续处理器是CommitRequestProcessor， CommitRequestProcessor将提交已经收到足够确认的提议， 而确认信息是在Leader中的processAck()中处理的。 ToBeAppliedRequestProcessor将迁移将被执行的提议(包括已经被法定人数确认和等待被执行的提议，但不对读请求做任何处理)。
- 
+
 
 ![image-20211112202034015](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20211112202034015.png)
 
@@ -1620,6 +1620,10 @@ public void run() {
         ServerMetrics.getMetrics().PROPOSAL_PROCESS_TIME.add(Time.currentElapsedTime() - timeFinishedPrepare);
     }
 ```
+
+![image-20211122155716915](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20211122155716915.png)
+
+![image-20211122155734459](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20211122155734459.png)
 
 ## 客户端
 
