@@ -1542,7 +1542,7 @@ selectOneMessageQueue
 
 ### 事务消息
 
-![image-20201229100959584](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20201229100959584.png)
+![image-20211208092413609](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20211208092413609.png)
 
 1. 发送方向 MQ 服务端发送消息。
 2. MQ Server 将消息持久化成功之后，向发送方 ACK 确认消息已经发送成功，此时消息为半消息。
@@ -1642,6 +1642,19 @@ public class TransactionProducerClient {
 - `TransactionStatus.CommitTransaction`：提交事务，允许订阅方消费该消息。
 - `TransactionStatus.RollbackTransaction`：回滚事务，消息将被丢弃不允许消费。
 - `TransactionStatus.Unknow`：无法判断状态，期待消息队列RocketMQ版的Broker向发送方再次询问该消息对应的本地事务的状态。
+
+#### 事务回查机制说明
+
+- 发送事务消息为什么必须要实现回查Check机制？
+
+  当步骤1中半事务消息发送完成，但本地事务返回状态为`TransactionStatus.Unknow`，或者应用退出导致本地事务未提交任何状态时，从Broker的角度看，这条半事务消息的状态是未知的。因此Broker会定期向消息发送方即消息生产者集群中的任意一生产者实例发起消息回查，要求发送方回查该Half状态消息，并上报其最终状态。
+
+- Check被回调时，业务逻辑都需要做些什么？
+
+  事务消息的Check方法里面，应该写一些检查事务一致性的逻辑。消息队列RocketMQ版发送事务消息时需要实现`LocalTransactionChecker`接口，用来处理Broker主动发起的本地事务状态回查请求，因此在事务消息的Check方法中，需要完成两件事情：
+
+  1. 检查该半事务消息对应的本地事务的状态（committed or rollback）。
+  2. 向Broker提交该半事务消息本地事务的状态。
 
 ```java
 public class LocalTransactionCheckerImpl implements LocalTransactionChecker {
