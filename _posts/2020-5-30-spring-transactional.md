@@ -423,6 +423,10 @@ ISOLATION_SERIALIZABLE：序列化。
 
 ### spring aop的实现
 
+Spring Aop的代理主要分为三个步骤：获取所有的Advisor，过滤可应用到当前bean的Adivsor和使用Advisor为当前bean生成代理对象
+
+
+
 org.springframework.aop.framework.autoproxy.AbstractAutoProxyCreator#postProcessBeforeInstantiation
 
 ```java
@@ -491,6 +495,8 @@ protected List<Advisor> findCandidateAdvisors() {
    return advisors;
 }
 ```
+
+`findCandidateAdvisors()`主要是通过两种方式获取切面逻辑，一种是在系统中找到实现了Advisor接口的所有类，另一种是在找到系统中使用`@Aspect`标注的类，并将其切面逻辑封装为Advisor，这两种Advisor都有可能是我们需要进行织入的切面逻辑。
 
 ```java
 public List<Advisor> buildAspectJAdvisors() {
@@ -716,6 +722,100 @@ public static boolean canApply(Pointcut pc, Class<?> targetClass, boolean hasInt
 - InfrastructureAdvisorAutoProxyCreator
 
 Spring注解事务使用的是InfrastructureAdvisorAutoProxyCreator
+
+
+
+```java
+public interface Advice {
+
+}
+
+public interface Interceptor extends Advice {
+
+}
+
+@FunctionalInterface
+public interface MethodInterceptor extends Interceptor {
+
+	/**
+	 * Implement this method to perform extra treatments before and
+	 * after the invocation. Polite implementations would certainly
+	 * like to invoke {@link Joinpoint#proceed()}.
+	 * @param invocation the method invocation joinpoint
+	 * @return the result of the call to {@link Joinpoint#proceed()};
+	 * might be intercepted by the interceptor
+	 * @throws Throwable if the interceptors or the target object
+	 * throws an exception
+	 */
+	Object invoke(MethodInvocation invocation) throws Throwable;
+
+}
+```
+
+
+
+```java
+public interface Advisor {
+
+   /**
+    * Common placeholder for an empty {@code Advice} to be returned from
+    * {@link #getAdvice()} if no proper advice has been configured (yet).
+    * @since 5.0
+    */
+   Advice EMPTY_ADVICE = new Advice() {};
+
+
+   /**
+    * Return the advice part of this aspect. An advice may be an
+    * interceptor, a before advice, a throws advice, etc.
+    * @return the advice that should apply if the pointcut matches
+    * @see org.aopalliance.intercept.MethodInterceptor
+    * @see BeforeAdvice
+    * @see ThrowsAdvice
+    * @see AfterReturningAdvice
+    */
+   Advice getAdvice();
+
+   /**
+    * Return whether this advice is associated with a particular instance
+    * (for example, creating a mixin) or shared with all instances of
+    * the advised class obtained from the same Spring bean factory.
+    * <p><b>Note that this method is not currently used by the framework.</b>
+    * Typical Advisor implementations always return {@code true}.
+    * Use singleton/prototype bean definitions or appropriate programmatic
+    * proxy creation to ensure that Advisors have the correct lifecycle model.
+    * @return whether this advice is associated with a particular target instance
+    */
+   boolean isPerInstance();
+
+}
+```
+
+```java
+public interface Pointcut {
+
+   /**
+    * Return the ClassFilter for this pointcut.
+    * @return the ClassFilter (never {@code null})
+    */
+   ClassFilter getClassFilter();
+
+   /**
+    * Return the MethodMatcher for this pointcut.
+    * @return the MethodMatcher (never {@code null})
+    */
+   MethodMatcher getMethodMatcher();
+
+
+   /**
+    * Canonical Pointcut instance that always matches.
+    */
+   Pointcut TRUE = TruePointcut.INSTANCE;
+
+}
+```
+
+aspectj概念：一个连接点是程序流中指定的一点。切点收集特定的连接点集合和在这些点中的值。一个通知是当一个连接点到达时执行的代码
 
 ### 入口
 

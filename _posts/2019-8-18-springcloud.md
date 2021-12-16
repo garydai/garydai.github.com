@@ -104,6 +104,11 @@ org.springframework.cloud.netflix.ribbon.RibbonAutoConfiguration
 	}
 ```
 
+```java
+// 创建子容器
+RibbonLoadBalancerContext context = this.clientFactory.getLoadBalancerContext(serviceId);
+```
+
 
 
 流程：
@@ -354,6 +359,7 @@ private void registerFeignClient(BeanDefinitionRegistry registry, AnnotationMeta
    definition.addPropertyValue("path", getPath(attributes));
    String name = getName(attributes);
    definition.addPropertyValue("name", name);
+   // 一个feign一个空间applicationContext
    String contextId = getContextId(attributes);
    definition.addPropertyValue("contextId", contextId);
    //type 设置的FactoryBean 返回的 类型
@@ -401,6 +407,7 @@ public Object getObject() throws Exception {
    // context 工厂FeignContext extends NamedContextFactory<FeignClientSpecification> 
    FeignContext context = applicationContext.getBean(FeignContext.class);
    //每个feignclient创建一个子容器applicationcontext
+		Feign.Builder builder = feign(context);
 
    if (!StringUtils.hasText(url)) {
       if (!name.startsWith("http")) {
@@ -438,6 +445,21 @@ public Object getObject() throws Exception {
    return (T) targeter.target(this, builder, context,
          new HardCodedTarget<>(type, name, url));
 }
+
+	protected <T> T loadBalance(Feign.Builder builder, FeignContext context,
+			HardCodedTarget<T> target) {
+    // 从容器里取client
+		Client client = getOptional(context, Client.class);
+		if (client != null) {
+      // 设置client
+			builder.client(client);
+			Targeter targeter = get(context, Targeter.class);
+			return targeter.target(this, builder, context, target);
+		}
+
+		throw new IllegalStateException(
+				"No Feign Client for loadBalancing defined. Did you forget to include spring-cloud-starter-netflix-ribbon or spring-cloud-starter-loadbalancer?");
+	}
 ```
 
 ```java
@@ -468,6 +490,47 @@ protected <T> T get(FeignContext context, Class<T> type) {
 		}
 		return instance;
 	}
+```
+
+```java
+feign.Feign.Builder#Builder
+public static class Builder {
+    private final List<RequestInterceptor> requestInterceptors = new ArrayList();
+    private Level logLevel;
+    private Contract contract;
+    private Client client;
+    private Retryer retryer;
+    private Logger logger;
+    private Encoder encoder;
+    private Decoder decoder;
+    private QueryMapEncoder queryMapEncoder;
+    private ErrorDecoder errorDecoder;
+    private Options options;
+    private InvocationHandlerFactory invocationHandlerFactory;
+    private boolean decode404;
+    private boolean closeAfterDecode;
+    private ExceptionPropagationPolicy propagationPolicy;
+    private boolean forceDecoding;
+    private List<Capability> capabilities;
+
+    public Builder() {
+        this.logLevel = Level.NONE;
+        this.contract = new Default();
+      // HttpURLConnnection
+        this.client = new feign.Client.Default((SSLSocketFactory)null, (HostnameVerifier)null);
+        this.retryer = new feign.Retryer.Default();
+        this.logger = new NoOpLogger();
+        this.encoder = new feign.codec.Encoder.Default();
+        this.decoder = new feign.codec.Decoder.Default();
+        this.queryMapEncoder = new FieldQueryMapEncoder();
+        this.errorDecoder = new feign.codec.ErrorDecoder.Default();
+        this.options = new Options();
+        this.invocationHandlerFactory = new feign.InvocationHandlerFactory.Default();
+        this.closeAfterDecode = true;
+        this.propagationPolicy = ExceptionPropagationPolicy.NONE;
+        this.forceDecoding = false;
+        this.capabilities = new ArrayList();
+    }
 ```
 
 ```java

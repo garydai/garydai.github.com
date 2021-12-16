@@ -1815,6 +1815,16 @@ public class PropertySourceBootstrapConfiguration implements
 
 
 
+![image-20211216163842249](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20211216163842249.png)
+
+ribbon applicationContext是由springclientFactory生成的
+
+```java
+public class SpringClientFactory extends NamedContextFactory<RibbonClientSpecification> 
+public class FeignContext extends NamedContextFactory<FeignClientSpecification> 
+public class SeataFeignContext extends FeignContext 
+```
+
 引入springcloud config：
 
 springboot run->envprepared event->springcloud application run -> configure class BootstrapImportSelectorConfiguration.class ->import PropertySourceBootstrapConfiguration class and set to springboot initializers -> springboot apply initializers -> import spring cloud config
