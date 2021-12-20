@@ -7,6 +7,8 @@ title: 设计模式
 
 # 设计模式
 
+![image-20211219181200990](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20211219181200990.png)
+
 ## 工厂方法模式
 
 
@@ -184,41 +186,45 @@ org.springframework.web.servlet.handler.SimpleServletHandlerAdapter
 委托人声明协议方法，代理人需要实现该协议的方法。
 
 
-	abstract class Subject
-	{
-	    public abstract void Request();
-	}
+```c++
+abstract class Subject
+{
+    public abstract void Request();
+}
+```
 
 
-	class RealSubject : Subject  
-	{  
-	    public override void Request()  
-	    {  
-	        //业务方法具体实现代码  
-	    }  
-	}  
-	
-	class Proxy : Subject
-	{
-	    private RealSubject realSubject = new RealSubject(); //维持一个对真实主题对象的引用
-	
-	    public void PreRequest() 
-	    {
-	        …...
-	    }
-	
-	    public override void Request() 
-	    {
-	        PreRequest();
-	        realSubject.Request(); //调用真实主题对象的方法
-	        PostRequest();
-	    }
-	
-	    public void PostRequest() 
-	    {
-	        ……
-	    }
-	}
+```c++
+class RealSubject : Subject  
+{  
+    public override void Request()  
+    {  
+        //业务方法具体实现代码  
+    }  
+}  
+
+class Proxy : Subject
+{
+    private RealSubject realSubject = new RealSubject(); //维持一个对真实主题对象的引用
+
+    public void PreRequest() 
+    {
+        …...
+    }
+
+    public override void Request() 
+    {
+        PreRequest();
+        realSubject.Request(); //调用真实主题对象的方法
+        PostRequest();
+    }
+
+    public void PostRequest() 
+    {
+        ……
+    }
+}
+```
 
 
 	Interface Hello {
@@ -499,7 +505,7 @@ public class Client {
 
 ![](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/observer.png)
 
-## 迭代子模式
+## 迭代器模式
 
 迭代器iterator
 
@@ -830,6 +836,13 @@ public class Client {
 Java io  	
 
 ## 分类
+
+**创建型**：主要解决对象的创建问题，封装复杂的创建过程，解耦对象的创建代码和使用代码
+
+**结构型**：主要通过类或对象的不同组合，解耦不同功能的耦合
+
+**行为型**：主要解决的是类或对象之间的交互行为的耦合
+
 ### 创建型
 
 工厂方法模式
@@ -845,6 +858,10 @@ Java io
 ### 结构型
 
 适配器模式
+
+**意图：**将一个类的接口转换成客户希望的另外一个接口。适配器模式使得原本由于接口不兼容而不能一起工作的那些类可以一起工作。
+
+**主要解决：**主要解决在软件系统中，常常要将一些"现存的对象"放到新的环境中，而新环境要求的接口是现对象不能满足的。
 
 代理模式
 
@@ -865,6 +882,10 @@ Java io
 模版方法模式
 
 观察者模式
+
+**意图：**定义对象间的一种一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都得到通知并被自动更新。
+
+**主要解决：**一个对象状态改变给其他对象通知的问题，而且要考虑到易用和低耦合，保证高度的协作。
 
 迭代器模式
 
@@ -892,9 +913,7 @@ proxy decoration middleman 解决方案都是一个类代理给另一个类，�
 
 设计模式：可复用面向对象软件的基础
 
+https://www.runoob.com/design-pattern/facade-pattern.html
 
 
-### 
-
-​    
 ​    
