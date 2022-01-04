@@ -1194,9 +1194,9 @@ org.apache.catalina.core.StandardContext#startInternal
 
 ![image-20191217144119968](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20191217144119968.png)
 
-### HandlerAdapter handler适配器
+### HandlerAdapter 处理适配器
 
-处理器映射器将查找到的Handler返回给DispatcherServlet后，DispatcherServlet会调用适配器执行Handler，通过适配器去扩展对不同Handler的执行
+调用具体的方法对用户发来的请求来进行处理。当handlerMapping获取到执行请求的controller时，DispatcherServlte会根据controller对应的controller类型来调用相应的HandlerAdapter来进行处理。
 
 ```xml
 <!--配置处理器适配器
@@ -1218,6 +1218,8 @@ public interface HandlerAdapter {
 
 }
 ```
+
+因为handler是个object，不是接口，所以需要一个handlerAdapter适配所有handler，如果handler都实现interface，则不需要适配器。
 
 ### HandlerException
 
