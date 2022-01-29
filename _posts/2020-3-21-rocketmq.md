@@ -1744,6 +1744,62 @@ RocketMQ中增加从节点有如下好处：
 1. 如何算消息生产成功？sync、async
 2. messageQueue分配规则
 
+## 延迟消息
+
+一些消息[中间件](https://cloud.tencent.com/product/tdmq?from=10680)的Broker端内置了延迟消息支持的能力，如：
+
+- **NSQ：**这是一个go语言的消息中间件，其通过内存中的优先级队列来保存延迟消息，支持秒级精度，最多2个小时延迟。Java中也有对应的实现，如ScheduledThreadPoolExecutor内部实际上也是使用了优先级队列。
+- **QMQ：**采用双重时间轮实现。可参考：[任意时间延时消息原理讲解：设计与实现](https://mp.weixin.qq.com/s?__biz=MzU2NjIzNDk5NQ==&mid=2247486449&idx=1&sn=489b5e17521d2b961fa21e1e5be8a082&scene=21#wechat_redirect)
+- **RabbitMQ：**需要安装一个rabbitmq_delayed_message_exchange插件。
+- **RocketMQ：**RocketMQ 开源版本延迟消息临时存储在一个内部主题中，不支持任意时间精度，支持特定的 level，例如定时 5s，10s，1m 等。
+
+滴滴开源的消息中间件DDMQ，底层消息中间件的基础上加了一层代理，独立部署延迟服务模块，使用rocksdb进行临时存储。rocksdb是一个高性能的KV存储，并支持排序。
+
+![image-20220125115205000](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20220125115205000.png)
+
+qmq的实现
+
+### 主要功能
+
+对于delay-server，官方已经有了一些[介绍](https://link.juejin.cn/?target=https%3A%2F%2Fmp.weixin.qq.com%2Fs%2F_NWEmku7vRAu5cc-mKDxKA)。记住，官方通常是最卖力的那个"媒婆"。qmq-delay-server其实主要做的是转发工作。所谓转发，就是delay-server做的就是个存储和投递的工作。怎么理解，就是qmq-client会对消息进行一个路由，即实时消息投递到实时server，延迟消息往delay-server投递，多说一句，这个路由的功能是由qmq-meta-server提供。投递到delay-server的消息会存下来，到时间之后再进行投递。现在我们知道了`存储`和`投递`是delay-server主要的两个功能点。那么我们挨个击破.
+
+#### 存储
+
+假如让我们来设计实现一个delay-server，存储部分我们需要解决什么问题？我觉得主要是要解决到期投递的`到期`问题。我们可以用传统db做，但是这个性能肯定是上不去的。我们也可以用基于LSM树的RocksDB。或者，干脆直接用文件存储。QMQ是用文件存储的。而用文件存储是怎么解决`到期`问题的呢？delay-server接收到延迟消息，就将消息append到message_log中，然后再通过回放这个message_log得到schedule_log，此外还有一个dispatch _log用于记录投递记录。QMQ还有个跟投递相关的存储设计，即两层HashWheel。第一层位于磁盘上，例如，以一个小时一个刻度一个文件，我们叫delay_message_segment，如延迟时间为2019年02月23日 19:00 至2019年02月23日 20:00为延迟消息将被存储在2019022319。并且这个刻度是可以配置调整的。第二层HashWheel位于内存中。也是以一个时间为刻度，比如500ms，加载进内存中的延迟消息文件会根据延迟时间hash到一个HashWheel中，第二层的wheel涉及更多的是下一小节的投递。貌似存储到这里就结束了，然而还有一个问题，目前当投递的时候我们需要将一个delay_message_segment加载进内存中，而假如我们提前一个刻度加载进一个delay_message_segment到内存中的hashwheel，比如在2019年02月23日 18:00加载2019022319这个segment文件，那么一个hashwheel中就会存在两个delay_message_segment，而这个时候所占内存是非常大的，所以这是完全不可接收的。所以，QMQ引入了一个数据结构，叫schedule_index，即消息索引，存储的内容为消息的索引，我们加载到内存的是这个schedule_index，在真正投递的时候再根据索引查到消息体进行投递。
+
+#### 投递
+
+解决了存储，那么到期的延迟消息如何投递呢？如在上一小节存储中所提到的，内存中的hashwheel会提前一段时间加载delay_schedule_index，这个时间自然也是可以配置的。而在hashwheel中，默认每500ms会tick一次，这个500ms也是可以根据用户需求配置的。而在投递的时候，QMQ根据实时broker进行分组多线程投递，如果某一broker离线不可用，导致投递失败，delay-server会将延迟消息投递在其他`存活`的实时broker。其实这里对于实时的broker应该有一个关于投递消息权重的，现在delay-server没有考虑到这一点，不过我看已经有一个pr解决了这个问题，只是官方还没有时间看这个问题。除此之外，QMQ还考虑到了要是当前延迟消息所属的delay_segment已经加载到内存中的hashwheel了，这个时候消息应该是直接投递或也应加载到hashwheel中的。这里需要考虑的情况还是比较多的，比如考虑delay_segment正在加载、已经加载、加载完成等情况，对于这种情况，QMQ用了两个cursor来表示hashwheel加载到哪个delay_segment以及加载到对应segment的什么offset了，这里还是挺复杂的，这里的代码逻辑在`WheelTickManager`这个类。
+
+rocketmq实现
+
+开源RocketMQ支持延迟消息，但是不支持秒级精度。默认支持18个level的延迟消息，这是通过broker端的messageDelayLevel配置项确定的，如下：
+
+```javascript
+messageDelayLevel=1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h
+```
+
+Broker在启动时，内部会创建一个内部主题：SCHEDULE_TOPIC_XXXX，根据延迟level的个数，创建对应数量的队列，也就是说18个level对应了18个队列。注意，这并不是说这个内部主题只会有18个队列，因为Broker通常是集群模式部署的，因此每个节点都有18个队列。
+
+![image-20220125103906107](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20220125103906107.png)
+
+1. 修改消息Topic名称和队列信息
+2. 转发消息到延迟主题的CosumeQueue中
+3. 延迟服务消费SCHEDULE_TOPIC_XXXX消息
+4. 将信息重新存储到CommitLog中
+5. 将消息投递到目标Topic中
+6. 消费者消费目标topic中的数据
+
+![image-20220125110806701](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20220125110806701.png)
+
+Broker内部有一个ScheduleMessageService类，其充当延迟服务，消费SCHEDULE_TOPIC_XXXX中的消息，并投递到目标Topic中。
+
+ScheduleMessageService在启动时，其会创建一个定时器Timer，并根据延迟级别的个数，启动对应数量的TimerTask，每个TimerTask负责一个延迟级别的消费与投递。
+
+![image-20220125104610806](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20220125104610806.png)
+
+每个TimeTask在检查消息是否到期时，首先检查对应队列中尚未投递第一条消息，如果这条消息没到期，那么之后的消息都不会检查。如果到期了，则进行投递，并检查之后的消息是否到期。
+
 ## 参考
 
 https://blog.csdn.net/qq_27641935/article/details/86539980
@@ -1761,3 +1817,5 @@ https://www.zhihu.com/question/30195969
 https://tinylcy.me/2019/the-design-of-rocketmq-message-storage-system/
 
 https://www.codenong.com/cs106535405/
+
+https://cloud.tencent.com/developer/article/1581368
