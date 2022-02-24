@@ -23,6 +23,28 @@ title: 设计模式
 
 把产品抽象
 
+```java
+public class ShapeFactory {
+    
+   //使用 getShape 方法获取形状类型的对象
+   public Shape getShape(String shapeType){
+      if(shapeType == null){
+         return null;
+      }        
+      if(shapeType.equalsIgnoreCase("CIRCLE")){
+         return new Circle();
+      } else if(shapeType.equalsIgnoreCase("RECTANGLE")){
+         return new Rectangle();
+      } else if(shapeType.equalsIgnoreCase("SQUARE")){
+         return new Square();
+      }
+      return null;
+   }
+}
+```
+
+
+
 ## 抽象工厂模式
 
 提供一个接口，用于创建相关或依赖对象的家族，而不需要明确指定具体类。
@@ -32,6 +54,8 @@ title: 设计模式
 工厂方法模式：创建抽象工厂类，具体工厂类，实例化具体工厂，创建产品
 
 抽象工厂模式与工厂方法模式最大的区别：抽象工厂中每个工厂可以创建多种类的产品；而工厂方法每个工厂只能创建一类
+
+用工厂方法模式创建工厂
 
 ```java
 // abstract factory

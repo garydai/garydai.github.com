@@ -722,6 +722,24 @@ private void startScheduledTask() {
 
 把topic下的queue按照一定的算法（分配的策略包含：平均分配、消费端配置等）平均分配给consumer
 
+（
+
+AllocateMessageQueueStrategy就是实现消费者消息队列负载均衡算法的接口。
+该接口在rocketMq-4.3.0版本中有六种实现方法：
+
+AllocateMessageQueueAveragely：平均算法
+AllocateMessageQueueAveragelyByCircle：环形平均算法
+AllocateMessageQueueByConfig：根据配置负载均衡算法
+AllocateMessageQueueByMachineRoom：根据机房负载均衡算法
+AllocateMessageQueueConsistentHash：一致性哈希负载均衡算法
+AllocateMachineRoomNearby：靠近机房策略
+
+）
+
+RocketMQ的Rebalance实际上是**无中心**的，这和Kafka有本质区别，Kafka虽然也是客户端做的负载均衡，但是Kafka在做负载均衡之前会选定一个Leader，由这个Leader全局把控分配的过程，而后再把每个消费者对partion的分配结果广播给各个消费者。
+
+而RocketMQ实际上没有人做这个统一分配的，而是每个消费者自己”有秩序地”计算出自己应该获取哪些队列
+
 org.apache.rocketmq.client.impl.consumer.RebalanceService#run
 
 ```java
@@ -856,6 +874,144 @@ RocketMQ提供其它的queue分配策略：
 - CONSISTENT_HASH，使用一致性hash算法来分配Queue，用户需自定义虚拟节点的数量
 - MACHINE_ROOM，将queue先按照broker划分几个computer room，不同的consumer只消费某几个broker上的消息
 - CONFIG,用户启动时指定消费哪些Queue的消息
+
+这里构建哈希环是通过TreeMap来实现的。
+
+private final SortedMap<Long, VirtualNode<T>> ring = new TreeMap<Long, VirtualNode<T>>();
+将物理节点、虚拟节点放入treeMap里。通过treeMap的tailMap、firstKey()等方法来获取请求映射对应的节点
+
+#### 一致性哈希例子
+
+```java
+import java.util.*;
+
+public class ConHashSrv2 {
+	 
+    //待添加入Hash环的真实服务器节点列表
+    private static LinkedList<Node> realNodes = new LinkedList<>();
+ 
+    //虚拟节点列表
+    private static SortedMap<Integer, Node> sortedMap = new TreeMap<Integer, Node>();
+ 
+    static {
+	  //初始化server 10台。
+		  for (int i = 0; i < 10; i++) {
+	    	  String nodeName = "server"+i;
+	    	  Node node = new Node(nodeName);
+	    	  realNodes.add(node);
+	    }
+		  
+		//引入虚拟节点： 添加1000倍虚拟节点，将10台server对应的虚拟节点放入TreeMap中
+	        for (Node node : realNodes) {
+	            for (int i = 1; i <=1000; i++) {
+	                String nodeName = node.getName() + "-VM" + String.valueOf(i);
+	                int hash = getHash(nodeName);//nodeName.hashCode();
+	                sortedMap.put(hash, node);
+	                System.out.println("虚拟节点hash:" + hash + "【" + nodeName + "】放入");
+	            }
+	        }    
+     }
+ 
+   
+
+    //使用FNV1_32_HASH算法计算服务器的Hash值
+
+    private static int getHash(String str) {
+    	 // int hash = str.hashCode();
+       
+        final int p = 16777619;
+        int hash = (int) 2166136261L;
+        for (int i = 0; i < str.length(); i++) {
+            hash = (hash ^ str.charAt(i)) * p;
+        }
+        hash += hash << 13;
+        hash ^= hash >> 7;
+        hash += hash << 3;
+        hash ^= hash >> 17;
+        hash += hash << 5;
+
+        // 如果算出来的值为负数则取其绝对值
+        if (hash < 0) {
+            hash = Math.abs(hash);
+        }
+        return hash;
+    }
+    
+        
+    
+ 
+    //得到应当路由到的结点
+    private static Node getServer(String key) {
+        //得到该key的hash值
+        int hash = getHash(key);
+        //得到大于该Hash值的所有Map      
+        Node server;
+        SortedMap<Integer, Node> subMap = sortedMap.tailMap(hash);
+        if (subMap.isEmpty()) {
+            //如果没有比该key的hash值大的，则从第一个node开始
+            Integer i = sortedMap.firstKey();
+            //返回对应的服务器
+            server = sortedMap.get(i);
+        } else {
+            //第一个Key就是顺时针过去离node最近的那个结点
+            Integer i = subMap.firstKey();
+            //返回对应的服务器
+            server= subMap.get(i);
+        }
+        
+        if(server!=null) {
+	        server.put(key,hash+"");
+	        System.out.println(server.getName());
+        }
+        return server;
+    }
+    
+    //获取实际服务器上负载平均值
+    public static double getAverage(LinkedList<Node> arr) {
+	    double sum = 0;
+	    int number = arr.size();
+	    for (int i = 0; i < number; i++) {
+	    	Node node =arr.get(i);
+	    	
+	        sum += node.getCount();
+	    }
+	    return sum / number;
+    }
+
+    //获取实际服务器上负载的标准差
+    public static double getStandardDevition(LinkedList<Node> arr) {
+	    double sum = 0;
+	    int number = arr.size();
+	    double avgValue = getAverage(arr);//获取平均值
+	    for (int i = 0; i < number; i++) {
+	    	Node node =arr.get(i);
+	        sum += Math.pow((node.getCount() - avgValue), 2);
+	    }
+	
+	    return Math.sqrt((sum / (number - 1)));
+    }
+  
+ 
+    public static void main(String[] args) {	    	
+    	
+       //模拟一百万用户
+        for (int i = 0; i < 1000000; i++) {
+        	String key = "User:"+i;        	
+        	
+            System.out.println("[" + key + "]的hash值为" + getHash(key) + ", 被路由到结点[" + getServer(key).getName() + "]");
+        }
+        
+        //打印 Node的实际负载
+        for (int i = 0; i < realNodes.size(); i++) {
+        	Node node = realNodes.get(i);
+        	System.out.println(node.getName()+"-> count："+node.getCount());
+        }
+       
+        System.out.println("标准差："+getStandardDevition(realNodes)+"");
+    }    
+
+}
+```
 
 
 

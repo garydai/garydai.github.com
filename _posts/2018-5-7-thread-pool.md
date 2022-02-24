@@ -194,3 +194,143 @@ public <T> Future<T> submit(Callable<T> task) {
 
 ## 线程列表
 
+## forkjoin
+
+```java
+package com.niuh.forkjoin.recursivetask;
+
+import java.util.concurrent.RecursiveTask;
+
+/**
+ * RecursiveTask 并行计算，同步有返回值
+ * ForkJoin框架处理的任务基本都能使用递归处理，比如求斐波那契数列等，但递归算法的缺陷是：
+ * 一只会只用单线程处理，
+ * 二是递归次数过多时会导致堆栈溢出；
+ * ForkJoin解决了这两个问题，使用多线程并发处理，充分利用计算资源来提高效率，同时避免堆栈溢出发生。
+ * 当然像求斐波那契数列这种小问题直接使用线性算法搞定可能更简单，实际应用中完全没必要使用ForkJoin框架，
+ * 所以ForkJoin是核弹，是用来对付大家伙的，比如超大数组排序。
+ * 最佳应用场景：多核、多内存、可以分割计算再合并的计算密集型任务
+ */
+class LongSum extends RecursiveTask<Long> {
+    //任务拆分的最小阀值
+    static final int SEQUENTIAL_THRESHOLD = 1000;
+    static final long NPS = (1000L * 1000 * 1000);
+    static final boolean extraWork = true; // change to add more than just a sum
+
+
+    int low;
+    int high;
+    int[] array;
+
+    LongSum(int[] arr, int lo, int hi) {
+        array = arr;
+        low = lo;
+        high = hi;
+    }
+
+    /**
+     * fork()方法：将任务放入队列并安排异步执行，一个任务应该只调用一次fork()函数，除非已经执行完毕并重新初始化。
+     * tryUnfork()方法：尝试把任务从队列中拿出单独处理，但不一定成功。
+     * join()方法：等待计算完成并返回计算结果。
+     * isCompletedAbnormally()方法：用于判断任务计算是否发生异常。
+     */
+    protected Long compute() {
+
+        if (high - low <= SEQUENTIAL_THRESHOLD) {
+            long sum = 0;
+            for (int i = low; i < high; ++i) {
+                sum += array[i];
+            }
+            return sum;
+
+        } else {
+            int mid = low + (high - low) / 2;
+            LongSum left = new LongSum(array, low, mid);
+            LongSum right = new LongSum(array, mid, high);
+            left.fork();
+            right.fork();
+            long rightAns = right.join();
+            long leftAns = left.join();
+            return leftAns + rightAns;
+        }
+    }
+}
+
+
+```
+
+
+
+```java
+package com.niuh.forkjoin.recursivetask;
+
+import com.niuh.forkjoin.utils.Utils;
+
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ForkJoinTask;
+
+public class LongSumMain {
+    //获取逻辑处理器数量
+    static final int NCPU = Runtime.getRuntime().availableProcessors();
+    /**
+     * for time conversion
+     */
+    static final long NPS = (1000L * 1000 * 1000);
+
+    static long calcSum;
+
+    static final boolean reportSteals = true;
+
+    public static void main(String[] args) throws Exception {
+        int[] array = Utils.buildRandomIntArray(2000000);
+        System.out.println("cpu-num:" + NCPU);
+        //单线程下计算数组数据总和
+        long start = System.currentTimeMillis();
+        calcSum = seqSum(array);
+        System.out.println("seq sum=" + calcSum);
+        System.out.println("singgle thread sort:->" + (System.currentTimeMillis() - start));
+
+        start = System.currentTimeMillis();
+        //采用fork/join方式将数组求和任务进行拆分执行，最后合并结果
+        LongSum ls = new LongSum(array, 0, array.length);
+        ForkJoinPool fjp = new ForkJoinPool(NCPU); //使用的线程数
+        ForkJoinTask<Long> task = fjp.submit(ls);
+
+        System.out.println("forkjoin sum=" + task.get());
+        System.out.println("singgle thread sort:->" + (System.currentTimeMillis() - start));
+        if (task.isCompletedAbnormally()) {
+            System.out.println(task.getException());
+        }
+
+        fjp.shutdown();
+
+    }
+
+
+    static long seqSum(int[] array) {
+        long sum = 0;
+        for (int i = 0; i < array.length; ++i) {
+            sum += array[i];
+        }
+        return sum;
+    }
+}
+
+
+```
+
+ForkJoinPool 的每个工作线程都维护着一个工作队列（WorkQueue），这是一个**双端队列（Deque）**，里面存放的对象是任务（**ForkJoinTask**）。
+
+每个工作线程在运行中产生新的任务（通常是因为调用了 fork()）时，会放入工作队列的队尾，并且工作线程在处理自己的工作队列时，使用的是 **LIFO** 方式，也就是说每次从队尾取出任务来执行。
+
+每个工作线程在处理自己的工作队列同时，会尝试窃取一个任务（或是来自于刚刚提交到 pool 的任务，或是来自于其他工作线程的工作队列），窃取的任务位于其他线程的工作队列的队首，也就是说工作线程在窃取其他工作线程的任务时，使用的是 FIFO 方式。
+
+在遇到 join() 时，如果需要 join 的任务尚未完成，则会先处理其他任务，并等待其完成。
+
+在既没有自己的任务，也没有可以窃取的任务时，进入休眠。
+
+
+
+## 参考
+
+https://juejin.cn/post/6906424424967667725

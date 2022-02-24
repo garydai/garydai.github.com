@@ -78,6 +78,36 @@ public RunnableScheduledFuture<?> take() throws InterruptedException {
 }
 ```
 
+```java
+public boolean offer(Runnable x) {
+    if (x == null)
+        throw new NullPointerException();
+    RunnableScheduledFuture<?> e = (RunnableScheduledFuture<?>)x;
+    final ReentrantLock lock = this.lock;
+    lock.lock();
+    try {
+        int i = size;
+        if (i >= queue.length)
+            grow();
+        size = i + 1;
+        if (i == 0) {
+            queue[0] = e;
+            setIndex(e, 0);
+        } else {
+            siftUp(i, e);
+        }
+        if (queue[0] == e) {
+           // 如果更早的任务来临，设置leader=null，其他线程能成为leader执行这个最早的任务
+            leader = null;
+            available.signal();
+        }
+    } finally {
+        lock.unlock();
+    }
+    return true;
+}
+```
+
 ## leader-follower模型
 
 在Java开源框架中很少看到这种线程模式的使用，但是在JUC包DelayQueue的实现中却有着Leader-Follower线程模型的思想存在。
