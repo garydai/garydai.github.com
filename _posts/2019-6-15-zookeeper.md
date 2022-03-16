@@ -1707,6 +1707,26 @@ observer 读
 
 允许用户在指定节点上注册一些watcher
 
+```java
+private final Map<String, Set<Watcher>> dataWatches = new HashMap<>();//当前路径对应节点数据修改的 Watcher
+private final Map<String, Set<Watcher>> existWatches = new HashMap<>();//当前路径对应节点创建的 Watcher
+private final Map<String, Set<Watcher>> childWatches = new HashMap<>();//当前路径对应节点的子节点创建的 Watcher
+private final Map<String, Set<Watcher>> persistentWatches = new HashMap<>();//当前路径对应节点的永久 Watcher
+private final Map<String, Set<Watcher>> persistentRecursiveWatches = new HashMap<>();//当前路径对应节点的永久递归 Watcher
+
+private volatile Watcher defaultWatcher;//客户端默认 Watcher 事件处理器
+```
+
+最常见的 Watcher 接口实现便是 ServerCnxn 实例，我们关注于基于 JDK NIO 的 NIOServerCnxn。
+
+`NIOServerCnxn.process(WatchedEvent event)` 方法的运行逻辑如下：
+
+- 首先构造一个 ReplyHeader 实例，其封装了响应类型、响应的 zxid，以及错误码（即使完全正常也需要错误码）；
+- 将 WatchedEvent 转换为 WatcherEvent，前者用于程序内部处理，后者用于事件序列化的发送；
+- 将 ReplyHeader、WatcherEvent 序列化为 ByteBuffer 后加入到 outgoingBuffers 队列中，等待异步线程的消费与发送；
+
+https://spongecaptain.cool/post/zookeeper/zookeeperwatch/
+
 ## 消息广播
 
 leader为follower服务器各自分配一个单独的队列，然后将需要广播的事务proposal依次放入队列中，并且根据fifo策略进行消息发送。

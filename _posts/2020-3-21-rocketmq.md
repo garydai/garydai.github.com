@@ -1304,6 +1304,12 @@ public void run() {
 
 消费线程池的队列里放的是task（ConsumeRequest），不是消息；线程从线程池里取出task，然后从processQueue里的msgTreeMap取早的消息，进行处理。所以后放入线程池队列的task先执行，也能保证消息被顺序消费。
 
+
+
+
+
+![image-20220315134758598](/Users/daitechang/Downloads/garydai.github.com/_posts/pic/image-20220315134758598.png)
+
 ### 消费位移
 
 如果消息消费是集群模式，那么消息进度保存在 Broker 上; 如果是广播模式，那么消息消费进度存储在消费端
