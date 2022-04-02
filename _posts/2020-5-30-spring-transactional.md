@@ -1525,6 +1525,27 @@ public abstract class TransactionSynchronizationManager {
 }
 ```
 
+### transaction
+
+```java
+public class DefaultTransactionStatus extends AbstractTransactionStatus {
+
+    private final Object transaction;
+
+    private final boolean newTransaction;
+
+    private final boolean newSynchronization;
+
+    private final boolean readOnly;
+
+    private final boolean debug;
+
+    private final Object suspendedResources;
+}
+```
+
+
+
 #### 事务管理
 
 ```java

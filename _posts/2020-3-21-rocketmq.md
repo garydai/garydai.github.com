@@ -454,6 +454,8 @@ public int flush(final int flushLeastPages) {
 }
 ```
 
+![image-20220324160612169](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20220324160612169.png)
+
 ## consumer
 
 问题1： PullRequest对象在什么时候创建并加入到pullRequestQueue 中以便唤醒 PullMessageService 线程 。
@@ -1136,6 +1138,12 @@ org.apache.rocketmq.client.impl.consumer.DefaultMQPushConsumerImpl#pullMessage
 在消息返回后，会将消息放入`ProcessQueue`，然后通知`ConsumeMessageService`来异步处理消息，然后再次提交Pull请求。这样对于用户端来说，只有`ConsumeMessageService`回调listener这一步是可见的，其它都是透明的。
 
 ![image-20200405205808582](https://github.com/garydai/garydai.github.com/raw/master/_posts/image-20200405205808582.png)
+
+![image-20220324163022826](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20220324163022826.png)
+
+当从 Broker 服务器拉取下来消息以后，只有当用户成功消费的时候，才会更新本地的偏移量表。本地的偏移量表再通过定时服务每隔 5 秒同步到 Broker 服务器端:
+
+![image-20220324163248579](https://github.com/garydai/garydai.github.com/raw/master/_posts/pic/image-20220324163248579.png)
 
 ### 消息处理`ConsumeMessageService`
 
@@ -1983,3 +1991,5 @@ https://tinylcy.me/2019/the-design-of-rocketmq-message-storage-system/
 https://www.codenong.com/cs106535405/
 
 https://cloud.tencent.com/developer/article/1581368
+
+https://kunzhao.org/docs/rocketmq/rocketmq-message-receive-flow/
