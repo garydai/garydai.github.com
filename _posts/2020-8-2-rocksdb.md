@@ -12,6 +12,28 @@ title: RocksDB
 
 内存中的数据达到一定阈值后，会刷到磁盘上生成 SST 文件 (Sorted String Table)，SST 又分为多层（默认至多 6 层），每一层的数据达到一定阈值后会挑选一部分 SST 合并到下一层，每一层的数据是上一层的 10 倍（因此 90% 的数据存储在最后一层）。
 
+Levledb是Google的两位Fellow （Jeaf Dean和Sanjay Ghemawat）设计和开发的嵌入式K-V系统，读写性能非常彪悍，官方网站报道其写性能40万/s，读性能达到6万/s，写操作要远快于读操作。Rocksdb是Facebook公司在Leveldb基础之上开发的一个嵌入式K-V系统，**在很多方面对Leveldb做了优化和增强**，更像是一个完整的产品，比如：
+
+1）Leveldb是单线程合并文件，Rocksdb可以支持**多线程合并**文件，充分利用多核的特性，加快文件合并的速度，避免文件合并期间引起系统停顿；
+
+LSM型的数据结构，最大的性能问题就出现在其合并的时间损耗上，在多CPU的环境下，多线程合并那是LevelDB所无法比拟的。不过据其官网上的介绍，似乎多线程合并还只是针对那些与下一层没有Key重叠的文件，只是简单的rename而已，至于在真正数据上的合并方面是否也有用到多线程，就只能看代码了。
+
+RocksDB增加了合并时过滤器，对一些不再符合条件的K-V进行丢弃，如根据K-V的有效期进行过滤。
+
+2）Leveldb只有一个Memtable，若Memtable满了还没有来得及持久化，则会减缓Put操作引起系统停顿；RocksDB支持**管道式的Memtable**，也就说允许根据需要**开辟多个Memtable**，以解决Put与Compact速度差异的性能瓶颈问题。
+
+3）Leveldb只能获取单个K-V；Rocksdb支持**一次获取多个K-V**，还支持**Key范围查找**。
+
+4）Levledb不支持备份；Rocksdb支持**全量和增量备份**。RocksDB允许将已删除的数据备份到指定的目录，供后续恢复。
+
+5）压缩方面RocksDB可采用**多种压缩算法**，除了LevelDB用的snappy，还有zlib、bzip2。LevelDB里面按数据的压缩率（压缩后低于75%）判断是否对数据进行压缩存储，而RocksDB典型的做法是Level 0-2不压缩，最后一层使用zlib，而其它各层采用snappy。
+
+6）RocksDB除了简单的Put、Delete操作，还提供了一个**Merge操作**，说是为了对多个Put操作进行合并，优化了modify的效率。站在引擎实现者的角度来看，相比其带来的价值，其实现的成本要昂贵很多。个人觉得有时过于追求完美不见得是好事，据笔者所测（包括测试自己编写的引擎），性能的瓶颈其实主要在合并上，多一次少一次Put对性能的影响并无大碍。
+
+7）RocksDB提供一些方便的工具，这些工具包含解析sst文件中的K-V记录、解析MANIFEST文件的内容等。有了这些工具，就不用再像使用LevelDB那样，只能在程序中才能知道sst文件K-V的具体信息了。
+
+8）其他优化：增加了column family，这样有利于多个不相关的数据集存储在同一个db中，因为不同column family的数据是存储在不同的sst和memtable中，所以一定程度上起到了隔离的作用。将flush和compaction分开不同的线程池，能有效的加快flush，防止stall拖延停顿。增加了对write ahead log(WAL)的特殊管理机制，这样就能方便管理WAL文件，因为WAL是binlog文件。
+
 ## lsm-tree
 
 LSM-Tree 的全称是：The Log-Structured Merge-Tree，是一种非常复杂的复合数据结构，它包含了 WAL（Write Ahead Log）、跳表（SkipList）和一个分层的有序表（SSTable，Sorted String Table）
@@ -94,3 +116,5 @@ https://blog.csdn.net/weixin_44607611/article/details/113742388
 https://zhuanlan.zhihu.com/p/181498475
 
 https://segmentfault.com/a/1190000039269078
+
+https://www.cnblogs.com/orange-CC/p/13212042.html
